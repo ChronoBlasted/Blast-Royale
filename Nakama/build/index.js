@@ -33,10 +33,84 @@ function afterAuthenticate(ctx, logger, nk, data) {
         logger.error('Error init update account : %s', error);
     }
     storeUserWallet(nk, user_id, DefaultWallet, logger);
+    const writeBlasts = {
+        collection: DeckCollectionName,
+        key: DeckCollectionKey,
+        permissionRead: DeckPermissionRead,
+        permissionWrite: DeckPermissionWrite,
+        value: defaultBlastCollection(nk, logger, ctx.userId),
+        userId: ctx.userId,
+    };
+    try {
+        nk.storageWrite([writeBlasts]);
+    }
+    catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
 function rpcDeleteAccount(ctx, logger, nk) {
     nk.accountDeleteId(ctx.userId);
+}
+const healManaPerRound = 20;
+const healManaPerWait = 50;
+function calculateBlastStat(baseStat, iv, level) {
+    return Math.floor(((2 * baseStat + iv) * level) / 100 + 5);
+}
+function calculateBlastHp(baseHp, iv, level) {
+    return Math.floor(((2 * baseHp + iv) * level) / 100 + level + 10);
+}
+function calculateBlastMana(baseMana, iv, level) {
+    return Math.floor(((baseMana + iv) * (level / 100) + level / 2) + 10);
+}
+function calculateLevelFromExperience(experience) {
+    if (experience < 0) {
+        throw new Error("L'expérience totale ne peut pas être négative.");
+    }
+    let niveau = 1;
+    let experienceNiveau = 0;
+    for (let i = 1; i <= 100; i++) {
+        experienceNiveau = Math.floor((i ** 3) * 100 / 2);
+        if (experience < experienceNiveau) {
+            break;
+        }
+        niveau = i;
+    }
+    return niveau;
+}
+function calculateExperienceFromLevel(level) {
+    if (level < 1 || level > 100) {
+        throw new Error("Le niveau doit être compris entre 1 et 100.");
+    }
+    let experienceNiveau = 0;
+    for (let i = 1; i <= level; i++) {
+        experienceNiveau = Math.floor((i ** 3) * 100 / 2);
+    }
+    return experienceNiveau;
+}
+function getRandomActiveMoveset(blastData, exp) {
+    const availableMoves = blastData.movepool
+        .filter(m => calculateLevelFromExperience(exp) >= m.levelMin)
+        .map(m => m.move_id);
+    const shuffledMoves = shuffleArray(availableMoves);
+    const randomMoveset = shuffledMoves.slice(0, 4);
+    return randomMoveset;
+}
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+function getRandomNumber(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1)) + minCeiled;
+}
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 var Currency;
 (function (Currency) {
@@ -745,3 +819,139 @@ function getBlastDataById(id) {
 const rpcLoadBlastPedia = function (ctkx, logger, nk) {
     return JSON.stringify(blastPedia);
 };
+const DeckPermissionRead = 2;
+const DeckPermissionWrite = 0;
+const DeckCollectionName = 'blasts_collection';
+const DeckCollectionKey = 'user_blasts';
+function getRandomIV(min = MinIV, max = MaxIV) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function generateUUID() {
+    let uuid = '', i, random;
+    for (i = 0; i < 36; i++) {
+        if (i === 8 || i === 13 || i === 18 || i === 23) {
+            uuid += '-';
+        }
+        else if (i === 14) {
+            uuid += '4'; // Le 14e caractère est toujours "4" pour un UUID v4
+        }
+        else {
+            random = Math.random() * 16 | 0;
+            if (i === 19) {
+                uuid += (random & 0x3 | 0x8).toString(16); // Le 19e caractère est limité à 8, 9, A, ou B
+            }
+            else {
+                uuid += random.toString(16);
+            }
+        }
+    }
+    return uuid;
+}
+const DefaultDeckBlasts = [
+    (() => {
+        const iv = getRandomIV(10, MaxIV);
+        return {
+            uuid: generateUUID(),
+            data_id: Florax.id,
+            exp: calculateExperienceFromLevel(5),
+            iv: iv,
+            hp: calculateBlastHp(Florax.hp, iv, 5),
+            maxHp: calculateBlastHp(Florax.hp, iv, 5),
+            mana: calculateBlastMana(Florax.mana, iv, 5),
+            maxMana: calculateBlastMana(Florax.mana, iv, 5),
+            attack: calculateBlastStat(Florax.attack, iv, 5),
+            defense: calculateBlastStat(Florax.defense, iv, 5),
+            speed: calculateBlastStat(Florax.speed, iv, 5),
+            status: Status.NONE,
+            activeMoveset: getRandomActiveMoveset(Florax, calculateExperienceFromLevel(5))
+        };
+    })(),
+    (() => {
+        const iv = getRandomIV(10, MaxIV);
+        return {
+            uuid: generateUUID(),
+            data_id: Pyrex.id,
+            exp: calculateExperienceFromLevel(5),
+            iv: iv,
+            hp: calculateBlastHp(Pyrex.hp, iv, 5),
+            maxHp: calculateBlastHp(Pyrex.hp, iv, 5),
+            mana: calculateBlastMana(Pyrex.mana, iv, 5),
+            maxMana: calculateBlastMana(Pyrex.mana, iv, 5),
+            attack: calculateBlastStat(Pyrex.attack, iv, 5),
+            defense: calculateBlastStat(Pyrex.defense, iv, 5),
+            speed: calculateBlastStat(Pyrex.speed, iv, 5),
+            status: Status.NONE,
+            activeMoveset: getRandomActiveMoveset(Pyrex, calculateExperienceFromLevel(5))
+        };
+    })(),
+    (() => {
+        const iv = getRandomIV(10, MaxIV);
+        return {
+            uuid: generateUUID(),
+            data_id: Aquaflare.id,
+            exp: calculateExperienceFromLevel(5),
+            iv: iv,
+            hp: calculateBlastHp(Aquaflare.hp, iv, 5),
+            maxHp: calculateBlastHp(Aquaflare.hp, iv, 5),
+            mana: calculateBlastMana(Aquaflare.mana, iv, 5),
+            maxMana: calculateBlastMana(Aquaflare.mana, iv, 5),
+            attack: calculateBlastStat(Aquaflare.attack, iv, 5),
+            defense: calculateBlastStat(Aquaflare.defense, iv, 5),
+            speed: calculateBlastStat(Aquaflare.speed, iv, 5),
+            status: Status.NONE,
+            activeMoveset: getRandomActiveMoveset(Aquaflare, calculateExperienceFromLevel(5))
+        };
+    })(),
+];
+const rpcLoadUserBlast = function (ctx, logger, nk, payload) {
+    return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
+};
+function loadUserBlast(nk, logger, userId) {
+    let storageReadReq = {
+        key: DeckCollectionKey,
+        collection: DeckCollectionName,
+        userId: userId,
+    };
+    let objects;
+    try {
+        objects = nk.storageRead([storageReadReq]);
+    }
+    catch (error) {
+        logger.error('storageRead error: %s', error);
+        throw error;
+    }
+    if (objects.length === 0) {
+        throw Error('user cards storage object not found');
+    }
+    let BlastCollection = objects[0].value;
+    return BlastCollection;
+}
+function storeUserBlasts(nk, logger, userId, cards) {
+    try {
+        nk.storageWrite([
+            {
+                key: DeckCollectionKey,
+                collection: DeckCollectionName,
+                userId: userId,
+                value: cards,
+                permissionRead: DeckPermissionRead,
+                permissionWrite: DeckPermissionWrite,
+            }
+        ]);
+    }
+    catch (error) {
+        logger.error('storageWrite error: %s', error);
+        throw error;
+    }
+}
+function defaultBlastCollection(nk, logger, userId) {
+    let cards = {
+        deckBlasts: DefaultDeckBlasts,
+        storedBlasts: DefaultDeckBlasts,
+    };
+    storeUserBlasts(nk, logger, userId, cards);
+    return {
+        deckBlasts: DefaultDeckBlasts,
+        storedBlasts: DefaultDeckBlasts,
+    };
+}

@@ -39,6 +39,22 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
 
     storeUserWallet(nk, user_id, DefaultWallet, logger);
 
+        const writeBlasts: nkruntime.StorageWriteRequest = {
+        collection: DeckCollectionName,
+        key: DeckCollectionKey,
+        permissionRead: DeckPermissionRead,
+        permissionWrite: DeckPermissionWrite,
+        value: defaultBlastCollection(nk, logger, ctx.userId),
+        userId: ctx.userId,
+    }
+
+    try {
+        nk.storageWrite([writeBlasts]);
+    } catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
+
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
 
