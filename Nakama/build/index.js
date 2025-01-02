@@ -906,6 +906,21 @@ const DefaultDeckBlasts = [
 const rpcLoadUserBlast = function (ctx, logger, nk, payload) {
     return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
 };
+function addBlast(nk, logger, userId, newBlastToAdd) {
+    newBlastToAdd.hp = newBlastToAdd.maxHp;
+    newBlastToAdd.mana = newBlastToAdd.maxMana;
+    newBlastToAdd.status = Status.NONE;
+    let userCards;
+    userCards = loadUserBlast(nk, logger, userId);
+    if (userCards.deckBlasts.length < 3) {
+        userCards.deckBlasts[userCards.deckBlasts.length] = newBlastToAdd;
+    }
+    else {
+        userCards.storedBlasts[userCards.storedBlasts.length] = newBlastToAdd;
+    }
+    storeUserBlasts(nk, logger, userId, userCards);
+    return userCards;
+}
 function loadUserBlast(nk, logger, userId) {
     let storageReadReq = {
         key: DeckCollectionKey,

@@ -93,6 +93,29 @@ const rpcLoadUserBlast: nkruntime.RpcFunction =
         return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
     }
 
+
+    
+function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newBlastToAdd: Blast): BlastCollection {
+
+    newBlastToAdd.hp = newBlastToAdd.maxHp;
+    newBlastToAdd.mana = newBlastToAdd.maxMana;
+    newBlastToAdd.status = Status.NONE;
+    
+    let userCards: BlastCollection;
+
+    userCards = loadUserBlast(nk, logger, userId);
+
+    if (userCards.deckBlasts.length < 3) {
+        userCards.deckBlasts[userCards.deckBlasts.length] = newBlastToAdd;
+    } else {
+        userCards.storedBlasts[userCards.storedBlasts.length] = newBlastToAdd;
+    }
+
+    storeUserBlasts(nk, logger, userId, userCards);
+
+    return userCards;
+}
+
 function loadUserBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastCollection {
     let storageReadReq: nkruntime.StorageReadRequest = {
         key: DeckCollectionKey,
