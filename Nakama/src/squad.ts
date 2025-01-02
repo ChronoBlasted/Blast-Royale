@@ -88,19 +88,53 @@ interface BlastCollection {
     storedBlasts: Blast[]
 }
 
+interface SwapDeckRequest {
+    inIndex: number
+    outIndex: number
+}
+
+
 const rpcLoadUserBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
         return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
     }
 
 
+const rpcSwapDeckBlast: nkruntime.RpcFunction =
+    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
+        const request: SwapDeckRequest = JSON.parse(payload);
+
+        const userBlasts = loadUserBlast(nk, logger, ctx.userId);
+
+        logger.debug("Payload on server '%s'", request);
+
+
+        if (userBlasts.deckBlasts[request.outIndex] == null) {
+            throw Error('invalid out card');
+        }
+        if (userBlasts.storedBlasts[request.inIndex] == null) {
+            throw Error('invalid in card');
+        }
+
+        let outCard = userBlasts.deckBlasts[request.outIndex];
+        let inCard = userBlasts.storedBlasts[request.inIndex];
+
+        userBlasts.deckBlasts[request.outIndex] = inCard;
+        userBlasts.storedBlasts[request.inIndex] = outCard;
+
+        storeUserBlasts(nk, logger, ctx.userId, userBlasts);
+
+        logger.debug("user '%s' deck card '%s' swapped with '%s'", ctx.userId);
+
+        return JSON.stringify(userBlasts);
+    }
     
 function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newBlastToAdd: Blast): BlastCollection {
 
     newBlastToAdd.hp = newBlastToAdd.maxHp;
     newBlastToAdd.mana = newBlastToAdd.maxMana;
     newBlastToAdd.status = Status.NONE;
-    
+
     let userCards: BlastCollection;
 
     userCards = loadUserBlast(nk, logger, userId);

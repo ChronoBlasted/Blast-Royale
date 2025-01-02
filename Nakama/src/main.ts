@@ -4,6 +4,15 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerAfterAuthenticateDevice(afterAuthenticate);
     initializer.registerAfterAuthenticateEmail(afterAuthenticate);
 
+    // Blast
+    initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
+    initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
+
+    // Others
+    initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
+    initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
+    initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
+
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
 
     logger.info('XXXXXXXXXXXXXXXXXXXX - Blast Royale TypeScript loaded - XXXXXXXXXXXXXXXXXXXX');
@@ -39,7 +48,7 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
 
     storeUserWallet(nk, user_id, DefaultWallet, logger);
 
-        const writeBlasts: nkruntime.StorageWriteRequest = {
+    const writeBlasts: nkruntime.StorageWriteRequest = {
         collection: DeckCollectionName,
         key: DeckCollectionKey,
         permissionRead: DeckPermissionRead,
