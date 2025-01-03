@@ -7,6 +7,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     // Blast
     initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
     initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
+    initializer.registerRpc('evolveBlast', rpcUpgradeBlast);
     initializer.registerRpc('swapMove', rpcSwapBlastMove);
 
     // Others

@@ -181,6 +181,73 @@ const rpcSwapDeckBlast: nkruntime.RpcFunction =
         return JSON.stringify(userBlasts);
     }
 
+const rpcUpgradeBlast: nkruntime.RpcFunction =
+    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
+
+        const uuid: string = JSON.parse(payload);
+
+        let userCards: BlastCollection;
+        userCards = loadUserBlast(nk, logger, ctx.userId);
+
+        let isInDeck: boolean = false;
+        let selectedBlast: Blast = {
+            uuid: "",
+            data_id: 0,
+            exp: 0,
+            iv: 0,
+            hp: 0,
+            maxHp: 0,
+            mana: 0,
+            maxMana: 0,
+            attack: 0,
+            defense: 0,
+            speed: 0,
+            status: Status.NONE,
+            activeMoveset: []
+        };
+
+        if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
+            selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid)!;
+            isInDeck = true;
+        }
+        else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
+            selectedBlast = userCards.storedBlasts.find(blast => blast.uuid === uuid)!;
+            isInDeck = false;
+        }
+
+        let blastdata = getBlastDataById(selectedBlast.data_id)
+
+
+        if (isInDeck) {
+            if (blastdata.nextEvolution !== null) {
+                if (blastdata.nextEvolution?.levelRequired! >= calculateLevelFromExperience(selectedBlast.exp)) {
+
+                    // Check si assez d'argent
+                    // If true check if assez d'argent par rapport rareté + ratio IV de base
+
+                    userCards.deckBlasts.find(blast => blast.uuid === uuid)!.data_id = getBlastDataById(blastdata.nextEvolution.id).id;
+
+                }
+            }
+        } else {
+            if (blastdata.nextEvolution != null) {
+                if (blastdata.nextEvolution?.levelRequired! >= calculateLevelFromExperience(selectedBlast.exp)) {
+
+                    // Check si assez d'argent
+                    // If true check if assez d'argent par rapport rareté + ratio IV de base
+
+                    userCards.storedBlasts.find(blast => blast.uuid === uuid)!.data_id = getBlastDataById(blastdata.nextEvolution.id).id;
+                }
+            }
+        }
+
+        storeUserBlasts(nk, logger, ctx.userId, userCards);
+
+        logger.debug("user '%s' upgraded card '%s'", ctx.userId, selectedBlast.uuid);
+
+        return JSON.stringify(userCards);
+    }
+
 function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newBlastToAdd: Blast): BlastCollection {
 
     newBlastToAdd.hp = newBlastToAdd.maxHp;
