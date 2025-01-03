@@ -316,6 +316,16 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
     return userCards.deckBlasts;
 }
 
+function getDeckBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): Blast[] {
+
+    let userCards: BlastCollection;
+    userCards = loadUserBlast(nk, logger, userId);
+
+    logger.debug("user '%s' successfully get deck blast", userId);
+
+    return userCards.deckBlasts;
+}
+
 function loadUserBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastCollection {
     let storageReadReq: nkruntime.StorageReadRequest = {
         key: DeckCollectionKey,
