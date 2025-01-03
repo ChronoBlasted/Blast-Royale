@@ -18,6 +18,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
     initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
     initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
+    initializer.registerRpc('loadAllArea', rpcLoadAllArea);
 
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
 
