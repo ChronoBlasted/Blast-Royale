@@ -18,3 +18,12 @@ function storeUserWallet(nk: nkruntime.Nakama, user_id: string, changeset: { coi
       logger.error('Error storing wallet of player : %s', user_id);
   }
 }
+
+function updateWalletWithCurrency(nk: nkruntime.Nakama, userId: string, currencyKeyName: Currency, amount: number): nkruntime.WalletUpdateResult {
+  const changeset = {
+    [currencyKeyName]: amount,
+  }
+  let result = nk.walletUpdate(userId, changeset);
+
+  return result;
+}
