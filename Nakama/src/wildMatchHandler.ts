@@ -293,6 +293,35 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         break;
                 }
 
+                if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
+
+                    if (state.TurnStateData.wb_turn_type != TurnType.WAIT) state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
+
+                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
+
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+
+                    return;
+                } else if (state.battle_state == BattleState.END) {
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+
+                    return;
+                }
+                else {
+
+                    state.battle_state = BattleState.WAITING;
+
+                    if (message.opCode != OpCodes.PLAYER_WAIT) state.player1_current_blast!.mana = calculateStaminaRecovery(state.player1_current_blast!.maxMana, state.player1_current_blast!.mana, false);
+                    if (state.TurnStateData.wb_turn_type != TurnType.WAIT) state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
+
+                    //Send matchTurn
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+
+
+                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
+                    logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast!.data_id).name, state.player1_current_blast?.hp, state.player1_current_blast?.mana);
+                }
+
                 logger.debug('______________ END LOOP BATTLE ______________');
 
             });
