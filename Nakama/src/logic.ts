@@ -78,3 +78,7 @@ function shuffleArray<T>(array: T[]): T[] {
     }
     return array;
 }
+
+function msecToSec(n: number): number {
+    return Math.floor(n / 1000);
+}
