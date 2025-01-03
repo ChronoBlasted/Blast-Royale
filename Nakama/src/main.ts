@@ -14,6 +14,20 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadUserItem', rpcLoadUserItems);
     initializer.registerRpc('swapDeckItem', rpcSwapDeckItem);
 
+    // Store
+    initializer.registerRpc('loadBlastTrapOffer', rpcLoadBlastTrapOffer);
+    initializer.registerRpc('buyTrapOffer', rpcBuyTrapOffer);
+
+    initializer.registerRpc('loadGemOffer', rpcLoadGemsOffer);
+    initializer.registerRpc('buyGemOffer', rpcBuyGemOffer);
+
+    initializer.registerRpc('loadCoinOffer', rpcLoadCoinsOffer);
+    initializer.registerRpc('buyCoinOffer', rpcBuyCoinOffer);
+
+    initializer.registerRpc('canClaimDailyShop', rpcCanClaimDailyShop);
+    initializer.registerRpc('claimDailyShop', rpcGetDailyShopOffer);
+    initializer.registerRpc('buyDailyShopOffer', rpcBuyDailyShopOffer);
+
     // Others
     initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
     initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);

@@ -71,6 +71,11 @@ function getRandomNumber(min: number, max: number): number {
     return Math.floor(Math.random() * (maxFloored - minCeiled + 1)) + minCeiled;
 }
 
+function randomElement<T>(array: T[]): T {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
+}
+
 function shuffleArray<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
