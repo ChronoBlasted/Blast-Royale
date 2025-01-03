@@ -37,6 +37,19 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
     initializer.registerRpc('loadAllArea', rpcLoadAllArea);
 
+    // Wild Battle
+    initializer.registerRpc('findWildBattle', rpcFindOrCreateWildBattle);
+
+    initializer.registerMatch('wildBattle', {
+        matchInit,
+        matchJoinAttempt,
+        matchJoin,
+        matchLeave,
+        matchLoop,
+        matchSignal,
+        matchTerminate
+    });
+
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
 
     createTrophyLeaderboard(nk, logger, ctx);
