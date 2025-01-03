@@ -15,7 +15,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void Awake()
     {
-
+        UIManager.Instance.Init();
     }
 
 
