@@ -66,12 +66,24 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
         throw error;
     }
 
+    const writeItems: nkruntime.StorageWriteRequest = {
+        collection: BagCollectionName,
+        key: BagCollectionKey,
+        permissionRead: BagPermissionRead,
+        permissionWrite: BagPermissionWrite,
+        value: defaultItemsCollection(nk, logger, ctx.userId),
+        userId: ctx.userId,
+    }
+
+    try {
+        nk.storageWrite([writeItems]);
+    } catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
+
     logger.debug('new user id: %s account data initialised', ctx.userId);
-
 }
-
-
-
 
 function rpcDeleteAccount(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama) {
     nk.accountDeleteId(ctx.userId);
