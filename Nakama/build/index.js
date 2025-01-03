@@ -11,12 +11,26 @@ let InitModule = function (ctx, logger, nk, initializer) {
     // Bag
     initializer.registerRpc('loadUserItem', rpcLoadUserItems);
     initializer.registerRpc('swapDeckItem', rpcSwapDeckItem);
+    // Leaderboard
+    initializer.registerRpc('getAroundLeaderboard', rpcGetAroundTrophyLeaderboard);
+    // Store
+    initializer.registerRpc('loadBlastTrapOffer', rpcLoadBlastTrapOffer);
+    initializer.registerRpc('buyTrapOffer', rpcBuyTrapOffer);
+    initializer.registerRpc('loadGemOffer', rpcLoadGemsOffer);
+    initializer.registerRpc('buyGemOffer', rpcBuyGemOffer);
+    initializer.registerRpc('loadCoinOffer', rpcLoadCoinsOffer);
+    initializer.registerRpc('buyCoinOffer', rpcBuyCoinOffer);
+    initializer.registerRpc('canClaimDailyShop', rpcCanClaimDailyShop);
+    initializer.registerRpc('claimDailyShop', rpcGetDailyShopOffer);
+    initializer.registerRpc('buyDailyShopOffer', rpcBuyDailyShopOffer);
     // Others
     initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
     initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
     initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
     initializer.registerRpc('loadAllArea', rpcLoadAllArea);
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
+    createTrophyLeaderboard(nk, logger, ctx);
+    createBlastDefeatedLeaderboard(nk, logger, ctx);
     logger.info('XXXXXXXXXXXXXXXXXXXX - Blast Royale TypeScript loaded - XXXXXXXXXXXXXXXXXXXX');
 };
 function afterAuthenticate(ctx, logger, nk, data) {
@@ -76,6 +90,8 @@ function afterAuthenticate(ctx, logger, nk, data) {
         logger.error('storageWrite error: %q', error);
         throw error;
     }
+    writeRecordTrophyLeaderboard(nk, logger, ctx);
+    writeRecordBlastDefeatedLeaderboard(nk, logger, ctx, 0);
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
 function rpcDeleteAccount(ctx, logger, nk) {
@@ -132,6 +148,10 @@ function getRandomNumber(min, max) {
     const minCeiled = Math.ceil(min);
     const maxFloored = Math.floor(max);
     return Math.floor(Math.random() * (maxFloored - minCeiled + 1)) + minCeiled;
+}
+function randomElement(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
 }
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -1121,20 +1141,6 @@ const rpcBuyCoinOffer = function (ctx, logger, nk, payload) {
         logger.error('error buying blast trap: %s', error);
         throw error;
     }
-    var notification = {
-        code: notificationOpCodes.CURENCY,
-        content: storeOffer,
-        persistent: false,
-        subject: "You've received a new currency",
-        userId: ctx.userId,
-    };
-    try {
-        nk.notificationsSend([notification]);
-    }
-    catch (error) {
-        logger.error('notificationsSend error: %q', error);
-        throw error;
-    }
 };
 //#endregion
 //#region Coins Offer
@@ -1233,22 +1239,454 @@ const rpcBuyGemOffer = function (ctx, logger, nk, payload) {
         logger.error('error buying blast trap: %s', error);
         throw error;
     }
-    var notification = {
-        code: notificationOpCodes.CURENCY,
-        content: storeOffer,
-        persistent: false,
-        subject: "You've received a new currency",
-        userId: ctx.userId,
-    };
-    try {
-        nk.notificationsSend([notification]);
-    }
-    catch (error) {
-        logger.error('notificationsSend error: %q', error);
-        throw error;
-    }
 };
 //#endregion
+const DailyShopPermissionRead = 2;
+const DailyShopPermissionWrite = 0;
+const DailyShopCollectionName = 'shop';
+const DailyShopCollectionKey = 'daily';
+function getLastDailyShopObject(context, logger, nk) {
+    if (!context.userId) {
+        throw Error('No user ID in context');
+    }
+    var objectId = {
+        collection: DailyShopCollectionName,
+        key: DailyShopCollectionKey,
+        userId: context.userId,
+    };
+    var objects;
+    try {
+        objects = nk.storageRead([objectId]);
+    }
+    catch (error) {
+        logger.error('storageRead error: %s', error);
+        throw error;
+    }
+    var dailyShop = {
+        lastClaimUnix: 0,
+        lastDailyShop: generateRandomDailyShop(nk, context.userId),
+    };
+    objects.forEach(function (object) {
+        if (object.key == DailyShopCollectionKey) {
+            dailyShop = object.value;
+        }
+    });
+    return dailyShop;
+}
+function canUserClaimDailyShop(dailyShop) {
+    if (!dailyShop.lastClaimUnix) {
+        dailyShop.lastClaimUnix = 0;
+    }
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return dailyShop.lastClaimUnix < msecToSec(d.getTime());
+}
+function rpcCanClaimDailyShop(context, logger, nk, payload) {
+    var dailyShop = getLastDailyShopObject(context, logger, nk);
+    var response = {
+        canClaimDailyShop: canUserClaimDailyShop(dailyShop),
+        lastDailyShop: dailyShop.lastDailyShop,
+    };
+    var result = JSON.stringify(response);
+    return result;
+}
+function rpcGetDailyShopOffer(context, logger, nk, payload) {
+    var dailyShop = getLastDailyShopObject(context, logger, nk);
+    if (canUserClaimDailyShop(dailyShop)) {
+        var newShop = generateRandomDailyShop(nk, context.userId);
+        dailyShop.lastClaimUnix = msecToSec(Date.now());
+        dailyShop.lastDailyShop = newShop;
+        var write = {
+            collection: DailyShopCollectionName,
+            key: DailyShopCollectionKey,
+            permissionRead: DailyShopPermissionRead,
+            permissionWrite: DailyShopPermissionWrite,
+            value: dailyShop,
+            userId: context.userId,
+        };
+        if (dailyShop.version) {
+            // Use OCC to prevent concurrent writes.
+            write.version = dailyShop.version;
+        }
+        // Update daily reward storage object for user.
+        try {
+            nk.storageWrite([write]);
+        }
+        catch (error) {
+            logger.error('storageWrite error: %q', error);
+            throw error;
+        }
+    }
+    var result = JSON.stringify(dailyShop);
+    return result;
+}
+function rpcBuyDailyShopOffer(context, logger, nk, payload) {
+    var dailyShop = getLastDailyShopObject(context, logger, nk);
+    var indexOffer = JSON.parse(payload);
+    if (dailyShop.lastDailyShop[indexOffer].isAlreadyBuyed == true) {
+        throw Error('Daily shop offer already buyed');
+    }
+    try {
+        nk.walletUpdate(context.userId, { [dailyShop.lastDailyShop[indexOffer].currency]: -dailyShop.lastDailyShop[indexOffer].price });
+    }
+    catch (error) {
+        logger.error('error buying blast trap: %s', error);
+        throw error;
+    }
+    dailyShop.lastDailyShop[indexOffer].isAlreadyBuyed = true;
+    var write = {
+        collection: DailyShopCollectionName,
+        key: DailyShopCollectionKey,
+        permissionRead: DailyShopPermissionRead,
+        permissionWrite: DailyShopPermissionWrite,
+        value: dailyShop,
+        userId: context.userId,
+    };
+    // Update daily reward storage object for user.
+    try {
+        nk.storageWrite([write]);
+    }
+    catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
+    if (dailyShop.lastDailyShop[indexOffer].blast != null) {
+        addBlast(nk, logger, context.userId, dailyShop.lastDailyShop[indexOffer].blast);
+    }
+    if (dailyShop.lastDailyShop[indexOffer].item != null) {
+        addItem(nk, logger, context, dailyShop.lastDailyShop[indexOffer].item);
+    }
+    var result = JSON.stringify(dailyShop);
+    logger.debug('Succefuly buy daily shop offer response: %q', result);
+    return result;
+}
+function generateRandomDailyShop(nk, userId) {
+    var dailyShop;
+    dailyShop = [
+        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId),
+    ];
+    return dailyShop;
+}
+function getRandomOfferType() {
+    const offerTypeValues = Object.values(OfferType);
+    const randomIndex = Math.floor(Math.random() * offerTypeValues.length);
+    return offerTypeValues[randomIndex];
+}
+function getRandomStoreOffer(nk, userId) {
+    let offer = {
+        name: "",
+        desc: "",
+        type: getRandomOfferType(),
+        coinsAmount: 0,
+        gemsAmount: 0,
+        blast: null,
+        item: null,
+        price: 0,
+        currency: Currency.Coins,
+        isAlreadyBuyed: false,
+    };
+    if (Math.random() < 0.5) {
+        offer.blast = getRandomBlastInAllPlayerArea(userId, nk);
+        offer.price = getBlastPrice(offer.blast);
+        offer.currency = Currency.Coins;
+        offer.desc = "LVL." + calculateLevelFromExperience(offer.blast.exp).toString();
+        offer.name = getBlastDataById(offer.blast.data_id).name;
+    }
+    else {
+        offer.item = getRandomItem(5);
+        var itemData = getItemDataById(offer.item.data_id);
+        offer.price = getItemPrice(offer.item);
+        offer.currency = Currency.Coins;
+        offer.desc = offer.item.amount.toString();
+        offer.name = itemData.name;
+    }
+    return offer;
+}
+function getBlastPrice(blast) {
+    var coeffRarity = 1;
+    switch (getBlastDataById(blast.data_id).rarity) {
+        case Rarity.COMMON:
+            coeffRarity = 1;
+            break;
+        case Rarity.UNCOMMON:
+            coeffRarity = 1.5;
+            break;
+        case Rarity.RARE:
+            coeffRarity = 2;
+            break;
+        case Rarity.EPIC:
+            coeffRarity = 3;
+            break;
+        case Rarity.LEGENDARY:
+            coeffRarity = 10;
+            break;
+        case Rarity.UNIQUE:
+            coeffRarity = 5;
+            break;
+    }
+    return Math.round(200 * coeffRarity * calculateLevelFromExperience(blast.exp));
+}
+function getItemPrice(item) {
+    var coeffRarity = 1;
+    var itemData = getItemDataById(item.data_id);
+    switch (itemData.rarity) {
+        case Rarity.COMMON:
+            coeffRarity = 1;
+            break;
+        case Rarity.UNCOMMON:
+            coeffRarity = 1.5;
+            break;
+        case Rarity.RARE:
+            coeffRarity = 2;
+            break;
+        case Rarity.EPIC:
+            coeffRarity = 3;
+            break;
+        case Rarity.LEGENDARY:
+            coeffRarity = 10;
+            break;
+        case Rarity.UNIQUE:
+            coeffRarity = 5;
+            break;
+    }
+    return Math.round(100 * coeffRarity * item.amount);
+}
+const DailyRewardPermissionRead = 2;
+const DailyRewardPermissionWrite = 0;
+const DailyRewardCollectionName = 'reward';
+const DailyRewardCollectionKey = 'daily';
+function getLastDailyRewardObject(context, logger, nk, payload) {
+    if (!context.userId) {
+        throw Error('No user ID in context');
+    }
+    if (payload) {
+        throw Error('No input allowed');
+    }
+    var objectId = {
+        collection: DailyRewardCollectionName,
+        key: DailyRewardCollectionKey,
+        userId: context.userId,
+    };
+    var objects;
+    try {
+        objects = nk.storageRead([objectId]);
+    }
+    catch (error) {
+        logger.error('storageRead error: %s', error);
+        throw error;
+    }
+    var dailyReward = {
+        lastClaimUnix: 0,
+        totalDay: 0,
+    };
+    objects.forEach(function (object) {
+        if (object.key == DailyRewardCollectionKey) {
+            dailyReward = object.value;
+        }
+    });
+    return dailyReward;
+}
+function canUserClaimDailyReward(dailyReward) {
+    if (!dailyReward.lastClaimUnix) {
+        dailyReward.lastClaimUnix = 0;
+    }
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return dailyReward.lastClaimUnix < msecToSec(d.getTime());
+}
+function getTotalDayConnected(dailyReward) {
+    if (!dailyReward.totalDay) {
+        dailyReward.totalDay = 0;
+    }
+    return dailyReward.totalDay;
+}
+function rpcCanClaimDailyReward(context, logger, nk, payload) {
+    var dailyReward = getLastDailyRewardObject(context, logger, nk, payload);
+    var response = {
+        canClaimDailyReward: canUserClaimDailyReward(dailyReward),
+        totalDayConnected: dailyReward.totalDay,
+    };
+    var result = JSON.stringify(response);
+    logger.debug('rpcCanClaimDailyReward response: %q', result);
+    return result;
+}
+function rpcClaimDailyReward(context, logger, nk, payload) {
+    var reward = {
+        coinsReceived: 0,
+        gemsReceived: 0,
+        blastReceived: null,
+        itemReceived: null,
+    };
+    var dailyReward = getLastDailyRewardObject(context, logger, nk, payload);
+    if (canUserClaimDailyReward(dailyReward)) {
+        var totalDay = getTotalDayConnected(dailyReward);
+        reward = getDayReward(totalDay);
+        var notification = {
+            code: notificationOpCodes.CURENCY,
+            content: reward,
+            persistent: false,
+            subject: "You've received a new item",
+            userId: context.userId,
+        };
+        if (reward.coinsReceived != 0) {
+            updateWalletWithCurrency(nk, context.userId, Currency.Coins, reward.coinsReceived);
+            notification = {
+                code: notificationOpCodes.CURENCY,
+                content: reward,
+                persistent: false,
+                subject: "You've received a new currency",
+                userId: context.userId,
+            };
+            try {
+                nk.notificationsSend([notification]);
+            }
+            catch (error) {
+                logger.error('notificationsSend error: %q', error);
+                throw error;
+            }
+        }
+        if (reward.gemsReceived != 0) {
+            updateWalletWithCurrency(nk, context.userId, Currency.Gems, reward.gemsReceived);
+            notification = {
+                code: notificationOpCodes.CURENCY,
+                content: reward,
+                persistent: false,
+                subject: "You've received a new currency",
+                userId: context.userId,
+            };
+            try {
+                nk.notificationsSend([notification]);
+            }
+            catch (error) {
+                logger.error('notificationsSend error: %q', error);
+                throw error;
+            }
+        }
+        if (reward.blastReceived != null) {
+            addBlast(nk, logger, context.userId, reward.blastReceived);
+        }
+        if (reward.itemReceived != null) {
+            addItem(nk, logger, context, reward.itemReceived);
+        }
+        dailyReward.lastClaimUnix = msecToSec(Date.now());
+        dailyReward.totalDay = totalDay + 1;
+        var write = {
+            collection: DailyRewardCollectionName,
+            key: DailyRewardCollectionKey,
+            permissionRead: DailyRewardPermissionRead,
+            permissionWrite: DailyRewardPermissionWrite,
+            value: dailyReward,
+            userId: context.userId,
+        };
+        if (dailyReward.version) {
+            // Use OCC to prevent concurrent writes.
+            write.version = dailyReward.version;
+        }
+        // Update daily reward storage object for user.
+        try {
+            nk.storageWrite([write]);
+        }
+        catch (error) {
+            logger.error('storageWrite error: %q', error);
+            throw error;
+        }
+    }
+    var result = JSON.stringify(reward);
+    logger.debug('rpcClaimDailyReward response: %q', result);
+    return result;
+}
+function getDayReward(totalDay) {
+    var reward = {
+        coinsReceived: 0,
+        gemsReceived: 0,
+        blastReceived: null,
+        itemReceived: null,
+    };
+    switch (totalDay % 7) {
+        case 0:
+            reward = Reward0;
+            break;
+        case 1:
+            reward = Reward1;
+            break;
+        case 2:
+            reward = Reward2;
+            break;
+        case 3:
+            reward = Reward3;
+            break;
+        case 4:
+            reward = Reward4;
+            break;
+        case 5:
+            reward = Reward5;
+            break;
+        case 6:
+            reward = Reward6;
+            break;
+    }
+    return reward;
+}
+// Data
+const Reward0 = {
+    coinsReceived: 500,
+    gemsReceived: 0,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward1 = {
+    coinsReceived: 0,
+    gemsReceived: 10,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward2 = {
+    coinsReceived: 1000,
+    gemsReceived: 0,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward3 = {
+    coinsReceived: 0,
+    gemsReceived: 15,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward4 = {
+    coinsReceived: 2000,
+    gemsReceived: 0,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward5 = {
+    coinsReceived: 0,
+    gemsReceived: 30,
+    blastReceived: null,
+    itemReceived: null,
+};
+const Reward6 = {
+    coinsReceived: 5000,
+    gemsReceived: 0,
+    blastReceived: null,
+    itemReceived: null,
+};
+const allReward = [
+    Reward0,
+    Reward1,
+    Reward2,
+    Reward3,
+    Reward4,
+    Reward5,
+    Reward6,
+];
+const rpcLoadAllDailyReward = function () {
+    return JSON.stringify(allReward);
+};
 const DeckPermissionRead = 2;
 const DeckPermissionWrite = 0;
 const DeckCollectionName = 'blasts_collection';
@@ -1654,4 +2092,91 @@ function defaultItemsCollection(nk, logger, userId) {
         deckItems: DefaultDeckItems,
         storedItems: [],
     };
+}
+var notificationOpCodes;
+(function (notificationOpCodes) {
+    notificationOpCodes[notificationOpCodes["CURENCY"] = 1000] = "CURENCY";
+    notificationOpCodes[notificationOpCodes["BLAST"] = 1010] = "BLAST";
+    notificationOpCodes[notificationOpCodes["ITEM"] = 1020] = "ITEM";
+})(notificationOpCodes || (notificationOpCodes = {}));
+const LeaderboardTrophyId = "leaderboard_trophy";
+const LeaderboardBlastDefeated = "leaderboard_blast_defeated";
+function createTrophyLeaderboard(nk, logger, ctx) {
+    let id = LeaderboardTrophyId;
+    let authoritative = true;
+    let sort = "descending" /* nkruntime.SortOrder.DESCENDING */;
+    let operator = "best" /* nkruntime.Operator.BEST */;
+    let reset = "0 0 1 */2 *";
+    try {
+        nk.leaderboardCreate(id, authoritative, sort, operator, reset, undefined);
+    }
+    catch (error) {
+        // Handle error
+    }
+}
+function createBlastDefeatedLeaderboard(nk, logger, ctx) {
+    let id = LeaderboardBlastDefeated;
+    let authoritative = true;
+    let sort = "descending" /* nkruntime.SortOrder.DESCENDING */;
+    let operator = "increment" /* nkruntime.Operator.INCREMENTAL */;
+    let reset = '0 0 1 */2 *';
+    try {
+        nk.leaderboardCreate(id, authoritative, sort, operator, reset, undefined);
+    }
+    catch (error) {
+        // Handle error
+    }
+}
+const rpcGetAroundTrophyLeaderboard = function (ctx, logger, nk) {
+    let result;
+    let id = LeaderboardTrophyId;
+    let ownerIds = [ctx.userId];
+    let limit = 100;
+    let cursor = '';
+    let overrideExpiry = 3600;
+    try {
+        result = nk.leaderboardRecordsList(id, ownerIds, limit, cursor, overrideExpiry);
+    }
+    catch (error) {
+        // Handle error
+    }
+    return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
+};
+let leaderboardReset = function (ctx, logger, nk, leaderboard, reset) {
+    if (leaderboard.id !== LeaderboardTrophyId) {
+        return;
+    }
+    let result = nk.leaderboardRecordsList(leaderboard.id, undefined, undefined, undefined, reset);
+    // If leaderboard is top tier and has 10 or more players, relegate bottom 3 players
+    result.records.forEach(function (r) {
+        // Enlever /2 au dessus de 400 tr
+        // nk.leaderboardRecordWrite(bottomTierId, r.ownerId, r.username, r.score, r.subscore, null, null);
+        // nk.leaderboardRecordDelete(topTierId, r.ownerId);
+    });
+};
+function writeRecordTrophyLeaderboard(nk, logger, ctx) {
+    let id = LeaderboardTrophyId;
+    let ownerID = ctx.userId;
+    let username = ctx.username;
+    let score = getCurrencyInWallet(nk, ctx.userId, Currency.Trophies);
+    let result;
+    try {
+        result = nk.leaderboardRecordWrite(id, ownerID, username, score, undefined, undefined);
+    }
+    catch (error) {
+        // Handle error
+    }
+}
+function writeRecordBlastDefeatedLeaderboard(nk, logger, ctx, amount) {
+    let id = LeaderboardBlastDefeated;
+    let ownerID = ctx.userId;
+    let username = ctx.username;
+    let score = amount;
+    let result;
+    try {
+        result = nk.leaderboardRecordWrite(id, ownerID, username, score, undefined, undefined);
+    }
+    catch (error) {
+        // Handle error
+    }
 }

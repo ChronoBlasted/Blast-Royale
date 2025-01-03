@@ -14,6 +14,9 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadUserItem', rpcLoadUserItems);
     initializer.registerRpc('swapDeckItem', rpcSwapDeckItem);
 
+    // Leaderboard
+    initializer.registerRpc('getAroundLeaderboard', rpcGetAroundTrophyLeaderboard);
+
     // Store
     initializer.registerRpc('loadBlastTrapOffer', rpcLoadBlastTrapOffer);
     initializer.registerRpc('buyTrapOffer', rpcBuyTrapOffer);
@@ -35,6 +38,9 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadAllArea', rpcLoadAllArea);
 
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
+
+    createTrophyLeaderboard(nk, logger, ctx);
+    createBlastDefeatedLeaderboard(nk, logger, ctx);
 
     logger.info('XXXXXXXXXXXXXXXXXXXX - Blast Royale TypeScript loaded - XXXXXXXXXXXXXXXXXXXX');
 }
@@ -100,6 +106,9 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
         logger.error('storageWrite error: %q', error);
         throw error;
     }
+
+    writeRecordTrophyLeaderboard(nk, logger, ctx);
+    writeRecordBlastDefeatedLeaderboard(nk, logger, ctx, 0);
 
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
