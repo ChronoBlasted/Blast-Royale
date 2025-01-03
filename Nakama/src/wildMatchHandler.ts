@@ -150,6 +150,34 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             logger.debug('______________ START BATTLE ______________');
 
+            const keys = Object.keys(state.presences);
+            const player1_presence = state.presences[keys[0]]!;
+
+            state.player1_id = player1_presence.userId;
+
+            var allPlayer1BlastInBattle = getDeckBlast(nk, logger, state.player1_id);
+            state.player1_current_blast = allPlayer1BlastInBattle[0];
+            state.player1_blasts = allPlayer1BlastInBattle;
+
+            var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
+            state.player1_items = allPlayer1Items;
+
+            state.wild_blast = getRandomBlastInPlayerArea(state.player1_id, logger, nk);
+
+            const StartData: StartStateData = {
+                id: state.wild_blast.data_id,
+                exp: state.wild_blast.exp,
+                iv: state.wild_blast.iv,
+                status: Status.NONE,
+                activeMoveset: state.wild_blast.activeMoveset!,
+            }
+
+            logger.debug('Random blast: %d, with level: %l appeared', getBlastDataById(state.wild_blast.data_id).name, calculateLevelFromExperience(state.wild_blast.exp));
+
+            state.battle_state = BattleState.WAITING;
+
+            dispatcher.broadcastMessage(OpCodes.MATCH_START, JSON.stringify(StartData));
+            
             logger.debug('______________ END START BATTLE ______________');
 
             break;

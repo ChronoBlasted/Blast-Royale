@@ -182,3 +182,11 @@ function getRandomItem(amount: number): Item {
 
     return newItem;
 }
+
+function getDeckItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): Item[] {
+
+    let userCards: ItemCollection;
+    userCards = loadUserItems(nk, logger, userId);
+
+    return userCards.deckItems;
+}
