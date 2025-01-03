@@ -52,10 +52,60 @@ const rpcSwapDeckItem: nkruntime.RpcFunction =
         return JSON.stringify(userItems);
     }
 
+
 const rpcLoadUserItems: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
         return JSON.stringify(loadUserItems(nk, logger, ctx.userId));
     }
+
+function addItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context, newItemToAdd: Item): ItemCollection {
+
+    let userItems: ItemCollection;
+
+    try {
+        userItems = loadUserItems(nk, logger, ctx.userId);
+    } catch (error) {
+        logger.error('error loading user cards: %s', error);
+        throw Error('Internal server error');
+    }
+
+    var continueScan = true;
+
+    if (continueScan) {
+        for (let i = 0; i < userItems.deckItems.length; i++) {
+            if (userItems.deckItems[i].data_id == newItemToAdd.data_id) {
+                userItems.deckItems[i].amount += newItemToAdd.amount;
+                continueScan = false;
+            }
+        }
+    }
+
+    if (continueScan) {
+        for (let i = 0; i < userItems.storedItems.length; i++) {
+            if (userItems.storedItems[i].data_id == newItemToAdd.data_id) {
+                userItems.storedItems[i].amount += newItemToAdd.amount;
+                continueScan = false;
+            }
+        }
+    }
+
+    if (continueScan) {
+        if (userItems.deckItems.length < 3) {
+            userItems.deckItems[userItems.deckItems.length] = newItemToAdd;
+        } else {
+            userItems.storedItems[userItems.storedItems.length] = newItemToAdd;
+        }
+    }
+
+    try {
+        storeUserItems(nk, logger, ctx.userId, userItems);
+    } catch (error) {
+        logger.error('error buying card: %s', error);
+        throw error;
+    }
+
+    return userItems;
+}
 
 function loadUserItems(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): ItemCollection {
     let storageReadReq: nkruntime.StorageReadRequest = {
