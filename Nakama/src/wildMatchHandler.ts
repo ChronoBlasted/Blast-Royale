@@ -332,6 +332,32 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 logger.debug('______________ PLAYER SWAP BLAST ______________');
 
+                message.data == null ? logger.debug('Receive Op code : %d', message.opCode) : logger.debug('Receive Op code : %d, with data : %e', message.opCode, JSON.parse(nk.binaryToString(message.data)));
+
+                if (message.opCode == OpCodes.PLAYER_CHANGE_BLAST) {
+
+                    state.player1_state = PlayerState.BUSY;
+
+                    var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.player1_blasts.length - 1);
+
+                    if (state.player1_current_blast == state.player1_blasts[msgChangeBlast]) {
+                        ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                        return;
+                    }
+
+                    if (!isBlastAlive(state.player1_blasts[msgChangeBlast])) {
+                        ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast", dispatcher));
+                        return;
+                    }
+
+                    state.player1_current_blast = state.player1_blasts[msgChangeBlast];
+                }
+
+                logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
+                logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast!.data_id).name, state.player1_current_blast?.hp, state.player1_current_blast?.mana);
+
+                state.battle_state = BattleState.WAITING;
+                
                 logger.debug('______________ END PLAYER SWAP BLAST ______________');
             });
             break;
