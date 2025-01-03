@@ -27,3 +27,32 @@ function updateWalletWithCurrency(nk: nkruntime.Nakama, userId: string, currency
 
   return result;
 }
+
+
+function getCurrencyInWallet(nk: nkruntime.Nakama, userId: string, currencyKeyName: Currency): number {
+
+  var amountToReturn = 0;
+
+  try {
+    let results = nk.walletLedgerList(userId);
+
+    switch (currencyKeyName) {
+      case Currency.Coins:
+        amountToReturn = results.items[0].changeset[Currency.Coins]
+        break;
+      case Currency.Gems:
+        amountToReturn = results.items[0].changeset[Currency.Gems]
+        break;
+      case Currency.Trophies:
+        amountToReturn = results.items[0].changeset[Currency.Trophies]
+        break;
+    }
+
+    return amountToReturn;
+
+  } catch (error) {
+    // Handle error
+  }
+
+  return amountToReturn;
+}
