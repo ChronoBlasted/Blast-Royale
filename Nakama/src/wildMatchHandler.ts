@@ -357,11 +357,16 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast!.data_id).name, state.player1_current_blast?.hp, state.player1_current_blast?.mana);
 
                 state.battle_state = BattleState.WAITING;
-                
+
                 logger.debug('______________ END PLAYER SWAP BLAST ______________');
             });
             break;
         case BattleState.END:
+
+            updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200)
+
+            state.battle_state = BattleState.START;
+            state.player1_state = PlayerState.BUSY;
 
             logger.debug('______________ END BATTLE ______________');
 
