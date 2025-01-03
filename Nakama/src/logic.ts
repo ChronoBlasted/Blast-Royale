@@ -218,6 +218,44 @@ function addExpOnBlastInGame(nk: nkruntime.Nakama, logger: nkruntime.Logger, pla
 }
 
 
+function healHealthBlast(blast: Blast, amount: number): Blast {
+    blast.hp += amount;
+
+    if (blast.hp > blast.maxHp) blast.hp = blast.maxHp;
+
+    return blast;
+}
+function healManaBlast(blast: Blast, amount: number): Blast {
+    blast.mana += amount;
+
+    if (blast.mana > blast.maxMana) blast.mana = blast.maxMana;
+
+    return blast;
+}
+
+function calculateCaptureProbability(currentHP: number, maxHP: number, catchRate: number, temCardBonus: number, statusBonus: number): number {
+    const hpFactor = (3 * maxHP - 2 * currentHP) / (3 * maxHP);
+    const baseProbability = catchRate * hpFactor * temCardBonus * statusBonus;
+
+    const captureProbability = Math.min(Math.max(baseProbability, 0), 1);
+
+    return captureProbability;
+}
+
+function isBlastCaptured(
+    currentHP: number,
+    maxHP: number,
+    catchRate: number,
+    temCardBonus: number,
+    statusBonus: number
+): boolean {
+    const captureProbability = calculateCaptureProbability(currentHP, maxHP, catchRate, temCardBonus, statusBonus) * 100;
+
+    const randomValue = Math.random() * 100;
+
+    return randomValue <= captureProbability;
+}
+
 //#endregion
 
 

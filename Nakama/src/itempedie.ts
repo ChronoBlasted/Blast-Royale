@@ -41,6 +41,11 @@ interface ItemData {
     rarity:Rarity;
 }
 
+interface ItemUseJSON {
+    index_item: number
+    index_blast: number
+}
+
 const healthPotionData: ItemData = {
     id: 1,
     name: "Potion",

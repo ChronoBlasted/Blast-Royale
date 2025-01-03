@@ -213,7 +213,58 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         state = performAttackSequence(state, move, dispatcher, nk, logger);
                         break;
                     case OpCodes.PLAYER_USE_ITEM:
-                      
+                        let msgItem = {} as ItemUseJSON;
+
+                        msgItem = JSON.parse(nk.binaryToString(message.data));
+
+                        msgItem.index_item = clamp(msgItem.index_item, 0, state.player1_items.length - 1)
+
+                        let item = state.player1_items[msgItem.index_item];
+
+                        useItem(nk, logger, state.player1_id, item);
+
+                        if (item == null) {
+                            ({ state } = ErrorFunc(state, "Item to use is null", dispatcher));
+                            return;
+                        }
+
+                        if (item.amount <= 0) {
+                            ({ state } = ErrorFunc(state, "U don't have enough item", dispatcher));
+                            return;
+                        }
+
+                        var itemData = getItemDataById(item.data_id);
+
+                        switch (itemData.behaviour) {
+                            case ItemBehaviour.HEAL:
+                                state.player1_blasts[msgItem.index_blast] = healHealthBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
+                                break;
+                            case ItemBehaviour.MANA:
+                                state.player1_blasts[msgItem.index_blast] = healManaBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
+                                break;
+                            case ItemBehaviour.STATUS:
+                                break;
+                            case ItemBehaviour.CATCH:
+                                var wildBlastCaptured = false;
+
+                                wildBlastCaptured = isBlastCaptured(state.wild_blast!.hp, state.wild_blast!.maxHp, getBlastDataById(state.wild_blast!.data_id).catchRate, itemData.catchRate, 1)
+
+                                if (wildBlastCaptured) {
+                                    logger.debug('Wild blast Captured !', wildBlastCaptured);
+
+                                    addBlast(nk, logger, state.player1_id, state.wild_blast!);
+
+                                    state.battle_state = BattleState.END;
+
+                                }
+
+                                state.TurnStateData.catched = wildBlastCaptured;
+                                break;
+                            default:
+                        }
+
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
+
 
                         break;
                     case OpCodes.PLAYER_CHANGE_BLAST:
