@@ -3,6 +3,18 @@ let InitModule = function (ctx, logger, nk, initializer) {
     // Set up hooks.
     initializer.registerAfterAuthenticateDevice(afterAuthenticate);
     initializer.registerAfterAuthenticateEmail(afterAuthenticate);
+    // Blast
+    initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
+    initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
+    initializer.registerRpc('evolveBlast', rpcUpgradeBlast);
+    initializer.registerRpc('swapMove', rpcSwapBlastMove);
+    // Bag
+    initializer.registerRpc('loadUserItem', rpcLoadUserItems);
+    initializer.registerRpc('swapDeckItem', rpcSwapDeckItem);
+    // Others
+    initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
+    initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
+    initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
     logger.info('XXXXXXXXXXXXXXXXXXXX - Blast Royale TypeScript loaded - XXXXXXXXXXXXXXXXXXXX');
 };
@@ -43,6 +55,21 @@ function afterAuthenticate(ctx, logger, nk, data) {
     };
     try {
         nk.storageWrite([writeBlasts]);
+    }
+    catch (error) {
+        logger.error('storageWrite error: %q', error);
+        throw error;
+    }
+    const writeItems = {
+        collection: BagCollectionName,
+        key: BagCollectionKey,
+        permissionRead: BagPermissionRead,
+        permissionWrite: BagPermissionWrite,
+        value: defaultItemsCollection(nk, logger, ctx.userId),
+        userId: ctx.userId,
+    };
+    try {
+        nk.storageWrite([writeItems]);
     }
     catch (error) {
         logger.error('storageWrite error: %q', error);
@@ -132,6 +159,35 @@ function storeUserWallet(nk, user_id, changeset, logger) {
     catch (error) {
         logger.error('Error storing wallet of player : %s', user_id);
     }
+}
+function updateWalletWithCurrency(nk, userId, currencyKeyName, amount) {
+    const changeset = {
+        [currencyKeyName]: amount,
+    };
+    let result = nk.walletUpdate(userId, changeset);
+    return result;
+}
+function getCurrencyInWallet(nk, userId, currencyKeyName) {
+    var amountToReturn = 0;
+    try {
+        let results = nk.walletLedgerList(userId);
+        switch (currencyKeyName) {
+            case Currency.Coins:
+                amountToReturn = results.items[0].changeset[Currency.Coins];
+                break;
+            case Currency.Gems:
+                amountToReturn = results.items[0].changeset[Currency.Gems];
+                break;
+            case Currency.Trophies:
+                amountToReturn = results.items[0].changeset[Currency.Trophies];
+                break;
+        }
+        return amountToReturn;
+    }
+    catch (error) {
+        // Handle error
+    }
+    return amountToReturn;
 }
 var Type;
 (function (Type) {
@@ -906,6 +962,115 @@ const DefaultDeckBlasts = [
 const rpcLoadUserBlast = function (ctx, logger, nk, payload) {
     return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
 };
+const rpcSwapBlastMove = function (ctx, logger, nk, payload) {
+    const request = JSON.parse(payload);
+    let userCards;
+    userCards = loadUserBlast(nk, logger, ctx.userId);
+    let isInDeck = false;
+    let selectedBlast = {
+        uuid: "",
+        data_id: 0,
+        exp: 0,
+        iv: 0,
+        hp: 0,
+        maxHp: 0,
+        mana: 0,
+        maxMana: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+        status: Status.NONE,
+        activeMoveset: []
+    };
+    if (userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast);
+        isInDeck = true;
+    }
+    else if (userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast);
+        isInDeck = false;
+    }
+    if (isInDeck) {
+        userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast);
+        selectedBlast.activeMoveset[request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id;
+    }
+    else {
+        userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
+        selectedBlast.activeMoveset[request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id;
+    }
+    storeUserBlasts(nk, logger, ctx.userId, userCards);
+    return JSON.stringify(userCards);
+};
+const rpcSwapDeckBlast = function (ctx, logger, nk, payload) {
+    const request = JSON.parse(payload);
+    const userBlasts = loadUserBlast(nk, logger, ctx.userId);
+    logger.debug("Payload on server '%s'", request);
+    if (userBlasts.deckBlasts[request.outIndex] == null) {
+        throw Error('invalid out card');
+    }
+    if (userBlasts.storedBlasts[request.inIndex] == null) {
+        throw Error('invalid in card');
+    }
+    let outCard = userBlasts.deckBlasts[request.outIndex];
+    let inCard = userBlasts.storedBlasts[request.inIndex];
+    userBlasts.deckBlasts[request.outIndex] = inCard;
+    userBlasts.storedBlasts[request.inIndex] = outCard;
+    storeUserBlasts(nk, logger, ctx.userId, userBlasts);
+    logger.debug("user '%s' deck card '%s' swapped with '%s'", ctx.userId);
+    return JSON.stringify(userBlasts);
+};
+const rpcUpgradeBlast = function (ctx, logger, nk, payload) {
+    var _a, _b;
+    const uuid = JSON.parse(payload);
+    let userCards;
+    userCards = loadUserBlast(nk, logger, ctx.userId);
+    let isInDeck = false;
+    let selectedBlast = {
+        uuid: "",
+        data_id: 0,
+        exp: 0,
+        iv: 0,
+        hp: 0,
+        maxHp: 0,
+        mana: 0,
+        maxMana: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+        status: Status.NONE,
+        activeMoveset: []
+    };
+    if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid);
+        isInDeck = true;
+    }
+    else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.storedBlasts.find(blast => blast.uuid === uuid);
+        isInDeck = false;
+    }
+    let blastdata = getBlastDataById(selectedBlast.data_id);
+    if (isInDeck) {
+        if (blastdata.nextEvolution !== null) {
+            if (((_a = blastdata.nextEvolution) === null || _a === void 0 ? void 0 : _a.levelRequired) >= calculateLevelFromExperience(selectedBlast.exp)) {
+                // Check si assez d'argent
+                // If true check if assez d'argent par rapport rareté + ratio IV de base
+                userCards.deckBlasts.find(blast => blast.uuid === uuid).data_id = getBlastDataById(blastdata.nextEvolution.id).id;
+            }
+        }
+    }
+    else {
+        if (blastdata.nextEvolution != null) {
+            if (((_b = blastdata.nextEvolution) === null || _b === void 0 ? void 0 : _b.levelRequired) >= calculateLevelFromExperience(selectedBlast.exp)) {
+                // Check si assez d'argent
+                // If true check if assez d'argent par rapport rareté + ratio IV de base
+                userCards.storedBlasts.find(blast => blast.uuid === uuid).data_id = getBlastDataById(blastdata.nextEvolution.id).id;
+            }
+        }
+    }
+    storeUserBlasts(nk, logger, ctx.userId, userCards);
+    logger.debug("user '%s' upgraded card '%s'", ctx.userId, selectedBlast.uuid);
+    return JSON.stringify(userCards);
+};
 function addBlast(nk, logger, userId, newBlastToAdd) {
     newBlastToAdd.hp = newBlastToAdd.maxHp;
     newBlastToAdd.mana = newBlastToAdd.maxMana;
@@ -968,5 +1133,151 @@ function defaultBlastCollection(nk, logger, userId) {
     return {
         deckBlasts: DefaultDeckBlasts,
         storedBlasts: DefaultDeckBlasts,
+    };
+}
+const BagPermissionRead = 2;
+const BagPermissionWrite = 0;
+const BagCollectionName = 'item_collection';
+const BagCollectionKey = 'user_items';
+const DefaultDeckItems = [
+    {
+        data_id: healthPotionData.id,
+        amount: 5,
+    },
+    {
+        data_id: manaPotionData.id,
+        amount: 5,
+    },
+    {
+        data_id: blastTrapData.id,
+        amount: 10,
+    },
+];
+const rpcSwapDeckItem = function (ctx, logger, nk, payload) {
+    const request = JSON.parse(payload);
+    const userItems = loadUserItems(nk, logger, ctx.userId);
+    logger.debug("Payload on server '%s'", request);
+    if (userItems.deckItems[request.outIndex] == null) {
+        throw Error('invalid out card');
+    }
+    if (userItems.storedItems[request.inIndex] == null) {
+        throw Error('invalid in card');
+    }
+    let outCard = userItems.deckItems[request.outIndex];
+    let inCard = userItems.storedItems[request.inIndex];
+    userItems.deckItems[request.outIndex] = inCard;
+    userItems.storedItems[request.inIndex] = outCard;
+    storeUserItems(nk, logger, ctx.userId, userItems);
+    logger.debug("user '%s' deck card '%s' swapped with '%s'", ctx.userId);
+    return JSON.stringify(userItems);
+};
+const rpcLoadUserItems = function (ctx, logger, nk, payload) {
+    return JSON.stringify(loadUserItems(nk, logger, ctx.userId));
+};
+function addItem(nk, logger, ctx, newItemToAdd) {
+    let userItems;
+    try {
+        userItems = loadUserItems(nk, logger, ctx.userId);
+    }
+    catch (error) {
+        logger.error('error loading user cards: %s', error);
+        throw Error('Internal server error');
+    }
+    var continueScan = true;
+    if (continueScan) {
+        for (let i = 0; i < userItems.deckItems.length; i++) {
+            if (userItems.deckItems[i].data_id == newItemToAdd.data_id) {
+                userItems.deckItems[i].amount += newItemToAdd.amount;
+                continueScan = false;
+            }
+        }
+    }
+    if (continueScan) {
+        for (let i = 0; i < userItems.storedItems.length; i++) {
+            if (userItems.storedItems[i].data_id == newItemToAdd.data_id) {
+                userItems.storedItems[i].amount += newItemToAdd.amount;
+                continueScan = false;
+            }
+        }
+    }
+    if (continueScan) {
+        if (userItems.deckItems.length < 3) {
+            userItems.deckItems[userItems.deckItems.length] = newItemToAdd;
+        }
+        else {
+            userItems.storedItems[userItems.storedItems.length] = newItemToAdd;
+        }
+    }
+    try {
+        storeUserItems(nk, logger, ctx.userId, userItems);
+    }
+    catch (error) {
+        logger.error('error buying card: %s', error);
+        throw error;
+    }
+    return userItems;
+}
+function useItem(nk, logger, userId, itemToUse) {
+    let userItems;
+    userItems = loadUserItems(nk, logger, userId);
+    for (let i = 0; i < userItems.deckItems.length; i++) {
+        if (userItems.deckItems[i].data_id == itemToUse.data_id) {
+            userItems.deckItems[i].amount--;
+            if (userItems.deckItems[i].amount < 0) {
+                userItems.deckItems[i].amount = 0;
+            }
+        }
+    }
+    storeUserItems(nk, logger, userId, userItems);
+    logger.debug('user %s successfully use item', userId);
+    return userItems;
+}
+function loadUserItems(nk, logger, userId) {
+    let storageReadReq = {
+        key: BagCollectionKey,
+        collection: BagCollectionName,
+        userId: userId,
+    };
+    let objects;
+    try {
+        objects = nk.storageRead([storageReadReq]);
+    }
+    catch (error) {
+        logger.error('storageRead error: %s', error);
+        throw error;
+    }
+    if (objects.length === 0) {
+        throw Error('user cards storage object not found');
+    }
+    let storedItemCollection = objects[0].value;
+    return storedItemCollection;
+}
+function storeUserItems(nk, logger, userId, cards) {
+    try {
+        nk.storageWrite([
+            {
+                key: BagCollectionKey,
+                collection: BagCollectionName,
+                userId: userId,
+                value: cards,
+                permissionRead: BagPermissionRead,
+                permissionWrite: BagPermissionWrite,
+            }
+        ]);
+    }
+    catch (error) {
+        logger.error('storageWrite error: %s', error);
+        throw error;
+    }
+}
+function defaultItemsCollection(nk, logger, userId) {
+    let cards = {
+        deckItems: DefaultDeckItems,
+        storedItems: [],
+    };
+    storeUserItems(nk, logger, userId, cards);
+    return {
+        deckItems: DefaultDeckItems,
+        storedItems: [],
     };
 }

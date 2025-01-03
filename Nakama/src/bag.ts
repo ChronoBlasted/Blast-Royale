@@ -107,6 +107,28 @@ function addItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.
     return userItems;
 }
 
+function useItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, itemToUse: Item): ItemCollection {
+
+    let userItems: ItemCollection;
+    userItems = loadUserItems(nk, logger, userId);
+
+    for (let i = 0; i < userItems.deckItems.length; i++) {
+        if (userItems.deckItems[i].data_id == itemToUse.data_id) {
+            userItems.deckItems[i].amount--;
+
+            if (userItems.deckItems[i].amount < 0) {
+                userItems.deckItems[i].amount = 0;
+            }
+        }
+    }
+
+    storeUserItems(nk, logger, userId, userItems);
+
+    logger.debug('user %s successfully use item', userId);
+
+    return userItems;
+}
+
 function loadUserItems(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): ItemCollection {
     let storageReadReq: nkruntime.StorageReadRequest = {
         key: BagCollectionKey,
