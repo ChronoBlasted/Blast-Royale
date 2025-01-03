@@ -268,7 +268,21 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                         break;
                     case OpCodes.PLAYER_CHANGE_BLAST:
-                       
+                        var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.player1_blasts.length - 1);
+
+                        if (state.player1_current_blast == state.player1_blasts[msgChangeBlast]) {
+                            ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                            return;
+                        }
+
+                        if (!isBlastAlive(state.player1_blasts[msgChangeBlast])) {
+                            ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast in Ready", dispatcher));
+                            return;
+                        }
+
+                        state.player1_current_blast = state.player1_blasts[msgChangeBlast];
+
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
                         break;
                     case OpCodes.PLAYER_WAIT:
                       
