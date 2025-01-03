@@ -266,7 +266,54 @@ function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string
 
     storeUserBlasts(nk, logger, userId, userCards);
 
+    logger.debug("user '%s' succesfully add blast with id '%s'", userId, newBlastToAdd.data_id);
+
     return userCards;
+}
+
+
+function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, uuid: string, expToAdd: number): Blast[] {
+
+    let userCards: BlastCollection;
+    userCards = loadUserBlast(nk, logger, userId);
+
+    let isInDeck: boolean = false;
+    let selectedBlast: Blast = {
+        uuid: "",
+        data_id: 0,
+        exp: 0,
+        iv: 0,
+        hp: 0,
+        maxHp: 0,
+        mana: 0,
+        maxMana: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+        status: Status.NONE,
+        activeMoveset: []
+    };
+
+    if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid)!;
+        isInDeck = true;
+    }
+    else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid)!;
+        isInDeck = false;
+    }
+
+    if (isInDeck) {
+        userCards.deckBlasts.find(blast => blast.uuid === uuid)!.exp += expToAdd;
+    } else {
+        userCards.storedBlasts.find(blast => blast.uuid === uuid)!.exp += expToAdd;
+    }
+
+    storeUserBlasts(nk, logger, userId, userCards);
+
+    logger.debug("user '%s' succesfully add exp on blast with uuid '%s'", userId, uuid);
+
+    return userCards.deckBlasts;
 }
 
 function loadUserBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastCollection {

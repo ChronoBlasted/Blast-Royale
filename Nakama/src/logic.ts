@@ -46,6 +46,11 @@ function calculateExperienceFromLevel(level: number): number {
     return experienceNiveau;
 }
 
+function calculateExperienceGain(expYield: number, enemyLevel: number, yourLevel: number): number {
+    const experience: number = Math.floor(((expYield * enemyLevel / 7) * ((2 * enemyLevel + 10) / (enemyLevel + yourLevel + 10)) + 1));
+    return experience;
+}
+
 function getRandomActiveMoveset(blastData: BlastData, exp: number): number[] {
 
     const availableMoves = blastData.movepool
@@ -58,6 +63,162 @@ function getRandomActiveMoveset(blastData: BlastData, exp: number): number[] {
     return randomMoveset;
 }
 
+//#region Battle
+
+function calculateDamage(
+    attackerLevel: number,
+    attackerAttack: number,
+    defenderDefense: number,
+    attackerType: Type,
+    defenderType: Type,
+    movePower: number
+): number {
+    const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
+    return Math.floor(damage);
+}
+
+function getTypeMultiplier(moveType: Type, defenderType: Type): number {
+    switch (moveType) {
+        case Type.FIRE:
+            switch (defenderType) {
+                case Type.GRASS:
+                    return 2;
+                case Type.WATER:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        case Type.WATER:
+            switch (defenderType) {
+                case Type.FIRE:
+                    return 2;
+                case Type.GRASS:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        case Type.GRASS:
+            switch (defenderType) {
+                case Type.WATER:
+                    return 2;
+                case Type.FIRE:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        case Type.NORMAL:
+            switch (defenderType) {
+                case Type.LIGHT:
+                    return 0.5;
+                case Type.DARK:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        case Type.GROUND:
+            switch (defenderType) {
+                case Type.ELECTRIC:
+                    return 2;
+                case Type.FLY:
+                    return 0;
+                default:
+                    return 1;
+            }
+
+        case Type.FLY:
+            switch (defenderType) {
+                case Type.ELECTRIC:
+                    return 0;
+                case Type.GROUND:
+                    return 2;
+                default:
+                    return 1;
+            }
+
+        case Type.ELECTRIC:
+            switch (defenderType) {
+                case Type.GROUND:
+                    return 0;
+                case Type.FLY:
+                    return 2;
+                default:
+                    return 1;
+            }
+
+        case Type.LIGHT:
+            switch (defenderType) {
+                case Type.DARK:
+                    return 2;
+                case Type.NORMAL:
+                    return 2;
+                case Type.LIGHT:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        case Type.DARK:
+            switch (defenderType) {
+                case Type.LIGHT:
+                    return 2;
+                case Type.NORMAL:
+                    return 2;
+                case Type.DARK:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+
+        default:
+            return 1;
+    }
+}
+
+
+function calculateStaminaRecovery(
+    maxStamina: number,
+    currentStamina: number,
+    useWait: boolean = false
+): number {
+    const normalRecovery: number = maxStamina * 0.2;
+    const waitRecovery: number = maxStamina * 0.5;
+
+    let recoveredStamina: number = currentStamina + (useWait ? waitRecovery : normalRecovery);
+
+    if (recoveredStamina > maxStamina) {
+        recoveredStamina = maxStamina;
+    }
+
+    return Math.floor(recoveredStamina);
+}
+
+function getFasterBlast(blast1: Blast, blast2: Blast): boolean {
+    if (blast1.speed > blast2.speed) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isAllBlastDead(allPlayerBlasts: Blast[]): boolean {
+    return allPlayerBlasts.every((blast) => blast.hp === 0);
+}
+
+function isBlastAlive(blast: Blast): boolean {
+    return blast.hp > 0;
+}
+
+function addExpOnBlastInGame(nk: nkruntime.Nakama, logger: nkruntime.Logger, playerId: string, currentPlayerBlast: Blast, enemyBlast: Blast) {
+    let expToAdd = calculateExperienceGain(getBlastDataById(currentPlayerBlast.data_id).expYield, calculateLevelFromExperience(enemyBlast.exp), calculateLevelFromExperience(currentPlayerBlast.exp));
+    addExpOnBlast(nk, logger, playerId, currentPlayerBlast.uuid, expToAdd);
+}
+
+
+//#endregion
 
 
 
