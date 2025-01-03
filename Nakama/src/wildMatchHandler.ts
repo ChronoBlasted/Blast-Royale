@@ -285,7 +285,11 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         ({ state } = executeWildBlastAttack(state, dispatcher));
                         break;
                     case OpCodes.PLAYER_WAIT:
-                      
+                        state.player1_state = PlayerState.BUSY;
+
+                        state.player1_current_blast!.mana = calculateStaminaRecovery(state.player1_current_blast!.maxMana, state.player1_current_blast!.mana, true);
+
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
                         break;
                 }
 
