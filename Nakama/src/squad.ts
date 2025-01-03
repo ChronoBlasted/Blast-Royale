@@ -93,12 +93,64 @@ interface SwapDeckRequest {
     outIndex: number
 }
 
+interface SwapMoveRequest {
+    uuidBlast: string
+    outMoveIndex: number
+    newMoveIndex: number
+}
 
 const rpcLoadUserBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
         return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
     }
 
+const rpcSwapBlastMove: nkruntime.RpcFunction =
+    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
+        const request: SwapMoveRequest = JSON.parse(payload);
+
+        let userCards: BlastCollection;
+        userCards = loadUserBlast(nk, logger, ctx.userId);
+
+        let isInDeck: boolean = false;
+        let selectedBlast: Blast = {
+            uuid: "",
+            data_id: 0,
+            exp: 0,
+            iv: 0,
+            hp: 0,
+            maxHp: 0,
+            mana: 0,
+            maxMana: 0,
+            attack: 0,
+            defense: 0,
+            speed: 0,
+            status: Status.NONE,
+            activeMoveset: []
+        };
+
+        if (userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
+            selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)!;
+            isInDeck = true;
+        }
+        else if (userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
+            selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)!;
+            isInDeck = false;
+        }
+
+        if (isInDeck) {
+            userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast);
+
+            selectedBlast.activeMoveset![request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id;
+        } else {
+            userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
+
+            selectedBlast.activeMoveset![request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id
+        }
+
+        storeUserBlasts(nk, logger, ctx.userId, userCards);
+
+        return JSON.stringify(userCards);
+    }
 
 const rpcSwapDeckBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
@@ -128,7 +180,7 @@ const rpcSwapDeckBlast: nkruntime.RpcFunction =
 
         return JSON.stringify(userBlasts);
     }
-    
+
 function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newBlastToAdd: Blast): BlastCollection {
 
     newBlastToAdd.hp = newBlastToAdd.maxHp;

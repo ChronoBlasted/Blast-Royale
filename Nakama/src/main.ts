@@ -7,6 +7,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     // Blast
     initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
     initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
+    initializer.registerRpc('swapMove', rpcSwapBlastMove);
 
     // Others
     initializer.registerRpc('loadBlastPedia', rpcLoadBlastPedia);
@@ -65,7 +66,9 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
     }
 
     logger.debug('new user id: %s account data initialised', ctx.userId);
+
 }
+
 
 
 
