@@ -33,8 +33,6 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
         NakamaArea.Init();
 
-        NakamaLogic.Init();
-
         NakamaStore.Init();
 
         NakamaWildBattle.Init();
