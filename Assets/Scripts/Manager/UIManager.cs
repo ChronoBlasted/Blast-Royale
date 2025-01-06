@@ -34,6 +34,11 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void InitView()
     {
+        MenuView.Init();
+        GameView.Init();
+        EndView.Init();
+        OpeningView.Init();
+
         HideBlackShade();
     }
 
