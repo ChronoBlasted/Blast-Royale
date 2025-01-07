@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7120952408294746363}
   - component: {fileID: 214719777143892112}
-  - component: {fileID: 8460149179785751635}
   - component: {fileID: 2358894834846662903}
+  - component: {fileID: 6476941616466720316}
   m_Layer: 0
   m_Name: TabLayout
   m_TagString: Untagged
@@ -60,23 +60,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
---- !u!114 &8460149179785751635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060118607875157301}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9959ab7beb6ff94098edf95f757992a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _layoutElement: {fileID: 214719777143892112}
-  _bg: {fileID: 7020468541827778479}
-  _ico: {fileID: 1240941482661058380}
-  _title: {fileID: 450517434472559448}
-  _tab: {fileID: 0}
 --- !u!114 &2358894834846662903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +107,23 @@ MonoBehaviour:
   _type: 1
   _rt: {fileID: 7120952408294746363}
   _timeOfScale: 0.2
+--- !u!114 &6476941616466720316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060118607875157301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61178e7c9c8ad4d45a93f3585fd4b063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _layoutElement: {fileID: 214719777143892112}
+  _bg: {fileID: 7020468541827778479}
+  _ico: {fileID: 1240941482661058380}
+  _title: {fileID: 450517434472559448}
+  _tab: {fileID: 0}
 --- !u!1 &2157102063180786323
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,10 +16,12 @@ public class DataUtils : MonoSingleton<DataUtils>
     [SerializeField] Sprite _gemIco, _trophyIco;
     [SerializeField] Sprite _blastPediaSprite, _itemPediaSprite, _blastIcoSprite, _itemIcoSprite;
 
-
     List<BlastData> _blastPedia;
     List<ItemData> _itemPedia;
     List<Move> _movePedia;
+
+    BlastCollection _blastCollection;
+    ItemCollection _itemCollection;
 
     public Sprite CoinIco { get => _coinIco; }
     public Sprite GemIco { get => _gemIco; }
@@ -28,7 +30,14 @@ public class DataUtils : MonoSingleton<DataUtils>
     public Sprite ItemPediaSprite { get => _itemPediaSprite; }
     public Sprite BlastIcoSprite { get => _blastIcoSprite; }
     public Sprite ItemIcoSprite { get => _itemIcoSprite; }
-    
+
+    public List<BlastData> BlastPedia { get => _blastPedia; set => _blastPedia = value; }
+    public List<ItemData> ItemPedia { get => _itemPedia; set => _itemPedia = value; }
+    public List<Move> MovePedia { get => _movePedia; set => _movePedia = value; }
+
+    public ItemCollection ItemCollection { get => _itemCollection; set => _itemCollection = value; }
+    public BlastCollection BlastCollection { get => _blastCollection; set => _blastCollection = value; }
+
 
     public Sprite GetBlastImgByID(int id)
     {

@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class FightPanel : Panel
 {
-
+    public override void OpenPanel()
+    {
+        base.OpenPanel();
+    }
 }
