@@ -6,6 +6,7 @@ public class MenuView : View
 {
     [SerializeField] NavBar navBar;
 
+    [field: SerializeField] public Topbar TopBar { get; protected set; }
     [field: SerializeField] public ShopPanel ShopPanel { get; protected set; }
     [field: SerializeField] public SquadPanel SquadPanel { get; protected set; }
     [field: SerializeField] public FightPanel FightPanel { get; protected set; }

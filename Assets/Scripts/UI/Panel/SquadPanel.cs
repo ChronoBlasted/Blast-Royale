@@ -43,7 +43,7 @@ public class SquadPanel : Panel
     {
         base.OpenPanel();
 
-        //UIManager.Instance.MenuView.TopBar.ShowTopBar();
+        UIManager.Instance.MenuView.TopBar.ShowTopBar();
 
         _squadNavBar.Init();
     }
@@ -129,6 +129,6 @@ public class SquadPanel : Panel
 
     public void UpdateMiddleTitle(SquadTabType tabType)
     {
-        //_squadMidLayout.UpdateData(tabType);
+        _squadMidLayout.UpdateData(tabType);
     }
 }
