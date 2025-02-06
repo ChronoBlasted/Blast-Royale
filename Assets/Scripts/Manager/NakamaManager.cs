@@ -1,4 +1,5 @@
 using BaseTemplate.Behaviours;
+using Nakama;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,27 +18,20 @@ public class NakamaManager : MonoSingleton<NakamaManager>
     [field: SerializeField] public NakamaWildBattle NakamaWildBattle { get; protected set; }
     [field: SerializeField] public NakamaNotifications NakamaNotifications { get; protected set; }
 
+    public IClient Client { get; private set; }
+    public ISession Session { get; private set; }
+    public ISocket Socket { get; private set; }
+
     public void Init()
     {
         NakamaAuth.Init();
+    }
 
-        NakamaUserAccount.Init();
-
-        NakamaDailyReward.Init();
-
-        NakamaPedia.Init();
-
-        NakamaFriends.Init();
-
-        NakamaLeaderboards.Init();
-
-        NakamaArea.Init();
-
-        NakamaStore.Init();
-
-        NakamaWildBattle.Init();
-
-        NakamaNotifications.Init();
+    public void AuthUser(IClient client, ISession session, ISocket socket)
+    {
+        Client = client;
+        Session = session;
+        Socket = socket;
 
         GameManager.Instance.UpdateStateToMenu();
     }
