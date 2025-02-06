@@ -27,11 +27,13 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         NakamaAuth.Init();
     }
 
-    public void AuthUser(IClient client, ISession session, ISocket socket)
+    public async void AuthUser(IClient client, ISession session, ISocket socket)
     {
         Client = client;
         Session = session;
         Socket = socket;
+
+        await NakamaUserAccount.Init(Client, Session);
 
         GameManager.Instance.UpdateStateToMenu();
     }
