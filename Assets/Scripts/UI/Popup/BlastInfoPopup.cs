@@ -9,7 +9,7 @@ public class BlastInfoPopup : Popup
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastDescTxt, _blastLevel, _blastExp, _blastHp, _blastMana, _blastAttack, _blastDefense, _blastSpeed, _blastType;
     [SerializeField] Image _blastImg, _blastTypeColorImg, _borderImg;
-    [SerializeField] GameObject _prestigeEvolveLayout, _attackLayout;
+    [SerializeField] GameObject _prestigeEvolveLayout, _moveLayout;
     [SerializeField] CustomButton _prestigeButton, _evolveButton;
     [SerializeField] List<MoveLayout> movesLayout;
 
@@ -59,7 +59,7 @@ public class BlastInfoPopup : Popup
         _blastTypeColorImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
         _borderImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
 
-        _attackLayout.SetActive(true);
+        _moveLayout.SetActive(true);
 
         for (int i = 0; i < movesLayout.Count; i++)
         {
@@ -97,7 +97,7 @@ public class BlastInfoPopup : Popup
         _borderImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
 
         _prestigeEvolveLayout.SetActive(false);
-        _attackLayout.SetActive(false);
+        _moveLayout.SetActive(false);
     }
 
     public void HandleOnEvolve()

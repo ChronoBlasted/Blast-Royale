@@ -14,7 +14,7 @@ public class LeaderboardView : View
     [SerializeField] Transform _blastDefeatedAroundMeTranform;
     [SerializeField] Transform _blastDefeatedFriendTranform;
 
-    [SerializeField] LeaderboardRowLayout _trophyLayout;
+    [SerializeField] LeaderboardRowLayout _leaderboardRowLayout;
 
     [SerializeField] NavBar _leaderboardNavbar;
     [SerializeField] NavBar _leaderboardSubNavbar;
@@ -51,7 +51,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _trophyTransform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyTransform);
             currentTrophyLayout.Init(player, LeaderboardType.Trophy);
         }
     }
@@ -60,7 +60,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _trophyAroundMeTransform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyAroundMeTransform);
             currentTrophyLayout.Init(player, LeaderboardType.Trophy);
         }
     }
@@ -69,7 +69,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _trophyFriendTransform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyFriendTransform);
             currentTrophyLayout.Init(player, LeaderboardType.Trophy);
         }
     }
@@ -78,7 +78,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _blastDefeatedTranform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedTranform);
             currentTrophyLayout.Init(player, LeaderboardType.BlastDefeated);
         }
     }
@@ -87,7 +87,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _blastDefeatedAroundMeTranform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedAroundMeTranform);
             currentTrophyLayout.Init(player, LeaderboardType.BlastDefeated);
         }
     }
@@ -96,7 +96,7 @@ public class LeaderboardView : View
     {
         foreach (var player in trophyLeaderboard.Records)
         {
-            var currentTrophyLayout = Instantiate(_trophyLayout, _blastDefeatedFriendTranform);
+            var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedFriendTranform);
             currentTrophyLayout.Init(player, LeaderboardType.BlastDefeated);
         }
     }

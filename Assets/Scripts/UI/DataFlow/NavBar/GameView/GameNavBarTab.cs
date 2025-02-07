@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class GameNavBarTab : MonoBehaviour
+public class GameNavBarTab : NavBarTab
 {
     [SerializeField] LayoutElement _layoutElement;
     [SerializeField] Image _bg, _ico;
@@ -16,7 +16,7 @@ public class GameNavBarTab : MonoBehaviour
 
     Sequence _growSequence;
 
-    public void HandleOnPress()
+    public override void HandleOnPress()
     {
         if (_growSequence.IsActive()) _growSequence.Kill();
 
@@ -39,7 +39,7 @@ public class GameNavBarTab : MonoBehaviour
         }
     }
 
-    public void HandleOnReset()
+    public override void HandleOnReset()
     {
         if (_growSequence.IsActive()) _growSequence.Kill();
 

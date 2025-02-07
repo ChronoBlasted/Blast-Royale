@@ -14,18 +14,22 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public EndView EndView { get; protected set; }
     [field: SerializeField] public OpeningView OpeningView { get; protected set; }
     [field: SerializeField] public PediaView PediaView { get; protected set; }
-    [field: SerializeField] public FriendView FriendView { get; protected set; }
-    [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
-    [field: SerializeField] public LeaderboardView LeaderboardView { get; protected set; }
-    [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
+    [field: SerializeField] public LeaderboardView LeaderboardView { get; protected set; }
+    [field: SerializeField] public FriendView FriendView { get; protected set; }
+    [field: SerializeField] public SettingView SettingView { get; protected set; }
+    [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
+    [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
 
+    [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
     [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
     [field: SerializeField] public MoveSelectorPopup MoveSelectorPopup { get; protected set; }
-    [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
-    [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
+    [field: SerializeField] public ItemInfoPopup ItemInfoPopup { get; protected set; }
+    [field: SerializeField] public ProfilePopup ProfilePopup { get; protected set; }
+    [field: SerializeField] public LanguagePopup LanguagePopup { get; protected set; }
     [field: SerializeField] public RewardPopup RewardPopup { get; protected set; }
     [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
+    [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
 
 
     [Header("Black Shade Ref")]

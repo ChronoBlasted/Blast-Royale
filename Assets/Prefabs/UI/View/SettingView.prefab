@@ -4001,13 +4001,42 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6279321013281887463, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5440551711328806314}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5857209562116736430, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3224498378438263239}
   m_SourcePrefab: {fileID: 100100000, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
 --- !u!224 &51205957270484654 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3557395375510874348, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
   m_PrefabInstance: {fileID: 3597113540790246978}
   m_PrefabAsset: {fileID: 0}
+--- !u!225 &5879249836306314638 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 6952653095860136908, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
+  m_PrefabInstance: {fileID: 3597113540790246978}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6963548694426786796 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5857209562116736430, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
+  m_PrefabInstance: {fileID: 3597113540790246978}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3224498378438263239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963548694426786796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eb20933c717e554995cb10b80f8d5b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 5879249836306314638}
+  _music: {fileID: 4942339831802933963}
+  _SFX: {fileID: 5436164189894956179}
+  _mixer: {fileID: 24100000, guid: f0c2f0888188f224db054760799b5114, type: 2}
 --- !u!224 &7408177869976554149 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6279321013281887463, guid: 7b11c12b3942af24ab218e95a52e54bb, type: 3}
