@@ -14,6 +14,56 @@ public class BlastLayout : MonoBehaviour
 
     public void Init(Blast blast, int index = -1)
     {
+        BlastData blastData = DataUtils.Instance.GetBlastDataById(blast.data_id);
 
+        _blast = blast;
+        _index = index;
+
+        _blastNameTxt.text = blastData.name;
+        _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
+
+        _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(blastData.id);
+        _blastBorder.color = DataUtils.Instance.GetTypeColor(blastData.type);
+    }
+
+    public void HandleOnInfoButton()
+    {
+        if (UIManager.Instance.MenuView.SquadPanel.IsSwapMode)
+        {
+            NakamaManager.Instance.NakamaUserAccount.SwitchPlayerBlast(_index, UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored);
+
+            foreach (Transform child in UIManager.Instance.MenuView.SquadPanel.StoredBlastTransform.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            HandleOnSwapDisable();
+        }
+        else
+        {
+            UIManager.Instance.BlastInfoPopup.UpdateData(_blast);
+
+            UIManager.Instance.BlastInfoPopup.OpenPopup();
+        }
+    }
+
+    public void HandleOnSwapEnable()
+    {
+        UIManager.Instance.MenuView.SquadPanel.IsSwapMode = true;
+        UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored = _index;
+
+        // Do feedback on select
+
+        UIManager.Instance.MenuView.SquadPanel.SwitchToSoloBlast(_blast);
+    }
+
+    public void HandleOnSwapDisable()
+    {
+        UIManager.Instance.MenuView.SquadPanel.IsSwapMode = false;
+        UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored = -1;
+
+        // Do feedback on select
+
+        UIManager.Instance.MenuView.SquadPanel.QuitSoloBlast();
     }
 }

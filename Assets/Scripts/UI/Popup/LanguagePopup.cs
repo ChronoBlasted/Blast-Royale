@@ -27,7 +27,7 @@ public class LanguagePopup : Popup
         base.ClosePopup();
     }
 
-    public void LocaleSelected(int index)
+    public void ChangeSelected(int index)
     {
         var locale = LocalizationSettings.AvailableLocales.Locales[index];
         LocalizationSettings.SelectedLocale = locale;
@@ -48,7 +48,6 @@ public class LanguagePopup : Popup
         for (int i = 0; i < _languageLayoutList.Count; ++i)
         {
             var locale = LocalizationSettings.AvailableLocales.Locales[i];
-
 
             if (LocalizationSettings.SelectedLocale == locale)
             {
