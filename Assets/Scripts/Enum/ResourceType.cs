@@ -12,6 +12,10 @@ public enum ResourceType
     Lock = 404,
     Unlock = 405,
     FloatingText = 406,
+    ArrowUp = 410,
+    ArrowDown = 411,
+    ArrowLeft = 412,
+    ArrowRight = 413,
 }
 
 public enum UIType
@@ -22,4 +26,8 @@ public enum UIType
     Lock = ResourceType.Lock,
     Unlock = ResourceType.Unlock,
     FloatingText = ResourceType.FloatingText,
+    ArrowUp = ResourceType.ArrowUp,
+    ArrowDown = ResourceType.ArrowDown,
+    ArrowLeft = ResourceType.ArrowLeft,
+    ArrowRight = ResourceType.ArrowRight,
 }
