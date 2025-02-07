@@ -31,11 +31,12 @@ public class NakamaWildBattle : MonoBehaviour
     ISession _session;
     ISocket _socket;
     IMatch _match;
-
     Action<IMatchState> _matchStateHandler;
 
     string _matchId;
     PlayerState _playerState;
+
+    StartStateData _startStateData;
 
     public PlayerState PlayerState { get => _playerState; }
 
@@ -90,8 +91,6 @@ public class NakamaWildBattle : MonoBehaviour
         GameManager.Instance.UpdateStateToMenu();
     }
 
-
-
     private void OnReceivedMatchState(IMatchState matchState)
     {
         string messageJson = Encoding.UTF8.GetString(matchState.State);
@@ -99,13 +98,123 @@ public class NakamaWildBattle : MonoBehaviour
         if (messageJson == "") Debug.Log("OpCodes recu : " + matchState.OpCode);
         else Debug.Log("OpCodes recu : " + matchState.OpCode + ",Message en Json : " + messageJson);
 
-/*        switch (matchState.OpCode)
+        switch (matchState.OpCode)
         {
-            // TODO add match logic
-        }*/
+            case NakamaOpCode.MATCH_START:
+                _startStateData = JsonUtility.FromJson<StartStateData>(messageJson);
+
+                WildBattleManager.Instance.StartBattle(_startStateData);
+                break;
+
+            case NakamaOpCode.ENEMY_READY:
+                WildBattleManager.Instance.StartNewTurn();
+                break;
+
+            case NakamaOpCode.MATCH_ROUND:
+                var _turnState = messageJson.FromJson<TurnStateData>();
+                WildBattleManager.Instance.PlayTurn(_turnState);
+                break;
+            case NakamaOpCode.MATCH_END:
+                WildBattleManager.Instance.MatchEnd(messageJson);
+                break;
+
+            case NakamaOpCode.ERROR_SERV:
+                WildBattleManager.Instance.StartNewTurn();
+                break;
+
+
+            case NakamaOpCode.DEBUG:
+                break;
+
+
+            default:
+                break;
+        }
+    }
+
+
+    public async Task PlayerAttack(int indexAttack)
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson(), null);
+
+            Debug.Log("ATTACK OP CODE SENT WITH DATA : " + indexAttack.ToJson());
+
+            WildBattleManager.Instance.WaitForOpponent();
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Attack: " + e.Message);
+        }
+    }
+
+    public async Task PlayerUseItem(int indexItem, int indexSelectedBlast = 0)
+    {
+        try
+        {
+            ItemUseJSON itemUseJson = new ItemUseJSON();
+
+            itemUseJson.index_item = indexItem;
+            itemUseJson.index_blast = indexSelectedBlast;
+
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_USE_ITEM, itemUseJson.ToJson(), null);
+
+            WildBattleManager.Instance.WaitForOpponent();
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Use Item: " + e.Message);
+        }
+
+    }
+
+    public async void PlayerChangeBlast(int indexSelectedBlast)
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, indexSelectedBlast.ToJson(), null);
+
+            WildBattleManager.Instance.WaitForOpponent();
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Change Blast: " + e.Message);
+        }
+
+    }
+
+    public async Task PlayerWait()
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, "");
+
+            WildBattleManager.Instance.WaitForOpponent();
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Change Blast: " + e.Message);
+        }
+    }
+
+    public async void PlayerReady()
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_READY, "", null);
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error player Ready : " + e.Message);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (_matchId != null) LeaveMatch();
     }
 }
-
 
 // Receive data
 

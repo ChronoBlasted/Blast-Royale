@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class RewardPopup : Popup
 {
-    Queue<RewardPopUp> _rewardQueue = new Queue<RewardPopUp>(10);
+    Queue<RewardPopupData> _rewardQueue = new Queue<RewardPopupData>(10);
 
     Coroutine _openRewardCor;
 
@@ -41,25 +41,25 @@ public class RewardPopup : Popup
 
     public void UpdateData(RewardCollection reward)
     {
-        _rewardQueue = new Queue<RewardPopUp>(10);
+        _rewardQueue = new Queue<RewardPopupData>(10);
 
         if (reward.coinsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopUp(reward.coinsReceived, "Coins", DataUtils.Instance.CoinIco));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", DataUtils.Instance.CoinIco));
         }
         if (reward.gemsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopUp(reward.gemsReceived, "Gems", DataUtils.Instance.GemIco));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", DataUtils.Instance.GemIco));
         }
         if (reward.blastReceived != null)
         {
-            _rewardQueue.Enqueue(new RewardPopUp(0, DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).name, DataUtils.Instance.GetBlastImgByID(DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).id)));
+            _rewardQueue.Enqueue(new RewardPopupData(0, DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).name, DataUtils.Instance.GetBlastImgByID(DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).id)));
         }
         if (reward.itemReceived != null)
         {
             ItemData itemData = DataUtils.Instance.GetItemDataById(reward.itemReceived.data_id);
 
-            _rewardQueue.Enqueue(new RewardPopUp(reward.itemReceived.amount, itemData.name, DataUtils.Instance.GetItemImgByID(reward.itemReceived.data_id)));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, itemData.name, DataUtils.Instance.GetItemImgByID(reward.itemReceived.data_id)));
         }
 
         if (_openRewardCor != null)
@@ -73,7 +73,7 @@ public class RewardPopup : Popup
 
     IEnumerator UpdateWithNextReward()
     {
-        RewardPopUp tempReward;
+        RewardPopupData tempReward;
 
         if (_rewardQueue.TryDequeue(out tempReward))
         {
@@ -108,13 +108,13 @@ public class RewardPopup : Popup
     }
 }
 
-public struct RewardPopUp
+public struct RewardPopupData
 {
     public int Amount;
     public string Name;
     public Sprite Sprite;
 
-    public RewardPopUp(int amount, string name, Sprite sprite)
+    public RewardPopupData(int amount, string name, Sprite sprite)
     {
         Amount = amount;
         Name = name;

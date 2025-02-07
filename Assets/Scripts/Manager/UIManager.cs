@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoSingleton<UIManager>
 {
     [field: SerializeField] public Canvas MainCanvas { get; protected set; }
+
     [field: SerializeField] public MenuView MenuView { get; protected set; }
     [field: SerializeField] public GameView GameView { get; protected set; }
     [field: SerializeField] public EndView EndView { get; protected set; }
@@ -18,9 +19,14 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public LeaderboardView LeaderboardView { get; protected set; }
     [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
+
     [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
     [field: SerializeField] public MoveSelectorPopup MoveSelectorPopup { get; protected set; }
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
+    [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
+    [field: SerializeField] public RewardPopup RewardPopup { get; protected set; }
+    [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
+
 
     [Header("Black Shade Ref")]
     [SerializeField] Image _blackShadeImg;

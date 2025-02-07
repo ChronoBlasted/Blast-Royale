@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+
+public class DialogLayout : MonoBehaviour
+{
+    [SerializeField] TMP_Text _dialogTxt;
+
+    bool _skipAsync;
+    public void UpdateText(string text)
+    {
+        _dialogTxt.text = text;
+    }
+
+    public async Task UpdateTextAsync(string text)
+    {
+        _skipAsync = false;
+        _dialogTxt.text = "";
+
+        foreach (char c in text)
+        {
+            if (_skipAsync)
+            {
+                _dialogTxt.text = text;
+                return;
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(20));
+
+            _dialogTxt.text += c;
+        }
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+    }
+
+    public void SkipUpdateTextAsync()
+    {
+        _skipAsync = true;
+
+        // A tester
+    }
+}

@@ -7,18 +7,274 @@ using UnityEngine;
 
 public class GameView : View
 {
+    [SerializeField] MovePanel _attackPanel;
+    [SerializeField] BagPanel _bagPanel;
+
+    [SerializeField] GameNavBar _bottomNavBar;
+
+    [SerializeField] HUDLayout _playerHUD, _opponentHUD;
+    [SerializeField] DialogLayout _dialogLayout;
+
+    public HUDLayout PlayerHUD { get => _playerHUD; }
+    public HUDLayout OpponentHUD { get => _opponentHUD; }
+    public DialogLayout DialogLayout { get => _dialogLayout; }
+
+    public MovePanel AttackPanel { get => _attackPanel; }
+    public BagPanel BagPanel { get => _bagPanel; }
+
+    Panel _currentPanel;
+
+    WildBattleManager _wildBattleManager;
+    DataUtils _dataUtils;
+
     public override void Init()
     {
         base.Init();
+
+        _currentPanel = null;
+
+        _attackPanel.Init();
+        _bagPanel.Init();
+
+        _wildBattleManager = WildBattleManager.Instance;
+        _dataUtils = DataUtils.Instance;
     }
 
     public override void OpenView(bool _instant = false)
     {
         base.OpenView(_instant);
+
+        _bottomNavBar.Init();
+
+        DisableAttackPanel();
+        HideNavBar();
     }
 
     public override void CloseView()
     {
         base.CloseView();
+
     }
+
+    void ChangePanel(Panel newMiniPanel)
+    {
+        if (newMiniPanel == _currentPanel) return;
+
+        if (_currentPanel != null)
+        {
+            _currentPanel.ClosePanel();
+        }
+
+        _currentPanel = newMiniPanel;
+
+        _currentPanel.gameObject.SetActive(true);
+        _currentPanel.OpenPanel();
+    }
+
+    public void CloseCurrentPanel()
+    {
+        if (_currentPanel != null)
+        {
+            _currentPanel.ClosePanel();
+            _currentPanel = null;
+        }
+    }
+
+    public void CloseAllPanel()
+    {
+        _attackPanel.ClosePanel();
+        _bagPanel.ClosePanel();
+
+        _currentPanel = null;
+    }
+
+    public void DisableAttackPanel()
+    {
+        _attackPanel.Disable();
+    }
+
+    public void HideNavBar()
+    {
+        _bottomNavBar.Hide();
+    }
+
+    public void ShowNavBar()
+    {
+        _bottomNavBar.Show();
+    }
+
+    public void ResetTab()
+    {
+        _bottomNavBar.Init();
+        ChangePanel(_attackPanel);
+    }
+
+    #region WildBlastBattle
+
+    public void EndTurn(Blast playerBlast, Blast opponentBlast)
+    {
+        _playerHUD.UpdateManaBar(playerBlast.Mana);
+        _opponentHUD.UpdateManaBar(opponentBlast.Mana);
+    }
+
+    public async Task BlastWait(bool isPlayer, Blast blast)
+    {
+        HUDLayout waiterHUD;
+
+        if (isPlayer)
+        {
+            await _dialogLayout.UpdateTextAsync("You wait and regen mana !");
+            waiterHUD = _playerHUD;
+        }
+        else
+        {
+            await _dialogLayout.UpdateTextAsync("Wild blast wait and regen mana !");
+
+            waiterHUD = _opponentHUD;
+        }
+
+        waiterHUD.UpdateManaBar(blast.Mana);
+    }
+
+    public async Task AllPlayerBlastFainted()
+    {
+        await _dialogLayout.UpdateTextAsync("All your blast are fainted !");
+    }
+
+    public async Task BlastFainted(bool isPlayer, Blast blast)
+    {
+        HUDLayout waiterHUD;
+
+        await _dialogLayout.UpdateTextAsync(DataUtils.Instance.GetBlastDataById(blast.data_id).name + " fainted !");
+
+        waiterHUD = isPlayer ? _playerHUD : _opponentHUD;
+
+        await waiterHUD.DoFaintedAnim();
+    }
+
+    public async Task BlastSwap(Blast currentBlast, Blast newCurrentBlast)
+    {
+        await ComeBackBlast(currentBlast);
+
+        await ThrowBlast(newCurrentBlast);
+    }
+
+    public async Task ComeBackBlast(Blast currentBlast)
+    {
+        await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataById(currentBlast.data_id).name + " come back !");
+
+        await _playerHUD.ComeBackBlast();
+    }
+
+    public async Task ThrowBlast(Blast newBlast)
+    {
+        PlayerHUD.Init(newBlast);
+        AttackPanel.UpdateAttack(newBlast);
+
+        await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataById(newBlast.data_id).name + " go !");
+
+        await _playerHUD.ThrowBlast();
+    }
+
+
+    public async Task BlastUseItem(Item item, Blast selectedBlast = null, Blast wildBlast = null, bool isCaptured = false)
+    {
+        ItemData itemData = DataUtils.Instance.GetItemDataById(item.data_id);
+
+        switch (itemData.behaviour)
+        {
+            case ItemBehaviour.HEAL:
+                await _dialogLayout.UpdateTextAsync("You use " + itemData.name + " on " + _dataUtils.GetBlastDataById(selectedBlast.data_id).name);
+
+                _playerHUD.UpdateHpBar(selectedBlast.Hp);
+                break;
+            case ItemBehaviour.MANA:
+                await _dialogLayout.UpdateTextAsync("You use " + itemData.name + " on " + _dataUtils.GetBlastDataById(selectedBlast.data_id).name);
+
+                _playerHUD.UpdateManaBar(selectedBlast.Mana);
+                break;
+            case ItemBehaviour.STATUS:
+                break;
+            case ItemBehaviour.CATCH:
+
+                if (isCaptured)
+                {
+                    // DoBlastTrapAnim
+
+                    break;
+                }
+                else
+                {
+                    // DoBlastTrapAnim
+                }
+
+                await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataById(wildBlast.data_id).name + " !");
+
+                break;
+        }
+    }
+
+    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, Status status = Status.NONE)
+    {
+        HUDLayout attackerHUD;
+        HUDLayout defenderHUD;
+
+        if (isPlayer)
+        {
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataById(attacker.data_id).name + " do " + move.name + " and does " + damage + " damage to " + _dataUtils.GetBlastDataById(defender.data_id).name + " !");
+
+            attackerHUD = _playerHUD;
+            defenderHUD = _opponentHUD;
+        }
+        else
+        {
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataById(attacker.data_id).name + " do " + move.name + " and does " + damage + " damage to " + _dataUtils.GetBlastDataById(defender.data_id).name + " !");
+
+            attackerHUD = _opponentHUD;
+            defenderHUD = _playerHUD;
+        }
+
+        await attackerHUD.DoAttackAnimAsync();
+
+        defenderHUD.UpdateHpBar(defender.Hp);
+
+        attackerHUD.UpdateManaBar(attacker.Mana);
+
+        if (NakamaLogic.GetTypeMultiplier(DataUtils.Instance.GetBlastDataById(attacker.data_id).type, DataUtils.Instance.GetBlastDataById(defender.data_id).type) == 2)
+        {
+            await _dialogLayout.UpdateTextAsync("It's super affective !");
+        }
+        else if (NakamaLogic.GetTypeMultiplier(DataUtils.Instance.GetBlastDataById(attacker.data_id).type, DataUtils.Instance.GetBlastDataById(defender.data_id).type) == .5f)
+        {
+            await _dialogLayout.UpdateTextAsync("It's not super affective !");
+        }
+    }
+
+    public async Task CantAttack(bool isPlayer, Blast blast, Move move)
+    {
+        HUDLayout attackerHUD;
+
+        attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
+
+        attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
+
+        await _dialogLayout.UpdateTextAsync(DataUtils.Instance.GetBlastDataById(blast.data_id).name + " don't have enough mana to do " + move.name);
+    }
+
+
+    public async Task MultiplierAttack(bool isPlayer, Blast blast, Move move)
+    {
+        await _dialogLayout.UpdateTextAsync(DataUtils.Instance.GetBlastDataById(blast.data_id).name + " don't have enough mana to do " + move.name);
+    }
+
+    public async void DoEndMatch(string textToShow)
+    {
+        await _dialogLayout.UpdateTextAsync(textToShow);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(1000));
+
+        GameManager.Instance.UpdateStateToEnd();
+
+    }
+    #endregion
 }
