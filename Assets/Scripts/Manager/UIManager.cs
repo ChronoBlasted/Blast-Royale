@@ -12,6 +12,8 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public GameView GameView { get; protected set; }
     [field: SerializeField] public EndView EndView { get; protected set; }
     [field: SerializeField] public OpeningView OpeningView { get; protected set; }
+    [field: SerializeField] public PediaView PediaView { get; protected set; }
+    [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
 
     [Header("Black Shade Ref")]
     [SerializeField] Image _blackShadeImg;
