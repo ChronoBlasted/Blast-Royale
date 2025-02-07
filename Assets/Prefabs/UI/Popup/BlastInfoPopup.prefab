@@ -6482,11 +6482,55 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: 4
       addedObject: {fileID: 8632808081134269406}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2285152607345297428, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1989335420520513149}
   m_SourcePrefab: {fileID: 100100000, guid: 6b677807674d05c438664e6209f434eb, type: 3}
 --- !u!224 &1877758834749894111 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+  m_PrefabInstance: {fileID: 4026046111280378700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2911891254657317720 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2285152607345297428, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+  m_PrefabInstance: {fileID: 4026046111280378700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1989335420520513149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2911891254657317720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4597367655eac346ab037c997a6e4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 3952256333412204447}
+  _blastNameTxt: {fileID: 0}
+  _blastDescTxt: {fileID: 0}
+  _blastLevel: {fileID: 0}
+  _blastExp: {fileID: 0}
+  _blastHp: {fileID: 0}
+  _blastMana: {fileID: 0}
+  _blastAttack: {fileID: 0}
+  _blastDefense: {fileID: 0}
+  _blastSpeed: {fileID: 0}
+  _blastType: {fileID: 0}
+  _blastImg: {fileID: 0}
+  _blastTypeColorImg: {fileID: 0}
+  _borderImg: {fileID: 0}
+  _prestigeEvolveLayout: {fileID: 0}
+  _attackLayout: {fileID: 0}
+  _prestigeButton: {fileID: 0}
+  _evolveButton: {fileID: 0}
+  movesLayout: []
+--- !u!225 &3952256333412204447 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 73851629902220499, guid: 6b677807674d05c438664e6209f434eb, type: 3}
   m_PrefabInstance: {fileID: 4026046111280378700}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4037739936252829408

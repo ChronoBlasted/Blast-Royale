@@ -20,6 +20,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
     [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
     [field: SerializeField] public MoveSelectorPopup MoveSelectorPopup { get; protected set; }
+    [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
 
     [Header("Black Shade Ref")]
     [SerializeField] Image _blackShadeImg;
