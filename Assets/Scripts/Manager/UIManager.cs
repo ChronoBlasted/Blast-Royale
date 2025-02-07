@@ -14,6 +14,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public OpeningView OpeningView { get; protected set; }
     [field: SerializeField] public PediaView PediaView { get; protected set; }
     [field: SerializeField] public FriendView FriendView { get; protected set; }
+    [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
     [field: SerializeField] public LeaderboardView LeaderboardView { get; protected set; }
     [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
