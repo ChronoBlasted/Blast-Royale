@@ -81,6 +81,16 @@ public class NakamaWildBattle : MonoBehaviour
         _matchId = null;
     }
 
+    public async void LeaveMatch()
+    {
+        await _socket.LeaveMatchAsync(_matchId);
+        _socket.ReceivedMatchState -= _matchStateHandler;
+        _matchId = null;
+
+        GameManager.Instance.UpdateStateToMenu();
+    }
+
+
 
     private void OnReceivedMatchState(IMatchState matchState)
     {

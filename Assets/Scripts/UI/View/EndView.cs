@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class EndView : View
 {
+    [SerializeField] TMP_Text _title, _desc;
+    [SerializeField] RewardEndGameLayout _rewardEndGameLayout;
+
     public override void Init()
     {
         base.Init();
@@ -18,5 +21,17 @@ public class EndView : View
     public override void CloseView()
     {
         base.CloseView();
+    }
+
+    public void UpdateEndGame(bool isWin)
+    {
+        _title.text = isWin ? "YOU WIN" : "YOU LOOSE";
+
+        _desc.text = "You win " + 100 + " coins"; // TODO Add more complexity
+    }
+
+    public void HandleOnReturnButton()
+    {
+        NakamaManager.Instance.NakamaWildBattle.LeaveMatch();
     }
 }
