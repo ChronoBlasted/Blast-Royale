@@ -17,6 +17,12 @@ public class GameManager : MonoSingleton<GameManager>
     {
         UIManager.Instance.Init();
 
+        TimeManager.Instance.Init();
+
+        AudioManager.Instance.Init();
+
+        PoolManager.Instance.Init();
+
         NakamaManager.Instance.Init();
     }
 
