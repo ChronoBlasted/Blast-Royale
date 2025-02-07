@@ -273,7 +273,7 @@ public class GameView : View
 
         await Task.Delay(TimeSpan.FromMilliseconds(1000));
 
-        GameManager.Instance.UpdateStateToEnd();
+        GameStateManager.Instance.UpdateStateToEnd();
 
     }
     #endregion

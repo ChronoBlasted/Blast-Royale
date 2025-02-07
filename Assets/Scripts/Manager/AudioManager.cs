@@ -16,7 +16,7 @@ public class AudioManager : MonoSingleton<AudioManager>
 
     public void Init()
     {
-        GameManager.Instance.OnGameStateChanged += HandleStateChange;
+        GameStateManager.Instance.OnGameStateChanged += HandleStateChange;
 
         InitDictionnary();
     }

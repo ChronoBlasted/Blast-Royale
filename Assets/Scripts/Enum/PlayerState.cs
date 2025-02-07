@@ -1,0 +1,9 @@
+public enum PlayerState
+{
+    BUSY,
+    READY,
+    WAITFORATTACK,
+    WAITFORCHANGEBLAST,
+    WAITFORUSEITEM,
+    WAITTURN,
+}

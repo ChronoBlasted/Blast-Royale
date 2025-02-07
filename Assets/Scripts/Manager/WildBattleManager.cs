@@ -45,7 +45,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _userAccount = NakamaManager.Instance.NakamaUserAccount;
         _dataUtils = DataUtils.Instance;
 
-        GameManager.Instance.OnGameStateChanged += HandleStateChange;
+        GameStateManager.Instance.OnGameStateChanged += HandleStateChange;
     }
 
     public void StartBattle(StartStateData startData)
@@ -84,7 +84,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         _gameView.DialogLayout.UpdateText("");
 
-        GameManager.Instance.UpdateStateToGame();
+        GameStateManager.Instance.UpdateStateToGame();
 
         _serverBattle.PlayerReady();
     }
@@ -242,7 +242,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
 
 
-            UIManager.Instance.LevelExpPopup.UpdateClose(GameManager.Instance.UpdateStateToEnd);
+            UIManager.Instance.LevelExpPopup.UpdateClose(GameStateManager.Instance.UpdateStateToEnd);
 
             return true;
         }
@@ -256,7 +256,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             {
                 await _gameView.AllPlayerBlastFainted();
 
-                GameManager.Instance.UpdateStateToEnd();
+                GameStateManager.Instance.UpdateStateToEnd();
             }
             else
             {

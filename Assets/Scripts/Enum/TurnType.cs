@@ -1,0 +1,1 @@
+public enum TurnType { NONE, ATTACK, ITEM, SWAP, WAIT }

@@ -15,15 +15,7 @@ public enum BattleState
     END,
 }
 
-public enum PlayerState
-{
-    BUSY,
-    READY,
-    WAITFORATTACK,
-    WAITFORCHANGEBLAST,
-    WAITFORUSEITEM,
-    WAITTURN,
-}
+
 
 public class NakamaWildBattle : MonoBehaviour
 {
@@ -88,7 +80,7 @@ public class NakamaWildBattle : MonoBehaviour
         _socket.ReceivedMatchState -= _matchStateHandler;
         _matchId = null;
 
-        GameManager.Instance.UpdateStateToMenu();
+        GameStateManager.Instance.UpdateStateToMenu();
     }
 
     private void OnReceivedMatchState(IMatchState matchState)
@@ -250,4 +242,3 @@ public class ItemUseJSON
     public int index_blast;
 }
 
-public enum TurnType { NONE, ATTACK, ITEM, SWAP, WAIT }

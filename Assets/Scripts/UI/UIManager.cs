@@ -44,7 +44,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void Init()
     {
-        GameManager.Instance.OnGameStateChanged += HandleStateChange;
+        GameStateManager.Instance.OnGameStateChanged += HandleStateChange;
 
         InitView();
 

@@ -35,6 +35,6 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
         await NakamaUserAccount.Init(Client, Session);
 
-        GameManager.Instance.UpdateStateToMenu();
+        GameStateManager.Instance.UpdateStateToMenu();
     }
 }
