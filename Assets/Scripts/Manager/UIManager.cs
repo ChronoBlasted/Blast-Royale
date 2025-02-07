@@ -13,6 +13,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public EndView EndView { get; protected set; }
     [field: SerializeField] public OpeningView OpeningView { get; protected set; }
     [field: SerializeField] public PediaView PediaView { get; protected set; }
+    [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
 
     [Header("Black Shade Ref")]
