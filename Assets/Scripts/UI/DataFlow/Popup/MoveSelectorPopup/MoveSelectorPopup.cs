@@ -32,7 +32,7 @@ public class MoveSelectorPopup : Popup
         _uuidBlast = blast.uuid;
         _outMoveIndex = outMoveIndex;
 
-        _bg.color = DataUtils.Instance.GetTypeColor(moveToReplace.type);
+        _bg.color = ColorManager.Instance.GetTypeColor(moveToReplace.type);
 
         List<Move> blastMoveset = blast.activeMoveset.Select(index => DataUtils.Instance.GetMoveById(index)).ToList();
         List<Move> availablesMoves = new List<Move>();

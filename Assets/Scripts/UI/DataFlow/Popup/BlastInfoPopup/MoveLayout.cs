@@ -29,7 +29,7 @@ public class MoveLayout : MonoBehaviour
 
         if (_blast != null) UpdateUI();
 
-        _moveBorder.color = DataUtils.Instance.GetTypeColor(move.type);
+        _moveBorder.color = ColorManager.Instance.GetTypeColor(move.type);
     }
 
     public void UpdateUI()

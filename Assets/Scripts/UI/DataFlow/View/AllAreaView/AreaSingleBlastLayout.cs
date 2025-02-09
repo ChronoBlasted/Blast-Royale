@@ -17,7 +17,7 @@ public class AreaSingleBlastLayout : MonoBehaviour
         _blastNameTxt.text = _blast.name;
 
         _ico.sprite = DataUtils.Instance.GetBlastImgByID(_blast.id);
-        _borderBG.color = DataUtils.Instance.GetTypeColor(_blast.type);
+        _borderBG.color = ColorManager.Instance.GetTypeColor(_blast.type);
     }
 
     public void HandleOnOpenInfo()

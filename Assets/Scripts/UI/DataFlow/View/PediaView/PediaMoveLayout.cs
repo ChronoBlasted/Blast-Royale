@@ -22,6 +22,6 @@ public class PediaMoveLayout : MonoBehaviour
         _manaCostTxt.text = _data.cost.ToString();
         _powerTxt.text = _data.power.ToString();
 
-        _borderImg.color = DataUtils.Instance.GetTypeColor(_data.type);
+        _borderImg.color = ColorManager.Instance.GetTypeColor(_data.type);
     }
 }

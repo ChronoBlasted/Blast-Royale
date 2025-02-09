@@ -35,8 +35,8 @@ public class PediaItemLayout : MonoBehaviour
         }
 
         _itemImg.sprite = DataUtils.Instance.GetItemImgByID(_data.id);
-        _borderImg.color = DataUtils.Instance.GetItemColor(_data.behaviour);
-        _behaviourBG.color = DataUtils.Instance.GetItemColor(_data.behaviour);
+        _borderImg.color = ColorManager.Instance.GetItemColor(_data.behaviour);
+        _behaviourBG.color = ColorManager.Instance.GetItemColor(_data.behaviour);
     }
 }
 

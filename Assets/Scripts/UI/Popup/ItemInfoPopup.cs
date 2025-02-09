@@ -37,7 +37,7 @@ public class ItemInfoPopup : Popup
         _itemBehaviour.text = itemData.behaviour.ToString();
 
         _itemImg.sprite = DataUtils.Instance.GetItemImgByID(item.data_id);
-        _itemTypeColorImg.color = DataUtils.Instance.GetItemColor(itemData.behaviour);
-        _borderImg.color = DataUtils.Instance.GetItemColor(itemData.behaviour);
+        _itemTypeColorImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
+        _borderImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
     }
 }

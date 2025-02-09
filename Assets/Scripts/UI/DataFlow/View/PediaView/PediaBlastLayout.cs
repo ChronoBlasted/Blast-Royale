@@ -21,8 +21,8 @@ public class PediaBlastLayout : MonoBehaviour
         _speedTxt.text = _data.speed.ToString();
 
         _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(_data.id);
-        _borderImg.color = DataUtils.Instance.GetTypeColor(_data.type);
-        _typeImg.color = DataUtils.Instance.GetTypeColor(_data.type);
+        _borderImg.color = ColorManager.Instance.GetTypeColor(_data.type);
+        _typeImg.color = ColorManager.Instance.GetTypeColor(_data.type);
     }
 
 }

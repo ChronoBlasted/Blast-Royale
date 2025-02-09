@@ -16,12 +16,14 @@ public class BlastInfoPopup : Popup
     Blast _currentBlast;
     BlastData _currentBlastData;
     DataUtils _dataUtils;
+    ColorManager _colorManager;
 
     public override void Init()
     {
         base.Init();
 
         _dataUtils = DataUtils.Instance;
+        _colorManager = ColorManager.Instance;
     }
 
     public override void OpenPopup()
@@ -56,8 +58,8 @@ public class BlastInfoPopup : Popup
         _blastType.text = _currentBlastData.type.ToString();
 
         _blastImg.sprite = _dataUtils.GetBlastImgByID(_currentBlastData.id);
-        _blastTypeColorImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
-        _borderImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
+        _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
+        _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
 
         _moveLayout.SetActive(true);
 
@@ -93,8 +95,8 @@ public class BlastInfoPopup : Popup
 
 
         _blastImg.sprite = _dataUtils.GetBlastImgByID(_currentBlastData.id);
-        _blastTypeColorImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
-        _borderImg.color = _dataUtils.GetTypeColor(_currentBlastData.type);
+        _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
+        _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
 
         _prestigeEvolveLayout.SetActive(false);
         _moveLayout.SetActive(false);

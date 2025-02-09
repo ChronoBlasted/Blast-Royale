@@ -23,7 +23,7 @@ public class BlastLayout : MonoBehaviour
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
 
         _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(blastData.id);
-        _blastBorder.color = DataUtils.Instance.GetTypeColor(blastData.type);
+        _blastBorder.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }
 
     public void HandleOnInfoButton()

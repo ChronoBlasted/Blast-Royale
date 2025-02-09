@@ -22,7 +22,7 @@ public class ItemLayout : MonoBehaviour
 
         ItemData itemData = DataUtils.Instance.GetItemDataById(item.data_id);
 
-        _itemBorderBG.color = DataUtils.Instance.GetItemColor(itemData.behaviour);
+        _itemBorderBG.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
         _itemIco.sprite = DataUtils.Instance.GetItemImgByID(itemData.id);
         _amount.text = "X" + _item.amount;
         _name.text = itemData.name;

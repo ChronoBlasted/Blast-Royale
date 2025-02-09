@@ -33,7 +33,7 @@ public class HUDLayout : MonoBehaviour
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
 
         _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(data.id);
-        _borderHUD.color = DataUtils.Instance.GetTypeColor(data.type);
+        _borderHUD.color = ColorManager.Instance.GetTypeColor(data.type);
 
         _hpSlider.Init(_blast.Hp, _blast.MaxHp);
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);

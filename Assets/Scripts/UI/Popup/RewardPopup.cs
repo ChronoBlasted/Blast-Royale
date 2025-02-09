@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,11 +44,11 @@ public class RewardPopup : Popup
 
         if (reward.coinsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", DataUtils.Instance.CoinIco));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).sprite));
         }
         if (reward.gemsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", DataUtils.Instance.GemIco));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).sprite));
         }
         if (reward.blastReceived != null)
         {

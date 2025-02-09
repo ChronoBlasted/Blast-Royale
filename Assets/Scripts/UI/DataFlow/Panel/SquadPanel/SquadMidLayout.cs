@@ -34,16 +34,16 @@ public class SquadMidLayout : MonoBehaviour
                 _totalPedia.text = uniqueBlast.Count + "/" + DataUtils.Instance.BlastPedia.Count;
                 _totalAmount.text = DataUtils.Instance.BlastCollection.storedBlasts.Count.ToString();
                 _titleTxt.text = _storedBlastTrad.GetLocalizedString();
-                _currentIco.sprite = DataUtils.Instance.BlastIcoSprite;
-                _pediaIco.sprite = DataUtils.Instance.BlastPediaSprite;
+                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Blast).sprite;
+                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastPedia).sprite;
                 break;
             case SquadTabType.ITEM:
 
                 _totalPedia.text = DataUtils.Instance.ItemCollection.storedItems.Count + DataUtils.Instance.ItemCollection.deckItems.Count + "/" + DataUtils.Instance.ItemPedia.Count;
                 _totalAmount.text = DataUtils.Instance.ItemCollection.storedItems.Count.ToString();
                 _titleTxt.text = _storedItemsTrad.GetLocalizedString();
-                _currentIco.sprite = DataUtils.Instance.ItemIcoSprite;
-                _pediaIco.sprite = DataUtils.Instance.ItemPediaSprite;
+                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Item).sprite;
+                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.ItemPedia).sprite;
                 break;
         }
     }

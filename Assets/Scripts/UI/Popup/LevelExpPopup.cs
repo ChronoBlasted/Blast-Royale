@@ -41,7 +41,7 @@ public class LevelExpPopup : Popup
         _expBar.SetValueSmooth(blast.exp + expGain, .5f, 1f, DG.Tweening.Ease.InSine);
 
         _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(data.id);
-        _blastBorder.color = DataUtils.Instance.GetTypeColor(data.type);
+        _blastBorder.color = ColorManager.Instance.GetTypeColor(data.type);
     }
 
     public void UpdateClose(UnityAction unityAction)

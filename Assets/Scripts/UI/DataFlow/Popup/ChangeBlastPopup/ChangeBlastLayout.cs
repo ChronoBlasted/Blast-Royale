@@ -26,7 +26,7 @@ public class ChangeBlastLayout : MonoBehaviour
         _manaBar.Init(_blast.Mana, _blast.MaxMana);
 
         _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(blastData.id);
-        _borderImg.color = DataUtils.Instance.GetTypeColor(blastData.type);
+        _borderImg.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }
 
     public bool IsLocked()
