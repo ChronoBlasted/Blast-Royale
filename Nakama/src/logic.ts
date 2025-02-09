@@ -69,105 +69,105 @@ function calculateDamage(
     attackerLevel: number,
     attackerAttack: number,
     defenderDefense: number,
-    attackerType: Type,
-    defenderType: Type,
+    attackerType: TYPE,
+    defenderType: TYPE,
     movePower: number
 ): number {
     const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
     return Math.floor(damage);
 }
 
-function getTypeMultiplier(moveType: Type, defenderType: Type): number {
+function getTypeMultiplier(moveType: TYPE, defenderType: TYPE): number {
     switch (moveType) {
-        case Type.FIRE:
+        case TYPE.FIRE:
             switch (defenderType) {
-                case Type.GRASS:
+                case TYPE.GRASS:
                     return 2;
-                case Type.WATER:
+                case TYPE.WATER:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case Type.WATER:
+        case TYPE.WATER:
             switch (defenderType) {
-                case Type.FIRE:
+                case TYPE.FIRE:
                     return 2;
-                case Type.GRASS:
+                case TYPE.GRASS:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case Type.GRASS:
+        case TYPE.GRASS:
             switch (defenderType) {
-                case Type.WATER:
+                case TYPE.WATER:
                     return 2;
-                case Type.FIRE:
+                case TYPE.FIRE:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case Type.NORMAL:
+        case TYPE.NORMAL:
             switch (defenderType) {
-                case Type.LIGHT:
+                case TYPE.LIGHT:
                     return 0.5;
-                case Type.DARK:
+                case TYPE.DARK:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case Type.GROUND:
+        case TYPE.GROUND:
             switch (defenderType) {
-                case Type.ELECTRIC:
+                case TYPE.ELECTRIC:
                     return 2;
-                case Type.FLY:
+                case TYPE.FLY:
                     return 0;
                 default:
                     return 1;
             }
 
-        case Type.FLY:
+        case TYPE.FLY:
             switch (defenderType) {
-                case Type.ELECTRIC:
+                case TYPE.ELECTRIC:
                     return 0;
-                case Type.GROUND:
+                case TYPE.GROUND:
                     return 2;
                 default:
                     return 1;
             }
 
-        case Type.ELECTRIC:
+        case TYPE.ELECTRIC:
             switch (defenderType) {
-                case Type.GROUND:
+                case TYPE.GROUND:
                     return 0;
-                case Type.FLY:
+                case TYPE.FLY:
                     return 2;
                 default:
                     return 1;
             }
 
-        case Type.LIGHT:
+        case TYPE.LIGHT:
             switch (defenderType) {
-                case Type.DARK:
+                case TYPE.DARK:
                     return 2;
-                case Type.NORMAL:
+                case TYPE.NORMAL:
                     return 2;
-                case Type.LIGHT:
+                case TYPE.LIGHT:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case Type.DARK:
+        case TYPE.DARK:
             switch (defenderType) {
-                case Type.LIGHT:
+                case TYPE.LIGHT:
                     return 2;
-                case Type.NORMAL:
+                case TYPE.NORMAL:
                     return 2;
-                case Type.DARK:
+                case TYPE.DARK:
                     return 0.5;
                 default:
                     return 1;

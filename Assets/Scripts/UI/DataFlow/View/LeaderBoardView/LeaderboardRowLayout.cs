@@ -20,11 +20,11 @@ public class LeaderboardRowLayout : MonoBehaviour
         switch (leaderBoardType)
         {
             case LeaderboardType.Trophy:
-                _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Trophy).sprite;
+                _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Trophy).Sprite;
                 break;
             case LeaderboardType.BlastDefeated:
 
-                _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastDefeated).sprite;
+                _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastDefeated).Sprite;
                 break;
         }
     }

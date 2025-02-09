@@ -1,6 +1,5 @@
 using Chrono.UI;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,14 +14,14 @@ public class BlastInfoPopup : Popup
 
     Blast _currentBlast;
     BlastData _currentBlastData;
-    DataUtils _dataUtils;
+    NakamaData _dataUtils;
     ColorManager _colorManager;
 
     public override void Init()
     {
         base.Init();
 
-        _dataUtils = DataUtils.Instance;
+        _dataUtils = NakamaData.Instance;
         _colorManager = ColorManager.Instance;
     }
 
@@ -42,7 +41,7 @@ public class BlastInfoPopup : Popup
         _currentBlast = blast;
         _currentBlastData = _dataUtils.GetBlastDataById(blast.data_id);
 
-        _blastNameTxt.text = _currentBlastData.name;
+        _blastNameTxt.text = _dataUtils.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
         _blastDescTxt.text = _currentBlastData.desc;
         _blastLevel.text = "Lvl." + NakamaLogic.CalculateLevelFromExperience(_currentBlast.exp);
         _blastExp.text =
@@ -57,7 +56,7 @@ public class BlastInfoPopup : Popup
         _blastSpeed.text = _currentBlast.Speed.ToString();
         _blastType.text = _currentBlastData.type.ToString();
 
-        _blastImg.sprite = _dataUtils.GetBlastImgByID(_currentBlastData.id);
+        _blastImg.sprite = _dataUtils.GetBlastDataRef(blast.data_id).Sprite;
         _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
         _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
 
@@ -81,7 +80,7 @@ public class BlastInfoPopup : Popup
     {
         _currentBlastData = blast;
 
-        _blastNameTxt.text = _currentBlastData.name;
+        _blastNameTxt.text = _dataUtils.GetBlastDataRef(_currentBlastData.id).Name.GetLocalizedString();
         _blastDescTxt.text = _currentBlastData.desc;
         _blastLevel.text = "";
         _blastExp.text = "";
@@ -94,7 +93,7 @@ public class BlastInfoPopup : Popup
         _blastType.text = _currentBlastData.type.ToString();
 
 
-        _blastImg.sprite = _dataUtils.GetBlastImgByID(_currentBlastData.id);
+        _blastImg.sprite = _dataUtils.GetBlastDataRef(_currentBlast.data_id).Sprite;
         _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
         _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
 

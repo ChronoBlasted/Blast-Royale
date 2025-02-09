@@ -65,7 +65,7 @@ public class BagPanel : Panel
             UseItemOnBlast,
         };
 
-        ItemData itemData = DataUtils.Instance.GetItemDataById(itemInBattleLayouts[_lastItemIndex].Item.data_id);
+        ItemData itemData = NakamaData.Instance.GetItemDataById(itemInBattleLayouts[_lastItemIndex].Item.data_id);
 
         switch (itemData.behaviour)
         {

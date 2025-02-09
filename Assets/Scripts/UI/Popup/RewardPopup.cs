@@ -44,21 +44,21 @@ public class RewardPopup : Popup
 
         if (reward.coinsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).sprite));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite));
         }
         if (reward.gemsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).sprite));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite));
         }
         if (reward.blastReceived != null)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(0, DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).name, DataUtils.Instance.GetBlastImgByID(DataUtils.Instance.GetBlastDataById(reward.blastReceived.data_id).id)));
+            _rewardQueue.Enqueue(new RewardPopupData(0, NakamaData.Instance.GetBlastDataRef(reward.blastReceived.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetBlastDataRef(NakamaData.Instance.GetBlastDataById(reward.blastReceived.data_id).id).Sprite));
         }
         if (reward.itemReceived != null)
         {
-            ItemData itemData = DataUtils.Instance.GetItemDataById(reward.itemReceived.data_id);
+            ItemData itemData = NakamaData.Instance.GetItemDataById(reward.itemReceived.data_id);
 
-            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, itemData.name, DataUtils.Instance.GetItemImgByID(reward.itemReceived.data_id)));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, itemData.name, NakamaData.Instance.GetItemImgByID(reward.itemReceived.data_id)));
         }
 
         if (_openRewardCor != null)

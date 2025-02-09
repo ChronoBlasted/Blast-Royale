@@ -74,7 +74,9 @@ public class NakamaUserAccount : MonoBehaviour
 
             _lastBlastCollection = response.Payload.FromJson<BlastCollection>();
 
-            DataUtils.Instance.BlastCollection = _lastBlastCollection;
+            Debug.Log(response);
+
+            NakamaData.Instance.BlastCollection = _lastBlastCollection;
 
             //Update Squad Panel
             UIManager.Instance.MenuView.SquadPanel.UpdateDeckBlast(_lastBlastCollection.deckBlasts);
@@ -192,7 +194,7 @@ public class NakamaUserAccount : MonoBehaviour
 
             _lastItemCollection = response.Payload.FromJson<ItemCollection>();
 
-            DataUtils.Instance.ItemCollection = _lastItemCollection;
+            NakamaData.Instance.ItemCollection = _lastItemCollection;
 
             //Update Squad Panel
             UIManager.Instance.MenuView.SquadPanel.UpdateDeckItem(_lastItemCollection.deckItems);

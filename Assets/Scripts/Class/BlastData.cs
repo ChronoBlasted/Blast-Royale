@@ -4,7 +4,6 @@ using System;
 public class BlastData
 {
     public int id;
-    public string name;
     public string desc;
     public TYPE type;
     public int hp;

@@ -6,14 +6,14 @@ public class MovePanel : Panel
 {
     [SerializeField] List<MoveLayout> moveInBatleLayouts;
 
-    DataUtils _dataUtils;
+    NakamaData _dataUtils;
 
     Blast _blast;
     public override void Init()
     {
         base.Init();
 
-        _dataUtils = DataUtils.Instance;
+        _dataUtils = NakamaData.Instance;
     }
 
     public override void OpenPanel()

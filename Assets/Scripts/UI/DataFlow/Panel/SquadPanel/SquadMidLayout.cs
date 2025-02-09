@@ -19,31 +19,31 @@ public class SquadMidLayout : MonoBehaviour
 
                 List<int> uniqueBlast = new List<int>();
 
-                foreach (var blast in DataUtils.Instance.BlastCollection.deckBlasts)
+                foreach (var blast in NakamaData.Instance.BlastCollection.deckBlasts)
                 {
-                    var id = uniqueBlast.IndexOf(DataUtils.Instance.GetBlastDataById(blast.data_id).id);
-                    if (id == -1) uniqueBlast.Add(DataUtils.Instance.GetBlastDataById(blast.data_id).id);
+                    var id = uniqueBlast.IndexOf(NakamaData.Instance.GetBlastDataById(blast.data_id).id);
+                    if (id == -1) uniqueBlast.Add(NakamaData.Instance.GetBlastDataById(blast.data_id).id);
                 }
 
-                foreach (var blast in DataUtils.Instance.BlastCollection.storedBlasts)
+                foreach (var blast in NakamaData.Instance.BlastCollection.storedBlasts)
                 {
-                    var id = uniqueBlast.IndexOf(DataUtils.Instance.GetBlastDataById(blast.data_id).id);
-                    if (id == -1) uniqueBlast.Add(DataUtils.Instance.GetBlastDataById(blast.data_id).id);
+                    var id = uniqueBlast.IndexOf(NakamaData.Instance.GetBlastDataById(blast.data_id).id);
+                    if (id == -1) uniqueBlast.Add(NakamaData.Instance.GetBlastDataById(blast.data_id).id);
                 }
 
-                _totalPedia.text = uniqueBlast.Count + "/" + DataUtils.Instance.BlastPedia.Count;
-                _totalAmount.text = DataUtils.Instance.BlastCollection.storedBlasts.Count.ToString();
+                _totalPedia.text = uniqueBlast.Count + "/" + NakamaData.Instance.BlastPedia.Count;
+                _totalAmount.text = NakamaData.Instance.BlastCollection.storedBlasts.Count.ToString();
                 _titleTxt.text = _storedBlastTrad.GetLocalizedString();
-                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Blast).sprite;
-                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastPedia).sprite;
+                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Blast).Sprite;
+                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastPedia).Sprite;
                 break;
             case SquadTabType.ITEM:
 
-                _totalPedia.text = DataUtils.Instance.ItemCollection.storedItems.Count + DataUtils.Instance.ItemCollection.deckItems.Count + "/" + DataUtils.Instance.ItemPedia.Count;
-                _totalAmount.text = DataUtils.Instance.ItemCollection.storedItems.Count.ToString();
+                _totalPedia.text = NakamaData.Instance.ItemCollection.storedItems.Count + NakamaData.Instance.ItemCollection.deckItems.Count + "/" + NakamaData.Instance.ItemPedia.Count;
+                _totalAmount.text = NakamaData.Instance.ItemCollection.storedItems.Count.ToString();
                 _titleTxt.text = _storedItemsTrad.GetLocalizedString();
-                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Item).sprite;
-                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.ItemPedia).sprite;
+                _currentIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Item).Sprite;
+                _pediaIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.ItemPedia).Sprite;
                 break;
         }
     }

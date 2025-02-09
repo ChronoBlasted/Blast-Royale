@@ -21,12 +21,12 @@ public class DailyRewardLayout : MonoBehaviour
         if (reward.coinsReceived > 0)
         {
             _rewardAmount.text = reward.coinsReceived.ToString();
-            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Coin).sprite;
+            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Coin).Sprite;
         }
         else if (reward.gemsReceived > 0)
         {
             _rewardAmount.text = reward.gemsReceived.ToString();
-            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Gem).sprite;
+            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Gem).Sprite;
         }
         else if (reward.blastReceived != null)
         {
@@ -41,14 +41,14 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Unlock()
     {
-        _stateImg.sprite = resource.GetResourceByType(ResourceType.Unlock).sprite;
+        _stateImg.sprite = resource.GetResourceByType(ResourceType.Unlock).Sprite;
     }
 
     public void Collectable(bool canClaimReward)
     {
         if (canClaimReward)
         {
-            _stateImg.sprite = resource.GetResourceByType(ResourceType.ArrowLeft).sprite;
+            _stateImg.sprite = resource.GetResourceByType(ResourceType.ArrowLeft).Sprite;
             _rewardButton.interactable = true;
         }
         else Lock();
@@ -56,7 +56,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Lock()
     {
-        _stateImg.sprite = resource.GetResourceByType(ResourceType.Lock).sprite;
+        _stateImg.sprite = resource.GetResourceByType(ResourceType.Lock).Sprite;
     }
 
     public async void HandleOnCollectDailyReward()

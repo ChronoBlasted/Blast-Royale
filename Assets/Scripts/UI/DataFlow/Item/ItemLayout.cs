@@ -20,10 +20,10 @@ public class ItemLayout : MonoBehaviour
         _item = item;
         _index = index;
 
-        ItemData itemData = DataUtils.Instance.GetItemDataById(item.data_id);
+        ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
 
         _itemBorderBG.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
-        _itemIco.sprite = DataUtils.Instance.GetItemImgByID(itemData.id);
+        _itemIco.sprite = NakamaData.Instance.GetItemImgByID(itemData.id);
         _amount.text = "X" + _item.amount;
         _name.text = itemData.name;
     }

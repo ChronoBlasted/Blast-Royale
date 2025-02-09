@@ -28,6 +28,17 @@ let InitModule = function (ctx, logger, nk, initializer) {
     initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
     initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
     initializer.registerRpc('loadAllArea', rpcLoadAllArea);
+    // Wild Battle
+    initializer.registerRpc('findWildBattle', rpcFindOrCreateWildBattle);
+    initializer.registerMatch('wildBattle', {
+        matchInit,
+        matchJoinAttempt,
+        matchJoin,
+        matchLeave,
+        matchLoop,
+        matchSignal,
+        matchTerminate
+    });
     initializer.registerRpc('deleteAccount', rpcDeleteAccount);
     createTrophyLeaderboard(nk, logger, ctx);
     createBlastDefeatedLeaderboard(nk, logger, ctx);
@@ -133,6 +144,10 @@ function calculateExperienceFromLevel(level) {
     }
     return experienceNiveau;
 }
+function calculateExperienceGain(expYield, enemyLevel, yourLevel) {
+    const experience = Math.floor(((expYield * enemyLevel / 7) * ((2 * enemyLevel + 10) / (enemyLevel + yourLevel + 10)) + 1));
+    return experience;
+}
 function getRandomActiveMoveset(blastData, exp) {
     const availableMoves = blastData.movepool
         .filter(m => calculateLevelFromExperience(exp) >= m.levelMin)
@@ -141,6 +156,153 @@ function getRandomActiveMoveset(blastData, exp) {
     const randomMoveset = shuffledMoves.slice(0, 4);
     return randomMoveset;
 }
+//#region Battle
+function calculateDamage(attackerLevel, attackerAttack, defenderDefense, attackerType, defenderType, movePower) {
+    const damage = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
+    return Math.floor(damage);
+}
+function getTypeMultiplier(moveType, defenderType) {
+    switch (moveType) {
+        case TYPE.FIRE:
+            switch (defenderType) {
+                case TYPE.GRASS:
+                    return 2;
+                case TYPE.WATER:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        case Type.WATER:
+            switch (defenderType) {
+                case Type.FIRE:
+                    return 2;
+                case Type.GRASS:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        case TYPE.GRASS:
+            switch (defenderType) {
+                case TYPE.WATER:
+                    return 2;
+                case TYPE.FIRE:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        case TYPE.NORMAL:
+            switch (defenderType) {
+                case TYPE.LIGHT:
+                    return 0.5;
+                case TYPE.DARK:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        case TYPE.GROUND:
+            switch (defenderType) {
+                case TYPE.ELECTRIC:
+                    return 2;
+                case TYPE.FLY:
+                    return 0;
+                default:
+                    return 1;
+            }
+        case TYPE.FLY:
+            switch (defenderType) {
+                case TYPE.ELECTRIC:
+                    return 0;
+                case TYPE.GROUND:
+                    return 2;
+                default:
+                    return 1;
+            }
+        case TYPE.ELECTRIC:
+            switch (defenderType) {
+                case TYPE.GROUND:
+                    return 0;
+                case TYPE.FLY:
+                    return 2;
+                default:
+                    return 1;
+            }
+        case TYPE.LIGHT:
+            switch (defenderType) {
+                case TYPE.DARK:
+                    return 2;
+                case TYPE.NORMAL:
+                    return 2;
+                case TYPE.LIGHT:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        case TYPE.DARK:
+            switch (defenderType) {
+                case TYPE.LIGHT:
+                    return 2;
+                case TYPE.NORMAL:
+                    return 2;
+                case TYPE.DARK:
+                    return 0.5;
+                default:
+                    return 1;
+            }
+        default:
+            return 1;
+    }
+}
+function calculateStaminaRecovery(maxStamina, currentStamina, useWait = false) {
+    const normalRecovery = maxStamina * 0.2;
+    const waitRecovery = maxStamina * 0.5;
+    let recoveredStamina = currentStamina + (useWait ? waitRecovery : normalRecovery);
+    if (recoveredStamina > maxStamina) {
+        recoveredStamina = maxStamina;
+    }
+    return Math.floor(recoveredStamina);
+}
+function getFasterBlast(blast1, blast2) {
+    if (blast1.speed > blast2.speed) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+function isAllBlastDead(allPlayerBlasts) {
+    return allPlayerBlasts.every((blast) => blast.hp === 0);
+}
+function isBlastAlive(blast) {
+    return blast.hp > 0;
+}
+function addExpOnBlastInGame(nk, logger, playerId, currentPlayerBlast, enemyBlast) {
+    let expToAdd = calculateExperienceGain(getBlastDataById(currentPlayerBlast.data_id).expYield, calculateLevelFromExperience(enemyBlast.exp), calculateLevelFromExperience(currentPlayerBlast.exp));
+    addExpOnBlast(nk, logger, playerId, currentPlayerBlast.uuid, expToAdd);
+}
+function healHealthBlast(blast, amount) {
+    blast.hp += amount;
+    if (blast.hp > blast.maxHp)
+        blast.hp = blast.maxHp;
+    return blast;
+}
+function healManaBlast(blast, amount) {
+    blast.mana += amount;
+    if (blast.mana > blast.maxMana)
+        blast.mana = blast.maxMana;
+    return blast;
+}
+function calculateCaptureProbability(currentHP, maxHP, catchRate, temCardBonus, statusBonus) {
+    const hpFactor = (3 * maxHP - 2 * currentHP) / (3 * maxHP);
+    const baseProbability = catchRate * hpFactor * temCardBonus * statusBonus;
+    const captureProbability = Math.min(Math.max(baseProbability, 0), 1);
+    return captureProbability;
+}
+function isBlastCaptured(currentHP, maxHP, catchRate, temCardBonus, statusBonus) {
+    const captureProbability = calculateCaptureProbability(currentHP, maxHP, catchRate, temCardBonus, statusBonus) * 100;
+    const randomValue = Math.random() * 100;
+    return randomValue <= captureProbability;
+}
+//#endregion
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -213,23 +375,23 @@ function getCurrencyInWallet(nk, userId, currencyKeyName) {
     }
     return amountToReturn;
 }
-var Type;
-(function (Type) {
-    Type[Type["NORMAL"] = 0] = "NORMAL";
-    Type[Type["FIRE"] = 1] = "FIRE";
-    Type[Type["WATER"] = 2] = "WATER";
-    Type[Type["GRASS"] = 3] = "GRASS";
-    Type[Type["GROUND"] = 4] = "GROUND";
-    Type[Type["FLY"] = 5] = "FLY";
-    Type[Type["ELECTRIC"] = 6] = "ELECTRIC";
-    Type[Type["LIGHT"] = 7] = "LIGHT";
-    Type[Type["DARK"] = 8] = "DARK";
-})(Type || (Type = {}));
+var TYPE;
+(function (TYPE) {
+    TYPE[TYPE["NORMAL"] = 0] = "NORMAL";
+    TYPE[TYPE["FIRE"] = 1] = "FIRE";
+    TYPE[TYPE["WATER"] = 2] = "WATER";
+    TYPE[TYPE["GRASS"] = 3] = "GRASS";
+    TYPE[TYPE["GROUND"] = 4] = "GROUND";
+    TYPE[TYPE["FLY"] = 5] = "FLY";
+    TYPE[TYPE["ELECTRIC"] = 6] = "ELECTRIC";
+    TYPE[TYPE["LIGHT"] = 7] = "LIGHT";
+    TYPE[TYPE["DARK"] = 8] = "DARK";
+})(TYPE || (TYPE = {}));
 const Tackle = {
     id: 1,
     name: "Tackle",
     desc: "A basic physical attack that uses the user's body.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 200,
     cost: 7,
 };
@@ -237,7 +399,7 @@ const Punch = {
     id: 2,
     name: "Punch",
     desc: "A strong punch aimed at the opponent.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 50,
     cost: 15,
 };
@@ -245,7 +407,7 @@ const Stomp = {
     id: 3,
     name: "Stomp",
     desc: "A powerful attack that stomps down on the opponent.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 65,
     cost: 25,
 };
@@ -253,7 +415,7 @@ const Slam = {
     id: 4,
     name: "Slam",
     desc: "A hard slam that causes significant damage.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 80,
     cost: 30,
 };
@@ -261,7 +423,7 @@ const Growl = {
     id: 5,
     name: "Growl",
     desc: "A menacing growl that lowers the target's attack.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 0,
     cost: 3,
 };
@@ -269,7 +431,7 @@ const Harden = {
     id: 6,
     name: "Harden",
     desc: "Increases the user's defense by hardening their body.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 0,
     cost: 4,
 };
@@ -277,7 +439,7 @@ const Ember = {
     id: 7,
     name: "Ember",
     desc: "A small flame attack that may cause a burn.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     power: 60,
     cost: 12,
 };
@@ -285,7 +447,7 @@ const FirePunch = {
     id: 8,
     name: "Fire Punch",
     desc: "A punch imbued with fire that burns the target.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     power: 75,
     cost: 15,
 };
@@ -293,7 +455,7 @@ const Flamethrower = {
     id: 9,
     name: "Flamethrower",
     desc: "A stream of fire that engulfs the target.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     power: 90,
     cost: 30,
 };
@@ -301,7 +463,7 @@ const FireBlast = {
     id: 10,
     name: "Fire Blast",
     desc: "A powerful fire attack that can leave the target burned.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     power: 110,
     cost: 40,
 };
@@ -309,7 +471,7 @@ const Bubble = {
     id: 11,
     name: "Bubble",
     desc: "A stream of bubbles that can trap the opponent.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     power: 50,
     cost: 5,
 };
@@ -317,7 +479,7 @@ const BubbleBeam = {
     id: 12,
     name: "Bubble Beam",
     desc: "A beam of bubbles that strikes the target with pressure.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     power: 65,
     cost: 15,
 };
@@ -325,7 +487,7 @@ const Waterfall = {
     id: 13,
     name: "Waterfall",
     desc: "A powerful water attack that crashes down on the target.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     power: 80,
     cost: 25,
 };
@@ -333,7 +495,7 @@ const HydroPump = {
     id: 14,
     name: "Hydro Pump",
     desc: "A massive blast of water that delivers high damage.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     power: 110,
     cost: 40,
 };
@@ -341,7 +503,7 @@ const VineWhip = {
     id: 15,
     name: "Vine Whip",
     desc: "Attacks the opponent with flexible vines.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     power: 50,
     cost: 7,
 };
@@ -349,7 +511,7 @@ const RazorLeaf = {
     id: 16,
     name: "Razor Leaf",
     desc: "Sharp leaves that are fired at the target.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     power: 75,
     cost: 15,
 };
@@ -357,7 +519,7 @@ const SolarBeam = {
     id: 17,
     name: "Solar Beam",
     desc: "A powerful beam of solar energy that requires a turn to charge.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     power: 120,
     cost: 50,
 };
@@ -365,7 +527,7 @@ const QuickAttack = {
     id: 18,
     name: "Quick Attack",
     desc: "A swift attack that always strikes first.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 40,
     cost: 5,
 };
@@ -373,7 +535,7 @@ const Gust = {
     id: 19,
     name: "Gust",
     desc: "A blast of wind that is effective against bug types.",
-    type: Type.FLY,
+    type: TYPE.FLY,
     power: 40,
     cost: 10,
 };
@@ -381,7 +543,7 @@ const HyperFang = {
     id: 20,
     name: "Hyper Fang",
     desc: "A sharp bite that deals high damage.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     power: 80,
     cost: 15,
 };
@@ -389,7 +551,7 @@ const ThunderShock = {
     id: 21,
     name: "Thunder Shock",
     desc: "An electric shock that may paralyze the target.",
-    type: Type.ELECTRIC,
+    type: TYPE.ELECTRIC,
     power: 40,
     cost: 5,
 };
@@ -397,7 +559,7 @@ const ElectroBall = {
     id: 22,
     name: "Electro Ball",
     desc: "A ball of electricity that grows stronger with speed.",
-    type: Type.ELECTRIC,
+    type: TYPE.ELECTRIC,
     power: 90,
     cost: 30,
 };
@@ -578,6 +740,11 @@ function getRandomItem(amount) {
     };
     return newItem;
 }
+function getDeckItem(nk, logger, userId) {
+    let userCards;
+    userCards = loadUserItems(nk, logger, userId);
+    return userCards.deckItems;
+}
 const MinIV = 1;
 const MaxIV = 31;
 // BlastData
@@ -586,7 +753,7 @@ const Florax = {
     id: 1,
     name: "Florax",
     desc: "A small plant.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     hp: 65,
     mana: 65,
     attack: 49,
@@ -606,7 +773,7 @@ const Florabloom = {
     id: 2,
     name: "Florabloom",
     desc: "A plant in full bloom.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     hp: 80,
     mana: 80,
     attack: 62,
@@ -627,7 +794,7 @@ const Floramajest = {
     id: 3,
     name: "Floramajest",
     desc: "A majestic plant.",
-    type: Type.GRASS,
+    type: TYPE.GRASS,
     hp: 90,
     mana: 90,
     attack: 82,
@@ -648,7 +815,7 @@ const Pyrex = {
     id: 4,
     name: "Pyrex",
     desc: "A small flame.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     hp: 60,
     mana: 60,
     attack: 64,
@@ -671,7 +838,7 @@ const Pyroclaw = {
     id: 5,
     name: "Pyroclaw",
     desc: "A fiery that is fierce in battle.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     hp: 80,
     mana: 80,
     attack: 80,
@@ -692,7 +859,7 @@ const Pyrowyvern = {
     id: 6,
     name: "Pyrowyvern",
     desc: "A magnificent fire that can fly.",
-    type: Type.FIRE,
+    type: TYPE.FIRE,
     hp: 78,
     mana: 78,
     attack: 84,
@@ -714,7 +881,7 @@ const Aquaflare = {
     id: 7,
     name: "Aquaflare",
     desc: "A small water.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     hp: 60,
     mana: 60,
     attack: 48,
@@ -733,7 +900,7 @@ const Aquablast = {
     id: 8,
     name: "Aquablast",
     desc: "A water that has a strong shell.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     hp: 80,
     mana: 80,
     attack: 63,
@@ -753,7 +920,7 @@ const Aqualith = {
     id: 9,
     name: "Aqualith",
     desc: "A powerful water with cannons.",
-    type: Type.WATER,
+    type: TYPE.WATER,
     hp: 79,
     mana: 79,
     attack: 83,
@@ -774,7 +941,7 @@ const Zephyrex = {
     id: 10,
     name: "Zephyrex",
     desc: "A small bird that can fly.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     hp: 40,
     mana: 40,
     attack: 45,
@@ -794,7 +961,7 @@ const Zephyrwing = {
     id: 11,
     name: "Zephyrwing",
     desc: "A powerful bird known for its sharp beak.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     hp: 63,
     mana: 63,
     attack: 60,
@@ -815,7 +982,7 @@ const Gnawbit = {
     id: 12,
     name: "Gnawbit",
     desc: "A small, purple rodent.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     hp: 30,
     mana: 30,
     attack: 56,
@@ -835,7 +1002,7 @@ const Gnawfang = {
     id: 13,
     name: "Gnawfang",
     desc: "A strong and aggressive rodent.",
-    type: Type.NORMAL,
+    type: TYPE.NORMAL,
     hp: 55,
     mana: 55,
     attack: 81,
@@ -856,7 +1023,7 @@ const Electrix = {
     id: 14,
     name: "Electrix",
     desc: "A small, electric known for its cute appearance.",
-    type: Type.ELECTRIC,
+    type: TYPE.ELECTRIC,
     hp: 35,
     mana: 35,
     attack: 55,
@@ -1896,7 +2063,51 @@ function addBlast(nk, logger, userId, newBlastToAdd) {
         userCards.storedBlasts[userCards.storedBlasts.length] = newBlastToAdd;
     }
     storeUserBlasts(nk, logger, userId, userCards);
+    logger.debug("user '%s' succesfully add blast with id '%s'", userId, newBlastToAdd.data_id);
     return userCards;
+}
+function addExpOnBlast(nk, logger, userId, uuid, expToAdd) {
+    let userCards;
+    userCards = loadUserBlast(nk, logger, userId);
+    let isInDeck = false;
+    let selectedBlast = {
+        uuid: "",
+        data_id: 0,
+        exp: 0,
+        iv: 0,
+        hp: 0,
+        maxHp: 0,
+        mana: 0,
+        maxMana: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+        status: Status.NONE,
+        activeMoveset: []
+    };
+    if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid);
+        isInDeck = true;
+    }
+    else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
+        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid);
+        isInDeck = false;
+    }
+    if (isInDeck) {
+        userCards.deckBlasts.find(blast => blast.uuid === uuid).exp += expToAdd;
+    }
+    else {
+        userCards.storedBlasts.find(blast => blast.uuid === uuid).exp += expToAdd;
+    }
+    storeUserBlasts(nk, logger, userId, userCards);
+    logger.debug("user '%s' succesfully add exp on blast with uuid '%s'", userId, uuid);
+    return userCards.deckBlasts;
+}
+function getDeckBlast(nk, logger, userId) {
+    let userCards;
+    userCards = loadUserBlast(nk, logger, userId);
+    logger.debug("user '%s' successfully get deck blast", userId);
+    return userCards.deckBlasts;
 }
 function loadUserBlast(nk, logger, userId) {
     let storageReadReq = {
@@ -2093,6 +2304,21 @@ function defaultItemsCollection(nk, logger, userId) {
         storedItems: [],
     };
 }
+var OpCodes;
+(function (OpCodes) {
+    OpCodes[OpCodes["MATCH_START"] = 10] = "MATCH_START";
+    OpCodes[OpCodes["PLAYER_WAIT"] = 15] = "PLAYER_WAIT";
+    OpCodes[OpCodes["PLAYER_ATTACK"] = 20] = "PLAYER_ATTACK";
+    OpCodes[OpCodes["PLAYER_USE_ITEM"] = 30] = "PLAYER_USE_ITEM";
+    OpCodes[OpCodes["PLAYER_CHANGE_BLAST"] = 40] = "PLAYER_CHANGE_BLAST";
+    OpCodes[OpCodes["PLAYER_READY"] = 50] = "PLAYER_READY";
+    OpCodes[OpCodes["ENEMY_READY"] = 55] = "ENEMY_READY";
+    OpCodes[OpCodes["MATCH_ROUND"] = 60] = "MATCH_ROUND";
+    OpCodes[OpCodes["PLAYER_MUST_CHANGE_BLAST"] = 61] = "PLAYER_MUST_CHANGE_BLAST";
+    OpCodes[OpCodes["MATCH_END"] = 100] = "MATCH_END";
+    OpCodes[OpCodes["ERROR_SERV"] = 404] = "ERROR_SERV";
+    OpCodes[OpCodes["DEBUG"] = 500] = "DEBUG";
+})(OpCodes || (OpCodes = {}));
 var notificationOpCodes;
 (function (notificationOpCodes) {
     notificationOpCodes[notificationOpCodes["CURENCY"] = 1000] = "CURENCY";
@@ -2180,3 +2406,369 @@ function writeRecordBlastDefeatedLeaderboard(nk, logger, ctx, amount) {
         // Handle error
     }
 }
+var BattleState;
+(function (BattleState) {
+    BattleState[BattleState["NONE"] = 0] = "NONE";
+    BattleState[BattleState["WAITING"] = 1] = "WAITING";
+    BattleState[BattleState["READY"] = 2] = "READY";
+    BattleState[BattleState["START"] = 3] = "START";
+    BattleState[BattleState["WAITFORPLAYERSWAP"] = 4] = "WAITFORPLAYERSWAP";
+    BattleState[BattleState["END"] = 5] = "END";
+})(BattleState || (BattleState = {}));
+var PlayerState;
+(function (PlayerState) {
+    PlayerState[PlayerState["NONE"] = 0] = "NONE";
+    PlayerState[PlayerState["BUSY"] = 1] = "BUSY";
+    PlayerState[PlayerState["READY"] = 2] = "READY";
+})(PlayerState || (PlayerState = {}));
+var TurnType;
+(function (TurnType) {
+    TurnType[TurnType["NONE"] = 0] = "NONE";
+    TurnType[TurnType["ATTACK"] = 1] = "ATTACK";
+    TurnType[TurnType["ITEM"] = 2] = "ITEM";
+    TurnType[TurnType["SWAP"] = 3] = "SWAP";
+    TurnType[TurnType["WAIT"] = 4] = "WAIT";
+})(TurnType || (TurnType = {}));
+function rpcFindOrCreateWildBattle(context, logger, nk) {
+    var matchId = nk.matchCreate('wildBattle', {});
+    return JSON.stringify(matchId);
+}
+const matchInit = function (ctx, logger, nk, params) {
+    const wildBattleData = {
+        emptyTicks: 0,
+        presences: {},
+        battle_state: BattleState.START,
+        player1_state: PlayerState.BUSY,
+        player1_id: "",
+        player1_current_blast: null,
+        player1_blasts: [],
+        player1_items: [],
+        wild_blast: null,
+        TurnStateData: {
+            p_move_damage: 0,
+            p_move_status: Status.NONE,
+            wb_turn_type: TurnType.NONE,
+            wb_move_index: 0,
+            wb_move_damage: 0,
+            wb_move_status: Status.NONE,
+            catched: false
+        },
+    };
+    return {
+        state: wildBattleData,
+        tickRate: 2,
+        label: ''
+    };
+};
+const matchJoinAttempt = function (ctx, logger, nk, dispatcher, tick, state, presence, metadata) {
+    logger.debug('%q attempted to join Lobby match', ctx.userId);
+    return {
+        state,
+        accept: true
+    };
+};
+const matchJoin = function (ctx, logger, nk, dispatcher, tick, state, presences) {
+    for (const presence of presences) {
+        state.emptyTicks = 0;
+        state.presences[presence.userId] = presence;
+    }
+    return {
+        state
+    };
+};
+const matchLeave = function (ctx, logger, nk, dispatcher, tick, state, presences) {
+    for (let presence of presences) {
+        logger.info("Player: %s left match: %s.", presence.userId, ctx.matchId);
+        state.presences[presence.userId] = null;
+    }
+    for (let userID in state.presences) {
+        if (state.presences[userID] === null) {
+            delete state.presences[userID];
+        }
+    }
+    if (connectedPlayers(state) === 0) {
+        return null;
+    }
+    return {
+        state
+    };
+};
+const matchLoop = function (ctx, logger, nk, dispatcher, tick, state, messages) {
+    // logger.info('Current state : %d', state.battle_state);
+    switch (state.battle_state) {
+        case BattleState.START:
+            logger.debug('______________ START BATTLE ______________');
+            const keys = Object.keys(state.presences);
+            const player1_presence = state.presences[keys[0]];
+            state.player1_id = player1_presence.userId;
+            var allPlayer1BlastInBattle = getDeckBlast(nk, logger, state.player1_id);
+            state.player1_current_blast = allPlayer1BlastInBattle[0];
+            state.player1_blasts = allPlayer1BlastInBattle;
+            var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
+            state.player1_items = allPlayer1Items;
+            state.wild_blast = getRandomBlastInPlayerArea(state.player1_id, logger, nk);
+            const StartData = {
+                id: state.wild_blast.data_id,
+                exp: state.wild_blast.exp,
+                iv: state.wild_blast.iv,
+                status: Status.NONE,
+                activeMoveset: state.wild_blast.activeMoveset,
+            };
+            logger.debug('Random blast: %d, with level: %l appeared', getBlastDataById(state.wild_blast.data_id).name, calculateLevelFromExperience(state.wild_blast.exp));
+            state.battle_state = BattleState.WAITING;
+            dispatcher.broadcastMessage(OpCodes.MATCH_START, JSON.stringify(StartData));
+            logger.debug('______________ END START BATTLE ______________');
+            break;
+        case BattleState.WAITING:
+            messages.forEach(function (message) {
+                switch (message.opCode) {
+                    case OpCodes.PLAYER_READY:
+                        state.player1_state = PlayerState.READY;
+                        logger.debug('______________ PLAYER 1 READY ______________');
+                        break;
+                }
+            });
+            if (state.player1_state == PlayerState.READY) {
+                dispatcher.broadcastMessage(OpCodes.ENEMY_READY);
+                state.battle_state = BattleState.READY;
+                logger.debug('______________ EVERYONE"S READY ______________');
+            }
+            break;
+        case BattleState.READY:
+            messages.forEach(function (message) {
+                // faire que si c'est un autre OP code que ceux d'en dessous faire un errorfunc
+                var _a, _b, _c, _d, _e, _f;
+                logger.debug('______________ LOOP BATTLE ______________');
+                message.data == null ? logger.debug('Receive Op code : %d', message.opCode) : logger.debug('Receive Op code : %d, with data : %e', message.opCode, JSON.parse(nk.binaryToString(message.data)));
+                state.player1_state = PlayerState.BUSY;
+                state.TurnStateData = {
+                    p_move_damage: 0,
+                    p_move_status: Status.NONE,
+                    wb_move_index: getRandomNumber(0, state.wild_blast.activeMoveset.length - 1),
+                    wb_move_damage: 0,
+                    wb_move_status: Status.NONE,
+                    wb_turn_type: TurnType.NONE,
+                    catched: false
+                };
+                switch (message.opCode) {
+                    case OpCodes.PLAYER_ATTACK:
+                        let attackIndex = clamp(JSON.parse(nk.binaryToString(message.data)), 0, 3);
+                        let move = getMoveById(state.player1_current_blast.activeMoveset[attackIndex]);
+                        if (move == null) {
+                            ({ state } = ErrorFunc(state, "Player 1 move null", dispatcher));
+                            return;
+                        }
+                        state = performAttackSequence(state, move, dispatcher, nk, logger);
+                        break;
+                    case OpCodes.PLAYER_USE_ITEM:
+                        let msgItem = {};
+                        msgItem = JSON.parse(nk.binaryToString(message.data));
+                        msgItem.index_item = clamp(msgItem.index_item, 0, state.player1_items.length - 1);
+                        let item = state.player1_items[msgItem.index_item];
+                        useItem(nk, logger, state.player1_id, item);
+                        if (item == null) {
+                            ({ state } = ErrorFunc(state, "Item to use is null", dispatcher));
+                            return;
+                        }
+                        if (item.amount <= 0) {
+                            ({ state } = ErrorFunc(state, "U don't have enough item", dispatcher));
+                            return;
+                        }
+                        var itemData = getItemDataById(item.data_id);
+                        switch (itemData.behaviour) {
+                            case ItemBehaviour.HEAL:
+                                state.player1_blasts[msgItem.index_blast] = healHealthBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
+                                break;
+                            case ItemBehaviour.MANA:
+                                state.player1_blasts[msgItem.index_blast] = healManaBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
+                                break;
+                            case ItemBehaviour.STATUS:
+                                break;
+                            case ItemBehaviour.CATCH:
+                                var wildBlastCaptured = false;
+                                wildBlastCaptured = isBlastCaptured(state.wild_blast.hp, state.wild_blast.maxHp, getBlastDataById(state.wild_blast.data_id).catchRate, itemData.catchRate, 1);
+                                if (wildBlastCaptured) {
+                                    logger.debug('Wild blast Captured !', wildBlastCaptured);
+                                    addBlast(nk, logger, state.player1_id, state.wild_blast);
+                                    state.battle_state = BattleState.END;
+                                }
+                                state.TurnStateData.catched = wildBlastCaptured;
+                                break;
+                            default:
+                        }
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        break;
+                    case OpCodes.PLAYER_CHANGE_BLAST:
+                        var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.player1_blasts.length - 1);
+                        if (state.player1_current_blast == state.player1_blasts[msgChangeBlast]) {
+                            ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                            return;
+                        }
+                        if (!isBlastAlive(state.player1_blasts[msgChangeBlast])) {
+                            ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast in Ready", dispatcher));
+                            return;
+                        }
+                        state.player1_current_blast = state.player1_blasts[msgChangeBlast];
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        break;
+                    case OpCodes.PLAYER_WAIT:
+                        state.player1_state = PlayerState.BUSY;
+                        state.player1_current_blast.mana = calculateStaminaRecovery(state.player1_current_blast.maxMana, state.player1_current_blast.mana, true);
+                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        break;
+                }
+                if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
+                    if (state.TurnStateData.wb_turn_type != TurnType.WAIT)
+                        state.wild_blast.mana = calculateStaminaRecovery(state.wild_blast.maxMana, state.wild_blast.mana, false);
+                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast.data_id).name, (_a = state.wild_blast) === null || _a === void 0 ? void 0 : _a.hp, (_b = state.wild_blast) === null || _b === void 0 ? void 0 : _b.mana);
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    return;
+                }
+                else if (state.battle_state == BattleState.END) {
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    return;
+                }
+                else {
+                    state.battle_state = BattleState.WAITING;
+                    if (message.opCode != OpCodes.PLAYER_WAIT)
+                        state.player1_current_blast.mana = calculateStaminaRecovery(state.player1_current_blast.maxMana, state.player1_current_blast.mana, false);
+                    if (state.TurnStateData.wb_turn_type != TurnType.WAIT)
+                        state.wild_blast.mana = calculateStaminaRecovery(state.wild_blast.maxMana, state.wild_blast.mana, false);
+                    //Send matchTurn
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast.data_id).name, (_c = state.wild_blast) === null || _c === void 0 ? void 0 : _c.hp, (_d = state.wild_blast) === null || _d === void 0 ? void 0 : _d.mana);
+                    logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast.data_id).name, (_e = state.player1_current_blast) === null || _e === void 0 ? void 0 : _e.hp, (_f = state.player1_current_blast) === null || _f === void 0 ? void 0 : _f.mana);
+                }
+                logger.debug('______________ END LOOP BATTLE ______________');
+            });
+            break;
+        case BattleState.WAITFORPLAYERSWAP:
+            messages.forEach(function (message) {
+                var _a, _b, _c, _d;
+                logger.debug('______________ PLAYER SWAP BLAST ______________');
+                message.data == null ? logger.debug('Receive Op code : %d', message.opCode) : logger.debug('Receive Op code : %d, with data : %e', message.opCode, JSON.parse(nk.binaryToString(message.data)));
+                if (message.opCode == OpCodes.PLAYER_CHANGE_BLAST) {
+                    state.player1_state = PlayerState.BUSY;
+                    var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.player1_blasts.length - 1);
+                    if (state.player1_current_blast == state.player1_blasts[msgChangeBlast]) {
+                        ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                        return;
+                    }
+                    if (!isBlastAlive(state.player1_blasts[msgChangeBlast])) {
+                        ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast", dispatcher));
+                        return;
+                    }
+                    state.player1_current_blast = state.player1_blasts[msgChangeBlast];
+                }
+                logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast.data_id).name, (_a = state.wild_blast) === null || _a === void 0 ? void 0 : _a.hp, (_b = state.wild_blast) === null || _b === void 0 ? void 0 : _b.mana);
+                logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast.data_id).name, (_c = state.player1_current_blast) === null || _c === void 0 ? void 0 : _c.hp, (_d = state.player1_current_blast) === null || _d === void 0 ? void 0 : _d.mana);
+                state.battle_state = BattleState.WAITING;
+                logger.debug('______________ END PLAYER SWAP BLAST ______________');
+            });
+            break;
+        case BattleState.END:
+            updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200);
+            state.battle_state = BattleState.START;
+            state.player1_state = PlayerState.BUSY;
+            logger.debug('______________ END BATTLE ______________');
+            return null;
+    }
+    if (connectedPlayers(state) === 0) {
+        logger.debug('Running empty ticks: %d', state.emptyTicks);
+        state.emptyTicks++;
+    }
+    if (state.emptyTicks > 100) {
+        return null;
+    }
+    return {
+        state
+    };
+};
+const matchSignal = function (ctx, logger, nk, dispatcher, tick, state, data) {
+    logger.debug('Lobby match signal received: ' + data);
+    return {
+        state,
+        data: "Lobby match signal received: " + data
+    };
+};
+const matchTerminate = function (ctx, logger, nk, dispatcher, tick, state, graceSeconds) {
+    logger.debug('Lobby match terminated');
+    return {
+        state
+    };
+};
+function ErrorFunc(state, error, dispatcher) {
+    state.battle_state = BattleState.READY;
+    state.player1_state = PlayerState.READY;
+    dispatcher.broadcastMessage(OpCodes.ERROR_SERV, JSON.stringify(error));
+    return { state };
+}
+function connectedPlayers(s) {
+    let count = 0;
+    for (const p of Object.keys(s.presences)) {
+        if (s.presences[p] !== null) {
+            count++;
+        }
+    }
+    return count;
+}
+//#region  Attack Logic
+function applyBlastAttack(attacker, defender, move, state) {
+    let damage = calculateDamage(calculateLevelFromExperience(attacker.exp), attacker.attack, defender.defense, move.type, getBlastDataById(defender.data_id).type, move.power);
+    defender.hp = clamp(defender.hp - damage, 0, Number.POSITIVE_INFINITY);
+    attacker.mana = clamp(attacker.mana - move.cost, 0, Number.POSITIVE_INFINITY);
+    return damage;
+}
+function executePlayerAttack(state, move, dispatcher) {
+    if (state.player1_current_blast.mana < move.cost) {
+        return { state };
+    }
+    const damage = applyBlastAttack(state.player1_current_blast, state.wild_blast, move, state);
+    state.TurnStateData.p_move_damage = damage;
+    state.TurnStateData.p_move_status = Status.NONE;
+    return { state };
+}
+function executeWildBlastAttack(state, dispatcher) {
+    let wb_move = getMoveById(state.wild_blast.activeMoveset[state.TurnStateData.wb_move_index]);
+    if (state.wild_blast.mana < wb_move.cost) {
+        state.TurnStateData.wb_move_index = -1;
+    }
+    if (state.TurnStateData.wb_move_index < 0) {
+        state.wild_blast.mana = calculateStaminaRecovery(state.wild_blast.maxMana, state.wild_blast.mana, true);
+        state.TurnStateData.wb_turn_type = TurnType.WAIT;
+    }
+    else {
+        const damage = applyBlastAttack(state.wild_blast, state.player1_current_blast, wb_move, state);
+        state.TurnStateData.wb_move_damage = damage;
+        state.TurnStateData.wb_move_status = Status.NONE;
+        state.TurnStateData.wb_turn_type = TurnType.ATTACK;
+    }
+    return { state };
+}
+function handleAttackTurn(isPlayerFaster, state, move, dispatcher, nk, logger) {
+    ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher));
+    ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
+    return { state };
+}
+function performAttackSequence(state, playerMove, dispatcher, nk, logger) {
+    ({ state } = handleAttackTurn(getFasterBlast(state.player1_current_blast, state.wild_blast), state, playerMove, dispatcher, nk, logger));
+    if (state.battle_state == BattleState.READY)
+        ({ state } = handleAttackTurn(!getFasterBlast(state.player1_current_blast, state.wild_blast), state, playerMove, dispatcher, nk, logger));
+    return state;
+}
+function checkIfMatchContinue(nk, logger, state, dispatcher) {
+    if (!isBlastAlive(state.wild_blast)) {
+        dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(true));
+        addExpOnBlastInGame(nk, logger, state.player1_id, state.player1_current_blast, state.wild_blast);
+        state.battle_state = BattleState.END;
+    }
+    if (isAllBlastDead(state.player1_blasts)) {
+        dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
+        state.battle_state = BattleState.END;
+    }
+    else if (!isBlastAlive(state.player1_current_blast)) {
+        state.battle_state = BattleState.WAITFORPLAYERSWAP;
+    }
+    return { state };
+}
+//#endregion

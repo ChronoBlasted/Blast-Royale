@@ -10,7 +10,7 @@ public class ResourceObjectHolder : MonoSingleton<ResourceObjectHolder>
 
     public ResourceData GetResourceByType(ResourceType resourceType)
     {
-        return resources.First(resource => resource.type == resourceType);
+        return resources.First(resource => resource.Type == resourceType);
     }
 
 #if UNITY_EDITOR

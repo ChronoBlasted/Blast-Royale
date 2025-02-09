@@ -14,9 +14,9 @@ public class AreaSingleBlastLayout : MonoBehaviour
     {
         _blast = blast;
 
-        _blastNameTxt.text = _blast.name;
+        _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(_blast.id).Name.GetLocalizedString();
 
-        _ico.sprite = DataUtils.Instance.GetBlastImgByID(_blast.id);
+        _ico.sprite = NakamaData.Instance.GetBlastDataRef(_blast.id).Sprite;
         _borderBG.color = ColorManager.Instance.GetTypeColor(_blast.type);
     }
 

@@ -33,6 +33,8 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         Session = session;
         Socket = socket;
 
+        await NakamaPedia.Init(Client, Session);
+
         await NakamaUserAccount.Init(Client, Session);
 
         GameStateManager.Instance.UpdateStateToMenu();

@@ -28,7 +28,7 @@ public class ItemInfoPopup : Popup
 
     public void UpdateData(Item item)
     {
-        ItemData itemData = DataUtils.Instance.GetItemDataById(item.data_id);
+        ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
 
         _itemNameTxt.text = itemData.name;
         _itemDescTxt.text = itemData.desc;
@@ -36,7 +36,7 @@ public class ItemInfoPopup : Popup
 
         _itemBehaviour.text = itemData.behaviour.ToString();
 
-        _itemImg.sprite = DataUtils.Instance.GetItemImgByID(item.data_id);
+        _itemImg.sprite = NakamaData.Instance.GetItemImgByID(item.data_id);
         _itemTypeColorImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
         _borderImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
     }

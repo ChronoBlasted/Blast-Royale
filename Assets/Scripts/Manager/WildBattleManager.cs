@@ -20,7 +20,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     EndView _endView;
     NakamaWildBattle _serverBattle;
     NakamaUserAccount _userAccount;
-    DataUtils _dataUtils;
+    NakamaData _dataUtils;
 
     // Data
     Blast _playerBlast;
@@ -43,7 +43,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _endView = UIManager.Instance.EndView;
         _serverBattle = NakamaManager.Instance.NakamaWildBattle;
         _userAccount = NakamaManager.Instance.NakamaUserAccount;
-        _dataUtils = DataUtils.Instance;
+        _dataUtils = NakamaData.Instance;
 
         GameStateManager.Instance.OnGameStateChanged += HandleStateChange;
     }
@@ -127,7 +127,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (_playerAction.TurnType == TurnType.ITEM)
         {
-            ItemData itemData = DataUtils.Instance.GetItemDataById(_playerItems[_playerAction.ItemIndex].data_id);
+            ItemData itemData = NakamaData.Instance.GetItemDataById(_playerItems[_playerAction.ItemIndex].data_id);
 
             switch (itemData.behaviour)
             {
@@ -143,7 +143,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 case ItemBehaviour.CATCH:
                     if (turnState.catched)
                     {
-                        _gameView.DoEndMatch("You caught the wild " + _dataUtils.GetBlastDataById(_wildBlast.data_id).name);
+                        _gameView.DoEndMatch("You caught the wild " + _dataUtils.GetBlastDataRef(_wildBlast.data_id).Name.GetLocalizedString());
                     }
                     break;
             }

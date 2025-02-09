@@ -38,7 +38,7 @@ public class PoolManager : MonoSingleton<PoolManager>
             pools[resourceType] = new ObjectPool<GameObject>(
                 () =>
                 {
-                    return Instantiate(holder.GetResourceByType(resourceType).prefab, container);
+                    return Instantiate(holder.GetResourceByType(resourceType).Prefab, container);
                 },
                 OnTakeFromPool,
                 (gameObject) =>

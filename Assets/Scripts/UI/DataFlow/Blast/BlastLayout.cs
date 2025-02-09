@@ -14,15 +14,17 @@ public class BlastLayout : MonoBehaviour
 
     public void Init(Blast blast, int index = -1)
     {
-        BlastData blastData = DataUtils.Instance.GetBlastDataById(blast.data_id);
+        BlastData blastData = NakamaData.Instance.GetBlastDataById(blast.data_id);
 
         _blast = blast;
         _index = index;
 
-        _blastNameTxt.text = blastData.name;
+        _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
 
-        _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(blastData.id);
+        Debug.Log(blastData );
+
+        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blast.data_id).Sprite;
         _blastBorder.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }
 

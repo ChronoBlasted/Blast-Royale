@@ -30,17 +30,17 @@ public class LevelExpPopup : Popup
 
     public void UpdateData(Blast blast, Blast enemyBlast)
     {
-        BlastData data = DataUtils.Instance.GetBlastDataById(blast.data_id);
+        BlastData data = NakamaData.Instance.GetBlastDataById(blast.data_id);
 
-        _blastNameTxt.text = data.name;
+        _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
         _blastLvlTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
 
         _expBar.Init(blast.exp, NakamaLogic.CalculateExperienceFromLevel(NakamaLogic.CalculateLevelFromExperience(blast.exp) + 1));
 
-        var expGain = NakamaLogic.CalculateExpGain(DataUtils.Instance.GetBlastDataById(blast.data_id).expYield, NakamaLogic.CalculateLevelFromExperience(blast.exp), NakamaLogic.CalculateLevelFromExperience(enemyBlast.exp));
+        var expGain = NakamaLogic.CalculateExpGain(NakamaData.Instance.GetBlastDataById(blast.data_id).expYield, NakamaLogic.CalculateLevelFromExperience(blast.exp), NakamaLogic.CalculateLevelFromExperience(enemyBlast.exp));
         _expBar.SetValueSmooth(blast.exp + expGain, .5f, 1f, DG.Tweening.Ease.InSine);
 
-        _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(data.id);
+        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
         _blastBorder.color = ColorManager.Instance.GetTypeColor(data.type);
     }
 

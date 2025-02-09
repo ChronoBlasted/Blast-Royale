@@ -34,13 +34,13 @@ public class MoveSelectorPopup : Popup
 
         _bg.color = ColorManager.Instance.GetTypeColor(moveToReplace.type);
 
-        List<Move> blastMoveset = blast.activeMoveset.Select(index => DataUtils.Instance.GetMoveById(index)).ToList();
+        List<Move> blastMoveset = blast.activeMoveset.Select(index => NakamaData.Instance.GetMoveById(index)).ToList();
         List<Move> availablesMoves = new List<Move>();
 
-        availablesMoves = DataUtils.Instance.GetBlastDataById(blast.data_id)
+        availablesMoves = NakamaData.Instance.GetBlastDataById(blast.data_id)
             .movepool
             .Where(move => NakamaLogic.CalculateLevelFromExperience(blast.exp) >= move.levelMin)
-            .Select(move => DataUtils.Instance.GetMoveById(move.move_id))
+            .Select(move => NakamaData.Instance.GetMoveById(move.move_id))
             .ToList();
 
         _currentMoveToReplace.Init(moveToReplace, null);

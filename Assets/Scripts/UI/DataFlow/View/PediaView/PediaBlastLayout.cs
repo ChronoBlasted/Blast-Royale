@@ -12,7 +12,7 @@ public class PediaBlastLayout : MonoBehaviour
     public void Init(BlastData _data)
     {
         _idTxt.text = "ID." + _data.id;
-        _nameTxt.text = _data.name;
+        _nameTxt.text = NakamaData.Instance.GetBlastDataRef(_data.id).Name.GetLocalizedString();
         _typeText.text = _data.type.ToString();
         _hpTxt.text = _data.hp.ToString();
         _manaTxt.text = _data.mana.ToString();
@@ -20,7 +20,7 @@ public class PediaBlastLayout : MonoBehaviour
         _defenseTxt.text = _data.defense.ToString();
         _speedTxt.text = _data.speed.ToString();
 
-        _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(_data.id);
+        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(_data.id).Sprite;
         _borderImg.color = ColorManager.Instance.GetTypeColor(_data.type);
         _typeImg.color = ColorManager.Instance.GetTypeColor(_data.type);
     }

@@ -21,7 +21,7 @@ public class AreaLayout : MonoBehaviour
         foreach (int blastId in areaData.blastIds)
         {
             var currentSingleBlast = Instantiate(_singleBlastPrefab, _singleBlastTransform);
-            currentSingleBlast.Init(DataUtils.Instance.GetBlastDataById(blastId));
+            currentSingleBlast.Init(NakamaData.Instance.GetBlastDataById(blastId));
         }
     }
 

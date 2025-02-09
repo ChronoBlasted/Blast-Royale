@@ -15,17 +15,17 @@ public class ChangeBlastLayout : MonoBehaviour
 
     public void Init(Blast newBlast)
     {
-        BlastData blastData = DataUtils.Instance.GetBlastDataById(newBlast.data_id);
+        BlastData blastData = NakamaData.Instance.GetBlastDataById(newBlast.data_id);
 
         _blast = newBlast;
 
-        _nameTxt.text = blastData.name;
+        _nameTxt.text = NakamaData.Instance.GetBlastDataRef(blastData.id).Name.GetLocalizedString();
         _lvlTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
 
         _hpBar.Init(_blast.Hp, _blast.MaxHp);
         _manaBar.Init(_blast.Mana, _blast.MaxMana);
 
-        _blastImg.sprite = DataUtils.Instance.GetBlastImgByID(blastData.id);
+        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blastData.id).Sprite;
         _borderImg.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }
 
