@@ -29,17 +29,17 @@ public class NakamaData : MonoSingleton<NakamaData>
 
     public BlastDataRef GetBlastDataRef(int id)
     {
-        return _allBlastData.Find(x => x.ID == id);
+        return _allBlastData.Find(x => x.DataID == id);
     }
 
     public ItemDataRef GetItemDataRef(int id)
     {
-        return _allItemData.Find(x => x.ID == id);
+        return _allItemData.Find(x => x.DataID == id);
     }
 
     public Sprite GetItemImgByID(int id)
     {
-        return _allItemData.Find(x => x.ID == id).Sprite;
+        return _allItemData.Find(x => x.DataID == id).Sprite;
     }
 
     public BlastData GetBlastDataById(int id)

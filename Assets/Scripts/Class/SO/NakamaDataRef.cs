@@ -5,5 +5,5 @@ public abstract class NakamaDataRef : ScriptableObject
 {
     public LocalizedString Name;
     public Sprite Sprite;
-    public int ID;
+    public int DataID;
 }
