@@ -177,8 +177,7 @@ function getRandomOfferType(): OfferType {
 function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string): StoreOffer {
 
     let offer: StoreOffer = {
-        name: "",
-        desc: "",
+        offer_id : -1,
         type: getRandomOfferType(),
         coinsAmount: 0,
         gemsAmount: 0,
@@ -193,17 +192,11 @@ function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string): StoreOffer {
         offer.blast = getRandomBlastInAllPlayerArea(userId, nk);
         offer.price = getBlastPrice(offer.blast);
         offer.currency = Currency.Coins;
-        offer.desc = "LVL." + calculateLevelFromExperience(offer.blast.exp).toString();
-        offer.name = getBlastDataById(offer.blast.data_id).name;
     } else {
         offer.item = getRandomItem(5);
         
-        var itemData = getItemDataById(offer.item.data_id)
-        
         offer.price = getItemPrice(offer.item);
         offer.currency = Currency.Coins;
-        offer.desc = offer.item.amount.toString();
-        offer.name = itemData.name;
     }
 
     return offer;
@@ -213,22 +206,22 @@ function getBlastPrice(blast: Blast): number {
 
     var coeffRarity = 1;
     switch (getBlastDataById(blast.data_id).rarity) {
-        case Rarity.COMMON:
+        case RARITY.COMMON:
             coeffRarity = 1;
             break;
-        case Rarity.UNCOMMON:
+        case RARITY.UNCOMMON:
             coeffRarity = 1.5;
             break;
-        case Rarity.RARE:
+        case RARITY.RARE:
             coeffRarity = 2;
             break;
-        case Rarity.EPIC:
+        case RARITY.EPIC:
             coeffRarity = 3;
             break;
-        case Rarity.LEGENDARY:
+        case RARITY.LEGENDARY:
             coeffRarity = 10;
             break;
-        case Rarity.UNIQUE:
+        case RARITY.UNIQUE:
             coeffRarity = 5;
             break;
     }
@@ -242,22 +235,22 @@ function getItemPrice(item: Item): number {
     var itemData = getItemDataById(item.data_id)
 
     switch (itemData.rarity) {
-        case Rarity.COMMON:
+        case RARITY.COMMON:
             coeffRarity = 1;
             break;
-        case Rarity.UNCOMMON:
+        case RARITY.UNCOMMON:
             coeffRarity = 1.5;
             break;
-        case Rarity.RARE:
+        case RARITY.RARE:
             coeffRarity = 2;
             break;
-        case Rarity.EPIC:
+        case RARITY.EPIC:
             coeffRarity = 3;
             break;
-        case Rarity.LEGENDARY:
+        case RARITY.LEGENDARY:
             coeffRarity = 10;
             break;
-        case Rarity.UNIQUE:
+        case RARITY.UNIQUE:
             coeffRarity = 5;
             break;
     }

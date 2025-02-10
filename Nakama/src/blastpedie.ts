@@ -13,7 +13,7 @@ interface Blast {
     attack: number;
     defense: number;
     speed: number;
-    status: Status;
+    status: STATUS;
     activeMoveset: number[];
 }
 
@@ -29,7 +29,7 @@ interface BlastData {
     nextEvolution: nextEvolutionStruct | null
     catchRate: number
     expYield: number
-    rarity: Rarity
+    rarity: RARITY
 }
 
 interface nextEvolutionStruct {
@@ -55,7 +55,7 @@ const Pantin: BlastData = { // Pantin
     nextEvolution: null,
     catchRate: 30,
     expYield: 64,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Lizzy: BlastData = { // Lizzy
@@ -74,7 +74,7 @@ const Lizzy: BlastData = { // Lizzy
     nextEvolution: null,
     catchRate: 35,
     expYield: 142,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Punchball: BlastData = { // Punchball
@@ -93,7 +93,7 @@ const Punchball: BlastData = { // Punchball
     nextEvolution: null,
     catchRate: 40,
     expYield: 192,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Jellys: BlastData = { // Jellys
@@ -112,7 +112,7 @@ const Jellys: BlastData = { // Jellys
     nextEvolution: null,
     catchRate: 25,
     expYield: 64,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Kitchi: BlastData = { // Kitchi
@@ -131,7 +131,7 @@ const Kitchi: BlastData = { // Kitchi
     nextEvolution: null,
     catchRate: 30,
     expYield: 50,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Kenchi: BlastData = { // Kenchi
@@ -150,7 +150,7 @@ const Kenchi: BlastData = { // Kenchi
     nextEvolution: null,
     catchRate: 35,
     expYield: 80,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Mousy: BlastData = { // Mousy
@@ -169,7 +169,7 @@ const Mousy: BlastData = { // Mousy
     nextEvolution: null,
     catchRate: 40,
     expYield: 50,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Clawball: BlastData = { // Clawball
@@ -188,7 +188,7 @@ const Clawball: BlastData = { // Clawball
     nextEvolution: null,
     catchRate: 45,
     expYield: 90,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Balt: BlastData = { // Balt
@@ -207,7 +207,7 @@ const Balt: BlastData = { // Balt
     nextEvolution: null,
     catchRate: 50,
     expYield: 60,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Stagpan: BlastData = { // Stagpan
@@ -226,7 +226,7 @@ const Stagpan: BlastData = { // Stagpan
     nextEvolution: null,
     catchRate: 30,
     expYield: 65,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Botte: BlastData = { // Botte
@@ -245,7 +245,7 @@ const Botte: BlastData = { // Botte
     nextEvolution: null,
     catchRate: 35,
     expYield: 120,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Booh: BlastData = { // Booh
@@ -264,7 +264,7 @@ const Booh: BlastData = { // Booh
     nextEvolution: null,
     catchRate: 40,
     expYield: 80,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Ghoosto: BlastData = { // Ghoosto
@@ -283,7 +283,7 @@ const Ghoosto: BlastData = { // Ghoosto
     nextEvolution: null,
     catchRate: 45,
     expYield: 145,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Goblin: BlastData = { // Goblin
@@ -302,7 +302,7 @@ const Goblin: BlastData = { // Goblin
     nextEvolution: null,
     catchRate: 35,
     expYield: 192,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const MiniDevil: BlastData = { // MiniDevil
@@ -321,7 +321,7 @@ const MiniDevil: BlastData = { // MiniDevil
     nextEvolution: null,
     catchRate: 40,
     expYield: 112,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const DevilDare: BlastData = { // DevilDare
@@ -340,7 +340,7 @@ const DevilDare: BlastData = { // DevilDare
     nextEvolution: null,
     catchRate: 45,
     expYield: 132,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Masks: BlastData = { // Masks
@@ -359,7 +359,7 @@ const Masks: BlastData = { // Masks
     nextEvolution: null,
     catchRate: 50,
     expYield: 156,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Luckun: BlastData = { // Luckun
@@ -378,7 +378,7 @@ const Luckun: BlastData = { // Luckun
     nextEvolution: null,
     catchRate: 30,
     expYield: 255,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const MiniHam: BlastData = { // MiniHam
@@ -397,7 +397,7 @@ const MiniHam: BlastData = { // MiniHam
     nextEvolution: null,
     catchRate: 35,
     expYield: 75,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const SadHam: BlastData = { // SadHam
@@ -416,7 +416,7 @@ const SadHam: BlastData = { // SadHam
     nextEvolution: null,
     catchRate: 40,
     expYield: 100,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const MoiHam: BlastData = { // MoiHam
@@ -435,7 +435,7 @@ const MoiHam: BlastData = { // MoiHam
     nextEvolution: null,
     catchRate: 45,
     expYield: 125,
-    rarity: Rarity.EPIC,
+    rarity: RARITY.EPIC,
 };
 
 const Bearos: BlastData = { // Bearos
@@ -454,7 +454,7 @@ const Bearos: BlastData = { // Bearos
     nextEvolution: null,
     catchRate: 50,
     expYield: 160,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Treex: BlastData = { // Treex
@@ -473,7 +473,7 @@ const Treex: BlastData = { // Treex
     nextEvolution: null,
     catchRate: 30,
     expYield: 192,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Moutmout: BlastData = { // Moutmout
@@ -492,7 +492,7 @@ const Moutmout: BlastData = { // Moutmout
     nextEvolution: null,
     catchRate: 35,
     expYield: 128,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Piggy: BlastData = { // Piggy
@@ -511,7 +511,7 @@ const Piggy: BlastData = { // Piggy
     nextEvolution: null,
     catchRate: 40,
     expYield: 160,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Bleaub: BlastData = { // Bleaub
@@ -530,7 +530,7 @@ const Bleaub: BlastData = { // Bleaub
     nextEvolution: null,
     catchRate: 45,
     expYield: 80,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Shroom: BlastData = { // Shroom
@@ -549,7 +549,7 @@ const Shroom: BlastData = { // Shroom
     nextEvolution: null,
     catchRate: 50,
     expYield: 88,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Lantern: BlastData = { // Lantern
@@ -568,7 +568,7 @@ const Lantern: BlastData = { // Lantern
     nextEvolution: null,
     catchRate: 30,
     expYield: 112,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Droplet: BlastData = { // Droplet
@@ -587,7 +587,7 @@ const Droplet: BlastData = { // Droplet
     nextEvolution: null,
     catchRate: 35,
     expYield: 150,
-    rarity: Rarity.EPIC,
+    rarity: RARITY.EPIC,
 };
 const Fireball: BlastData = { // Fireball
     id: 29,
@@ -605,7 +605,7 @@ const Fireball: BlastData = { // Fireball
     nextEvolution: null,
     catchRate: 40,
     expYield: 150,
-    rarity: Rarity.EPIC,
+    rarity: RARITY.EPIC,
 };
 
 const Mystical: BlastData = { // Mystical
@@ -624,7 +624,7 @@ const Mystical: BlastData = { // Mystical
     nextEvolution: null,
     catchRate: 45,
     expYield: 150,
-    rarity: Rarity.EPIC,
+    rarity: RARITY.EPIC,
 };
 
 const Clover: BlastData = { // Clover
@@ -643,7 +643,7 @@ const Clover: BlastData = { // Clover
     nextEvolution: null,
     catchRate: 50,
     expYield: 112,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Scorlov: BlastData = { // Scorlov
@@ -662,7 +662,7 @@ const Scorlov: BlastData = { // Scorlov
     nextEvolution: null,
     catchRate: 30,
     expYield: 128,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Wormie: BlastData = { // Wormie
@@ -681,7 +681,7 @@ const Wormie: BlastData = { // Wormie
     nextEvolution: null,
     catchRate: 35,
     expYield: 99,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Skel: BlastData = { // Skel
@@ -700,7 +700,7 @@ const Skel: BlastData = { // Skel
     nextEvolution: null,
     catchRate: 40,
     expYield: 77,
-    rarity: Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
 const Frederic: BlastData = { // Frederic
@@ -719,7 +719,7 @@ const Frederic: BlastData = { // Frederic
     nextEvolution: null,
     catchRate: 45,
     expYield: 69,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Smoky: BlastData = { // Smoky
@@ -738,7 +738,7 @@ const Smoky: BlastData = { // Smoky
     nextEvolution: null,
     catchRate: 45,
     expYield: 130,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Forty: BlastData = { // Forty
@@ -757,7 +757,7 @@ const Forty: BlastData = { // Forty
     nextEvolution: null,
     catchRate: 50,
     expYield: 212,
-    rarity: Rarity.RARE,
+    rarity: RARITY.RARE,
 };
 
 const Bud: BlastData = { // Bud
@@ -776,7 +776,7 @@ const Bud: BlastData = { // Bud
     nextEvolution: null,
     catchRate: 30,
     expYield: 169,
-    rarity: Rarity.UNCOMMON,
+    rarity: RARITY.UNCOMMON,
 };
 
 const Hiboo: BlastData = { // Hiboo
@@ -795,7 +795,7 @@ const Hiboo: BlastData = { // Hiboo
     nextEvolution: null,
     catchRate: 35,
     expYield: 222,
-    rarity: Rarity.LEGENDARY,
+    rarity: RARITY.LEGENDARY,
 };
 
 const Eggy: BlastData = { // Eggy
@@ -814,7 +814,7 @@ const Eggy: BlastData = { // Eggy
     nextEvolution: null,
     catchRate: 40,
     expYield: 118,
-    rarity: Rarity.EPIC,
+    rarity: RARITY.EPIC,
 };
 
 const Dracoblast: BlastData = { // Dracoblast
@@ -833,7 +833,7 @@ const Dracoblast: BlastData = { // Dracoblast
     nextEvolution: null,
     catchRate: 45,
     expYield: 255,
-    rarity: Rarity.LEGENDARY,
+    rarity: RARITY.LEGENDARY,
 };
 
 const Cerberus: BlastData = { // Cerberus
@@ -852,7 +852,7 @@ const Cerberus: BlastData = { // Cerberus
     nextEvolution: null,
     catchRate: 45,
     expYield: 255,
-    rarity: Rarity.LEGENDARY,
+    rarity: RARITY.LEGENDARY,
 };
 
 const blastPedia: BlastData[] = [

@@ -129,3 +129,38 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
 function rpcDeleteAccount(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama) {
     nk.accountDeleteId(ctx.userId);
 }
+
+//#region ENUM
+
+enum STATUS {
+    NONE,
+    SLEEP,
+    BURN,
+    POISONOUS,
+    WET,
+};
+
+enum RARITY {
+    NONE,
+    COMMON,
+    UNCOMMON,
+    RARE,
+    EPIC,
+    LEGENDARY,
+    ULTIMATE,
+    UNIQUE,
+}
+
+enum TYPE {
+    NORMAL,
+    FIRE,
+    WATER,
+    GRASS,
+    GROUND,
+    FLY,
+    ELECTRIC,
+    LIGHT,
+    DARK
+}
+
+//#endregion

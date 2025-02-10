@@ -6,8 +6,7 @@ enum OfferType {
 }
 
 interface StoreOffer {
-    name: string
-    desc: string
+    offer_id: number
     type: OfferType
 
     coinsAmount: number
@@ -28,8 +27,7 @@ const blastTrap1: Item = {
 };
 
 const blastTrapOffer1: StoreOffer = {
-    name: "BlastTrap",
-    desc: "X1",
+    offer_id: 1,
     type: OfferType.ITEM,
     currency: Currency.Coins,
 
@@ -48,8 +46,7 @@ const blastTrap5: Item = {
 };
 
 const blastTrapOffer2: StoreOffer = {
-    name: "BlastTrap",
-    desc: "X5",
+    offer_id: 2,
     type: OfferType.ITEM,
     currency: Currency.Coins,
 
@@ -68,8 +65,7 @@ const blastTrap20: Item = {
 };
 
 const blastTrapOffer3: StoreOffer = {
-    name: "BlastTrap",
-    desc: "X5",
+    offer_id: 3,
     type: OfferType.ITEM,
     currency: Currency.Coins,
 
@@ -116,8 +112,7 @@ const rpcBuyTrapOffer: nkruntime.RpcFunction =
 //#region Coins Offer
 
 const coinsOffer1: StoreOffer = {
-    name: "Coins",
-    desc: "20000",
+    offer_id: 4,
     type: OfferType.ITEM,
     currency: Currency.Gems,
 
@@ -131,8 +126,7 @@ const coinsOffer1: StoreOffer = {
 };
 
 const coinsOffer2: StoreOffer = {
-    name: "Coins",
-    desc: "60000",
+    offer_id: 5,
     type: OfferType.ITEM,
     currency: Currency.Gems,
 
@@ -146,8 +140,7 @@ const coinsOffer2: StoreOffer = {
 };
 
 const coinsOffer3: StoreOffer = {
-    name: "Coins",
-    desc: "140000",
+    offer_id: 6,
     type: OfferType.ITEM,
     currency: Currency.Gems,
 
@@ -192,8 +185,7 @@ const rpcBuyCoinOffer: nkruntime.RpcFunction =
 //#region Coins Offer
 
 const gemsOffer1: StoreOffer = {
-    name: "Gems",
-    desc: "100",
+    offer_id: 7,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 
@@ -207,8 +199,7 @@ const gemsOffer1: StoreOffer = {
 };
 
 const gemsOffer2: StoreOffer = {
-    name: "Gems",
-    desc: "200",
+    offer_id: 8,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 
@@ -222,8 +213,7 @@ const gemsOffer2: StoreOffer = {
 };
 
 const gemsOffer3: StoreOffer = {
-    name: "Gems",
-    desc: "300",
+    offer_id: 9,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 
@@ -237,8 +227,7 @@ const gemsOffer3: StoreOffer = {
 };
 
 const gemsOffer4: StoreOffer = {
-    name: "Gems",
-    desc: "400",
+    offer_id: 10,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 
@@ -252,8 +241,7 @@ const gemsOffer4: StoreOffer = {
 };
 
 const gemsOffer5: StoreOffer = {
-    name: "Gems",
-    desc: "500",
+    offer_id: 11,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 
@@ -267,8 +255,7 @@ const gemsOffer5: StoreOffer = {
 };
 
 const gemsOffer6: StoreOffer = {
-    name: "Gems",
-    desc: "600",
+    offer_id: 12,
     type: OfferType.GEMS,
     currency: Currency.Hard,
 

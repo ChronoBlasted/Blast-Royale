@@ -1,29 +1,11 @@
-enum ItemBehaviour {
+
+enum ITEM_BEHAVIOUR {
     NONE,
     HEAL,
     MANA,
     STATUS,
     CATCH,
 };
-
-enum Status {
-    NONE,
-    SLEEP,
-    BURN,
-    POISONOUS,
-    WET,
-};
-
-enum Rarity {
-    NONE,
-    COMMON,
-    UNCOMMON,
-    RARE,
-    EPIC,
-    LEGENDARY,
-    ULTIMATE,
-    UNIQUE,
-}
 
 interface Item {
     data_id: number
@@ -32,13 +14,11 @@ interface Item {
 
 interface ItemData {
     id: number;
-    name: string;
-    desc: string;
-    behaviour: ItemBehaviour;
+    behaviour: ITEM_BEHAVIOUR;
     gain_amount: number
-    status: Status;
+    status: STATUS;
     catchRate: number;
-    rarity:Rarity;
+    rarity:RARITY;
 }
 
 interface ItemUseJSON {
@@ -46,103 +26,85 @@ interface ItemUseJSON {
     index_blast: number
 }
 
-const healthPotionData: ItemData = {
+const healthPotionData: ItemData = { // healthPotionData
     id: 1,
-    name: "Potion",
-    desc: "Give 20 HP",
-    behaviour: ItemBehaviour.HEAL,
+    behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 20,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity: RARITY.COMMON,
 };
 
-const superHealthPotionData: ItemData = {
+const superHealthPotionData: ItemData = { // superHealthPotionData
     id: 2,
-    name: "Super Potion",
-    desc: "Give 50 HP",
-    behaviour: ItemBehaviour.HEAL,
+    behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 50,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.UNCOMMON,
 };
 
-const hyperHealthPotionData: ItemData = {
+const hyperHealthPotionData: ItemData = { // hyperHealthPotionData
     id: 3,
-    name: "Hyper Potion",
-    desc: "Give 200 HP",
-    behaviour: ItemBehaviour.HEAL,
+    behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 200,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.RARE,
 };
 
-const manaPotionData: ItemData = {
+const manaPotionData: ItemData = { // manaPotionData
     id: 4,
-    name: "Elixir",
-    desc: "Give 10 Mana",
-    behaviour: ItemBehaviour.MANA,
+    behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 10,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.COMMON,
 };
 
-const superManaPotionData: ItemData = {
+const superManaPotionData: ItemData = { // superManaPotionData
     id: 5,
-    name: "Super Elixir",
-    desc: "Give 25 Mana",
-    behaviour: ItemBehaviour.MANA,
+    behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 25,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.UNCOMMON,
 };
 
-const hyperManaPotionData: ItemData = {
+const hyperManaPotionData: ItemData = { // hyperManaPotionData
     id: 6,
-    name: "Hyper Elixir",
-    desc: "Give 100 Mana",
-    behaviour: ItemBehaviour.MANA,
+    behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 100,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 0,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.RARE,
 };
 
-const blastTrapData: ItemData = {
+const blastTrapData: ItemData = { // blastTrapData
     id: 7,
-    name: "BlastTrap",
-    desc: "Catch with bonus 1",
-    behaviour: ItemBehaviour.CATCH,
+    behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 1,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.COMMON,
 };
 
-const superBlastTrapData: ItemData = {
+const superBlastTrapData: ItemData = { // superBlastTrapData
     id: 8,
-    name: "Super BlastTrap",
-    desc: "Catch with bonus 1.5",
-    behaviour: ItemBehaviour.CATCH,
+    behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 1.5,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.COMMON,
 };
 
-const hyperBlastTrapData: ItemData = {
+const hyperBlastTrapData: ItemData = { // hyperBlastTrapData
     id: 9,
-    name: "Hyper BlastTrap",
-    desc: "Catch with bonus 2",
-    behaviour: ItemBehaviour.CATCH,
+    behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.NONE,
+    status: STATUS.NONE,
     catchRate: 2,
-    rarity:Rarity.COMMON,
+    rarity:RARITY.COMMON,
 };
 
 const itemPedia: ItemData[] = [

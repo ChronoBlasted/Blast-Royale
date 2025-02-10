@@ -44,18 +44,18 @@ interface StartStateData {
     id: number;
     exp: number;
     iv: number;
-    status: Status;
+    status: STATUS;
     activeMoveset: number[];
 }
 
 interface TurnStateData {
     p_move_damage: number;
-    p_move_status: Status;
+    p_move_status: STATUS;
 
     wb_turn_type: TurnType;
     wb_move_index: number;
     wb_move_damage: number;
-    wb_move_status: Status;
+    wb_move_status: STATUS;
 
     catched: boolean;
 }
@@ -83,11 +83,11 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
         TurnStateData: {
             p_move_damage: 0,
-            p_move_status: Status.NONE,
+            p_move_status: STATUS.NONE,
             wb_turn_type: TurnType.NONE,
             wb_move_index: 0,
             wb_move_damage: 0,
-            wb_move_status: Status.NONE,
+            wb_move_status: STATUS.NONE,
             catched: false
         },
     };
@@ -168,7 +168,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 id: state.wild_blast.data_id,
                 exp: state.wild_blast.exp,
                 iv: state.wild_blast.iv,
-                status: Status.NONE,
+                status: STATUS.NONE,
                 activeMoveset: state.wild_blast.activeMoveset!,
             }
 
@@ -217,11 +217,11 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 state.TurnStateData = {
                     p_move_damage: 0,
-                    p_move_status: Status.NONE,
+                    p_move_status: STATUS.NONE,
 
                     wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
                     wb_move_damage: 0,
-                    wb_move_status: Status.NONE,
+                    wb_move_status: STATUS.NONE,
 
                     wb_turn_type: TurnType.NONE,
 
@@ -264,15 +264,15 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         var itemData = getItemDataById(item.data_id);
 
                         switch (itemData.behaviour) {
-                            case ItemBehaviour.HEAL:
+                            case ITEM_BEHAVIOUR.HEAL:
                                 state.player1_blasts[msgItem.index_blast] = healHealthBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
                                 break;
-                            case ItemBehaviour.MANA:
+                            case ITEM_BEHAVIOUR.MANA:
                                 state.player1_blasts[msgItem.index_blast] = healManaBlast(state.player1_blasts[msgItem.index_blast], itemData.gain_amount);
                                 break;
-                            case ItemBehaviour.STATUS:
+                            case ITEM_BEHAVIOUR.STATUS:
                                 break;
-                            case ItemBehaviour.CATCH:
+                            case ITEM_BEHAVIOUR.CATCH:
                                 var wildBlastCaptured = false;
 
                                 wildBlastCaptured = isBlastCaptured(state.wild_blast!.hp, state.wild_blast!.maxHp, getBlastDataById(state.wild_blast!.data_id).catchRate, itemData.catchRate, 1)
@@ -480,7 +480,7 @@ function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkru
 
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);
     state.TurnStateData.p_move_damage = damage;
-    state.TurnStateData.p_move_status = Status.NONE;
+    state.TurnStateData.p_move_status = STATUS.NONE;
 
     return { state };
 }
@@ -500,7 +500,7 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
         const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
 
         state.TurnStateData.wb_move_damage = damage;
-        state.TurnStateData.wb_move_status = Status.NONE;
+        state.TurnStateData.wb_move_status = STATUS.NONE;
         state.TurnStateData.wb_turn_type = TurnType.ATTACK;
     }
 

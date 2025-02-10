@@ -1,5 +1,6 @@
 const DeckPermissionRead = 2;
 const DeckPermissionWrite = 0;
+const DefaultBlastLevel = 5;
 const DeckCollectionName = 'blasts_collection';
 const DeckCollectionKey = 'user_blasts';
 
@@ -31,54 +32,54 @@ const DefaultDeckBlasts: Blast[] = [
         const iv = getRandomIV(10, MaxIV);
         return {
             uuid: generateUUID(),
-            data_id: Florax.id,
-            exp: calculateExperienceFromLevel(5),
-            iv: iv, // Utiliser l'IV généré
-            hp: calculateBlastHp(Florax.hp, iv, 5),
-            maxHp: calculateBlastHp(Florax.hp, iv, 5),
-            mana: calculateBlastMana(Florax.mana, iv, 5),
-            maxMana: calculateBlastMana(Florax.mana, iv, 5),
-            attack: calculateBlastStat(Florax.attack, iv, 5),
-            defense: calculateBlastStat(Florax.defense, iv, 5),
-            speed: calculateBlastStat(Florax.speed, iv, 5),
-            status: Status.NONE,
-            activeMoveset: getRandomActiveMoveset(Florax, calculateExperienceFromLevel(5))
+            data_id: Lizzy.id,
+            exp: calculateExperienceFromLevel(DefaultBlastLevel),
+            iv: iv,
+            hp: calculateBlastHp(Lizzy.hp, iv, DefaultBlastLevel),
+            maxHp: calculateBlastHp(Lizzy.hp, iv, DefaultBlastLevel),
+            mana: calculateBlastMana(Lizzy.mana, iv, DefaultBlastLevel),
+            maxMana: calculateBlastMana(Lizzy.mana, iv, DefaultBlastLevel),
+            attack: calculateBlastStat(Lizzy.attack, iv, DefaultBlastLevel),
+            defense: calculateBlastStat(Lizzy.defense, iv, DefaultBlastLevel),
+            speed: calculateBlastStat(Lizzy.speed, iv, DefaultBlastLevel),
+            status: STATUS.NONE,
+            activeMoveset: getRandomActiveMoveset(Lizzy, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
     (() => {
         const iv = getRandomIV(10, MaxIV);
         return {
             uuid: generateUUID(),
-            data_id: Pyrex.id,
-            exp: calculateExperienceFromLevel(5),
-            iv: iv, // Utiliser l'IV généré
-            hp: calculateBlastHp(Pyrex.hp, iv, 5),
-            maxHp: calculateBlastHp(Pyrex.hp, iv, 5),
-            mana: calculateBlastMana(Pyrex.mana, iv, 5),
-            maxMana: calculateBlastMana(Pyrex.mana, iv, 5),
-            attack: calculateBlastStat(Pyrex.attack, iv, 5),
-            defense: calculateBlastStat(Pyrex.defense, iv, 5),
-            speed: calculateBlastStat(Pyrex.speed, iv, 5),
-            status: Status.NONE,
-            activeMoveset: getRandomActiveMoveset(Pyrex, calculateExperienceFromLevel(5))
+            data_id: Punchball.id,
+            exp: calculateExperienceFromLevel(DefaultBlastLevel),
+            iv: iv,
+            hp: calculateBlastHp(Punchball.hp, iv, DefaultBlastLevel),
+            maxHp: calculateBlastHp(Punchball.hp, iv, DefaultBlastLevel),
+            mana: calculateBlastMana(Punchball.mana, iv, DefaultBlastLevel),
+            maxMana: calculateBlastMana(Punchball.mana, iv, DefaultBlastLevel),
+            attack: calculateBlastStat(Punchball.attack, iv, DefaultBlastLevel),
+            defense: calculateBlastStat(Punchball.defense, iv, DefaultBlastLevel),
+            speed: calculateBlastStat(Punchball.speed, iv, DefaultBlastLevel),
+            status: STATUS.NONE,
+            activeMoveset: getRandomActiveMoveset(Punchball, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
     (() => {
         const iv = getRandomIV(10, MaxIV);
         return {
             uuid: generateUUID(),
-            data_id: Aquaflare.id,
-            exp: calculateExperienceFromLevel(5),
-            iv: iv, // Utiliser l'IV généré
-            hp: calculateBlastHp(Aquaflare.hp, iv, 5),
-            maxHp: calculateBlastHp(Aquaflare.hp, iv, 5),
-            mana: calculateBlastMana(Aquaflare.mana, iv, 5),
-            maxMana: calculateBlastMana(Aquaflare.mana, iv, 5),
-            attack: calculateBlastStat(Aquaflare.attack, iv, 5),
-            defense: calculateBlastStat(Aquaflare.defense, iv, 5),
-            speed: calculateBlastStat(Aquaflare.speed, iv, 5),
-            status: Status.NONE,
-            activeMoveset: getRandomActiveMoveset(Aquaflare, calculateExperienceFromLevel(5))
+            data_id: Jellys.id,
+            exp: calculateExperienceFromLevel(DefaultBlastLevel),
+            iv: iv,
+            hp: calculateBlastHp(Jellys.hp, iv, DefaultBlastLevel),
+            maxHp: calculateBlastHp(Jellys.hp, iv, DefaultBlastLevel),
+            mana: calculateBlastMana(Jellys.mana, iv, DefaultBlastLevel),
+            maxMana: calculateBlastMana(Jellys.mana, iv, DefaultBlastLevel),
+            attack: calculateBlastStat(Jellys.attack, iv, DefaultBlastLevel),
+            defense: calculateBlastStat(Jellys.defense, iv, DefaultBlastLevel),
+            speed: calculateBlastStat(Jellys.speed, iv, DefaultBlastLevel),
+            status: STATUS.NONE,
+            activeMoveset: getRandomActiveMoveset(Jellys, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
 ];
@@ -124,7 +125,7 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
             attack: 0,
             defense: 0,
             speed: 0,
-            status: Status.NONE,
+            status: STATUS.NONE,
             activeMoveset: []
         };
 
@@ -202,7 +203,7 @@ const rpcUpgradeBlast: nkruntime.RpcFunction =
             attack: 0,
             defense: 0,
             speed: 0,
-            status: Status.NONE,
+            status: STATUS.NONE,
             activeMoveset: []
         };
 
@@ -252,7 +253,7 @@ function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string
 
     newBlastToAdd.hp = newBlastToAdd.maxHp;
     newBlastToAdd.mana = newBlastToAdd.maxMana;
-    newBlastToAdd.status = Status.NONE;
+    newBlastToAdd.status = STATUS.NONE;
 
     let userCards: BlastCollection;
 
@@ -290,7 +291,7 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
         attack: 0,
         defense: 0,
         speed: 0,
-        status: Status.NONE,
+        status: STATUS.NONE,
         activeMoveset: []
     };
 
