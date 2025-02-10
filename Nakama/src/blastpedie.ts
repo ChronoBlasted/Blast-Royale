@@ -19,8 +19,6 @@ interface Blast {
 
 interface BlastData {
     id: number
-    name: string
-    desc: string
     type: TYPE
     hp: number
     mana: number
@@ -41,327 +39,866 @@ interface nextEvolutionStruct {
 
 // BlastData
 
-// Définition des Pokémon (monstres) avec leurs mouvements mis à jour
-const Florax: BlastData = {
-    id: 1,
-    name: "Florax",
-    desc: "A small plant.",
-    type: TYPE.GRASS,
-    hp: 65,
-    mana: 65,
-    attack: 49,
-    defense: 49,
-    speed: 45,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 4 },
-        { move_id: VineWhip.id, levelMin: 10 },
-    ],
-    nextEvolution: { id: 2, levelRequired: 16 },
-    catchRate: 20,
-    expYield: 64,
-    rarity: Rarity.COMMON,
-};
-
-const Florabloom: BlastData = {
-    id: 2,
-    name: "Florabloom",
-    desc: "A plant in full bloom.",
-    type: TYPE.GRASS,
-    hp: 80,
-    mana: 80,
-    attack: 62,
-    defense: 63,
-    speed: 60,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 4 },
-        { move_id: VineWhip.id, levelMin: 10 },
-        { move_id: RazorLeaf.id, levelMin: 16 },
-    ],
-    nextEvolution: { id: 3, levelRequired: 32 },
-    catchRate: 20,
-    expYield: 142,
-    rarity: Rarity.COMMON,
-};
-
-const Floramajest: BlastData = {
-    id: 3,
-    name: "Floramajest",
-    desc: "A majestic plant.",
-    type: TYPE.GRASS,
-    hp: 90,
-    mana: 90,
-    attack: 82,
-    defense: 83,
-    speed: 80,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 4 },
-        { move_id: VineWhip.id, levelMin: 10 },
-        { move_id: SolarBeam.id, levelMin: 32 },
-    ],
-    nextEvolution: null,
-    catchRate: 20,
-    expYield: 240,
-    rarity: Rarity.COMMON,
-};
-
-const Pyrex: BlastData = {
-    id: 4,
-    name: "Pyrex",
-    desc: "A small flame.",
-    type: TYPE.FIRE,
-    hp: 60,
-    mana: 60,
-    attack: 64,
-    defense: 50,
-    speed: 65,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Stomp.id, levelMin: 0 },
-        { move_id: Slam.id, levelMin: 0 },
-        { move_id: Flamethrower.id, levelMin: 0 },
-        { move_id: FireBlast.id, levelMin: 0 },
-        { move_id: Ember.id, levelMin: 0 },
-    ],
-    nextEvolution: { id: 5, levelRequired: 16 },
-    catchRate: 20,
-    expYield: 64,
-    rarity: Rarity.COMMON,
-};
-
-const Pyroclaw: BlastData = {
-    id: 5,
-    name: "Pyroclaw",
-    desc: "A fiery that is fierce in battle.",
-    type: TYPE.FIRE,
-    hp: 80,
-    mana: 80,
-    attack: 80,
-    defense: 65,
-    speed: 80,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Ember.id, levelMin: 7 },
-        { move_id: FirePunch.id, levelMin: 16 },
-        { move_id: Flamethrower.id, levelMin: 32 },
-    ],
-    nextEvolution: { id: 6, levelRequired: 36 },
-    catchRate: 20,
-    expYield: 142,
-    rarity: Rarity.COMMON,
-};
-
-const Pyrowyvern: BlastData = {
-    id: 6,
-    name: "Pyrowyvern",
-    desc: "A magnificent fire that can fly.",
-    type: TYPE.FIRE,
-    hp: 78,
-    mana: 78,
-    attack: 84,
-    defense: 78,
-    speed: 100,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Ember.id, levelMin: 7 },
-        { move_id: FirePunch.id, levelMin: 16 },
-        { move_id: Flamethrower.id, levelMin: 32 },
-        { move_id: FireBlast.id, levelMin: 50 },
-    ],
-    nextEvolution: null,
-    catchRate: 20,
-    expYield: 240,
-    rarity: Rarity.COMMON,
-};
-
-const Aquaflare: BlastData = {
-    id: 7,
-    name: "Aquaflare",
-    desc: "A small water.",
-    type: TYPE.WATER,
-    hp: 60,
-    mana: 60,
-    attack: 48,
-    defense: 65,
-    speed: 43,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Bubble.id, levelMin: 5 },
-    ],
-    nextEvolution: { id: 8, levelRequired: 16 },
-    catchRate: 20,
-    expYield: 64,
-    rarity: Rarity.COMMON,
-};
-
-const Aquablast: BlastData = {
-    id: 8,
-    name: "Aquablast",
-    desc: "A water that has a strong shell.",
-    type: TYPE.WATER,
-    hp: 80,
-    mana: 80,
-    attack: 63,
-    defense: 80,
-    speed: 58,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Bubble.id, levelMin: 5 },
-        { move_id: BubbleBeam.id, levelMin: 10 },
-    ],
-    nextEvolution: { id: 9, levelRequired: 36 },
-    catchRate: 20,
-    expYield: 142,
-    rarity: Rarity.COMMON,
-};
-
-const Aqualith: BlastData = {
-    id: 9,
-    name: "Aqualith",
-    desc: "A powerful water with cannons.",
-    type: TYPE.WATER,
-    hp: 79,
-    mana: 79,
-    attack: 83,
-    defense: 100,
-    speed: 78,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Bubble.id, levelMin: 5 },
-        { move_id: BubbleBeam.id, levelMin: 10 },
-        { move_id: HydroPump.id, levelMin: 36 },
-    ],
-    nextEvolution: null,
-    catchRate: 20,
-    expYield: 239,
-    rarity: Rarity.COMMON,
-};
-
-const Zephyrex: BlastData = {
-    id: 10,
-    name: "Zephyrex", 
-    desc: "A small bird that can fly.",
+const Pantin: BlastData = { // Pantin
+    id: 0,
     type: TYPE.NORMAL,
-    hp: 40,
-    mana: 40,
-    attack: 45,
-    defense: 40,
-    speed: 55,
+    hp: 80,
+    mana: 75,
+    attack: 70,
+    defense: 65,
+    speed: 60,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
         { move_id: QuickAttack.id, levelMin: 10 },
     ],
-    nextEvolution: { id: 11, levelRequired: 18 },
-    catchRate: 20,
+    nextEvolution: null,
+    catchRate: 30,
+    expYield: 64,
+    rarity: Rarity.COMMON,
+};
+
+const Lizzy: BlastData = { // Lizzy
+    id: 1,
+    type: TYPE.GRASS,
+    hp: 70,
+    mana: 80,
+    attack: 75,
+    defense: 70,
+    speed: 65,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: VineWhip.id, levelMin: 5 },
+        { move_id: RazorLeaf.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 142,
+    rarity: Rarity.RARE,
+};
+
+const Punchball: BlastData = { // Punchball
+    id: 2,
+    type: TYPE.GROUND,
+    hp: 85,
+    mana: 70,
+    attack: 80,
+    defense: 75,
+    speed: 60,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: SolarBeam.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 192,
+    rarity: Rarity.RARE,
+};
+
+const Jellys: BlastData = { // Jellys
+    id: 3,
+    type: TYPE.WATER,
+    hp: 75,
+    mana: 85,
+    attack: 70,
+    defense: 65,
+    speed: 80,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Stomp.id, levelMin: 5 },
+        { move_id: Slam.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 25,
+    expYield: 64,
+    rarity: Rarity.RARE,
+};
+
+const Kitchi: BlastData = { // Kitchi
+    id: 4,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 70,
+    attack: 75,
+    defense: 65,
+    speed: 80,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Ember.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
     expYield: 50,
     rarity: Rarity.COMMON,
 };
 
-const Zephyrwing: BlastData = {
-    id: 11,
-    name: "Zephyrwing",
-    desc: "A powerful bird known for its sharp beak.",
+const Kenchi: BlastData = { // Kenchi
+    id: 5,
     type: TYPE.NORMAL,
-    hp: 63,
-    mana: 63,
-    attack: 60,
-    defense: 55,
-    speed: 71,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 70,
+    speed: 65,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 5 },
-        { move_id: QuickAttack.id, levelMin: 10 },
-        { move_id: Gust.id, levelMin: 20 },
+        { move_id: Ember.id, levelMin: 5 },
+        { move_id: FireBlast.id, levelMin: 10 },
     ],
     nextEvolution: null,
-    catchRate: 20,
-    expYield: 100,
-    rarity: Rarity.UNCOMMON,
-};
-
-const Gnawbit: BlastData = {
-    id: 12,
-    name: "Gnawbit",
-    desc: "A small, purple rodent.",
-    type: TYPE.NORMAL,
-    hp: 30,
-    mana: 30,
-    attack: 56,
-    defense: 35,
-    speed: 72,
-    movepool: [
-        { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 5 },
-        { move_id: QuickAttack.id, levelMin: 10 },
-    ],
-    nextEvolution: { id: 13, levelRequired: 20 },
-    catchRate: 25,
-    expYield: 51,
+    catchRate: 35,
+    expYield: 80,
     rarity: Rarity.COMMON,
 };
 
-const Gnawfang: BlastData = {
-    id: 13,
-    name: "Gnawfang",
-    desc: "A strong and aggressive rodent.",
+const Mousy: BlastData = { // Mousy
+    id: 6,
     type: TYPE.NORMAL,
-    hp: 55,
-    mana: 55,
-    attack: 81,
-    defense: 60,
-    speed: 97,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Bubble.id, levelMin: 5 },
+        { move_id: BubbleBeam.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 50,
+    rarity: Rarity.COMMON,
+};
+
+const Clawball: BlastData = { // Clawball
+    id: 7,
+    type: TYPE.GROUND,
+    hp: 80,
+    mana: 70,
+    attack: 75,
+    defense: 80,
+    speed: 65,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Bubble.id, levelMin: 5 },
+        { move_id: BubbleBeam.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 90,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Balt: BlastData = { // Balt
+    id: 8,
+    type: TYPE.FLY,
+    hp: 70,
+    mana: 80,
+    attack: 65,
+    defense: 70,
+    speed: 85,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Bubble.id, levelMin: 5 },
+        { move_id: HydroPump.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 60,
+    rarity: Rarity.COMMON,
+};
+
+const Stagpan: BlastData = { // Stagpan
+    id: 9,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
         { move_id: QuickAttack.id, levelMin: 10 },
-        { move_id: HyperFang.id, levelMin: 20 },
     ],
     nextEvolution: null,
-    catchRate: 20,
-    expYield: 145,
-    rarity: Rarity.UNCOMMON,
+    catchRate: 30,
+    expYield: 65,
+    rarity: Rarity.COMMON,
 };
 
-const Electrix: BlastData = {
-    id: 14,
-    name: "Electrix", // Electrix
-    desc: "A small, electric known for its cute appearance.",
-    type: TYPE.ELECTRIC,
-    hp: 35,
-    mana: 35,
-    attack: 55,
-    defense: 40,
-    speed: 90,
+const Botte: BlastData = { // Botte
+    id: 10,
+    type: TYPE.GROUND,
+    hp: 80,
+    mana: 75,
+    attack: 70,
+    defense: 85,
+    speed: 65,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
+        { move_id: Gust.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 120,
+    rarity: Rarity.RARE,
+};
+
+const Booh: BlastData = { // Booh
+    id: 11,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: QuickAttack.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 80,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Ghoosto: BlastData = { // Ghoosto
+    id: 12,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: HyperFang.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 145,
+    rarity: Rarity.RARE,
+};
+
+const Goblin: BlastData = { // Goblin
+    id: 13,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
         { move_id: ThunderShock.id, levelMin: 10 },
     ],
-    nextEvolution: { id: 15, levelRequired: 20 },
-    catchRate: 25,
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 192,
+    rarity: Rarity.COMMON,
+};
+
+const MiniDevil: BlastData = { // MiniDevil
+    id: 14,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Ember.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 112,
+    rarity: Rarity.UNCOMMON,
+};
+
+const DevilDare: BlastData = { // DevilDare
+    id: 15,
+    type: TYPE.NORMAL,
+    hp: 80,
+    mana: 75,
+    attack: 70,
+    defense: 85,
+    speed: 65,
+    movepool: [
+        { move_id: Slam.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: FireBlast.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 132,
+    rarity: Rarity.RARE,
+};
+
+const Masks: BlastData = { // Masks
+    id: 16,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: QuickAttack.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 156,
+    rarity: Rarity.RARE,
+};
+
+const Luckun: BlastData = { // Luckun
+    id: 17,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
+    expYield: 255,
+    rarity: Rarity.RARE,
+};
+
+const MiniHam: BlastData = { // MiniHam
+    id: 18,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Tackle.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: Slam.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 75,
+    rarity: Rarity.UNCOMMON,
+};
+
+const SadHam: BlastData = { // SadHam
+    id: 19,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 100,
+    rarity: Rarity.RARE,
+};
+
+const MoiHam: BlastData = { // MoiHam
+    id: 20,
+    type: TYPE.NORMAL,
+    hp: 80,
+    mana: 75,
+    attack: 70,
+    defense: 85,
+    speed: 65,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 125,
+    rarity: Rarity.EPIC,
+};
+
+const Bearos: BlastData = { // Bearos
+    id: 21,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Slam.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 160,
+    rarity: Rarity.RARE,
+};
+
+const Treex: BlastData = { // Treex
+    id: 22,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
+    expYield: 192,
+    rarity: Rarity.RARE,
+};
+
+const Moutmout: BlastData = { // Moutmout
+    id: 23,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: QuickAttack.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 128,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Piggy: BlastData = { // Piggy
+    id: 24,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 160,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Bleaub: BlastData = { // Bleaub
+    id: 25,
+    type: TYPE.NORMAL,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 80,
+    rarity: Rarity.COMMON,
+};
+
+const Shroom: BlastData = { // Shroom
+    id: 26,
+    type: TYPE.NORMAL,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 88,
+    rarity: Rarity.COMMON,
+};
+
+const Lantern: BlastData = { // Lantern
+    id: 27,
+    type: TYPE.WATER,
+    hp: 70,
+    mana: 75,
+    attack: 65,
+    defense: 70,
+    speed: 80,
+    movepool: [
+        { move_id: Bubble.id, levelMin: 0 },
+        { move_id: Waterfall.id, levelMin: 5 },
+        { move_id: HydroPump.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
     expYield: 112,
     rarity: Rarity.COMMON,
 };
 
-// Tableau de tous les Pokémon
+const Droplet: BlastData = { // Droplet
+    id: 28,
+    type: TYPE.WATER,
+    hp: 75,
+    mana: 70,
+    attack: 80,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Bubble.id, levelMin: 0 },
+        { move_id: BubbleBeam.id, levelMin: 5 },
+        { move_id: HydroPump.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 150,
+    rarity: Rarity.EPIC,
+};
+const Fireball: BlastData = { // Fireball
+    id: 29,
+    type: TYPE.FIRE,
+    hp: 80,
+    mana: 60,
+    attack: 90,
+    defense: 50,
+    speed: 70,
+    movepool: [
+        { move_id: Ember.id, levelMin: 0 },
+        { move_id: FirePunch.id, levelMin: 5 },
+        { move_id: Flamethrower.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 150,
+    rarity: Rarity.EPIC,
+};
+
+const Mystical: BlastData = { // Mystical
+    id: 30,
+    type: TYPE.LIGHT,
+    hp: 75,
+    mana: 65,
+    attack: 85,
+    defense: 55,
+    speed: 75,
+    movepool: [
+        { move_id: QuickAttack.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 150,
+    rarity: Rarity.EPIC,
+};
+
+const Clover: BlastData = { // Clover
+    id: 31,
+    type: TYPE.DARK,
+    hp: 70,
+    mana: 70,
+    attack: 80,
+    defense: 60,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 112,
+    rarity: Rarity.RARE,
+};
+
+const Scorlov: BlastData = { // Scorlov
+    id: 32,
+    type: TYPE.DARK,
+    hp: 85,
+    mana: 55,
+    attack: 75,
+    defense: 65,
+    speed: 70,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
+    expYield: 128,
+    rarity: Rarity.RARE,
+};
+
+const Wormie: BlastData = { // Wormie
+    id: 33,
+    type: TYPE.GRASS,
+    hp: 60,
+    mana: 80,
+    attack: 70,
+    defense: 70,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 99,
+    rarity: Rarity.COMMON,
+};
+
+const Skel: BlastData = { // Skel
+    id: 34,
+    type: TYPE.DARK,
+    hp: 70,
+    mana: 70,
+    attack: 70,
+    defense: 70,
+    speed: 70,
+    movepool: [
+        { move_id: QuickAttack.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 77,
+    rarity: Rarity.COMMON,
+};
+
+const Frederic: BlastData = { // Frederic
+    id: 35,
+    type: TYPE.LIGHT,
+    hp: 75,
+    mana: 65,
+    attack: 85,
+    defense: 55,
+    speed: 75,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 69,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Smoky: BlastData = { // Smoky
+    id: 36,
+    type: TYPE.WATER,
+    hp: 80,
+    mana: 60,
+    attack: 90,
+    defense: 50,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 130,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Forty: BlastData = { // Forty
+    id: 37,
+    type: TYPE.GROUND,
+    hp: 100,
+    mana: 55,
+    attack: 45,
+    defense: 100,
+    speed: 45,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 50,
+    expYield: 212,
+    rarity: Rarity.RARE,
+};
+
+const Bud: BlastData = { // Bud
+    id: 38,
+    type: TYPE.DARK,
+    hp: 60,
+    mana: 80,
+    attack: 70,
+    defense: 70,
+    speed: 70,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: ElectroBall.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 30,
+    expYield: 169,
+    rarity: Rarity.UNCOMMON,
+};
+
+const Hiboo: BlastData = { // Hiboo
+    id: 39,
+    type: TYPE.NORMAL,
+    hp: 90,
+    mana: 100,
+    attack: 80,
+    defense: 90,
+    speed: 100,
+    movepool: [
+        { move_id: QuickAttack.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 35,
+    expYield: 222,
+    rarity: Rarity.LEGENDARY,
+};
+
+const Eggy: BlastData = { // Eggy
+    id: 40,
+    type: TYPE.GROUND,
+    hp: 100,
+    mana: 40,
+    attack: 30,
+    defense: 70,
+    speed: 20,
+    movepool: [
+        { move_id: Punch.id, levelMin: 0 },
+        { move_id: Growl.id, levelMin: 5 },
+        { move_id: FirePunch.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 40,
+    expYield: 118,
+    rarity: Rarity.EPIC,
+};
+
+const Dracoblast: BlastData = { // Dracoblast
+    id: 41,
+    type: TYPE.FLY,
+    hp: 90,
+    mana: 90,
+    attack: 90,
+    defense: 90,
+    speed: 100,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 255,
+    rarity: Rarity.LEGENDARY,
+};
+
+const Cerberus: BlastData = { // Cerberus
+    id: 42,
+    type: TYPE.FIRE,
+    hp: 100,
+    mana: 80,
+    attack: 100,
+    defense: 80,
+    speed: 100,
+    movepool: [
+        { move_id: Stomp.id, levelMin: 0 },
+        { move_id: Harden.id, levelMin: 5 },
+        { move_id: ThunderShock.id, levelMin: 10 },
+    ],
+    nextEvolution: null,
+    catchRate: 45,
+    expYield: 255,
+    rarity: Rarity.LEGENDARY,
+};
+
 const blastPedia: BlastData[] = [
-    Florax,
-    Florabloom,
-    Floramajest,
-    Pyrex,
-    Pyroclaw,
-    Pyrowyvern,
-    Aquaflare,
-    Aquablast,
-    Aqualith,
-    Zephyrex,
-    Zephyrwing,
-    Gnawbit,
-    Gnawfang,
-    Electrix,
+    Pantin,
+    Lizzy,
+    Punchball,
+    Jellys,
+    Kitchi,
+    Kenchi,
+    Mousy,
+    Clawball,
+    Balt,
+    Stagpan,
+    Botte,
+    Booh,
+    Ghoosto,
+    Goblin,
+    MiniDevil,
+    DevilDare,
+    Masks,
+    Luckun,
+    MiniHam,
+    SadHam,
+    MoiHam,
+    Bearos,
+    Treex,
+    Moutmout,
+    Piggy,
+    Bleaub,
+    Shroom,
+    Lantern,
+    Droplet,
+    Fireball,
+    Mystical,
+    Clover,
+    Scorlov,
+    Wormie,
+    Skel,
+    Frederic,
+    Smoky,
+    Forty,
+    Bud,
+    Hiboo,
+    Eggy,
+    Dracoblast,
+    Cerberus,
 ];
 
 function getBlastDataById(id: number): BlastData {
@@ -376,5 +913,3 @@ const rpcLoadBlastPedia: nkruntime.RpcFunction =
     function (ctkx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama): string {
         return JSON.stringify(blastPedia);
     }
-
-
