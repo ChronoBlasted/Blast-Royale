@@ -172,7 +172,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 activeMoveset: state.wild_blast.activeMoveset!,
             }
 
-            logger.debug('Random blast: %d, with level: %l appeared', getBlastDataById(state.wild_blast.data_id).name, calculateLevelFromExperience(state.wild_blast.exp));
+            logger.debug('Random blast with id: %d, lvl: %l appeared', state.wild_blast.data_id, calculateLevelFromExperience(state.wild_blast.exp));
 
             state.battle_state = BattleState.WAITING;
 
@@ -325,7 +325,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                     if (state.TurnStateData.wb_turn_type != TurnType.WAIT) state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
-                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
+                    logger.debug('Wild blast HP : %h, Mana : %m',state.wild_blast?.hp, state.wild_blast?.mana);
 
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
 
@@ -346,8 +346,8 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
 
 
-                    logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
-                    logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast!.data_id).name, state.player1_current_blast?.hp, state.player1_current_blast?.mana);
+                    logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
+                    logger.debug('Player blast HP : %h, Mana : %m', state.player1_current_blast?.hp, state.player1_current_blast?.mana);
                 }
 
                 logger.debug('______________ END LOOP BATTLE ______________');
@@ -381,8 +381,8 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     state.player1_current_blast = state.player1_blasts[msgChangeBlast];
                 }
 
-                logger.debug('Wild blast : %d, HP : %h, Mana : %m', getBlastDataById(state.wild_blast!.data_id).name, state.wild_blast?.hp, state.wild_blast?.mana);
-                logger.debug('P1 blast : %d, HP : %h, Mana : %m', getBlastDataById(state.player1_current_blast!.data_id).name, state.player1_current_blast?.hp, state.player1_current_blast?.mana);
+                logger.debug('Wild blast HP : %h, Mana : %m',  state.wild_blast?.hp, state.wild_blast?.mana);
+                logger.debug('Player blast HP : %h, Mana : %m',  state.player1_current_blast?.hp, state.player1_current_blast?.mana);
 
                 state.battle_state = BattleState.WAITING;
 
