@@ -30,13 +30,13 @@ public class ItemInfoPopup : Popup
     {
         ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
 
-        _itemNameTxt.text = itemData.name;
-        _itemDescTxt.text = itemData.desc;
+        _itemNameTxt.text = NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString();
+        _itemDescTxt.text = NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString();
         _itemAmount.text = "X" + item.amount;
 
         _itemBehaviour.text = itemData.behaviour.ToString();
 
-        _itemImg.sprite = NakamaData.Instance.GetItemImgByID(item.data_id);
+        _itemImg.sprite = NakamaData.Instance.GetItemDataRef(item.data_id).Sprite;
         _itemTypeColorImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
         _borderImg.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
     }

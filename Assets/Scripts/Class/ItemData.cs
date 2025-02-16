@@ -16,8 +16,6 @@ public class Item
 public class ItemData
 {
     public int id;
-    public string name;
-    public string desc;
     public ItemBehaviour behaviour;
     public int gain_amount;
     public Status status;

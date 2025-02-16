@@ -27,7 +27,7 @@ interface ItemUseJSON {
 }
 
 const healthPotionData: ItemData = { // healthPotionData
-    id: 1,
+    id: 0,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 20,
     status: STATUS.NONE,
@@ -36,7 +36,7 @@ const healthPotionData: ItemData = { // healthPotionData
 };
 
 const superHealthPotionData: ItemData = { // superHealthPotionData
-    id: 2,
+    id: 1,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 50,
     status: STATUS.NONE,
@@ -45,7 +45,7 @@ const superHealthPotionData: ItemData = { // superHealthPotionData
 };
 
 const hyperHealthPotionData: ItemData = { // hyperHealthPotionData
-    id: 3,
+    id: 2,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 200,
     status: STATUS.NONE,
@@ -54,7 +54,7 @@ const hyperHealthPotionData: ItemData = { // hyperHealthPotionData
 };
 
 const manaPotionData: ItemData = { // manaPotionData
-    id: 4,
+    id: 3,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 10,
     status: STATUS.NONE,
@@ -63,7 +63,7 @@ const manaPotionData: ItemData = { // manaPotionData
 };
 
 const superManaPotionData: ItemData = { // superManaPotionData
-    id: 5,
+    id: 4,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 25,
     status: STATUS.NONE,
@@ -72,16 +72,16 @@ const superManaPotionData: ItemData = { // superManaPotionData
 };
 
 const hyperManaPotionData: ItemData = { // hyperManaPotionData
-    id: 6,
+    id: 5,
     behaviour: ITEM_BEHAVIOUR.MANA,
-    gain_amount: 100,
+    gain_amount: 50,
     status: STATUS.NONE,
     catchRate: 0,
     rarity:RARITY.RARE,
 };
 
 const blastTrapData: ItemData = { // blastTrapData
-    id: 7,
+    id: 6,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
     status: STATUS.NONE,
@@ -90,7 +90,7 @@ const blastTrapData: ItemData = { // blastTrapData
 };
 
 const superBlastTrapData: ItemData = { // superBlastTrapData
-    id: 8,
+    id: 7,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
     status: STATUS.NONE,
@@ -99,7 +99,7 @@ const superBlastTrapData: ItemData = { // superBlastTrapData
 };
 
 const hyperBlastTrapData: ItemData = { // hyperBlastTrapData
-    id: 9,
+    id: 8,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
     status: STATUS.NONE,

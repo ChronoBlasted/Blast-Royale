@@ -13,9 +13,8 @@ public class Blast
     public int iv;
 
     int hp;
-    int maxHp;
     int mana;
-    int maxMana;
+
     int attack;
     int defense;
     int speed;

@@ -23,9 +23,9 @@ public class ItemLayout : MonoBehaviour
         ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
 
         _itemBorderBG.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
-        _itemIco.sprite = NakamaData.Instance.GetItemImgByID(itemData.id);
+        _itemIco.sprite = NakamaData.Instance.GetItemDataRef(itemData.id).Sprite;
         _amount.text = "X" + _item.amount;
-        _name.text = itemData.name;
+        _name.text = NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString();
     }
 
     public void UpdateUI(int amount)

@@ -36,7 +36,7 @@ public class LanguagePopup : Popup
 
         UIManager.Instance.ChangeView(UIManager.Instance.OpeningView);
 
-        GameManager.Instance.ReloadScene();
+        //GameManager.Instance.ReloadScene();
     }
 
     IEnumerator UpdateSelectedLanguage()

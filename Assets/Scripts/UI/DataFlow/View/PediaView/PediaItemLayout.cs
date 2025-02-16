@@ -15,7 +15,7 @@ public class PediaItemLayout : MonoBehaviour
         _data = item;
 
         _idTxt.text = "ID." + _data.id;
-        _nameTxt.text = _data.name;
+        _nameTxt.text = NakamaData.Instance.GetItemDataRef(_data.id).Name.GetLocalizedString();
         _behaviourTxt.text = _data.behaviour.ToString();
 
         switch (_data.behaviour)
@@ -34,7 +34,7 @@ public class PediaItemLayout : MonoBehaviour
                 break;
         }
 
-        _itemImg.sprite = NakamaData.Instance.GetItemImgByID(_data.id);
+        _itemImg.sprite = NakamaData.Instance.GetItemDataRef(_data.id).Sprite;
         _borderImg.color = ColorManager.Instance.GetItemColor(_data.behaviour);
         _behaviourBG.color = ColorManager.Instance.GetItemColor(_data.behaviour);
     }

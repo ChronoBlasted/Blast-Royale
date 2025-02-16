@@ -22,8 +22,6 @@ public class BlastLayout : MonoBehaviour
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
 
-        Debug.Log(blastData );
-
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blast.data_id).Sprite;
         _blastBorder.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }

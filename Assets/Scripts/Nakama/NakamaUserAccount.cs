@@ -238,7 +238,7 @@ public class NakamaUserAccount : MonoBehaviour
 
             PlayerPrefs.DeleteAll();
 
-            GameManager.Instance.ReloadScene();
+            //GameManager.Instance.ReloadScene();
         }
         catch (ApiResponseException ex)
         {

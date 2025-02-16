@@ -182,12 +182,12 @@ public class GameView : View
         switch (itemData.behaviour)
         {
             case ItemBehaviour.HEAL:
-                await _dialogLayout.UpdateTextAsync("You use " + itemData.name + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
 
                 _playerHUD.UpdateHpBar(selectedBlast.Hp);
                 break;
             case ItemBehaviour.MANA:
-                await _dialogLayout.UpdateTextAsync("You use " + itemData.name + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
 
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
@@ -219,14 +219,14 @@ public class GameView : View
 
         if (isPlayer)
         {
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + " do " + move.name + " and does " + damage + " damage to " + _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " !");
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + " do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString() + " and does " + damage + " damage to " + _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " !");
 
             attackerHUD = _playerHUD;
             defenderHUD = _opponentHUD;
         }
         else
         {
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + " do " + move.name + " and does " + damage + " damage to " + _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " !");
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + " do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString() + " and does " + damage + " damage to " + _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " !");
 
             attackerHUD = _opponentHUD;
             defenderHUD = _playerHUD;
@@ -256,13 +256,12 @@ public class GameView : View
 
         attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
 
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + move.name);
+        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
     }
-
 
     public async Task MultiplierAttack(bool isPlayer, Blast blast, Move move)
     {
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + move.name);
+        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
     }
 
     public async void DoEndMatch(string textToShow)

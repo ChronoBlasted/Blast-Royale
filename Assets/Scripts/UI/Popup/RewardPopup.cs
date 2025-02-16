@@ -58,7 +58,7 @@ public class RewardPopup : Popup
         {
             ItemData itemData = NakamaData.Instance.GetItemDataById(reward.itemReceived.data_id);
 
-            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, itemData.name, NakamaData.Instance.GetItemImgByID(reward.itemReceived.data_id)));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id).Sprite));
         }
 
         if (_openRewardCor != null)

@@ -16,8 +16,8 @@ public class PediaMoveLayout : MonoBehaviour
         _data = move;
 
         _idTxt.text = "ID." + _data.id;
-        _nameTxt.text = _data.name;
-        _descTxt.text = _data.desc;
+        _nameTxt.text = NakamaData.Instance.GetMoveDataRef(_data.id).Name.GetLocalizedString();
+        _descTxt.text = NakamaData.Instance.GetMoveDataRef(_data.id).Desc.GetLocalizedString();
 
         _manaCostTxt.text = _data.cost.ToString();
         _powerTxt.text = _data.power.ToString();

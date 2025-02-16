@@ -11,6 +11,7 @@ public class NakamaData : MonoSingleton<NakamaData>
 {
     [SerializeField] List<BlastDataRef> _allBlastData;
     [SerializeField] List<ItemDataRef> _allItemData;
+    [SerializeField] List<MoveDataRef> _allMoveData;
 
     List<BlastData> _blastPedia = new List<BlastData>();
     List<ItemData> _itemPedia = new List<ItemData>();
@@ -37,24 +38,23 @@ public class NakamaData : MonoSingleton<NakamaData>
         return _allItemData.Find(x => x.DataID == id);
     }
 
-    public Sprite GetItemImgByID(int id)
+    public MoveDataRef GetMoveDataRef(int id)
     {
-        return _allItemData.Find(x => x.DataID == id).Sprite;
+        return _allMoveData.Find(x => x.DataID == id);
     }
+
 
     public BlastData GetBlastDataById(int id)
     {
         return _blastPedia.Find(x => x.id == id);
     }
-
-    public Move GetMoveById(int id)
-    {
-        return _movePedia.Find(x => x.id == id);
-    }
-
     public ItemData GetItemDataById(int id)
     {
         return _itemPedia.Find(x => x.id == id);
+    }
+    public Move GetMoveById(int id)
+    {
+        return _movePedia.Find(x => x.id == id);
     }
 
 #if UNITY_EDITOR
@@ -71,6 +71,13 @@ public class NakamaData : MonoSingleton<NakamaData>
         _allItemData = AssetDatabase.FindAssets("t:ItemDataRef")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<ItemDataRef>)
+            .ToList();
+
+        EditorUtility.SetDirty(this);
+
+        _allMoveData = AssetDatabase.FindAssets("t:MoveDataRef")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<MoveDataRef>)
             .ToList();
 
         EditorUtility.SetDirty(this);
