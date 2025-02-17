@@ -20,8 +20,8 @@ public class MoveLayout : MonoBehaviour
         _move = move;
         _indexMove = index;
 
-        _moveNameTxt.text = NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString();
-        _moveDescTxt.text = NakamaData.Instance.GetItemDataRef(move.id).Desc.GetLocalizedString();
+        _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString();
+        _moveDescTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Desc.GetLocalizedString();
         _movePowerTxt.text = _move.power.ToString();
         _moveCostTxt.text = _move.cost.ToString();
 

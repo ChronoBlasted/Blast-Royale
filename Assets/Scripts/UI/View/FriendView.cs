@@ -77,6 +77,8 @@ public class FriendView : View
 
     public void HandleOnAddFriendButton()
     {
-        UIManager.Instance.ChangeView(UIManager.Instance.FriendView);
+        UIManager.Instance.ConfirmPopup.OpenPopup();
+
+        UIManager.Instance.ConfirmPopup.UpdateDataWithInputField("Add friend", "Enter your friend username :", "Enter friend username", NakamaManager.Instance.NakamaFriends.AddFriends);
     }
 }

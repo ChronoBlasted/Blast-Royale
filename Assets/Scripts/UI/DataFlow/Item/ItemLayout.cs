@@ -28,6 +28,27 @@ public class ItemLayout : MonoBehaviour
         _name.text = NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString();
     }
 
+    public void HandleOnInfoButton()
+    {
+        if (UIManager.Instance.MenuView.SquadPanel.IsSwapMode)
+        {
+            NakamaManager.Instance.NakamaUserAccount.SwitchPlayerItem(_index, UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored);
+
+            foreach (Transform child in UIManager.Instance.MenuView.SquadPanel.StoredItemTransform.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            HandleOnSwapDisable();
+        }
+        else
+        {
+            UIManager.Instance.ItemInfoPopup.UpdateData(_item);
+
+            UIManager.Instance.ItemInfoPopup.OpenPopup();
+        }
+    }
+
     public void UpdateUI(int amount)
     {
         if (amount == 0)

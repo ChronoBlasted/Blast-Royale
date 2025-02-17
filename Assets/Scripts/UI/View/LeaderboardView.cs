@@ -45,6 +45,11 @@ public class LeaderboardView : View
         base.CloseView();
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     #region LoadLeaderboard
 
     public void UpdateTrophyLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)

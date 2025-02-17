@@ -18,12 +18,12 @@ public class PediaView : View
     public override void Init()
     {
         base.Init();
-
-        _pediaNavBar.Init();
     }
 
     public override void OpenView(bool _instant = false)
     {
+        _pediaNavBar.Init();
+
         base.OpenView(_instant);
     }
 
@@ -39,6 +39,11 @@ public class PediaView : View
 
     public void UpdateBlastPedia(List<BlastData> allBlasts)
     {
+        foreach (Transform t in _pediaBlastTransform.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
         foreach (var blast in allBlasts)
         {
             PediaBlastLayout pediaBlastLayout = Instantiate(_pediaBlastLayoutPrefab, _pediaBlastTransform);

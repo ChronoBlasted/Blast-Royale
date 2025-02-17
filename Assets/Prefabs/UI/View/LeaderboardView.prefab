@@ -491,7 +491,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5383106663867958915}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1392.3209}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1102,6 +1102,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7890132854277181603}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LeaderboardView, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6599332317817835967, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_Name
       value: ReturnButton
@@ -1339,6 +1351,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7260003250995002458}
     m_Modifications:
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3440899151727270941}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1997560815519229652}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2858808079298735558, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_Name
       value: LeaderboardSubTabLayout (2)
@@ -1428,6 +1464,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+--- !u!114 &1997560815519229652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1134171387968132544, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+  m_PrefabInstance: {fileID: 1442735332859835156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f6b857018bb2f46bc7b21fd90952a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5697639118701422764 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6563913664897915832, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
@@ -1441,6 +1488,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7260003250995002458}
     m_Modifications:
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3440899151727270941}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 4607476468816286351}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2858808079298735558, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_Name
       value: LeaderboardSubTabLayout
@@ -2082,11 +2153,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeaderboardTabLayout (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6320426758146510560}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 2640379244176034799}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+--- !u!114 &2640379244176034799 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5365262017469593474, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+  m_PrefabInstance: {fileID: 7985374231167171693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0697a57433f5eab478b45ef766be9673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7886138539361917745 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 261365691249698652, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
@@ -2295,6 +2401,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeaderboardTabLayout
       objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6320426758146510560}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 4398949164800336889}
+    - target: {fileID: 8028369757972162100, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2324,6 +2454,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7260003250995002458}
     m_Modifications:
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3440899151727270941}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ChangeTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 8103968321752780126}
+    - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2858808079298735558, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_Name
       value: LeaderboardSubTabLayout (1)
@@ -2418,3 +2572,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6563913664897915832, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
   m_PrefabInstance: {fileID: 9208302812433701022}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8103968321752780126 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1134171387968132544, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+  m_PrefabInstance: {fileID: 9208302812433701022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f6b857018bb2f46bc7b21fd90952a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
