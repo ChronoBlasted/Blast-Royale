@@ -28,6 +28,11 @@ public class AllAreaView : View
         base.CloseView();
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     public void UpdateAllArea(List<AreaData> allArea)
     {
         _allArea.Clear();

@@ -502,9 +502,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ebc39ec484fbb438233f4d7fb73998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _switchIco: {fileID: 0}
-  _onColor: {r: 0, g: 0, b: 0, a: 0}
-  _offColor: {r: 0, g: 0, b: 0, a: 0}
+  _switchIco: {fileID: 6396055909423118250}
+  _onColor: {r: 0.6313726, g: 1, b: 0.039215688, a: 1}
+  _offColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &4920792757988843879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,7 +548,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9101970798600993523}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3224498378438263239}
+        m_TargetAssemblyTypeName: SettingView, Assembly-CSharp
+        m_MethodName: SwitchSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _type: 1
   _rt: {fileID: 8163986813809598798}
   _timeOfScale: 0.2
@@ -1275,9 +1287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ebc39ec484fbb438233f4d7fb73998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _switchIco: {fileID: 0}
-  _onColor: {r: 0, g: 0, b: 0, a: 0}
-  _offColor: {r: 0, g: 0, b: 0, a: 0}
+  _switchIco: {fileID: 7890629645148215593}
+  _onColor: {r: 0.6313726, g: 1, b: 0.039215688, a: 1}
+  _offColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &699967435933937497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,7 +1333,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 494984442200701528}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3224498378438263239}
+        m_TargetAssemblyTypeName: SettingView, Assembly-CSharp
+        m_MethodName: SwitchMusic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _type: 1
   _rt: {fileID: 9095260004715760193}
   _timeOfScale: 0.2
@@ -4129,6 +4153,18 @@ PrefabInstance:
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3224498378438263239}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6599332317817835967, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_Name

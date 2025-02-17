@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc452152836fc74ab30894b9e9ff626, type: 3}
   m_Name: ItemData
   m_EditorClassIdentifier: 
-  type: 409
-  name: Item
-  sprite: {fileID: 21300000, guid: 3a21a0f8ae2e7e348874e2735e749630, type: 3}
-  prefab: {fileID: 0}
+  Type: 409
+  Name:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Sprite: {fileID: 21300000, guid: de9a4b8c27634034b9b27682007433c1, type: 3}
+  Prefab: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []

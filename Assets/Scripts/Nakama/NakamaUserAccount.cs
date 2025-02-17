@@ -74,8 +74,6 @@ public class NakamaUserAccount : MonoBehaviour
 
             _lastBlastCollection = response.Payload.FromJson<BlastCollection>();
 
-            Debug.Log(response);
-
             NakamaData.Instance.BlastCollection = _lastBlastCollection;
 
             //Update Squad Panel

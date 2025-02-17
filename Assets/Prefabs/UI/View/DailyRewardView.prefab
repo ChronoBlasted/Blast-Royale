@@ -234,8 +234,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: -1057.4999}
-  m_SizeDelta: {x: 1016, y: 0}
+  m_AnchoredPosition: {x: 443.6019, y: -1057.4999}
+  m_SizeDelta: {x: 823.2038, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2024496904765899317
 MonoBehaviour:
@@ -1531,6 +1531,18 @@ PrefabInstance:
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6107615709182681334}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DailyRewardView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6599332317817835967, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_Name

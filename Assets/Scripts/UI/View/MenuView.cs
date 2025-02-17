@@ -12,7 +12,7 @@ public class MenuView : View
     [field: SerializeField] public FightPanel FightPanel { get; protected set; }
     [field: SerializeField] public ClanPanel ClanPanel { get; protected set; }
     [field: SerializeField] public EventPanel EventPanel { get; protected set; }
-
+    public NavBar NavBar { get => navBar; }
 
     public override void Init()
     {

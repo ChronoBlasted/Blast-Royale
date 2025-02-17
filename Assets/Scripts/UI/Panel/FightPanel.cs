@@ -27,4 +27,14 @@ public class FightPanel : Panel
     {
         _squadLayout.UpdateDeckBlast(decks);
     }
+
+    public void HandleOnWildBattle()
+    {
+        NakamaManager.Instance.NakamaWildBattle.FindWildBattle();
+    }
+
+    public void HandleOnPlayerBattle()
+    {
+
+    }
 }

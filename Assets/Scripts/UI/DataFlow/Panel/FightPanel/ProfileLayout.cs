@@ -11,4 +11,9 @@ public class ProfileLayout : MonoBehaviour
     {
         _playerName.text = newName;
     }
+
+    public void HandleOnProfileClick()
+    {
+        UIManager.Instance.ProfilePopup.OpenPopup();
+    }
 }

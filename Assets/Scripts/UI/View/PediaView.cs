@@ -32,6 +32,11 @@ public class PediaView : View
         base.CloseView();
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     public void UpdateBlastPedia(List<BlastData> allBlasts)
     {
         foreach (var blast in allBlasts)

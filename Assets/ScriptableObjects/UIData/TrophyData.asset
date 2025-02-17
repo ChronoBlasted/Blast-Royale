@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc452152836fc74ab30894b9e9ff626, type: 3}
   m_Name: TrophyData
   m_EditorClassIdentifier: 
-  type: 403
-  name: Trophy
-  sprite: {fileID: 21300000, guid: 9acefdc2c0b0e0946865f091643eec38, type: 3}
-  prefab: {fileID: 0}
+  Type: 403
+  Name:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Sprite: {fileID: 21300000, guid: 9acefdc2c0b0e0946865f091643eec38, type: 3}
+  Prefab: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []

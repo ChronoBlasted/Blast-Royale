@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc452152836fc74ab30894b9e9ff626, type: 3}
   m_Name: ItemPediaData
   m_EditorClassIdentifier: 
-  type: 415
-  name: Item pedia
-  sprite: {fileID: 21300000, guid: 1a5993bc7ca776c478602fd18bae9d5b, type: 3}
-  prefab: {fileID: 0}
+  Type: 415
+  Name:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  Sprite: {fileID: 21300000, guid: 34c18e03b8428f841ae55086bcfbfd58, type: 3}
+  Prefab: {fileID: 0}
+  references:
+    version: 2
+    RefIds: []

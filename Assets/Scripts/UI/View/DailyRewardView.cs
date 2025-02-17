@@ -25,6 +25,11 @@ public class DailyRewardView : View
         base.CloseView();
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     public void UpdateTotalDay(int day)
     {
         _totalDayTxt.text = "TOTAL DAY : " + day;

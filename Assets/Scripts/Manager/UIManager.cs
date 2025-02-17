@@ -57,6 +57,22 @@ public class UIManager : MonoSingleton<UIManager>
         GameView.Init();
         EndView.Init();
         OpeningView.Init();
+        SettingView.Init();
+        OpeningView.Init();
+        LeaderboardView.Init();
+        DailyRewardView.Init();
+        LoadingBattleView.Init();
+        AllAreaView.Init();
+
+        ChangeBlastPopup.Init();
+        BlastInfoPopup.Init();
+        MoveSelectorPopup.Init();
+        ItemInfoPopup.Init();
+        ProfilePopup.Init();
+        LanguagePopup.Init();
+        RewardPopup.Init();
+        LevelExpPopup.Init();
+        ConfirmPopup.Init();
 
         HideBlackShade();
     }
@@ -149,7 +165,7 @@ public class UIManager : MonoSingleton<UIManager>
     {
         if (_blackShadeTweener.IsActive()) _blackShadeTweener.Kill();
 
-        _blackShadeTweener = _blackShadeImg.DOFade(.5f, .1f);
+        _blackShadeTweener = _blackShadeImg.DOFade(.8f, .1f);
 
         _blackShadeImg.raycastTarget = true;
 

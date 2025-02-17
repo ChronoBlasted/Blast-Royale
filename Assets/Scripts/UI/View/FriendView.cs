@@ -26,6 +26,11 @@ public class FriendView : View
         base.CloseView();
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     public void UpdateFriendList(IApiFriendList friendList)
     {
         _headerFriendRequest.SetActive(false);
@@ -72,6 +77,6 @@ public class FriendView : View
 
     public void HandleOnAddFriendButton()
     {
-        //TODO add confirm popup
+        UIManager.Instance.ChangeView(UIManager.Instance.FriendView);
     }
 }

@@ -605,30 +605,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1955364058411938037}
     m_Modifications:
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HandleCancelMatchMaking
-      objectReference: {fileID: 0}
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: LoadingBattleView, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -721,9 +697,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2642324944512003387}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleCancelMatchMaking
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736547751369933511, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoadingBattleView, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6599332317817835967, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_Name
       value: ReturnButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleCancelMatchMaking
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LoadingBattleView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 418582758202285690, guid: 7440c391a7b80744ebf978909bebcd61, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

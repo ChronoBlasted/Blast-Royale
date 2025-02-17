@@ -17,6 +17,11 @@ public class SettingView : View
         StartCoroutine(InitCoroutine());
     }
 
+    public void Close()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
+    }
+
     IEnumerator InitCoroutine()
     {
         yield return new WaitForEndOfFrame();

@@ -42,4 +42,25 @@ public class SettingLayout : MonoBehaviour
             })
             .SetUpdate(UpdateType.Normal, true);
     }
+
+    public void HandleOpenDailyReward()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.DailyRewardView);
+    }
+    public void HandleOpenPedia()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.PediaView);
+    }
+    public void HandleOpenFriend()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.FriendView);
+    }
+    public void HandleOpenLeaderboard()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.LeaderboardView);
+    }
+    public void HandleOpenSetting()
+    {
+        UIManager.Instance.ChangeView(UIManager.Instance.SettingView);
+    }
 }

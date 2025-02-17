@@ -62,4 +62,5 @@ public class Topbar : MonoBehaviour
             .Join(rectTransform.DOAnchorPosY(64, .2f).SetEase(Ease.OutBack))
             .Join(_cg.DOFade(0, .1f));
     }
+
 }

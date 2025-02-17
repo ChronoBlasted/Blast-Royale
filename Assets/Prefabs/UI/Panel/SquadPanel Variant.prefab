@@ -162,7 +162,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8692427562034593295}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6017071915108667649}
+        m_TargetAssemblyTypeName: NavBar, Assembly-CSharp
+        m_MethodName: ChangeTab
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 4602107683151559747}
+          m_ObjectArgumentAssemblyTypeName: NavBarTab, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _type: 1
   _rt: {fileID: 753892865585547500}
   _timeOfScale: 0.2
@@ -653,7 +665,7 @@ MonoBehaviour:
   _totalPedia: {fileID: 3123970647519602087}
   _currentIco: {fileID: 3165207350697389265}
   _pediaIco: {fileID: 644157527823016024}
-  _storedBlast:
+  _storedBlastTrad:
     m_TableReference:
       m_TableCollectionName: GUID:8e47f340855630048937d8806ed8d4b5
     m_TableEntryReference:
@@ -662,7 +674,7 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  _storedItems:
+  _storedItemsTrad:
     m_TableReference:
       m_TableCollectionName: GUID:8e47f340855630048937d8806ed8d4b5
     m_TableEntryReference:
@@ -1449,7 +1461,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 70795616540223228}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6017071915108667649}
+        m_TargetAssemblyTypeName: NavBar, Assembly-CSharp
+        m_MethodName: ChangeTab
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 3182845167523489033}
+          m_ObjectArgumentAssemblyTypeName: NavBarTab, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _type: 1
   _rt: {fileID: 3167347332116655253}
   _timeOfScale: 0.2
