@@ -14,9 +14,9 @@ public class Popup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public virtual void OpenPopup()
+    public virtual void OpenPopup(bool shouldOpenBlackShade = true)
     {
-        UIManager.Instance.ShowBlackShade(ClosePopup);
+        if (shouldOpenBlackShade) UIManager.Instance.ShowBlackShade(ClosePopup);
 
         gameObject.SetActive(true);
 
@@ -30,9 +30,11 @@ public class Popup : MonoBehaviour
         }).SetUpdate(UpdateType.Normal, true);
     }
 
-    public virtual void ClosePopup()
+    public virtual void OpenPopup() => OpenPopup(true);
+
+    public virtual void ClosePopup(bool shouldCloseBlackShade = true)
     {
-        UIManager.Instance.HideBlackShade();
+        if (shouldCloseBlackShade) UIManager.Instance.HideBlackShade();
 
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
@@ -43,4 +45,7 @@ public class Popup : MonoBehaviour
             })
             .SetUpdate(UpdateType.Normal, true);
     }
+
+    public virtual void ClosePopup() => ClosePopup(true);
+
 }

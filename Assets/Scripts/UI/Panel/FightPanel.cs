@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class FightPanel : Panel
 {
+    [SerializeField] ProfileLayout _profileLayout;
+
     [SerializeField] SquadLayout _squadLayout;
 
+    public ProfileLayout ProfileLayout { get => _profileLayout; }
     public override void Init()
     {
         base.Init();
@@ -35,6 +38,6 @@ public class FightPanel : Panel
 
     public void HandleOnPlayerBattle()
     {
-
+        Debug.Log("Coming soon");
     }
 }

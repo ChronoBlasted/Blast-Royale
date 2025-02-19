@@ -221,7 +221,7 @@ public class GameView : View
         {
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + 
                 " do " + 
-                NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString() + 
+                NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() + 
                 " and does " + 
                 damage + 
                 " damage to " + 

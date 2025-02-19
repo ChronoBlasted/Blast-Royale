@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class MoveSelectorPopup : Popup
     [SerializeField] MoveLayout _currentMoveToReplace;
     [SerializeField] Transform _scrollMoveAvaible;
     [SerializeField] MoveLayout _moveLayoutPrefab;
+    [SerializeField] TMP_Text _noMoveAvailable;
 
     string _uuidBlast;
     int _outMoveIndex;
@@ -19,12 +21,12 @@ public class MoveSelectorPopup : Popup
 
     public override void ClosePopup()
     {
-        base.ClosePopup();
+        base.ClosePopup(false);
     }
 
     public override void OpenPopup()
     {
-        base.OpenPopup();
+        base.OpenPopup(false);
     }
 
     public void UpdateData(Blast blast, Move moveToReplace, int outMoveIndex)
@@ -45,8 +47,6 @@ public class MoveSelectorPopup : Popup
 
         _currentMoveToReplace.Init(moveToReplace, null);
 
-
-
         foreach (Transform t in _scrollMoveAvaible)
         {
             Destroy(t.gameObject);
@@ -62,10 +62,14 @@ public class MoveSelectorPopup : Popup
             if (blastMoveset.Contains(availablesMoves[i])) currentMove.Lock();
             else currentMove.Unlock();
         }
+
+        _noMoveAvailable.enabled = _scrollMoveAvaible.childCount <= 0;
     }
 
     public void HandleChangeMove()
     {
+
+        Debug.Log("SWAP");
         NakamaManager.Instance.NakamaUserAccount.SwitchMoveBlast(_uuidBlast, _outMoveIndex, _newMoveIndex);
     }
 }

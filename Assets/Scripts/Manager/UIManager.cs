@@ -31,13 +31,10 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
 
-
     [Header("Black Shade Ref")]
     [SerializeField] Image _blackShadeImg;
     [field: SerializeField] public Button BlackShadeButton { get; protected set; }
 
-    [Header("Popup Ref")]
-    // Empty
 
     View _currentView;
     Tweener _blackShadeTweener;
@@ -61,6 +58,8 @@ public class UIManager : MonoSingleton<UIManager>
         OpeningView.Init();
         LeaderboardView.Init();
         DailyRewardView.Init();
+        PediaView.Init();
+        FriendView.Init();
         LoadingBattleView.Init();
         AllAreaView.Init();
 

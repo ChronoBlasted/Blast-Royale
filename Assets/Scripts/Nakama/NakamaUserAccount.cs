@@ -40,7 +40,10 @@ public class NakamaUserAccount : MonoBehaviour
         var avatarUrl = account.User.AvatarUrl;
         var userId = account.User.Id;
 
-        // TODO Update corresponding UI
+        UIManager.Instance.ProfilePopup.UpdateData(account.User.Metadata);
+
+        UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(username);
+        UIManager.Instance.FriendView.UpdateUsername(username);
     }
 
     public async Task GetWalletData()
@@ -147,6 +150,8 @@ public class NakamaUserAccount : MonoBehaviour
 
             var response = await _client.RpcAsync(_session, "swapMove", swapMoveRequest.ToJson());
 
+            Debug.Log("dd");
+
             _lastBlastCollection = response.Payload.FromJson<BlastCollection>();
 
             //Update Squad Panel
@@ -236,7 +241,7 @@ public class NakamaUserAccount : MonoBehaviour
 
             PlayerPrefs.DeleteAll();
 
-            //GameManager.Instance.ReloadScene();
+            GameManager.Instance.ReloadScene();
         }
         catch (ApiResponseException ex)
         {
