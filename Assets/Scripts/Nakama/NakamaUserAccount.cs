@@ -67,6 +67,8 @@ public class NakamaUserAccount : MonoBehaviour
                 UIManager.Instance.MenuView.TopBar.UpdateTrophy(LastWalletData[currency]);
             }
         }
+
+        Debug.Log("Update wallet");
     }
 
     public async Task GetPlayerBlast()

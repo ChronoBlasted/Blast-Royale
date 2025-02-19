@@ -1115,8 +1115,6 @@ MonoBehaviour:
   _descTxt: {fileID: 4268140392047916457}
   _priceAmount: {fileID: 5895516338586029713}
   _buyedBlackShade: {fileID: 564885766992020801}
-  _coinIco: {fileID: 0}
-  _gemIco: {fileID: 0}
   _buyButton: {fileID: 4424202074314524446}
 --- !u!114 &5354675661142358009
 MonoBehaviour:
@@ -1187,7 +1185,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4231826009893126583}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _type: 1
   _rt: {fileID: 5801911940152381225}
   _timeOfScale: 0.2

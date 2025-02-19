@@ -13,6 +13,7 @@ public class NakamaStore : MonoBehaviour
     ISession _session;
 
     CanClaimDailyShop _canClaimDailyShop;
+
     public async Task Init(IClient client, ISession session)
     {
         _client = client;
@@ -48,6 +49,10 @@ public class NakamaStore : MonoBehaviour
         try
         {
             var response = await _client.RpcAsync(_session, "buyTrapOffer", index.ToJson());
+
+            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
+
+            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
         }
         catch (ApiResponseException ex)
         {
@@ -76,6 +81,8 @@ public class NakamaStore : MonoBehaviour
         try
         {
             var response = await _client.RpcAsync(_session, "buyCoinOffer", index.ToJson());
+
+            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
         }
         catch (ApiResponseException ex)
         {
@@ -105,6 +112,7 @@ public class NakamaStore : MonoBehaviour
         {
             var response = await _client.RpcAsync(_session, "buyGemOffer", index.ToJson());
 
+            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
         }
         catch (ApiResponseException ex)
         {
@@ -161,6 +169,13 @@ public class NakamaStore : MonoBehaviour
             if (_canClaimDailyShop.lastDailyShop[index].isAlreadyBuyed == true) return;
 
             var response = await _client.RpcAsync(_session, "buyDailyShopOffer", index.ToJson());
+
+            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
+
+            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
+
+            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+
         }
         catch (ApiResponseException ex)
         {
@@ -172,8 +187,6 @@ public class NakamaStore : MonoBehaviour
 [System.Serializable]
 public class StoreOffer
 {
-    public string name;
-    public string desc;
     public OfferType type;
 
     public int coinsAmount;

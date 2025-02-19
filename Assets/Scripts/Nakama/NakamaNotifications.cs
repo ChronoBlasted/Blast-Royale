@@ -53,5 +53,7 @@ public class NakamaNotifications : MonoBehaviour
 
         UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);
+
+        Debug.Log("REWARD");
     }
 }

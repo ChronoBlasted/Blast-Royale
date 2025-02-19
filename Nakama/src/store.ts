@@ -21,12 +21,12 @@ interface StoreOffer {
 
 //#region BlastTrap Offer
 
-const blastTrap1: Item = {
+const blastTrap: Item = {
     data_id: blastTrapData.id,
     amount: 1,
 };
 
-const blastTrapOffer1: StoreOffer = {
+const blastTrapOffer: StoreOffer = {
     offer_id: 1,
     type: OfferType.ITEM,
     currency: Currency.Coins,
@@ -34,18 +34,18 @@ const blastTrapOffer1: StoreOffer = {
     coinsAmount: 0,
     gemsAmount: 0,
     blast: null,
-    item: blastTrap1,
+    item: blastTrap,
 
     price: 100,
     isAlreadyBuyed:false,
 };
 
-const blastTrap5: Item = {
-    data_id: blastTrapData.id,
-    amount: 5,
+const superBlastTrap: Item = {
+    data_id: superBlastTrapData.id,
+    amount: 1,
 };
 
-const blastTrapOffer2: StoreOffer = {
+const superBlastTrapOffer: StoreOffer = {
     offer_id: 2,
     type: OfferType.ITEM,
     currency: Currency.Coins,
@@ -53,18 +53,18 @@ const blastTrapOffer2: StoreOffer = {
     coinsAmount: 0,
     gemsAmount: 0,
     blast: null,
-    item: blastTrap5,
+    item: superBlastTrap,
 
-    price: 450,
+    price: 250,
     isAlreadyBuyed:false,
 };
 
-const blastTrap20: Item = {
-    data_id: blastTrapData.id,
-    amount: 5,
+const hyperBlastTrap: Item = {
+    data_id: hyperBlastTrapData.id,
+    amount: 1,
 };
 
-const blastTrapOffer3: StoreOffer = {
+const hyperBlastTrapOffer: StoreOffer = {
     offer_id: 3,
     type: OfferType.ITEM,
     currency: Currency.Coins,
@@ -72,28 +72,28 @@ const blastTrapOffer3: StoreOffer = {
     coinsAmount: 0,
     gemsAmount: 0,
     blast: null,
-    item: blastTrap20,
+    item: hyperBlastTrap,
 
-    price: 1900,
+    price: 500,
     isAlreadyBuyed:false,
 };
 
-const blastTrapOffer: StoreOffer[] = [
-    blastTrapOffer1,
-    blastTrapOffer2,
-    blastTrapOffer3,
+const blastTrapOffers: StoreOffer[] = [
+    blastTrapOffer,
+    superBlastTrapOffer,
+    hyperBlastTrapOffer,
 ];
 
 const rpcLoadBlastTrapOffer: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama): string {
-        return JSON.stringify(blastTrapOffer);
+        return JSON.stringify(blastTrapOffers);
     }
 
 const rpcBuyTrapOffer: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string) {
         var indexOffer = JSON.parse(payload);
 
-        var storeOffer = blastTrapOffer[indexOffer];
+        var storeOffer = blastTrapOffers[indexOffer];
 
         try {
             nk.walletUpdate(ctx.userId, { [storeOffer.currency]: -storeOffer.price });
