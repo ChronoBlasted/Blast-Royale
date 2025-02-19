@@ -84,11 +84,11 @@ function getRandomBlastInPlayerArea(userId: string, logger: nkruntime.Logger, nk
 
     let randomBlastId = getRandomBlastIdInPlayerAreaIdInArea(metadata.area);
     let blastData = getBlastDataById(randomBlastId);
-    let randomblastLevels = calculateExperienceFromLevel(getRandomLevelInArea(metadata.area));
+    let randomLevel = getRandomLevelInArea(metadata.area);
 
     let randomIv = getRandomNumber(MinIV, MaxIV);
 
-    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomblastLevels)
+    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
 
     logger.debug('user %s successfully get a random blast', userId);
 
@@ -101,31 +101,31 @@ function getRandomBlastInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Bl
 
     let randomBlastId = getRandomBlastIdInPlayerAreaWithTrophy(getCurrencyInWallet(nk, userId, Currency.Trophies));
     let randomData = getBlastDataById(randomBlastId);
-    let randomblastLevels = getRandomLevelInArea(metadata.area);
+    let randomlevel = getRandomLevelInArea(metadata.area);
 
     let randomIv = getRandomNumber(MinIV, MaxIV);
 
-    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, randomData, randomblastLevels)
+    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, randomData, randomlevel)
 
     return newBlast;
 }
 
 
-function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, randomblastLevels: number): Blast {
+function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, level: number): Blast {
     return {
         uuid: nk.uuidv4(),
         data_id: randomBlastId,
-        exp: calculateExperienceFromLevel(randomblastLevels),
+        exp: calculateExperienceFromLevel(level),
         iv: randomIv,
-        hp: calculateBlastHp(randomData.hp, randomIv, randomblastLevels),
-        maxHp: calculateBlastHp(randomData.hp, randomIv, randomblastLevels),
-        mana: calculateBlastMana(randomData.mana, randomIv, randomblastLevels),
-        maxMana: calculateBlastMana(randomData.mana, randomIv, randomblastLevels),
-        attack: calculateBlastStat(randomData.attack, randomIv, randomblastLevels),
-        defense: calculateBlastStat(randomData.defense, randomIv, randomblastLevels),
-        speed: calculateBlastStat(randomData.speed, randomIv, randomblastLevels),
+        hp: calculateBlastHp(randomData.hp, randomIv, level),
+        maxHp: calculateBlastHp(randomData.hp, randomIv, level),
+        mana: calculateBlastMana(randomData.mana, randomIv, level),
+        maxMana: calculateBlastMana(randomData.mana, randomIv, level),
+        attack: calculateBlastStat(randomData.attack, randomIv, level),
+        defense: calculateBlastStat(randomData.defense, randomIv, level),
+        speed: calculateBlastStat(randomData.speed, randomIv, level),
         status: STATUS.NONE,
-        activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(randomblastLevels))
+        activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level))
     };
 }
 

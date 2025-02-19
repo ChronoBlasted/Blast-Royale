@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class AllAreaView : View
 {
     [SerializeField] AreaLayout _areaLayoutPrefab;
+    [SerializeField] Transform _areaContent;
     [SerializeField] Transform _areaTransform;
     [SerializeField] ScrollRect _scrollRect;
 
@@ -46,15 +47,14 @@ public class AllAreaView : View
         }
     }
 
-
     public void UpdateScrollRect()
     {
         for (int i = 0; i < _allArea.Count; i++)
         {
-            if (_allArea[i].trophyRequired > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.trophies.ToString()])
+            if (NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.trophies.ToString()] >= _allArea[i].trophyRequired)
             {
-                UIManager.ScrollToItem(_scrollRect, _areaTransform, i);
-                break;
+                UIManager.ScrollToItem(_scrollRect, _areaContent, i);
+                return;
             }
         }
     }

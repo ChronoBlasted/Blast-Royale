@@ -20,7 +20,7 @@ public class ChangeBlastPopup : Popup
     {
         base.OpenPopup();
 
-        //TODO Update data with current team
+        UpdateData(WildBattleManager.Instance.PlayerSquads);
     }
 
     public override void ClosePopup()
@@ -36,14 +36,14 @@ public class ChangeBlastPopup : Popup
         }
     }
 
-    public void UpdateAction(List<UnityAction<int>> actions)
+    public void UpdateAction(List<UnityAction<int>> actions, CHANGE_REASON changeReason)
     {
         for (int i = 0; i < customButtons.Count; i++)
         {
             int buttonIndex = i;
             customButtons[i].onClick.RemoveAllListeners();
 
-            if (!changeBlastLayouts[i].IsLocked())
+            if (changeBlastLayouts[i].IsUnlocked(changeReason))
             {
                 foreach (UnityAction<int> action in actions)
                 {
@@ -72,4 +72,13 @@ public class ChangeBlastPopup : Popup
             UIManager.Instance.BlackShadeButton.onClick.RemoveAllListeners();
         }
     }
+}
+
+public enum CHANGE_REASON
+{
+    HP,
+    MANA,
+    STATUS,
+    KO,
+    SWAP
 }

@@ -390,7 +390,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             SwapBlast,
         };
 
-        UIManager.Instance.ChangeBlastPopup.UpdateAction(actions);
+        UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.SWAP);
 
         UIManager.Instance.ChangeBlastPopup.UpdateClose(UIManager.Instance.GameView.ResetTab, false);
     }

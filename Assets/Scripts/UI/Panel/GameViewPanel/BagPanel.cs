@@ -72,18 +72,18 @@ public class BagPanel : Panel
             case ItemBehaviour.HEAL:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions,CHANGE_REASON.HP);
                 break;
 
             case ItemBehaviour.MANA:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions,CHANGE_REASON.MANA);
                 break;
             case ItemBehaviour.STATUS:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.STATUS);
                 break;
             case ItemBehaviour.CATCH:
                 UseItemOnBlast(_lastItemIndex);
@@ -93,6 +93,6 @@ public class BagPanel : Panel
 
     void UseItemOnBlast(int indexBlast)
     {
-        //_wildBattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
+        _wildBattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
     }
 }

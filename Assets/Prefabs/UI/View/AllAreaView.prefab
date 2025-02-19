@@ -679,7 +679,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 436.6019, y: -256}
+  m_AnchoredPosition: {x: 436.6019, y: -0}
   m_SizeDelta: {x: 773.2038, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3299749702463361145
@@ -754,6 +754,7 @@ GameObject:
   - component: {fileID: 3425247281040879923}
   - component: {fileID: 4472520180518617090}
   - component: {fileID: 726771643695903597}
+  - component: {fileID: 1359273216075194819}
   m_Layer: 0
   m_Name: Content
   m_TagString: Untagged
@@ -777,9 +778,9 @@ RectTransform:
   - {fileID: 5851953396945613568}
   m_Father: {fileID: 8351309151430467612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.000012391621}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3425247281040879923
@@ -811,8 +812,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 256
-    m_Bottom: 256
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
@@ -830,6 +831,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7900867730115846642}
   m_CullTransparentMesh: 1
+--- !u!114 &1359273216075194819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7900867730115846642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.003921569}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &1530419122313836290
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1105,6 +1136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 4549718171915310536}
   _areaLayoutPrefab: {fileID: 6084673602285982773, guid: 35955b58fd566c34399ed7b8a91f33de, type: 3}
+  _areaContent: {fileID: 2995243497533363171}
   _areaTransform: {fileID: 5851953396945613568}
   _scrollRect: {fileID: 5446621540285473870}
 --- !u!225 &4549718171915310536 stripped

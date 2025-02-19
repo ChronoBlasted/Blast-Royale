@@ -7,16 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum BattleState
-{
-    WAITING,
-    READY,
-    START,
-    END,
-}
-
-
-
 public class NakamaWildBattle : MonoBehaviour
 {
     IClient _client;
@@ -51,6 +41,8 @@ public class NakamaWildBattle : MonoBehaviour
 
             _matchId = response.Payload.FromJson<string>();
             _match = await _socket.JoinMatchAsync(_matchId);
+
+            Debug.Log(_matchId);
 
             StartWildBattle();
         }
@@ -241,4 +233,3 @@ public class ItemUseJSON
     public int index_item;
     public int index_blast;
 }
-

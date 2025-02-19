@@ -10,6 +10,7 @@ public class AreaSingleBlastLayout : MonoBehaviour
     [SerializeField] Image _borderBG, _ico;
 
     BlastData _blast;
+
     public void Init(BlastData blast)
     {
         _blast = blast;

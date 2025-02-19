@@ -25,7 +25,6 @@ public class GameNavBarTab : NavBarTab
         _growSequence
             .Join(DOVirtual.Float(_layoutElement.flexibleWidth, 1.5f, .2f, x => _layoutElement.flexibleWidth = x))
             .Join(_bg.rectTransform.DOSizeDelta(new Vector2(0, 40), .2f))
-            .Join(_title.DOFade(1, .2f))
             .Join(_ico.rectTransform.DOSizeDelta(new Vector2(256, 256), .2f))
             .Join(_ico.rectTransform.DOAnchorPosY(10, .2f));
 
@@ -48,7 +47,6 @@ public class GameNavBarTab : NavBarTab
         _growSequence
             .Join(DOVirtual.Float(_layoutElement.flexibleWidth, 1, .2f, x => _layoutElement.flexibleWidth = x))
             .Join(_bg.rectTransform.DOSizeDelta(new Vector2(0, 0), .2f))
-            .Join(_title.DOFade(0, .1f))
             .Join(_ico.rectTransform.DOSizeDelta(new Vector2(128, 128), .2f))
             .Join(_ico.rectTransform.DOAnchorPosY(-100, .2f));
 
@@ -67,13 +65,16 @@ public class GameNavBarTab : NavBarTab
             WildBattleManager.Instance.PlayerChangeBlast,
         };
 
-        UIManager.Instance.ChangeBlastPopup.UpdateAction(actions);
-
-        UIManager.Instance.ChangeBlastPopup.UpdateClose(UIManager.Instance.GameView.ResetTab);
+        UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.SWAP);
     }
 
     public void HandleOnWait()
     {
         WildBattleManager.Instance.PlayerWait();
+    }
+
+    public void HandleOnLeaveBattle()
+    {
+        NakamaManager.Instance.NakamaWildBattle.LeaveMatch();
     }
 }

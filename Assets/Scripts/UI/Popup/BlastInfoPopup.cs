@@ -92,8 +92,7 @@ public class BlastInfoPopup : Popup
         _blastSpeed.text = _currentBlastData.speed.ToString();
         _blastType.text = _currentBlastData.type.ToString();
 
-
-        _blastImg.sprite = _nakamaData.GetBlastDataRef(_currentBlast.data_id).Sprite;
+        _blastImg.sprite = _nakamaData.GetBlastDataRef(_currentBlastData.id).Sprite;
         _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
         _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
 

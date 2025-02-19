@@ -29,18 +29,42 @@ public class ChangeBlastLayout : MonoBehaviour
         _borderImg.color = ColorManager.Instance.GetTypeColor(blastData.type);
     }
 
-    public bool IsLocked()
+    public bool IsUnlocked(CHANGE_REASON changeReason)
     {
-        if (_blast.Hp == 0 || WildBattleManager.Instance.PlayerBlast == _blast)
+        switch (changeReason)
         {
-            LockBlast();
-            return true;
+            case CHANGE_REASON.HP:
+                if (_blast.Hp != _blast.MaxHp)
+                {
+                    UnlockBlast();
+                    return true;
+                }
+                break;
+            case CHANGE_REASON.MANA:
+                if (_blast.MaxMana != _blast.Mana)
+                {
+                    UnlockBlast();
+                    return true;
+                }
+                break;
+            case CHANGE_REASON.KO:
+                if (_blast.Hp > 0)
+                {
+                    UnlockBlast();
+                    return true;
+                }
+                break;
+            case CHANGE_REASON.SWAP:
+                if (WildBattleManager.Instance.PlayerBlast == _blast)
+                {
+                    UnlockBlast();
+                    return true;
+                }
+                break;
         }
-        else
-        {
-            UnlockBlast();
-            return false;
-        }
+
+        LockBlast();
+        return false;
     }
 
 

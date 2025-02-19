@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MovePanel : Panel
 {
@@ -40,5 +41,10 @@ public class MovePanel : Panel
             if (i < _blast.activeMoveset.Count) moveInBatleLayouts[i].Init(_dataUtils.GetMoveById(_blast.activeMoveset[i]), _blast);
             else moveInBatleLayouts[i].gameObject.SetActive(false);
         }
+    }
+
+    public void HandleOnUseAttack(int indexAttack)
+    {
+        WildBattleManager.Instance.PlayerAttack(indexAttack);
     }
 }
