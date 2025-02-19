@@ -2,6 +2,7 @@ using BaseTemplate.Behaviours;
 using Nakama;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 
 public class NakamaManager : MonoSingleton<NakamaManager>
@@ -36,6 +37,20 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         await NakamaPedia.Init(Client, Session);
 
         await NakamaUserAccount.Init(Client, Session);
+
+        await NakamaDailyReward.Init(Client, Session);
+
+        await NakamaArea.Init(Client, Session);
+
+        await NakamaFriends.Init(Client, Session);
+
+        await NakamaLeaderboards.Init(Client, Session);
+
+        await NakamaStore.Init(Client, Session);
+
+        NakamaNotifications.Init(Client, Session, Socket);
+
+        NakamaWildBattle.Init(Client, Session, Socket);
 
         GameStateManager.Instance.UpdateStateToMenu();
     }

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    void Awake()
+    void Start()
     {
         UIManager.Instance.Init();
 

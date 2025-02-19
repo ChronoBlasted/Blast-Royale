@@ -12,21 +12,17 @@ public class DailyRewardLayout : MonoBehaviour
     [SerializeField] Image _rewardImg, _stateImg;
     [SerializeField] CustomButton _rewardButton;
 
-    ResourceObjectHolder resource;
-
     public void Init(RewardCollection reward)
     {
-        resource = ResourceObjectHolder.Instance;
-
         if (reward.coinsReceived > 0)
         {
             _rewardAmount.text = reward.coinsReceived.ToString();
-            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Coin).Sprite;
+            _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
         }
         else if (reward.gemsReceived > 0)
         {
             _rewardAmount.text = reward.gemsReceived.ToString();
-            _rewardImg.sprite = resource.GetResourceByType(ResourceType.Gem).Sprite;
+            _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
         }
         else if (reward.blastReceived != null)
         {
@@ -41,14 +37,14 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Unlock()
     {
-        _stateImg.sprite = resource.GetResourceByType(ResourceType.Unlock).Sprite;
+        _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Unlock).Sprite;
     }
 
     public void Collectable(bool canClaimReward)
     {
         if (canClaimReward)
         {
-            _stateImg.sprite = resource.GetResourceByType(ResourceType.ArrowLeft).Sprite;
+            _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.ArrowLeft).Sprite;
             _rewardButton.interactable = true;
         }
         else Lock();
@@ -56,7 +52,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Lock()
     {
-        _stateImg.sprite = resource.GetResourceByType(ResourceType.Lock).Sprite;
+        _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Lock).Sprite;
     }
 
     public async void HandleOnCollectDailyReward()

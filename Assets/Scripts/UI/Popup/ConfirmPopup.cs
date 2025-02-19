@@ -32,9 +32,13 @@ public class ConfirmPopup : Popup
         _titleTxt.text = title;
         _descTxt.text = desc;
 
+        _inputField.gameObject.SetActive(false);
+
         _acceptButton.onClick.RemoveAllListeners();
+        _cancelButton.onClick.RemoveAllListeners();
+
         _acceptButton.onClick.AddListener(acceptAction);
-        _acceptButton.onClick.AddListener(ClosePopup);
+        _cancelButton.onClick.AddListener(ClosePopup);
     }
 
     public void UpdateDataWithInputField(string title, string desc, string placeHolder, UnityAction<string> acceptAction)
@@ -44,13 +48,15 @@ public class ConfirmPopup : Popup
         _placeHolderTxt.text = placeHolder;
 
         _acceptButton.onClick.RemoveAllListeners();
+        _cancelButton.onClick.RemoveAllListeners();
 
         _inputField.gameObject.SetActive(true);
 
         _inputField.text = "";
 
         _acceptButton.onClick.AddListener(() => acceptAction.Invoke(_inputField.text));
-        _acceptButton.onClick.AddListener(ClosePopup);
+
+        _cancelButton.onClick.AddListener(ClosePopup);
     }
 
 }

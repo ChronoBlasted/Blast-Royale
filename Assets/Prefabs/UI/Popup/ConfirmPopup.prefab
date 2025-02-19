@@ -33,10 +33,10 @@ RectTransform:
   - {fileID: 8476688580441328730}
   m_Father: {fileID: 5265061361047731960}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -113.11914}
-  m_SizeDelta: {x: 544, y: 9.052217}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5003382361978403312
 MonoBehaviour:
@@ -98,10 +98,10 @@ RectTransform:
   - {fileID: 5056469942435135399}
   m_Father: {fileID: 7531097976704381025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 416, y: -4.5261083}
-  m_SizeDelta: {x: 256, y: 9.052217}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8762711782120483410
 MonoBehaviour:
@@ -427,10 +427,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5265061361047731960}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -72.10156}
-  m_SizeDelta: {x: 265.47, y: 8.982439}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5980548386385963298
 CanvasRenderer:
@@ -566,7 +566,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 417.83878, y: -562.775}
+  m_AnchoredPosition: {x: 443.6019, y: -261.55002}
   m_SizeDelta: {x: 544, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1703221341544685013
@@ -966,10 +966,10 @@ RectTransform:
   - {fileID: 5173220456711743170}
   m_Father: {fileID: 7531097976704381025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 128, y: -4.5261083}
-  m_SizeDelta: {x: 256, y: 9.052217}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7045095395960859410
 MonoBehaviour:
@@ -1279,10 +1279,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5265061361047731960}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -33.805176}
-  m_SizeDelta: {x: 439.53, y: 3.6105144}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7689196923767694882
 CanvasRenderer:
@@ -1389,13 +1389,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 73851629902220499, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2285152607345297428, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Name
       value: ConfirmPopup
       objectReference: {fileID: 0}
     - target: {fileID: 2285152607345297428, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Pivot.x
@@ -1507,10 +1511,10 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4072297630045869449}
+      addedObject: {fileID: 8797215207199677696}
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8797215207199677696}
+      addedObject: {fileID: 4072297630045869449}
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6702718731261387890}

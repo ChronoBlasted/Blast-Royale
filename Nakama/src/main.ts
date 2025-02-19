@@ -4,6 +4,11 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerAfterAuthenticateDevice(afterAuthenticate);
     initializer.registerAfterAuthenticateEmail(afterAuthenticate);
 
+    // DailyReward
+    initializer.registerRpc('canClaimDailyReward', rpcCanClaimDailyReward);
+    initializer.registerRpc('claimDailyReward', rpcClaimDailyReward);
+    initializer.registerRpc('loadAllDailyReward', rpcLoadAllDailyReward);
+
     // Blast
     initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
     initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
