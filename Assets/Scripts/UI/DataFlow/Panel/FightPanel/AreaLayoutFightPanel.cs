@@ -7,9 +7,11 @@ public class AreaLayoutFightPanel : MonoBehaviour
 {
     [SerializeField] Image _areaImg;
 
-    public void UpdateArea(Sprite sprite)
+    public void UpdateArea()
     {
-        _areaImg.sprite = sprite;
+        var data = Nakama.TinyJson.JsonParser.FromJson<Metadata>(NakamaManager.Instance.NakamaUserAccount.LastAccount.User.Metadata);
+
+        _areaImg.sprite = NakamaData.Instance.GetAreaDataRef(data.area).Sprite;
     }
 
     public void HandleOpenAllArea()

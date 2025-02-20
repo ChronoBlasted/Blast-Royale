@@ -7,7 +7,6 @@ public class AllAreaView : View
 {
     [SerializeField] AreaLayout _areaLayoutPrefab;
     [SerializeField] Transform _areaContent;
-    [SerializeField] Transform _areaTransform;
     [SerializeField] ScrollRect _scrollRect;
 
     List<AreaData> _allArea = new List<AreaData>();
@@ -40,7 +39,7 @@ public class AllAreaView : View
 
         foreach (AreaData areaData in allArea)
         {
-            AreaLayout currentAreaLayout = Instantiate(_areaLayoutPrefab, _areaTransform);
+            AreaLayout currentAreaLayout = Instantiate(_areaLayoutPrefab, _areaContent);
             currentAreaLayout.Init(areaData);
 
             _allArea.Add(areaData);

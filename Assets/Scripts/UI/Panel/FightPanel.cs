@@ -7,8 +7,10 @@ public class FightPanel : Panel
     [SerializeField] ProfileLayout _profileLayout;
 
     [SerializeField] SquadLayout _squadLayout;
-
+    [SerializeField] AreaLayoutFightPanel _areaLayoutFightPanel;
     public ProfileLayout ProfileLayout { get => _profileLayout; }
+    public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
+
     public override void Init()
     {
         base.Init();

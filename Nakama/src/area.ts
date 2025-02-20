@@ -1,7 +1,6 @@
 
 interface Area {
     id: number
-    name: string
     trophyRequired: number
     blastIds: number[];
     blastLevels: [number, number];
@@ -9,7 +8,6 @@ interface Area {
 
 const thePlains: Area = {
     id: 0,
-    name: "The Plains",
     trophyRequired: 0,
     blastIds: [Kitchi.id, Kenchi.id, Mousy.id, Clawball.id],
     blastLevels: [2, 5]
@@ -17,7 +15,6 @@ const thePlains: Area = {
 
 const theDarkCaves: Area = {
     id: 1,
-    name: "The Dark Caves",
     trophyRequired: 300,
     blastIds: [Balt.id, Stagpan.id, Botte.id, Booh.id, Ghoosto.id],
     blastLevels: [4, 10]
@@ -25,7 +22,6 @@ const theDarkCaves: Area = {
 
 const theMiniHell: Area = {
     id: 2,
-    name: "The Mine Hell",
     trophyRequired: 600,
     blastIds: [Goblin.id, MiniDevil.id, DevilDare.id,Masks.id,Luckun.id,MiniHam.id,SadHam.id],
     blastLevels: [8, 15]
@@ -33,31 +29,27 @@ const theMiniHell: Area = {
 
 const theWildForest: Area = {
     id: 3,
-    name: "The Wild Forest",
     trophyRequired: 1000,
     blastIds: [Bearos.id, Treex.id, Moutmout.id,Piggy.id,Bleaub.id,Shroom.id],
     blastLevels: [13, 20]
 }
 
 const theWideOcean: Area = {
-    id: 3,
-    name: "The Wide Ocean",
+    id: 4,
     trophyRequired: 1300,
     blastIds: [Lantern.id, Droplet.id, Fireball.id,Mystical.id,Wormie.id,Smoky.id],
     blastLevels: [17, 25]
 }
 
 const theGloryCastle: Area = {
-    id: 3,
-    name: "The Glory Castle",
+    id: 5,
     trophyRequired: 1600,
     blastIds: [Clover.id, Scorlov.id, Skel.id,Frederic.id,Bud.id],
     blastLevels: [22, 30]
 }
 
 const theElusiveMount: Area = {
-    id: 3,
-    name: "The Elusive Mount",
+    id: 6,
     trophyRequired: 2000,
     blastIds: [Forty.id, Hiboo.id, Eggy.id,Dracoblast.id,Cerberus.id],
     blastLevels: [27, 40]
@@ -78,22 +70,22 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
         return JSON.stringify(allArea);
     }
 
-function getRandomBlastInPlayerArea(userId: string, logger: nkruntime.Logger, nk: nkruntime.Nakama): Blast {
+// function getRandomBlastInPlayerArea(userId: string, logger: nkruntime.Logger, nk: nkruntime.Nakama): Blast {
 
-    let metadata = nk.accountGetId(userId).user.metadata;
+//     let metadata = nk.accountGetId(userId).user.metadata;
 
-    let randomBlastId = getRandomBlastIdInPlayerAreaIdInArea(metadata.area);
-    let blastData = getBlastDataById(randomBlastId);
-    let randomLevel = getRandomLevelInArea(metadata.area);
+//     let randomBlastId = getRandomBlastIdInPlayerAreaIdInArea(metadata.area);
+//     let blastData = getBlastDataById(randomBlastId);
+//     let randomLevel = getRandomLevelInArea(metadata.area);
 
-    let randomIv = getRandomNumber(MinIV, MaxIV);
+//     let randomIv = getRandomNumber(MinIV, MaxIV);
 
-    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
+//     let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
 
-    logger.debug('user %s successfully get a random blast', userId);
+//     logger.debug('user %s successfully get a random blast', userId);
 
-    return newBlast;
-}
+//     return newBlast;
+// }
 
 function getRandomBlastInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Blast {
 
@@ -129,7 +121,7 @@ function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: numb
     };
 }
 
-function getRandomBlastIdInPlayerAreaIdInArea(id: number): number {
+function getRandomBlastIdWithAreaId(id: number): number {
 
     const area = allArea.find((area) => area.id === id);
 
@@ -145,16 +137,16 @@ function getRandomBlastIdInPlayerAreaWithTrophy(amountOfTrophy: number): number 
 
     const allAreaUnderTrophy = getAllAreaUnderTrophy(amountOfTrophy);
     const randomAreaIndex = Math.floor(Math.random() * (allAreaUnderTrophy.length - 1));
-    const randomBlastId = getRandomBlastIdInPlayerAreaIdInArea(allAreaUnderTrophy[randomAreaIndex].id)
+    const randomBlastId = getRandomBlastIdWithAreaId(allAreaUnderTrophy[randomAreaIndex].id)
     return randomBlastId;
 }
 
 function getAllAreaUnderTrophy(amountOfTrophy: number): Area[] {
 
     const areaUnderTrophy: Area[] = [];
-    for (const aire of allArea) {
-        if (aire.trophyRequired <= amountOfTrophy) {
-            areaUnderTrophy.push(aire);
+    for (const area of allArea) {
+        if (area.trophyRequired <= amountOfTrophy) {
+            areaUnderTrophy.push(area);
         }
     }
     return areaUnderTrophy;

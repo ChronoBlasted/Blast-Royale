@@ -1368,7 +1368,7 @@ GameObject:
   - component: {fileID: 697877951313709868}
   - component: {fileID: 360684136765514672}
   m_Layer: 0
-  m_Name: BG
+  m_Name: AreaImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1414,16 +1414,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -834840547, guid: 23d86afb701fe6d4fac0928e602225d8, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3039,7 +3039,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3075,7 +3075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3160,7 +3160,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 256898423816986338}
+  _profileLayout: {fileID: 8264244916385527048}
   _squadLayout: {fileID: 7908370043690740640}
+  _areaLayoutFightPanel: {fileID: 8723330345261686247}
 --- !u!1001 &4743151861162647009
 PrefabInstance:
   m_ObjectHideFlags: 0

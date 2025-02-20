@@ -42,8 +42,6 @@ public class NakamaWildBattle : MonoBehaviour
             _matchId = response.Payload.FromJson<string>();
             _match = await _socket.JoinMatchAsync(_matchId);
 
-            Debug.Log(_matchId);
-
             StartWildBattle();
         }
         catch (ApiResponseException e)
@@ -79,8 +77,7 @@ public class NakamaWildBattle : MonoBehaviour
     {
         string messageJson = Encoding.UTF8.GetString(matchState.State);
 
-        if (messageJson == "") Debug.Log("OpCodes recu : " + matchState.OpCode);
-        else Debug.Log("OpCodes recu : " + matchState.OpCode + ",Message en Json : " + messageJson);
+        Debug.Log("OpCodes recu : " + matchState.OpCode + ",Message en Json : " + messageJson);
 
         switch (matchState.OpCode)
         {

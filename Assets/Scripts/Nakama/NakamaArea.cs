@@ -27,7 +27,10 @@ public class NakamaArea : MonoBehaviour
 
             List<AreaData> allAreaList = response.Payload.FromJson<List<AreaData>>();
 
+            NakamaData.Instance.AreaCollection = allAreaList;
+
             UIManager.Instance.AllAreaView.UpdateAllArea(allAreaList);
+            UIManager.Instance.MenuView.FightPanel.AreaLayoutFightPanel.UpdateArea();
         }
         catch (ApiResponseException ex)
         {
@@ -40,7 +43,6 @@ public class NakamaArea : MonoBehaviour
 public class AreaData
 {
     public int id;
-    public string name;
     public int trophyRequired;
     public int[] blastIds;
     public int[] blastLevels;

@@ -162,7 +162,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-            state.wild_blast = getRandomBlastInPlayerArea(state.player1_id, logger, nk);
+            state.wild_blast = getRandomBlastInAllPlayerArea(state.player1_id, nk);
 
             const StartData: StartStateData = {
                 id: state.wild_blast.data_id,

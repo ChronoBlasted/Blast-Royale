@@ -12,21 +12,23 @@ public class NakamaData : MonoSingleton<NakamaData>
     [SerializeField] List<BlastDataRef> _allBlastData;
     [SerializeField] List<ItemDataRef> _allItemData;
     [SerializeField] List<MoveDataRef> _allMoveData;
+    [SerializeField] List<AreaDataRef> _allAreaDataRef;
+
+    BlastCollection _blastCollection;
+    ItemCollection _itemCollection;
+    List<AreaData> _areaCollection;
+
+    public ItemCollection ItemCollection { get => _itemCollection; set => _itemCollection = value; }
+    public BlastCollection BlastCollection { get => _blastCollection; set => _blastCollection = value; }
+    public List<AreaData> AreaCollection { get => _areaCollection; set => _areaCollection = value; }
+
 
     List<BlastData> _blastPedia = new List<BlastData>();
     List<ItemData> _itemPedia = new List<ItemData>();
     List<Move> _movePedia = new List<Move>();
-
-    BlastCollection _blastCollection;
-    ItemCollection _itemCollection;
-
     public List<BlastData> BlastPedia { get => _blastPedia; set => _blastPedia = value; }
     public List<ItemData> ItemPedia { get => _itemPedia; set => _itemPedia = value; }
     public List<Move> MovePedia { get => _movePedia; set => _movePedia = value; }
-
-    public ItemCollection ItemCollection { get => _itemCollection; set => _itemCollection = value; }
-    public BlastCollection BlastCollection { get => _blastCollection; set => _blastCollection = value; }
-
 
     public BlastDataRef GetBlastDataRef(int id)
     {
@@ -41,6 +43,11 @@ public class NakamaData : MonoSingleton<NakamaData>
     public MoveDataRef GetMoveDataRef(int id)
     {
         return _allMoveData.Find(x => x.DataID == id);
+    }
+
+    public AreaDataRef GetAreaDataRef(int id)
+    {
+        return _allAreaDataRef.Find(x => x.DataID == id);
     }
 
 
@@ -66,18 +73,19 @@ public class NakamaData : MonoSingleton<NakamaData>
             .Select(AssetDatabase.LoadAssetAtPath<BlastDataRef>)
             .ToList();
 
-        EditorUtility.SetDirty(this);
-
         _allItemData = AssetDatabase.FindAssets("t:ItemDataRef")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<ItemDataRef>)
             .ToList();
 
-        EditorUtility.SetDirty(this);
-
         _allMoveData = AssetDatabase.FindAssets("t:MoveDataRef")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<MoveDataRef>)
+            .ToList();
+
+        _allAreaDataRef = AssetDatabase.FindAssets("t:AreaDataRef")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<AreaDataRef>)
             .ToList();
 
         EditorUtility.SetDirty(this);

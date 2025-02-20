@@ -12,6 +12,8 @@ public class NakamaUserAccount : MonoBehaviour
     IClient _client;
     ISession _session;
 
+    IApiAccount _lastAccount;
+
     BlastCollection _lastBlastCollection;
     ItemCollection _lastItemCollection;
 
@@ -21,6 +23,7 @@ public class NakamaUserAccount : MonoBehaviour
     public Dictionary<string, int> LastWalletData { get => _lastWalletData; set => _lastWalletData = value; }
     public BlastCollection LastBlastCollection { get => _lastBlastCollection; }
     public ItemCollection LastItemCollection { get => _lastItemCollection; }
+    public IApiAccount LastAccount { get => _lastAccount; }
 
     public async Task Init(IClient client, ISession session)
     {
@@ -35,12 +38,12 @@ public class NakamaUserAccount : MonoBehaviour
 
     async Task GetPlayerData()
     {
-        var account = await _client.GetAccountAsync(_session);
-        var username = account.User.Username;
-        var avatarUrl = account.User.AvatarUrl;
-        var userId = account.User.Id;
+        _lastAccount = await _client.GetAccountAsync(_session);
+        var username = _lastAccount.User.Username;
+        var avatarUrl = _lastAccount.User.AvatarUrl;
+        var userId = _lastAccount.User.Id;
 
-        UIManager.Instance.ProfilePopup.UpdateData(account.User.Metadata);
+        UIManager.Instance.ProfilePopup.UpdateData(_lastAccount.User.Metadata);
 
         UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(username);
         UIManager.Instance.FriendView.UpdateUsername(username);
@@ -48,9 +51,9 @@ public class NakamaUserAccount : MonoBehaviour
 
     public async Task GetWalletData()
     {
-        var account = await _client.GetAccountAsync(_session);
+        _lastAccount = await _client.GetAccountAsync(_session);
 
-        LastWalletData = JsonParser.FromJson<Dictionary<string, int>>(account.Wallet);
+        LastWalletData = JsonParser.FromJson<Dictionary<string, int>>(_lastAccount.Wallet);
 
         foreach (var currency in LastWalletData.Keys)
         {
@@ -67,8 +70,6 @@ public class NakamaUserAccount : MonoBehaviour
                 UIManager.Instance.MenuView.TopBar.UpdateTrophy(LastWalletData[currency]);
             }
         }
-
-        Debug.Log("Update wallet");
     }
 
     public async Task GetPlayerBlast()
