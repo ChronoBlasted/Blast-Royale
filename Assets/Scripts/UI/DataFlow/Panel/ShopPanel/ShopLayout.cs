@@ -43,7 +43,7 @@ public class ShopLayout : MonoBehaviour
             BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(storeOffer.blast.data_id);
 
             _ico.sprite = blastData.Sprite;
-            _border.color = ColorManager.Instance.GetTypeColor(NakamaData.Instance.GetBlastDataById(_offer.blast.data_id).type);
+            _border.color = ResourceObjectHolder.Instance.GetTypeDataByType(NakamaData.Instance.GetBlastDataById(_offer.blast.data_id).type).Color;   
 
             _nameTxt.text = blastData.Name.GetLocalizedString();
             _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(storeOffer.blast.exp);

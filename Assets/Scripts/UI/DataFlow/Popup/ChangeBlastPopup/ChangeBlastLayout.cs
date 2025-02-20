@@ -26,7 +26,7 @@ public class ChangeBlastLayout : MonoBehaviour
         _manaBar.Init(_blast.Mana, _blast.MaxMana);
 
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blastData.id).Sprite;
-        _borderImg.color = ColorManager.Instance.GetTypeColor(blastData.type);
+        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(blastData.type).Color;
     }
 
     public bool IsUnlocked(CHANGE_REASON changeReason)

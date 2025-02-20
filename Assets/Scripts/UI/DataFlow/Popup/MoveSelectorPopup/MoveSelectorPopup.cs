@@ -34,7 +34,7 @@ public class MoveSelectorPopup : Popup
         _uuidBlast = blast.uuid;
         _outMoveIndex = outMoveIndex;
 
-        _bg.color = ColorManager.Instance.GetTypeColor(moveToReplace.type);
+        _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(moveToReplace.type).Color;
 
         List<Move> blastMoveset = blast.activeMoveset.Select(index => NakamaData.Instance.GetMoveById(index)).ToList();
         List<Move> availablesMoves = new List<Move>();

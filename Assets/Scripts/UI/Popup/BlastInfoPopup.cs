@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BlastInfoPopup : Popup
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastDescTxt, _blastLevel, _blastExp, _blastHp, _blastMana, _blastAttack, _blastDefense, _blastSpeed, _blastType;
-    [SerializeField] Image _blastImg, _blastTypeColorImg, _borderImg;
+    [SerializeField] Image _blastImg, _blastTypeColorImg, _borderImg, _blastTypeIcoImg;
     [SerializeField] GameObject _prestigeEvolveLayout, _moveLayout;
     [SerializeField] CustomButton _prestigeButton, _evolveButton;
     [SerializeField] List<MoveLayout> movesLayout;
@@ -15,14 +15,12 @@ public class BlastInfoPopup : Popup
     Blast _currentBlast;
     BlastData _currentBlastData;
     NakamaData _nakamaData;
-    ColorManager _colorManager;
 
     public override void Init()
     {
         base.Init();
 
         _nakamaData = NakamaData.Instance;
-        _colorManager = ColorManager.Instance;
     }
 
     public override void OpenPopup()
@@ -57,8 +55,9 @@ public class BlastInfoPopup : Popup
         _blastType.text = _currentBlastData.type.ToString();
 
         _blastImg.sprite = _nakamaData.GetBlastDataRef(blast.data_id).Sprite;
-        _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
-        _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
+        _blastTypeColorImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
+        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
+        _blastTypeIcoImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
 
         _moveLayout.SetActive(true);
 
@@ -93,8 +92,9 @@ public class BlastInfoPopup : Popup
         _blastType.text = _currentBlastData.type.ToString();
 
         _blastImg.sprite = _nakamaData.GetBlastDataRef(_currentBlastData.id).Sprite;
-        _blastTypeColorImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
-        _borderImg.color = _colorManager.GetTypeColor(_currentBlastData.type);
+        _blastTypeColorImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
+        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
+        _blastTypeIcoImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
 
         _prestigeEvolveLayout.SetActive(false);
         _moveLayout.SetActive(false);

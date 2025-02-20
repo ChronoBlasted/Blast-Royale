@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PediaMoveLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _idTxt, _nameTxt, _descTxt, _manaCostTxt, _powerTxt;
-    [SerializeField] Image _borderImg;
+    [SerializeField] Image _borderImg, _moveIco;
 
     Move _data;
 
@@ -22,6 +22,7 @@ public class PediaMoveLayout : MonoBehaviour
         _manaCostTxt.text = _data.cost.ToString();
         _powerTxt.text = _data.power.ToString();
 
-        _borderImg.color = ColorManager.Instance.GetTypeColor(_data.type);
+        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_data.type).Color;
+        _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Sprite;
     }
 }

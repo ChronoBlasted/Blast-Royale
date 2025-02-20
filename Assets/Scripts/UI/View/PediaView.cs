@@ -53,6 +53,11 @@ public class PediaView : View
 
     public void UpdateItemPedia(List<ItemData> allItems)
     {
+        foreach (Transform t in _pediaItemTransform.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
         foreach (var item in allItems)
         {
             PediaItemLayout pediaBlastLayout = Instantiate(_pediaItemLayoutPrefab, _pediaItemTransform);
@@ -62,6 +67,11 @@ public class PediaView : View
 
     public void UpdateMovePedia(List<Move> allItems)
     {
+        foreach (Transform t in _moveTransform.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
         foreach (var item in allItems)
         {
             PediaMoveLayout pediaBlastLayout = Instantiate(_moveLayoutPrefab, _moveTransform);

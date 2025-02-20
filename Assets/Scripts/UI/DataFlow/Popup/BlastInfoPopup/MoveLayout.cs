@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MoveLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt;
-    [SerializeField] Image _moveBorder;
+    [SerializeField] Image _moveBorder, _moveIco;
     [SerializeField] CanvasGroup _cg;
     [SerializeField] Button _button;
 
@@ -22,6 +22,9 @@ public class MoveLayout : MonoBehaviour
 
         _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString();
         _moveDescTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Desc.GetLocalizedString();
+
+        _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Sprite;
+
         _movePowerTxt.text = _move.power.ToString();
         _moveCostTxt.text = _move.cost.ToString();
 
@@ -29,7 +32,7 @@ public class MoveLayout : MonoBehaviour
 
         if (_blast != null) UpdateUI();
 
-        _moveBorder.color = ColorManager.Instance.GetTypeColor(move.type);
+        _moveBorder.color = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Color;
     }
 
     public void UpdateUI()
