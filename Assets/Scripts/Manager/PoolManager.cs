@@ -43,7 +43,7 @@ public class PoolManager : MonoSingleton<PoolManager>
                 OnTakeFromPool,
                 (gameObject) =>
                 {
-                    if (gameObject.transform as RectTransform) gameObject.transform.SetParent(UIManager.Instance.MainCanvas.transform);
+                    if (gameObject.transform as RectTransform) gameObject.transform.SetParent(UIManager.Instance.RectTransformPool);
                     else gameObject.transform.SetParent(container);
                     gameObject.transform.localPosition = Vector3.zero;
                     gameObject.transform.localScale = Vector3.one;

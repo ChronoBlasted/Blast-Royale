@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoSingleton<UIManager>
 {
     [field: SerializeField] public Canvas MainCanvas { get; protected set; }
+    [field: SerializeField] public RectTransform RectTransformPool { get; protected set; }
 
     [field: SerializeField] public MenuView MenuView { get; protected set; }
     [field: SerializeField] public GameView GameView { get; protected set; }
@@ -20,6 +21,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public SettingView SettingView { get; protected set; }
     [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
+    [field: SerializeField] public ErrorView ErrorView { get; protected set; }
 
     [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
     [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
@@ -62,6 +64,7 @@ public class UIManager : MonoSingleton<UIManager>
         FriendView.Init();
         LoadingBattleView.Init();
         AllAreaView.Init();
+        ErrorView.Init();
 
         ChangeBlastPopup.Init();
         BlastInfoPopup.Init();
