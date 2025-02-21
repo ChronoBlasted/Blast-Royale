@@ -7,15 +7,14 @@ using UnityEngine.UI;
 public class SwitchButtonLayout : MonoBehaviour
 {
     [SerializeField] Image _switchIco;
-    [SerializeField] Color _onColor, _offColor;
 
     public void SetOn()
     {
-        _switchIco.color = _onColor;
+        _switchIco.color = ColorManager.Instance.ActiveColor;
     }
 
     public void SetOff()
     {
-        _switchIco.color = _offColor;
+        _switchIco.color = ColorManager.Instance.InactiveColor;
     }
 }

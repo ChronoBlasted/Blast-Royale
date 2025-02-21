@@ -17,17 +17,17 @@ public class Topbar : MonoBehaviour
 
     public void UpdateTrophy(int amount)
     {
-        _trophyTxt.text = amount.ToString();
+        _trophyTxt.text = UIManager.GetFormattedInt(amount);
     }
 
     public void UpdateCoin(int amount)
     {
-        _coinTxt.text = amount.ToString();
+        _coinTxt.text = UIManager.GetFormattedInt(amount);
     }
 
     public void UpdateGem(int amount)
     {
-        _gemTxt.text = amount.ToString();
+        _gemTxt.text = UIManager.GetFormattedInt(amount);
     }
 
     public void ShowTopBar()

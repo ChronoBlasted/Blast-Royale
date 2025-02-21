@@ -27,7 +27,7 @@ public class ShopLayout : MonoBehaviour
             _ico.sprite = coinData.Sprite;
 
             _nameTxt.text = coinData.Name.GetLocalizedString();
-            _descTxt.text = storeOffer.coinsAmount.ToString();
+            _descTxt.text = UIManager.GetFormattedInt(storeOffer.coinsAmount); 
         }
         if (_offer.gemsAmount > 0)
         {
@@ -36,7 +36,7 @@ public class ShopLayout : MonoBehaviour
             _ico.sprite = gemData.Sprite;
 
             _nameTxt.text = gemData.Name.GetLocalizedString();
-            _descTxt.text = storeOffer.coinsAmount.ToString();
+            _descTxt.text = UIManager.GetFormattedInt(storeOffer.gemsAmount);
         }
         if (_offer.blast != null)
         {

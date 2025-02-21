@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class DailyRewardLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _dayTxt, _rewardAmount;
-    [SerializeField] Image _rewardImg, _stateImg;
+    [SerializeField] Image _rewardImg, _stateImg,_alreadyCollectBG;
     [SerializeField] CustomButton _rewardButton;
 
     public void Init(RewardCollection reward)
@@ -37,14 +37,15 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Unlock()
     {
-        _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Unlock).Sprite;
+        _stateImg.enabled = false;
+        _alreadyCollectBG.enabled = true;
     }
 
     public void Collectable(bool canClaimReward)
     {
         if (canClaimReward)
         {
-            _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.ArrowLeft).Sprite;
+            _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Unlock).Sprite;
             _rewardButton.interactable = true;
         }
         else Lock();
@@ -53,6 +54,7 @@ public class DailyRewardLayout : MonoBehaviour
     public void Lock()
     {
         _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Lock).Sprite;
+        _alreadyCollectBG.enabled = false;
     }
 
     public async void HandleOnCollectDailyReward()

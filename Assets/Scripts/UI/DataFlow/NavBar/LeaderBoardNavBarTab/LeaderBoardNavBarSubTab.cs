@@ -9,7 +9,6 @@ public class LeaderboardSubTab : NavBarTab
     [SerializeField] LeaderboardFilter _type;
 
     [SerializeField] Image _bg;
-    [SerializeField] Sprite _activeSprite, _inactiveSprite;
 
 
     public override void HandleOnPress()
@@ -20,13 +19,13 @@ public class LeaderboardSubTab : NavBarTab
 
         UIManager.Instance.LeaderboardView.UpdateActiveLeaderboard();
 
-        _bg.sprite = _activeSprite;
+        _bg.color = ColorManager.Instance.ActiveColor;
     }
 
     public override void HandleOnReset()
     {
         base.HandleOnReset();
 
-        _bg.sprite = _inactiveSprite;
+        _bg.color = ColorManager.Instance.InactiveColor;
     }
 }

@@ -78,7 +78,7 @@ public class RewardPopup : Popup
         {
             _continueBtn.interactable = false;
 
-            if (tempReward.Amount > 1) _titleTxt.text = tempReward.Amount + " " + tempReward.Name;
+            if (tempReward.Amount > 1) _titleTxt.text = UIManager.GetFormattedInt(tempReward.Amount) + " " + tempReward.Name;
             else _titleTxt.text = tempReward.Name;
 
             _ico.sprite = tempReward.Sprite;

@@ -182,7 +182,7 @@ const rpcBuyCoinOffer: nkruntime.RpcFunction =
 
 //#endregion
 
-//#region Coins Offer
+//#region Gems Offer
 
 const gemsOffer1: StoreOffer = {
     offer_id: 7,
