@@ -18,6 +18,7 @@ public enum ResourceType
     BlastPedia = 410,
     ItemPedia = 411,
     ErrorMsg = 412,
+    MovePedia = 413,
 }
 
 public enum UIType
@@ -34,4 +35,5 @@ public enum UIType
     BlastPedia = ResourceType.BlastPedia,
     ItemPedia = ResourceType.ItemPedia,
     ErrorMsg = ResourceType.ErrorMsg,
+    MovePedia = ResourceType.MovePedia,
 }

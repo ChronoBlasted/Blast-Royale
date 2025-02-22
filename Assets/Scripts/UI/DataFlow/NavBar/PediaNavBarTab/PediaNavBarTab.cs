@@ -7,16 +7,13 @@ public class PediaNavBarTab : NavBarTab
 {
     [SerializeField] Image _bg;
     [SerializeField] GameObject _tab;
-
-    [SerializeField] Sprite _onSprite, _offSprite;
-
     public override void HandleOnPress()
     {
         base.HandleOnPress();
 
         _tab.SetActive(true);
 
-        _bg.sprite = _onSprite;
+        _bg.color = ColorManager.Instance.ActiveColor;
     }
 
     public override void HandleOnReset()
@@ -25,6 +22,6 @@ public class PediaNavBarTab : NavBarTab
 
         _tab.SetActive(false);
 
-        _bg.sprite = _offSprite;
+        _bg.color = ColorManager.Instance.InactiveColor;
     }
 }
