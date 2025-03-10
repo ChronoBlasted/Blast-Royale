@@ -233,7 +233,14 @@ public class GameView : View
         }
         else
         {
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + " do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString() + " and does " + damage + " damage to " + _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " !");
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() +
+                " do " + 
+                NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() + 
+                " and does " + 
+                damage + 
+                " damage to " +
+                _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + 
+                " !");
 
             attackerHUD = _opponentHUD;
             defenderHUD = _playerHUD;
