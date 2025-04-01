@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ShopLayout : MonoBehaviour
 {
-    [SerializeField] Image _ico, _border, _priceIco;
+    [SerializeField] Image _ico, _priceIco;
     [SerializeField] TMP_Text _nameTxt, _descTxt, _priceAmount;
     [SerializeField] GameObject _buyedBlackShade;
 
@@ -43,7 +43,6 @@ public class ShopLayout : MonoBehaviour
             BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(storeOffer.blast.data_id);
 
             _ico.sprite = blastData.Sprite;
-            _border.color = ResourceObjectHolder.Instance.GetTypeDataByType(NakamaData.Instance.GetBlastDataById(_offer.blast.data_id).type).Color;
 
             _nameTxt.text = blastData.Name.GetLocalizedString();
             _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(storeOffer.blast.exp);
@@ -55,7 +54,6 @@ public class ShopLayout : MonoBehaviour
             ItemData itemData = NakamaData.Instance.GetItemDataById(_offer.item.data_id);
 
             _ico.sprite = itemDataRef.Sprite;
-            _border.color = ColorManager.Instance.GetItemColor(itemData.behaviour);
 
             _nameTxt.text = itemDataRef.Name.GetLocalizedString();
             _descTxt.text = "";

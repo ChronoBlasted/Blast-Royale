@@ -386,7 +386,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 22.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -984,6 +984,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LevelExpPopup, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5458481187989947836, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_PreferredWidth
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1003,6 +1007,14 @@ PrefabInstance:
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121669427232202899, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 8121669427232202899, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_Padding.m_Right
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 8518086827190402651, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1087,7 +1099,6 @@ MonoBehaviour:
   _blastNameTxt: {fileID: 924080001427573530}
   _blastLvlTxt: {fileID: 2117713132695095751}
   _expBar: {fileID: 216631454766212580}
-  _blastBorder: {fileID: 3080361390560011706}
   _blastImg: {fileID: 1453770221476066966}
   _closeButton: {fileID: 2615987025847959287}
 --- !u!1001 &8748636190813330829
@@ -1262,14 +1273,3 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &3080361390560011706 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6041229384917350455, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
-  m_PrefabInstance: {fileID: 8748636190813330829}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2579535107382684164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

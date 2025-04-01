@@ -9,7 +9,7 @@ public class LevelExpPopup : Popup
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastLvlTxt;
     [SerializeField] SliderBar _expBar;
-    [SerializeField] Image _blastBorder, _blastImg;
+    [SerializeField] Image  _blastImg;
 
     [SerializeField] Button _closeButton;
 
@@ -41,7 +41,6 @@ public class LevelExpPopup : Popup
         _expBar.SetValueSmooth(blast.exp + expGain, .5f, 1f, DG.Tweening.Ease.InSine);
 
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
-        _blastBorder.color = ResourceObjectHolder.Instance.GetTypeDataByType(data.type).Color;
     }
 
     public void UpdateClose(UnityAction unityAction)
