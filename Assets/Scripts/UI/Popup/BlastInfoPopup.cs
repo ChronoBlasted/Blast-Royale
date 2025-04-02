@@ -41,11 +41,8 @@ public class BlastInfoPopup : Popup
 
         _blastNameTxt.text = _nakamaData.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
         _blastDescTxt.text = _currentBlastData.desc;
-        _blastLevel.text = "Lvl." + NakamaLogic.CalculateLevelFromExperience(_currentBlast.exp);
-        _blastExp.text =
-            _currentBlast.exp - NakamaLogic.CalculateExperienceFromLevel(NakamaLogic.CalculateLevelFromExperience(_currentBlast.exp))
-            + " / " +
-            (NakamaLogic.CalculateExperienceFromLevel(NakamaLogic.CalculateLevelFromExperience(_currentBlast.exp) + 1) - NakamaLogic.CalculateExperienceFromLevel(NakamaLogic.CalculateLevelFromExperience(_currentBlast.exp)));
+        _blastLevel.text = "Lvl." + _currentBlast.Level;
+        _blastExp.text = _currentBlast.GetRatioExp() + " / " + _currentBlast.GetRatioExpNextLevel();
 
         _blastHp.text = _currentBlast.MaxHp.ToString();
         _blastMana.text = _currentBlast.MaxMana.ToString();

@@ -605,7 +605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.3137255, b: 0.6156863, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1154,7 +1154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset
@@ -1322,7 +1322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset
@@ -1479,7 +1479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset
@@ -1636,7 +1636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset
@@ -1703,9 +1703,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7450985626616129537}
     m_Modifications:
+    - target: {fileID: 418984125909499584, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6531696928567048073, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_Name
       value: BlastContainerLayout
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8500324537202406822, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_Pivot.x
@@ -1933,7 +1941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset
@@ -2086,7 +2094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontSize
-      value: 15.6
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5502840487092871931, guid: c5013ba036064dc468f61e051a60c3a9, type: 3}
       propertyPath: m_fontAsset

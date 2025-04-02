@@ -6,10 +6,11 @@ using UnityEngine;
 public class ColorManager : MonoSingleton<ColorManager>
 {
     [SerializeField] Color _healColor, _manaColor, _catchColor, _statusColor;
-    [SerializeField] Color _activeColor, _inactiveColor;
 
-    public Color ActiveColor { get => _activeColor; }
-    public Color InactiveColor { get => _inactiveColor; }
+    [SerializeField] Sprite _activeSprite, _inactiveSprite;
+
+    public Sprite ActiveSprite { get => _activeSprite; }
+    public Sprite InactiveSprite { get => _inactiveSprite; }
 
     public Color GetItemColor(ItemBehaviour behaviour)
     {

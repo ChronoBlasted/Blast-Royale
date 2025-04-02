@@ -13,7 +13,7 @@ public class LanguageLayout : MonoBehaviour
 
     public void UpdateState(bool isOn = false)
     {
-        _bg.color = isOn ? ColorManager.Instance.ActiveColor : ColorManager.Instance.InactiveColor;
+        _bg.sprite = isOn ? ColorManager.Instance.ActiveSprite : ColorManager.Instance.InactiveSprite;
     }
 
     public void HandleOnChangeLanguage(int languageIndex)

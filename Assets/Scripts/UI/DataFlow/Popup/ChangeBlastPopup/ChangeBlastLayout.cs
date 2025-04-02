@@ -9,9 +9,10 @@ public class ChangeBlastLayout : MonoBehaviour
 {
     Blast _blast;
 
-    [SerializeField] TMP_Text _nameTxt, _lvlTxt;
+    [SerializeField] TMP_Text _nameTxt, _lvlTxt, _cantTxt;
     [SerializeField] SliderBar _hpBar, _manaBar;
     [SerializeField] Image _borderImg, _blastImg;
+    [SerializeField] GameObject _cantLayout;
 
     public void Init(Blast newBlast)
     {
@@ -39,6 +40,8 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
+                else LockBlast("FULL LIFE"); // TODO Translate
+
                 break;
             case CHANGE_REASON.MANA:
                 if (_blast.MaxMana != _blast.Mana)
@@ -46,6 +49,8 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
+                else LockBlast("FULL MANA");  // TODO Translate
+
                 break;
             case CHANGE_REASON.KO:
                 if (_blast.Hp > 0)
@@ -53,6 +58,7 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
+                else LockBlast("FAINTED");  // TODO Translate
                 break;
             case CHANGE_REASON.SWAP:
                 if (WildBattleManager.Instance.PlayerBlast != _blast && _blast.Hp > 0)
@@ -60,21 +66,25 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
+                else LockBlast("ALREADY or FAINTED");  // TODO Translate
+
                 break;
         }
 
-        LockBlast();
         return false;
     }
 
 
     void UnlockBlast()
     {
-        _borderImg.DOFade(1f, 0);
+        _cantLayout.SetActive(false);
+
     }
 
-    void LockBlast()
+    void LockBlast(string reason)
     {
-        _borderImg.DOFade(.5f, 0);
+        _cantLayout.SetActive(true);
+
+        _cantTxt.text = reason;
     }
 }

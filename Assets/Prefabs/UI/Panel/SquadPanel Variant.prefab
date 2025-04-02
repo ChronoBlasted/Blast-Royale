@@ -2585,14 +2585,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2841059587579328826}
     m_Modifications:
-    - target: {fileID: 1838920801634448743, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
-      propertyPath: _button
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2623,7 +2615,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 256
+      value: 320
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2677,6 +2669,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlastLayout
       objectReference: {fileID: 0}
+    - target: {fileID: 1838920801634448743, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: _button
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
     - {fileID: 6652659862347756520, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
@@ -2708,17 +2708,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1429308439642378319}
     m_Modifications:
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      objectReference: {fileID: 5177440453791954738}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: HandleOnInfoButton
       objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BlastLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7962276885134453634, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Pivot.x
@@ -2800,6 +2804,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlastLayout (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BlastLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2829,17 +2845,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1429308439642378319}
     m_Modifications:
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      objectReference: {fileID: 4829314944029689399}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: HandleOnInfoButton
       objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BlastLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7962276885134453634, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Pivot.x
@@ -2921,6 +2941,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlastLayout
       objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BlastLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2976,7 +3008,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5244547114640944346, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5244547114640944346, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_Pivot.y
@@ -3434,7 +3466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3831710202846125493, guid: 13d569da243657244a477929dc9d6b00, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 256
+      value: 320
       objectReference: {fileID: 0}
     - target: {fileID: 3831710202846125493, guid: 13d569da243657244a477929dc9d6b00, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3650,7 +3682,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5244547114640944346, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5244547114640944346, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_Pivot.y
@@ -3898,17 +3930,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1429308439642378319}
     m_Modifications:
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      objectReference: {fileID: 4541065529459983833}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: HandleOnInfoButton
       objectReference: {fileID: 0}
-    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+    - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BlastLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7962276885134453634, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Pivot.x
@@ -3989,6 +4025,18 @@ PrefabInstance:
     - target: {fileID: 8669150381888830958, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Name
       value: BlastLayout (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 7777826009455879536, guid: 78811f0782a130c47adec9c54eeeaec7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BlastLayout, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

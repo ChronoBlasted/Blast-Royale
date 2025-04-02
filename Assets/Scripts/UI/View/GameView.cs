@@ -126,7 +126,7 @@ public class GameView : View
         }
         else
         {
-            await _dialogLayout.UpdateTextAsync("Wild blast wait and regen mana !");
+            await _dialogLayout.UpdateTextAsync("Wild " + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
 
             waiterHUD = _opponentHUD;
         }
@@ -195,6 +195,8 @@ public class GameView : View
                 break;
             case ItemBehaviour.CATCH:
 
+                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString());
+
                 if (isCaptured)
                 {
                     // DoBlastTrapAnim
@@ -204,11 +206,10 @@ public class GameView : View
                 else
                 {
                     // DoBlastTrapAnim
+
+                    await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString() + " !");
+                    break;
                 }
-
-                await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString() + " !");
-
-                break;
         }
     }
 
@@ -217,49 +218,35 @@ public class GameView : View
         HUDLayout attackerHUD;
         HUDLayout defenderHUD;
 
-        if (isPlayer)
-        {
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() + 
-                " do " + 
-                NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() + 
-                " and does " + 
-                damage + 
-                " damage to " + 
-                _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + 
-                " !");
+        float effective = NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
-            attackerHUD = _playerHUD;
-            defenderHUD = _opponentHUD;
-        }
-        else
-        {
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() +
-                " do " + 
-                NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() + 
-                " and does " + 
-                damage + 
-                " damage to " +
-                _dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + 
-                " !");
+        var isWild = isPlayer ? "Wild " : "";
 
-            attackerHUD = _opponentHUD;
-            defenderHUD = _playerHUD;
-        }
+        await _dialogLayout.UpdateTextAsync(
+            isWild +
+            _dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() +
+            " do " +
+            NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() +
+            " !");
 
-        await attackerHUD.DoAttackAnimAsync();
-
-        defenderHUD.UpdateHpBar(defender.Hp);
+        attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
+        defenderHUD = isPlayer ? _opponentHUD : _playerHUD;
 
         attackerHUD.UpdateManaBar(attacker.Mana);
 
-        if (NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type) == 2)
+        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);
+
+        if (effective == 2)
         {
             await _dialogLayout.UpdateTextAsync("It's super affective !");
         }
-        else if (NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type) == .5f)
+        else if (effective == .5f)
         {
             await _dialogLayout.UpdateTextAsync("It's not super affective !");
         }
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
     }
 
     public async Task CantAttack(bool isPlayer, Blast blast, Move move)
@@ -270,12 +257,19 @@ public class GameView : View
 
         attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
 
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
+        var isWild = isPlayer ? "Wild " : "";
+
+        await _dialogLayout.UpdateTextAsync(
+            isWild +
+            NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString()
+            + " don't have enough mana to do "
+            + NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString());
     }
 
     public async Task MultiplierAttack(bool isPlayer, Blast blast, Move move)
     {
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
+        var isWild = isPlayer ? "Wild " : "";
+        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
     }
 
     public async void DoEndMatch(string textToShow)

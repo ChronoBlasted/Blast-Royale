@@ -42,7 +42,7 @@ public enum UIType
     BlastPedia = ResourceType.BlastPedia,
     ItemPedia = ResourceType.ItemPedia,
     ErrorMsg = ResourceType.ErrorMsg,
-    MovePedia = ResourceType.MovePedia,
+    MovePedia = ResourceType.MovePedia
 }
 
 public enum StatType
@@ -53,5 +53,5 @@ public enum StatType
     Attack = ResourceType.Attack,
     Defense = ResourceType.Defense,
     Speed = ResourceType.Speed,
-    Type = ResourceType.Type,
+    Type = ResourceType.Type
 }

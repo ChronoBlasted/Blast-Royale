@@ -20,13 +20,13 @@ public class LeaderboardTab : NavBarTab
 
         UIManager.Instance.LeaderboardView.UpdateActiveLeaderboard();
 
-        _bg.color = ColorManager.Instance.ActiveColor;
+        _bg.sprite = ColorManager.Instance.ActiveSprite;
     }
 
     public override void HandleOnReset()
     {
         base.HandleOnReset();
 
-        _bg.color = ColorManager.Instance.InactiveColor;
+        _bg.sprite = ColorManager.Instance.InactiveSprite;
     }
 }

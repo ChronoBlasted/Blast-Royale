@@ -9,7 +9,7 @@ public class LevelExpPopup : Popup
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastLvlTxt;
     [SerializeField] SliderBar _expBar;
-    [SerializeField] Image  _blastImg;
+    [SerializeField] Image _blastImg;
 
     [SerializeField] Button _closeButton;
 
@@ -33,12 +33,13 @@ public class LevelExpPopup : Popup
         BlastData data = NakamaData.Instance.GetBlastDataById(blast.data_id);
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
-        _blastLvlTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
+        _blastLvlTxt.text = "LVL." + blast.Level;
 
-        _expBar.Init(blast.exp, NakamaLogic.CalculateExperienceFromLevel(NakamaLogic.CalculateLevelFromExperience(blast.exp) + 1));
+        _expBar.Init(blast.GetRatioExp(), blast.GetRatioExpNextLevel());
 
-        var expGain = NakamaLogic.CalculateExpGain(NakamaData.Instance.GetBlastDataById(blast.data_id).expYield, NakamaLogic.CalculateLevelFromExperience(blast.exp), NakamaLogic.CalculateLevelFromExperience(enemyBlast.exp));
-        _expBar.SetValueSmooth(blast.exp + expGain, .5f, 1f, DG.Tweening.Ease.InSine);
+        var expGain = NakamaLogic.CalculateExpGain(NakamaData.Instance.GetBlastDataById(blast.data_id).expYield, blast.Level, enemyBlast.Level);
+
+        _expBar.SetValueSmooth(blast.GetRatioExp() + expGain, .5f, 1f, DG.Tweening.Ease.InSine);
 
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
     }

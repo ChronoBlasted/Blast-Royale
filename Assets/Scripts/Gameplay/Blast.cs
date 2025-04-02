@@ -22,13 +22,14 @@ public class Blast
     public Status status;
     public List<int> activeMoveset;
 
-    public int MaxHp { get => CalculateBlastHp(NakamaData.Instance.GetBlastDataById(data_id).hp, iv, NakamaLogic.CalculateLevelFromExperience(exp)); }
-    public int MaxMana { get => CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data_id).mana, iv, NakamaLogic.CalculateLevelFromExperience(exp)); }
+    public int MaxHp { get => CalculateBlastHp(NakamaData.Instance.GetBlastDataById(data_id).hp, iv, Level); }
+    public int MaxMana { get => CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data_id).mana, iv, Level); }
     public int Hp { get => hp; set => hp = Math.Clamp(value, 0, MaxHp); }
     public int Mana { get => mana; set => mana = Math.Clamp(value, 0, MaxMana); }
-    public int Attack { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).attack, NakamaLogic.CalculateLevelFromExperience(exp), iv); }
-    public int Defense { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).defense, NakamaLogic.CalculateLevelFromExperience(exp), iv); }
-    public int Speed { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, NakamaLogic.CalculateLevelFromExperience(exp), iv); }
+    public int Attack { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).attack, Level, iv); }
+    public int Defense { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).defense, Level, iv); }
+    public int Speed { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, Level, iv); }
+    public int Level { get => NakamaLogic.CalculateLevelFromExperience(exp); }
 
     public Blast(string uuid, int data, int exp, int iv, List<int> moveset, Status status = Status.NONE)
     {
@@ -36,8 +37,8 @@ public class Blast
         this.data_id = data;
         this.exp = exp;
         this.iv = iv;
-        hp = CalculateBlastHp(NakamaData.Instance.GetBlastDataById(data).hp, iv, NakamaLogic.CalculateLevelFromExperience(exp));
-        mana = CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data).mana, iv, NakamaLogic.CalculateLevelFromExperience(exp));
+        hp = CalculateBlastHp(NakamaData.Instance.GetBlastDataById(data).hp, iv, Level);
+        mana = CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data).mana, iv, Level);
         this.status = status;
         this.activeMoveset = moveset;
     }
@@ -55,5 +56,15 @@ public class Blast
     int CalculateBlastMana(int baseMana, int iv, int level)
     {
         return Mathf.FloorToInt(((baseMana + iv) * (level / 100f) + level / 2) + 10);
+    }
+
+    public int GetRatioExp()
+    {
+        return exp - NakamaLogic.CalculateExperienceFromLevel(Level);
+    }
+
+    public int GetRatioExpNextLevel()
+    {
+        return NakamaLogic.CalculateExperienceFromLevel(Level + 1) - NakamaLogic.CalculateExperienceFromLevel(Level);
     }
 }

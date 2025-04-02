@@ -105,7 +105,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _gameView.DisableAttackPanel();
         _gameView.HideNavBar();
 
-        _gameView.DialogLayout.UpdateText("Waiting for opponent...");
+        //_gameView.DialogLayout.UpdateText("Waiting for opponent..."); // ONLY IN PVP
     }
 
     public async void PlayTurn(TurnStateData turnState)
@@ -141,10 +141,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                     _playerSquads[_playerAction.SelectedBlastIndex].status = itemData.status;
                     break;
                 case ItemBehaviour.CATCH:
-                    if (turnState.catched)
-                    {
-                        _gameView.DoEndMatch("You caught the wild " + _dataUtils.GetBlastDataRef(_wildBlast.data_id).Name.GetLocalizedString());
-                    }
                     break;
             }
 
@@ -157,6 +153,13 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             UIManager.Instance.ChangeBlastPopup.UpdateData(_playerSquads);
 
             await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+            if (turnState.catched)
+            {
+                _gameView.DoEndMatch("You caught the wild " + _dataUtils.GetBlastDataRef(_wildBlast.data_id).Name.GetLocalizedString());
+
+                return;
+            }
         }
 
         if (_playerAction.TurnType == TurnType.ATTACK && _wbAction.TurnType == TurnType.ATTACK)
@@ -167,7 +170,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             else await Attack(turnState, false);
 
             if (await CheckIfKO()) return;
-
 
             if (isPlayerBlastFaster == false) await Attack(turnState, true);
             else await Attack(turnState, false);

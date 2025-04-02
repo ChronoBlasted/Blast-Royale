@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.6
+  m_fontSize: 32
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.4
+  m_fontSize: 30.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -674,6 +674,7 @@ MonoBehaviour:
   _blastNameTxt: {fileID: 2274616815099523819}
   _blastLevelTxt: {fileID: 4324723022792292212}
   _blastImg: {fileID: 0}
+  _coverWhite: {fileID: 0}
   _borderHUD: {fileID: 5959025029429621815}
   _hpSlider: {fileID: 4119877489442215221}
   _manaSlider: {fileID: 6452923543159697837}
@@ -714,9 +715,37 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7246309700298238267, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246309700298238267, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7555471231953289663, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_fontSize
       value: 25.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.b
+      value: 0.504717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.r
+      value: 0.57056385
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123672433485208253, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123672433485208253, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8765136229423921073, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.b
@@ -859,9 +888,37 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7246309700298238267, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7246309700298238267, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7555471231953289663, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_fontSize
       value: 25.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.g
+      value: 0.68768775
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.r
+      value: 0.36320752
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123672433485208253, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123672433485208253, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8982943721299130083, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Pivot.x
