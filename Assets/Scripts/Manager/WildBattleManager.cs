@@ -26,6 +26,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     Blast _playerBlast;
     List<Blast> _playerSquads = new List<Blast>();
     List<Item> _playerItems = new List<Item>();
+    Meteo _battleMeteo;
 
     Blast _wildBlast;
 
@@ -66,6 +67,10 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         }
 
         _wildBlast = new Blast("", startData.id, startData.exp, startData.iv, startData.activeMoveset, startData.status);
+
+        _battleMeteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
+
+        _gameView.SetMeteo(_battleMeteo);
 
         _gameView.PlayerHUD.Init(_playerBlast);
         _gameView.OpponentHUD.Init(_wildBlast);

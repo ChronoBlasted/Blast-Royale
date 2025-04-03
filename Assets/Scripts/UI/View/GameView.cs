@@ -109,6 +109,15 @@ public class GameView : View
 
     #region WildBlastBattle
 
+    public void SetMeteo(Meteo meteo)
+    {
+        var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
+
+        DialogLayout.SetMeteo(meteoData.Name.GetLocalizedString());
+
+        //Instantiate(meteoData.Prefab);
+    }
+
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
     {
         _playerHUD.UpdateManaBar(playerBlast.Mana);

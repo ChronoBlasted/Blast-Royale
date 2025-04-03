@@ -207,6 +207,7 @@ public class StartStateData
     public int iv;
     public Status status;
     public List<int> activeMoveset;
+    public Meteo meteo;
 }
 
 [Serializable]

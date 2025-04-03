@@ -168,4 +168,11 @@ enum TYPE {
     DARK
 }
 
+enum Meteo {
+    None,
+    Sun,
+    Rain,
+    Wind,
+}
+
 //#endregion

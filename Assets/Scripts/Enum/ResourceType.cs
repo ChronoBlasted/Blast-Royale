@@ -25,7 +25,11 @@ public enum ResourceType
     Attack = 422,
     Defense = 423,
     Speed = 424,
-    Type = 425
+    Type = 425,
+
+    Sun = 440,
+    Rain = 441,
+    Wind = 442,
 }
 
 public enum UIType
@@ -54,4 +58,12 @@ public enum StatType
     Defense = ResourceType.Defense,
     Speed = ResourceType.Speed,
     Type = ResourceType.Type
+}
+
+public enum Meteo
+{
+    None = ResourceType.None,
+    Sun = ResourceType.Sun,
+    Rain = ResourceType.Rain,
+    Wind = ResourceType.Wind,
 }

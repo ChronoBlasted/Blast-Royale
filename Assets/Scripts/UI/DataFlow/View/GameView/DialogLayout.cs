@@ -7,13 +7,14 @@ using UnityEngine;
 
 public class DialogLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _dialogTxt;
+    [SerializeField] TMP_Text _dialogTxt, meteoTxt;
 
     bool _skipAsync;
     public void UpdateText(string text)
     {
         _dialogTxt.text = text;
     }
+
 
     public async Task UpdateTextAsync(string text)
     {
@@ -41,5 +42,10 @@ public class DialogLayout : MonoBehaviour
         _skipAsync = true;
 
         // A tester
+    }
+
+    public void SetMeteo(string newMeteo)
+    {
+        meteoTxt.text = newMeteo;
     }
 }

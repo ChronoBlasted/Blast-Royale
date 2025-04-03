@@ -206,4 +206,14 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
                 return 1;
         }
     }
+
+    public static TEnum GetEnumFromIndex<TEnum>(int index) where TEnum : Enum
+    {
+        TEnum[] values = (TEnum[])Enum.GetValues(typeof(TEnum));
+
+        if (index < 0 || index >= values.Length)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index must be within the valid range.");
+
+        return values[index];
+    }
 }

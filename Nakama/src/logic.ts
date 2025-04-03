@@ -217,7 +217,6 @@ function addExpOnBlastInGame(nk: nkruntime.Nakama, logger: nkruntime.Logger, pla
     addExpOnBlast(nk, logger, playerId, currentPlayerBlast.uuid, expToAdd);
 }
 
-
 function healHealthBlast(blast: Blast, amount: number): Blast {
     blast.hp += amount;
 
@@ -225,6 +224,7 @@ function healHealthBlast(blast: Blast, amount: number): Blast {
 
     return blast;
 }
+
 function healManaBlast(blast: Blast, amount: number): Blast {
     blast.mana += amount;
 
@@ -254,6 +254,11 @@ function isBlastCaptured(
     const randomValue = Math.random() * 100;
 
     return randomValue <= captureProbability;
+}
+
+function getRandomMeteo(): Meteo {
+    const values = Object.values(Meteo).filter(value => typeof value === "number") as Meteo[];
+    return randomElement(values);
 }
 
 //#endregion

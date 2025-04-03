@@ -37,6 +37,8 @@ interface WildBattleData {
 
     wild_blast: Blast | null;
 
+    meteo : Meteo
+
     TurnStateData: TurnStateData;
 }
 
@@ -46,6 +48,7 @@ interface StartStateData {
     iv: number;
     status: STATUS;
     activeMoveset: number[];
+    meteo : Meteo;
 }
 
 interface TurnStateData {
@@ -80,6 +83,8 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         player1_blasts: [],
         player1_items: [],
         wild_blast: null,
+
+        meteo : Meteo.None,
 
         TurnStateData: {
             p_move_damage: 0,
@@ -164,12 +169,15 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             state.wild_blast = getRandomBlastInAllPlayerArea(state.player1_id, nk);
 
+            state.meteo = getRandomMeteo();
+
             const StartData: StartStateData = {
                 id: state.wild_blast.data_id,
                 exp: state.wild_blast.exp,
                 iv: state.wild_blast.iv,
                 status: STATUS.NONE,
                 activeMoveset: state.wild_blast.activeMoveset!,
+                meteo: state.meteo,
             }
 
             logger.debug('Random blast with id: %d, lvl: %l appeared', state.wild_blast.data_id, calculateLevelFromExperience(state.wild_blast.exp));
