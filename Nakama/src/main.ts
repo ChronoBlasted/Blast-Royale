@@ -156,7 +156,7 @@ enum RARITY {
     UNIQUE,
 }
 
-enum TYPE {
+enum Type {
     NORMAL,
     FIRE,
     WATER,
@@ -172,7 +172,7 @@ enum Meteo {
     None,
     Sun,
     Rain,
-    Wind,
+    Leaves,
 }
 
 //#endregion

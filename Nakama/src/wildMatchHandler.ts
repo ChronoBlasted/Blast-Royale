@@ -471,7 +471,8 @@ function applyBlastAttack(attacker: Blast, defender: Blast, move: Move, state: W
         defender.defense,
         move.type,
         getBlastDataById(defender.data_id!).type,
-        move.power
+        move.power,
+        state.meteo,
     );
 
     defender.hp = clamp(defender.hp - damage, 0, Number.POSITIVE_INFINITY);

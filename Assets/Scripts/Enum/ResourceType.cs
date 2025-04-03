@@ -29,7 +29,7 @@ public enum ResourceType
 
     Sun = 440,
     Rain = 441,
-    Wind = 442,
+    Leaves = 442,
 }
 
 public enum UIType
@@ -65,5 +65,5 @@ public enum Meteo
     None = ResourceType.None,
     Sun = ResourceType.Sun,
     Rain = ResourceType.Rain,
-    Wind = ResourceType.Wind,
+    Leaves = ResourceType.Leaves,
 }

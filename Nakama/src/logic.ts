@@ -69,105 +69,109 @@ function calculateDamage(
     attackerLevel: number,
     attackerAttack: number,
     defenderDefense: number,
-    attackerType: TYPE,
-    defenderType: TYPE,
-    movePower: number
+    attackType: Type,
+    defenderType: Type,
+    movePower: number,
+    meteo: Meteo,
 ): number {
-    const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
+    const weatherModifier = calculateWeatherModifier(meteo, attackType);
+
+    const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackType, defenderType) * (attackerAttack / defenderDefense) / 50) * weatherModifier;
+    
     return Math.floor(damage);
 }
 
-function getTypeMultiplier(moveType: TYPE, defenderType: TYPE): number {
+function getTypeMultiplier(moveType: Type, defenderType: Type): number {
     switch (moveType) {
-        case TYPE.FIRE:
+        case Type.FIRE:
             switch (defenderType) {
-                case TYPE.GRASS:
+                case Type.GRASS:
                     return 2;
-                case TYPE.WATER:
+                case Type.WATER:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case TYPE.WATER:
+        case Type.WATER:
             switch (defenderType) {
-                case TYPE.FIRE:
+                case Type.FIRE:
                     return 2;
-                case TYPE.GRASS:
+                case Type.GRASS:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case TYPE.GRASS:
+        case Type.GRASS:
             switch (defenderType) {
-                case TYPE.WATER:
+                case Type.WATER:
                     return 2;
-                case TYPE.FIRE:
+                case Type.FIRE:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case TYPE.NORMAL:
+        case Type.NORMAL:
             switch (defenderType) {
-                case TYPE.LIGHT:
+                case Type.LIGHT:
                     return 0.5;
-                case TYPE.DARK:
+                case Type.DARK:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case TYPE.GROUND:
+        case Type.GROUND:
             switch (defenderType) {
-                case TYPE.ELECTRIC:
+                case Type.ELECTRIC:
                     return 2;
-                case TYPE.FLY:
+                case Type.FLY:
                     return 0;
                 default:
                     return 1;
             }
 
-        case TYPE.FLY:
+        case Type.FLY:
             switch (defenderType) {
-                case TYPE.ELECTRIC:
+                case Type.ELECTRIC:
                     return 0;
-                case TYPE.GROUND:
+                case Type.GROUND:
                     return 2;
                 default:
                     return 1;
             }
 
-        case TYPE.ELECTRIC:
+        case Type.ELECTRIC:
             switch (defenderType) {
-                case TYPE.GROUND:
+                case Type.GROUND:
                     return 0;
-                case TYPE.FLY:
+                case Type.FLY:
                     return 2;
                 default:
                     return 1;
             }
 
-        case TYPE.LIGHT:
+        case Type.LIGHT:
             switch (defenderType) {
-                case TYPE.DARK:
+                case Type.DARK:
                     return 2;
-                case TYPE.NORMAL:
+                case Type.NORMAL:
                     return 2;
-                case TYPE.LIGHT:
+                case Type.LIGHT:
                     return 0.5;
                 default:
                     return 1;
             }
 
-        case TYPE.DARK:
+        case Type.DARK:
             switch (defenderType) {
-                case TYPE.LIGHT:
+                case Type.LIGHT:
                     return 2;
-                case TYPE.NORMAL:
+                case Type.NORMAL:
                     return 2;
-                case TYPE.DARK:
+                case Type.DARK:
                     return 0.5;
                 default:
                     return 1;
@@ -178,6 +182,35 @@ function getTypeMultiplier(moveType: TYPE, defenderType: TYPE): number {
     }
 }
 
+function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
+    let modifier = 1.0;
+
+    switch (weather) {
+        case Meteo.Sun:
+            if (moveType === Type.FIRE) {
+                modifier = 1.5;
+            }
+            break;
+
+        case Meteo.Rain:
+            if (moveType === Type.WATER) {
+                modifier = 1.5;
+            }
+            break;
+
+        case Meteo.Leaves:
+            if (moveType === Type.GRASS) {
+                modifier = 1.5;
+            }
+
+            break;
+
+        case Meteo.None:
+            break;
+    }
+
+    return modifier;
+}
 
 function calculateStaminaRecovery(
     maxStamina: number,

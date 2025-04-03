@@ -19,7 +19,7 @@ interface Blast {
 
 interface BlastData {
     id: number
-    type: TYPE
+    type: Type
     hp: number
     mana: number
     attack: number
@@ -41,7 +41,7 @@ interface nextEvolutionStruct {
 
 const Pantin: BlastData = { // Pantin
     id: 0,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 80,
     mana: 75,
     attack: 70,
@@ -60,7 +60,7 @@ const Pantin: BlastData = { // Pantin
 
 const Lizzy: BlastData = { // Lizzy
     id: 1,
-    type: TYPE.GRASS,
+    type: Type.GRASS,
     hp: 70,
     mana: 80,
     attack: 75,
@@ -79,7 +79,7 @@ const Lizzy: BlastData = { // Lizzy
 
 const Punchball: BlastData = { // Punchball
     id: 2,
-    type: TYPE.GROUND,
+    type: Type.GROUND,
     hp: 85,
     mana: 70,
     attack: 80,
@@ -98,7 +98,7 @@ const Punchball: BlastData = { // Punchball
 
 const Jellys: BlastData = { // Jellys
     id: 3,
-    type: TYPE.WATER,
+    type: Type.WATER,
     hp: 75,
     mana: 85,
     attack: 70,
@@ -117,7 +117,7 @@ const Jellys: BlastData = { // Jellys
 
 const Kitchi: BlastData = { // Kitchi
     id: 4,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 70,
     attack: 75,
@@ -136,7 +136,7 @@ const Kitchi: BlastData = { // Kitchi
 
 const Kenchi: BlastData = { // Kenchi
     id: 5,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -155,7 +155,7 @@ const Kenchi: BlastData = { // Kenchi
 
 const Mousy: BlastData = { // Mousy
     id: 6,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -174,7 +174,7 @@ const Mousy: BlastData = { // Mousy
 
 const Clawball: BlastData = { // Clawball
     id: 7,
-    type: TYPE.GROUND,
+    type: Type.GROUND,
     hp: 80,
     mana: 70,
     attack: 75,
@@ -193,7 +193,7 @@ const Clawball: BlastData = { // Clawball
 
 const Balt: BlastData = { // Balt
     id: 8,
-    type: TYPE.FLY,
+    type: Type.FLY,
     hp: 70,
     mana: 80,
     attack: 65,
@@ -212,7 +212,7 @@ const Balt: BlastData = { // Balt
 
 const Stagpan: BlastData = { // Stagpan
     id: 9,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -231,7 +231,7 @@ const Stagpan: BlastData = { // Stagpan
 
 const Botte: BlastData = { // Botte
     id: 10,
-    type: TYPE.GROUND,
+    type: Type.GROUND,
     hp: 80,
     mana: 75,
     attack: 70,
@@ -250,7 +250,7 @@ const Botte: BlastData = { // Botte
 
 const Booh: BlastData = { // Booh
     id: 11,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -269,7 +269,7 @@ const Booh: BlastData = { // Booh
 
 const Ghoosto: BlastData = { // Ghoosto
     id: 12,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -288,7 +288,7 @@ const Ghoosto: BlastData = { // Ghoosto
 
 const Goblin: BlastData = { // Goblin
     id: 13,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -307,7 +307,7 @@ const Goblin: BlastData = { // Goblin
 
 const MiniDevil: BlastData = { // MiniDevil
     id: 14,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -326,7 +326,7 @@ const MiniDevil: BlastData = { // MiniDevil
 
 const DevilDare: BlastData = { // DevilDare
     id: 15,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 80,
     mana: 75,
     attack: 70,
@@ -345,7 +345,7 @@ const DevilDare: BlastData = { // DevilDare
 
 const Masks: BlastData = { // Masks
     id: 16,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -364,7 +364,7 @@ const Masks: BlastData = { // Masks
 
 const Luckun: BlastData = { // Luckun
     id: 17,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -383,7 +383,7 @@ const Luckun: BlastData = { // Luckun
 
 const MiniHam: BlastData = { // MiniHam
     id: 18,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -402,7 +402,7 @@ const MiniHam: BlastData = { // MiniHam
 
 const SadHam: BlastData = { // SadHam
     id: 19,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -421,7 +421,7 @@ const SadHam: BlastData = { // SadHam
 
 const MoiHam: BlastData = { // MoiHam
     id: 20,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 80,
     mana: 75,
     attack: 70,
@@ -440,7 +440,7 @@ const MoiHam: BlastData = { // MoiHam
 
 const Bearos: BlastData = { // Bearos
     id: 21,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -459,7 +459,7 @@ const Bearos: BlastData = { // Bearos
 
 const Treex: BlastData = { // Treex
     id: 22,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -478,7 +478,7 @@ const Treex: BlastData = { // Treex
 
 const Moutmout: BlastData = { // Moutmout
     id: 23,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -497,7 +497,7 @@ const Moutmout: BlastData = { // Moutmout
 
 const Piggy: BlastData = { // Piggy
     id: 24,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -516,7 +516,7 @@ const Piggy: BlastData = { // Piggy
 
 const Bleaub: BlastData = { // Bleaub
     id: 25,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -535,7 +535,7 @@ const Bleaub: BlastData = { // Bleaub
 
 const Shroom: BlastData = { // Shroom
     id: 26,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -554,7 +554,7 @@ const Shroom: BlastData = { // Shroom
 
 const Lantern: BlastData = { // Lantern
     id: 27,
-    type: TYPE.WATER,
+    type: Type.WATER,
     hp: 70,
     mana: 75,
     attack: 65,
@@ -573,7 +573,7 @@ const Lantern: BlastData = { // Lantern
 
 const Droplet: BlastData = { // Droplet
     id: 28,
-    type: TYPE.WATER,
+    type: Type.WATER,
     hp: 75,
     mana: 70,
     attack: 80,
@@ -591,7 +591,7 @@ const Droplet: BlastData = { // Droplet
 };
 const Fireball: BlastData = { // Fireball
     id: 29,
-    type: TYPE.FIRE,
+    type: Type.FIRE,
     hp: 80,
     mana: 60,
     attack: 90,
@@ -610,7 +610,7 @@ const Fireball: BlastData = { // Fireball
 
 const Mystical: BlastData = { // Mystical
     id: 30,
-    type: TYPE.LIGHT,
+    type: Type.LIGHT,
     hp: 75,
     mana: 65,
     attack: 85,
@@ -629,7 +629,7 @@ const Mystical: BlastData = { // Mystical
 
 const Clover: BlastData = { // Clover
     id: 31,
-    type: TYPE.DARK,
+    type: Type.DARK,
     hp: 70,
     mana: 70,
     attack: 80,
@@ -648,7 +648,7 @@ const Clover: BlastData = { // Clover
 
 const Scorlov: BlastData = { // Scorlov
     id: 32,
-    type: TYPE.DARK,
+    type: Type.DARK,
     hp: 85,
     mana: 55,
     attack: 75,
@@ -667,7 +667,7 @@ const Scorlov: BlastData = { // Scorlov
 
 const Wormie: BlastData = { // Wormie
     id: 33,
-    type: TYPE.GRASS,
+    type: Type.GRASS,
     hp: 60,
     mana: 80,
     attack: 70,
@@ -686,7 +686,7 @@ const Wormie: BlastData = { // Wormie
 
 const Skel: BlastData = { // Skel
     id: 34,
-    type: TYPE.DARK,
+    type: Type.DARK,
     hp: 70,
     mana: 70,
     attack: 70,
@@ -705,7 +705,7 @@ const Skel: BlastData = { // Skel
 
 const Frederic: BlastData = { // Frederic
     id: 35,
-    type: TYPE.LIGHT,
+    type: Type.LIGHT,
     hp: 75,
     mana: 65,
     attack: 85,
@@ -724,7 +724,7 @@ const Frederic: BlastData = { // Frederic
 
 const Smoky: BlastData = { // Smoky
     id: 36,
-    type: TYPE.WATER,
+    type: Type.WATER,
     hp: 80,
     mana: 60,
     attack: 90,
@@ -743,7 +743,7 @@ const Smoky: BlastData = { // Smoky
 
 const Forty: BlastData = { // Forty
     id: 37,
-    type: TYPE.GROUND,
+    type: Type.GROUND,
     hp: 100,
     mana: 55,
     attack: 45,
@@ -762,7 +762,7 @@ const Forty: BlastData = { // Forty
 
 const Bud: BlastData = { // Bud
     id: 38,
-    type: TYPE.DARK,
+    type: Type.DARK,
     hp: 60,
     mana: 80,
     attack: 70,
@@ -781,7 +781,7 @@ const Bud: BlastData = { // Bud
 
 const Hiboo: BlastData = { // Hiboo
     id: 39,
-    type: TYPE.NORMAL,
+    type: Type.NORMAL,
     hp: 90,
     mana: 100,
     attack: 80,
@@ -800,7 +800,7 @@ const Hiboo: BlastData = { // Hiboo
 
 const Eggy: BlastData = { // Eggy
     id: 40,
-    type: TYPE.GROUND,
+    type: Type.GROUND,
     hp: 100,
     mana: 40,
     attack: 30,
@@ -819,7 +819,7 @@ const Eggy: BlastData = { // Eggy
 
 const Dracoblast: BlastData = { // Dracoblast
     id: 41,
-    type: TYPE.FLY,
+    type: Type.FLY,
     hp: 90,
     mana: 90,
     attack: 90,
@@ -838,7 +838,7 @@ const Dracoblast: BlastData = { // Dracoblast
 
 const Cerberus: BlastData = { // Cerberus
     id: 42,
-    type: TYPE.FIRE,
+    type: Type.FIRE,
     hp: 100,
     mana: 80,
     attack: 100,
