@@ -115,7 +115,7 @@ public class GameView : View
 
         DialogLayout.SetMeteo(meteoData.Name.GetLocalizedString());
 
-        //Instantiate(meteoData.Prefab);
+        //Instantiate(meteoData.Prefab); TODO mettre un fx de meteo
     }
 
     public void EndTurn(Blast playerBlast, Blast opponentBlast)

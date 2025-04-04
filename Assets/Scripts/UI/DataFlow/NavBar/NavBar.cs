@@ -11,6 +11,8 @@ public class NavBar : MonoBehaviour
 
     public void Init()
     {
+        _currentTab = null;
+
         ChangeTab(_firstTab);
     }
 
