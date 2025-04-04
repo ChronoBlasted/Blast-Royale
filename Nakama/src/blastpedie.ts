@@ -68,8 +68,9 @@ const Lizzy: BlastData = { // Lizzy
     speed: 65,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: VineWhip.id, levelMin: 5 },
-        { move_id: RazorLeaf.id, levelMin: 10 },
+        { move_id: VineWhip.id, levelMin: 2 },
+        { move_id: RazorLeaf.id, levelMin: 3 },
+        { move_id: SolarBeam.id, levelMin: 4 },
     ],
     nextEvolution: null,
     catchRate: 35,

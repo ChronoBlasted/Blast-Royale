@@ -65,6 +65,34 @@ function getRandomActiveMoveset(blastData: BlastData, exp: number): number[] {
 
 //#region Battle
 
+function addPlatformType(p_platform: Type[], newType: Type): Type[] {
+    if (p_platform.length < 3) {
+        p_platform.push(newType);
+    } else {
+        p_platform.shift();
+        p_platform.push(newType);
+    }
+
+    return p_platform;
+}
+function getAmountOfPlatformTypeByType(p_platform: Type[], typeToCount: Type): number {
+    return p_platform.filter(type => type === typeToCount).length;
+}
+
+function removePlatformTypeByType(p_platform: Type[], typeToRemove: Type, numberToRemove: number): Type[] {
+    let removedCount = 0;
+
+    for (let i = p_platform.length - 1; i >= 0 && removedCount < numberToRemove; i--) {
+        if (p_platform[i] === typeToRemove) {
+            p_platform.splice(i, 1);
+            removedCount++;
+        }
+    }
+
+    return p_platform;
+}
+
+
 function calculateDamage(
     attackerLevel: number,
     attackerAttack: number,

@@ -34,10 +34,14 @@ interface WildBattleData {
     player1_current_blast: Blast | null;
     player1_blasts: Blast[];
     player1_items: Item[];
+    player1_platform: Type[];
+
 
     wild_blast: Blast | null;
+    wild_blast_platform: Type[];
 
-    meteo : Meteo
+
+    meteo: Meteo
 
     TurnStateData: TurnStateData;
 }
@@ -48,17 +52,19 @@ interface StartStateData {
     iv: number;
     status: STATUS;
     activeMoveset: number[];
-    meteo : Meteo;
+    meteo: Meteo;
 }
 
 interface TurnStateData {
     p_move_damage: number;
     p_move_status: STATUS;
+    p_platform: Type[];
 
     wb_turn_type: TurnType;
     wb_move_index: number;
     wb_move_damage: number;
     wb_move_status: STATUS;
+    wb_platform: Type[];
 
     catched: boolean;
 }
@@ -82,17 +88,22 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         player1_current_blast: null,
         player1_blasts: [],
         player1_items: [],
-        wild_blast: null,
+        player1_platform: [],
 
-        meteo : Meteo.None,
+        wild_blast: null,
+        wild_blast_platform: [],
+
+        meteo: Meteo.None,
 
         TurnStateData: {
             p_move_damage: 0,
             p_move_status: STATUS.NONE,
+            p_platform: [],
             wb_turn_type: TurnType.NONE,
             wb_move_index: 0,
             wb_move_damage: 0,
             wb_move_status: STATUS.NONE,
+            wb_platform: [],
             catched: false
         },
     };
@@ -185,7 +196,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             state.battle_state = BattleState.WAITING;
 
             dispatcher.broadcastMessage(OpCodes.MATCH_START, JSON.stringify(StartData));
-            
+
             logger.debug('______________ END START BATTLE ______________');
 
             break;
@@ -194,7 +205,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             messages.forEach(function (message) {
                 switch (message.opCode) {
                     case OpCodes.PLAYER_READY:
-                        
+
                         state.player1_state = PlayerState.READY;
 
                         logger.debug('______________ PLAYER 1 READY ______________');
@@ -226,10 +237,12 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 state.TurnStateData = {
                     p_move_damage: 0,
                     p_move_status: STATUS.NONE,
+                    p_platform: state.player1_platform,
 
                     wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
                     wb_move_damage: 0,
                     wb_move_status: STATUS.NONE,
+                    wb_platform: state.wild_blast_platform,
 
                     wb_turn_type: TurnType.NONE,
 
@@ -245,6 +258,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             ({ state } = ErrorFunc(state, "Player 1 move null", dispatcher));
                             return;
                         }
+
 
                         state = performAttackSequence(state, move, dispatcher, nk, logger);
                         break;
@@ -333,7 +347,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                     if (state.TurnStateData.wb_turn_type != TurnType.WAIT) state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
-                    logger.debug('Wild blast HP : %h, Mana : %m',state.wild_blast?.hp, state.wild_blast?.mana);
+                    logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
 
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
 
@@ -389,8 +403,8 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     state.player1_current_blast = state.player1_blasts[msgChangeBlast];
                 }
 
-                logger.debug('Wild blast HP : %h, Mana : %m',  state.wild_blast?.hp, state.wild_blast?.mana);
-                logger.debug('Player blast HP : %h, Mana : %m',  state.player1_current_blast?.hp, state.player1_current_blast?.mana);
+                logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
+                logger.debug('Player blast HP : %h, Mana : %m', state.player1_current_blast?.hp, state.player1_current_blast?.mana);
 
                 state.battle_state = BattleState.WAITING;
 
@@ -464,6 +478,8 @@ function connectedPlayers(s: WildBattleData): number {
 
 
 //#region  Attack Logic
+
+
 function applyBlastAttack(attacker: Blast, defender: Blast, move: Move, state: WildBattleData): number {
     let damage = calculateDamage(
         calculateLevelFromExperience(attacker.exp),
@@ -483,13 +499,34 @@ function applyBlastAttack(attacker: Blast, defender: Blast, move: Move, state: W
 
 function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkruntime.MatchDispatcher): { state: WildBattleData } {
 
-    if (state.player1_current_blast!.mana < move.cost) {
-        return { state };
+    if (move.platform_cost > 0) {
+        let amountType = getAmountOfPlatformTypeByType(state.player1_platform, move.type);
+
+        if (amountType < move.platform_cost) {
+            ({ state } = ErrorFunc(state, "Player not enough platform type", dispatcher));
+            return { state };
+        }
+
+        state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, move.platform_cost);
+
+    } else {
+
+        if (state.player1_current_blast!.mana < move.cost) {
+            return { state };
+        }
+
+        state.player1_platform = addPlatformType(state.player1_platform, move.type);
     }
+
 
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);
     state.TurnStateData.p_move_damage = damage;
     state.TurnStateData.p_move_status = STATUS.NONE;
+    state.TurnStateData.p_platform = state.player1_platform;
+    
+    if (move.platform_cost > 0) { 
+
+    }
 
     return { state };
 }
@@ -498,20 +535,34 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
 
     let wb_move = getMoveById(state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index]);
 
-    if (state.wild_blast!.mana < wb_move.cost) {
-        state.TurnStateData.wb_move_index = -1;
-    }
+    if (wb_move.platform_cost > 0) {
+        let amountType = getAmountOfPlatformTypeByType(state.wild_blast_platform, wb_move.type);
 
-    if (state.TurnStateData.wb_move_index < 0) {
-        state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, true);
-        state.TurnStateData.wb_turn_type = TurnType.WAIT;
+        if (amountType < wb_move.platform_cost) {
+            ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
+            return { state };
+        }
+
+        state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, wb_move.platform_cost);
+
     } else {
-        const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
+        if (state.wild_blast!.mana < wb_move.cost) {
+            state.TurnStateData.wb_move_index = -1;
 
-        state.TurnStateData.wb_move_damage = damage;
-        state.TurnStateData.wb_move_status = STATUS.NONE;
-        state.TurnStateData.wb_turn_type = TurnType.ATTACK;
+            state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, true);
+            state.TurnStateData.wb_turn_type = TurnType.WAIT;
+        } else {
+            const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
+    
+            state.TurnStateData.wb_move_damage = damage;
+            state.TurnStateData.wb_move_status = STATUS.NONE;
+            state.TurnStateData.wb_turn_type = TurnType.ATTACK;
+        }
+
+        state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
     }
+
+    state.TurnStateData.wb_platform = state.wild_blast_platform;
 
     return { state };
 }
