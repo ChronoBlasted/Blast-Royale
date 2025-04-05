@@ -105,7 +105,7 @@ function calculateDamage(
     const weatherModifier = calculateWeatherModifier(meteo, attackType);
 
     const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackType, defenderType) * (attackerAttack / defenderDefense) / 50) * weatherModifier;
-    
+
     return Math.floor(damage);
 }
 
@@ -239,6 +239,131 @@ function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
 
     return modifier;
 }
+
+function calculateEffectWithProbability(blast: Blast, move: Move): Blast {
+    const statusEffectProbabilities: { [key in StatusEffect]?: number } = {
+        [StatusEffect.Burn]: 0.1,
+        [StatusEffect.Seeded]: 0.1,
+        [StatusEffect.Wet]: 0.1,
+        [StatusEffect.ManaExplosion]: 0.2,
+        [StatusEffect.HpExplosion]: 0.2,
+        [StatusEffect.ManaRestore]: 0.2,
+        [StatusEffect.HpRestore]: 0.2,
+        [StatusEffect.AttackBoost]: 0.5,
+        [StatusEffect.DefenseBoost]: 0.5,
+        [StatusEffect.SpeedBoost]: 0.5,
+        [StatusEffect.AttackReduce]: 0.5,
+        [StatusEffect.DefenseReduce]: 0.5,
+        [StatusEffect.SpeedReduce]: 0.5,
+        [StatusEffect.Cleanse]: 0.5,
+    };
+
+    // Ajuste la probabilité en fonction de l'entrée "probability"
+    const effectProbability = statusEffectProbabilities[move.effect!];
+    if (Math.random() < effectProbability!) {
+        return calculateEffect(blast, move);
+    }
+
+    return blast;
+}
+
+
+function calculateEffect(blast: Blast, move: Move): Blast {
+    switch (move.effect) {
+        case StatusEffect.Burn:
+            blast.status = Status.Burn;
+            break;
+        case StatusEffect.Seeded:
+            blast.status = Status.Seeded;
+            break;
+        case StatusEffect.Wet:
+            blast.status = Status.Wet;
+            break;
+
+        case StatusEffect.ManaExplosion:
+            const manaDmg = Math.floor(blast.maxMana / 2);
+            blast.hp = Math.max(0, blast.hp - manaDmg);
+            blast.mana = Math.floor(blast.mana / 2);
+            break;
+        case StatusEffect.HpExplosion:
+            const hpCost = Math.floor(blast.maxHp / 3);
+            blast.hp = Math.max(0, blast.hp - hpCost);
+            break;
+
+        case StatusEffect.ManaRestore:
+            blast.mana = Math.min(blast.maxMana, blast.mana + move.power);
+            break;
+        case StatusEffect.HpRestore:
+            blast.hp = Math.min(blast.maxHp, blast.hp + move.power);
+            break;
+
+        case StatusEffect.AttackBoost:
+            blast.attack = Math.floor(blast.attack * 1.5);
+            blast.attack = Math.min(blast.attack, 500);
+            break;
+        case StatusEffect.DefenseBoost:
+            blast.defense = Math.floor(blast.defense * 1.5);
+            blast.defense = Math.min(blast.defense, 500);
+            break;
+        case StatusEffect.SpeedBoost:
+            blast.speed = Math.floor(blast.speed * 1.5);
+            blast.speed = Math.min(blast.speed, 500);
+            break;
+
+        case StatusEffect.AttackReduce:
+            blast.attack = Math.max(1, Math.floor(blast.attack * 0.75));
+            break;
+        case StatusEffect.DefenseReduce:
+            blast.defense = Math.max(1, Math.floor(blast.defense * 0.75));
+            break;
+        case StatusEffect.SpeedReduce:
+            blast.speed = Math.max(1, Math.floor(blast.speed * 0.75));
+            break;
+
+        case StatusEffect.Cleanse:
+            blast.status = Status.None;
+            break;
+    }
+
+    return blast;
+}
+
+
+function applyStatusEffectAtStartOfTurn(blast: Blast, otherBlast: Blast, move: Move): { blast: Blast, otherBlast: Blast, move: Move } {
+
+    switch (blast.status) {
+        case Status.Wet:
+            move.priority = Math.max(-2, move.priority - 1);
+            break;
+
+        default:
+            break;
+    }
+
+    return { blast, otherBlast, move };
+}
+
+function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast: Blast, otherBlast: Blast} {
+    switch (blast.status) {
+        case Status.Burn:
+            blast.hp = Math.max(0, blast.hp - Math.floor(blast.maxHp / 8));
+            break;
+
+        case Status.Seeded:
+            const healAmount = Math.floor(blast.maxHp / 16);
+
+            blast.hp = Math.max(0, blast.hp - healAmount);
+            otherBlast.hp = Math.min(otherBlast.maxHp, otherBlast.hp + healAmount);
+            break;
+
+        default:
+            break;
+    }
+
+    return { blast, otherBlast };
+}
+
+
 
 function calculateStaminaRecovery(
     maxStamina: number,

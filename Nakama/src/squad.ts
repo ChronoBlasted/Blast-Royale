@@ -42,7 +42,7 @@ const DefaultDeckBlasts: Blast[] = [
             attack: calculateBlastStat(Lizzy.attack, iv, DefaultBlastLevel),
             defense: calculateBlastStat(Lizzy.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Lizzy.speed, iv, DefaultBlastLevel),
-            status: STATUS.NONE,
+            status: Status.None,
             activeMoveset: getRandomActiveMoveset(Lizzy, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
@@ -60,7 +60,7 @@ const DefaultDeckBlasts: Blast[] = [
             attack: calculateBlastStat(Punchball.attack, iv, DefaultBlastLevel),
             defense: calculateBlastStat(Punchball.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Punchball.speed, iv, DefaultBlastLevel),
-            status: STATUS.NONE,
+            status: Status.None,
             activeMoveset: getRandomActiveMoveset(Punchball, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
@@ -78,7 +78,7 @@ const DefaultDeckBlasts: Blast[] = [
             attack: calculateBlastStat(Jellys.attack, iv, DefaultBlastLevel),
             defense: calculateBlastStat(Jellys.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Jellys.speed, iv, DefaultBlastLevel),
-            status: STATUS.NONE,
+            status: Status.None,
             activeMoveset: getRandomActiveMoveset(Jellys, calculateExperienceFromLevel(DefaultBlastLevel))
         };
     })(),
@@ -125,7 +125,7 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
             attack: 0,
             defense: 0,
             speed: 0,
-            status: STATUS.NONE,
+            status: Status.None,
             activeMoveset: []
         };
 
@@ -203,7 +203,7 @@ const rpcUpgradeBlast: nkruntime.RpcFunction =
             attack: 0,
             defense: 0,
             speed: 0,
-            status: STATUS.NONE,
+            status: Status.None,
             activeMoveset: []
         };
 
@@ -253,7 +253,7 @@ function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string
 
     newBlastToAdd.hp = newBlastToAdd.maxHp;
     newBlastToAdd.mana = newBlastToAdd.maxMana;
-    newBlastToAdd.status = STATUS.NONE;
+    newBlastToAdd.status = Status.None;
 
     let userCards: BlastCollection;
 
@@ -291,7 +291,7 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
         attack: 0,
         defense: 0,
         speed: 0,
-        status: STATUS.NONE,
+        status: Status.None,
         activeMoveset: []
     };
 

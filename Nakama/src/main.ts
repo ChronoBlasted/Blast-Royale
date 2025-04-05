@@ -137,15 +137,36 @@ function rpcDeleteAccount(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: 
 
 //#region ENUM
 
-enum STATUS {
-    NONE,
-    SLEEP,
-    BURN,
-    POISONOUS,
-    WET,
+enum Status {
+    None,
+    Burn,
+    Seeded,
+    Wet,
 };
 
-enum RARITY {
+enum StatusEffect {
+    Burn,
+    Seeded,
+    Wet,
+
+    ManaExplosion,
+    HpExplosion,
+
+    ManaRestore,
+    HpRestore,
+
+    AttackBoost,
+    DefenseBoost,
+    SpeedBoost,
+
+    AttackReduce,
+    DefenseReduce,
+    SpeedReduce,
+
+    Cleanse,
+}
+
+enum Rarity {
     NONE,
     COMMON,
     UNCOMMON,

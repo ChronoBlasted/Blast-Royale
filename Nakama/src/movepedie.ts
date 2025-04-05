@@ -8,7 +8,9 @@ interface Move {
     type: Type
     power: number
     cost: number
-    platform_cost: number
+    priority: number;
+    platform_cost?: number
+    effect?: StatusEffect; 
 }
 
 const Tackle: Move = {
@@ -16,7 +18,7 @@ const Tackle: Move = {
     type: Type.NORMAL,
     power: 40,
     cost: 7,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const Punch: Move = {
@@ -24,7 +26,7 @@ const Punch: Move = {
     type: Type.NORMAL,
     power: 50,
     cost: 15,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const Stomp: Move = {
@@ -32,8 +34,7 @@ const Stomp: Move = {
     type: Type.NORMAL,
     power: 65,
     cost: 25,
-    platform_cost: 0,
-
+    priority: 0,
 };
 
 const Slam: Move = {
@@ -41,8 +42,9 @@ const Slam: Move = {
     type: Type.NORMAL,
     power: 80,
     cost: 30,
-    platform_cost: 0,
-
+    priority: 0,
+    platform_cost: 1,
+    effect: StatusEffect.HpExplosion,
 };
 
 const Growl: Move = {
@@ -50,8 +52,8 @@ const Growl: Move = {
     type: Type.NORMAL,
     power: 0,
     cost: 3,
-    platform_cost: 0,
-
+    priority: 0,
+    effect: StatusEffect.AttackReduce,
 };
 
 const Harden: Move = {
@@ -59,17 +61,17 @@ const Harden: Move = {
     type: Type.NORMAL,
     power: 0,
     cost: 4,
-    platform_cost: 0,
-
+    priority: 0,
+    effect: StatusEffect.DefenseBoost,
 };
 
 const Ember: Move = {
     id: 7,
     type: Type.FIRE,
-    power: 60,
+    power: 50,
     cost: 12,
-    platform_cost: 0,
-
+    priority: 0,
+    effect: StatusEffect.Burn,
 };
 
 const FirePunch: Move = {
@@ -77,8 +79,7 @@ const FirePunch: Move = {
     type: Type.FIRE,
     power: 75,
     cost: 15,
-    platform_cost: 0,
-
+    priority: 0,
 };
 
 const Flamethrower: Move = {
@@ -86,7 +87,9 @@ const Flamethrower: Move = {
     type: Type.FIRE,
     power: 90,
     cost: 30,
+    priority: 0,
     platform_cost: 1,
+    effect: StatusEffect.AttackBoost,
 };
 
 const FireBlast: Move = {
@@ -94,7 +97,9 @@ const FireBlast: Move = {
     type: Type.FIRE,
     power: 110,
     cost: 40,
+    priority: 0,
     platform_cost: 2,
+    effect: StatusEffect.Burn,
 };
 
 const Bubble: Move = {
@@ -102,7 +107,8 @@ const Bubble: Move = {
     type: Type.WATER,
     power: 50,
     cost: 5,
-    platform_cost: 0,
+    priority: 0,
+    effect: StatusEffect.Wet,
 };
 
 const BubbleBeam: Move = {
@@ -110,7 +116,7 @@ const BubbleBeam: Move = {
     type: Type.WATER,
     power: 65,
     cost: 15,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const Waterfall: Move = {
@@ -118,7 +124,9 @@ const Waterfall: Move = {
     type: Type.WATER,
     power: 80,
     cost: 25,
+    priority: 0,
     platform_cost: 1,
+    effect: StatusEffect.SpeedBoost,
 };
 
 const HydroPump: Move = {
@@ -126,7 +134,9 @@ const HydroPump: Move = {
     type: Type.WATER,
     power: 110,
     cost: 40,
+    priority: 0,
     platform_cost: 2,
+    effect: StatusEffect.Wet,
 };
 
 const VineWhip: Move = {
@@ -134,7 +144,8 @@ const VineWhip: Move = {
     type: Type.GRASS,
     power: 50,
     cost: 7,
-    platform_cost: 0,
+    priority: 0,
+    effect: StatusEffect.Seeded,
 };
 
 const RazorLeaf: Move = {
@@ -142,7 +153,9 @@ const RazorLeaf: Move = {
     type: Type.GRASS,
     power: 75,
     cost: 15,
+    priority: 0,
     platform_cost: 1,
+    effect: StatusEffect.DefenseBoost,
 };
 
 const SolarBeam: Move = {
@@ -150,7 +163,9 @@ const SolarBeam: Move = {
     type: Type.GRASS,
     power: 120,
     cost: 50,
+    priority: 0,
     platform_cost: 2,
+    effect: StatusEffect.Seeded,
 };
 
 const QuickAttack: Move = {
@@ -158,7 +173,7 @@ const QuickAttack: Move = {
     type: Type.NORMAL,
     power: 40,
     cost: 5,
-    platform_cost: 0,
+    priority: 1,
 };
 
 const Gust: Move = {
@@ -166,7 +181,7 @@ const Gust: Move = {
     type: Type.FLY,
     power: 40,
     cost: 10,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const HyperFang: Move = {
@@ -174,7 +189,7 @@ const HyperFang: Move = {
     type: Type.NORMAL,
     power: 80,
     cost: 15,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const ThunderShock: Move = {
@@ -182,7 +197,7 @@ const ThunderShock: Move = {
     type: Type.ELECTRIC,
     power: 40,
     cost: 5,
-    platform_cost: 0,
+    priority: 0,
 };
 
 const ElectroBall: Move = {
@@ -190,7 +205,19 @@ const ElectroBall: Move = {
     type: Type.ELECTRIC,
     power: 90,
     cost: 30,
-    platform_cost: 0,
+    priority: 0,
+    platform_cost: 1,
+    effect: StatusEffect.ManaExplosion,
+};
+
+const Cleanse: Move = {
+    id: 22,
+    type: Type.NORMAL,
+    power: 0,
+    cost: 0,
+    priority: 0,
+    platform_cost: 3,
+    effect: StatusEffect.Cleanse,
 };
 
 
@@ -220,6 +247,7 @@ const movePedia: Move[] = [
     VineWhip,
     RazorLeaf,
     SolarBeam,
+    Cleanse,
 ];
 
 const rpcLoadMovePedia: nkruntime.RpcFunction =

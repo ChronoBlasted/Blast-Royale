@@ -50,20 +50,20 @@ interface StartStateData {
     id: number;
     exp: number;
     iv: number;
-    status: STATUS;
+    status: Status;
     activeMoveset: number[];
     meteo: Meteo;
 }
 
 interface TurnStateData {
     p_move_damage: number;
-    p_move_status: STATUS;
+    p_move_status: Status;
     p_platform: Type[];
 
     wb_turn_type: TurnType;
     wb_move_index: number;
     wb_move_damage: number;
-    wb_move_status: STATUS;
+    wb_move_status: Status;
     wb_platform: Type[];
 
     catched: boolean;
@@ -97,12 +97,12 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
         TurnStateData: {
             p_move_damage: 0,
-            p_move_status: STATUS.NONE,
+            p_move_status: Status.None,
             p_platform: [],
             wb_turn_type: TurnType.NONE,
             wb_move_index: 0,
             wb_move_damage: 0,
-            wb_move_status: STATUS.NONE,
+            wb_move_status: Status.None,
             wb_platform: [],
             catched: false
         },
@@ -186,7 +186,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 id: state.wild_blast.data_id,
                 exp: state.wild_blast.exp,
                 iv: state.wild_blast.iv,
-                status: STATUS.NONE,
+                status: Status.None,
                 activeMoveset: state.wild_blast.activeMoveset!,
                 meteo: state.meteo,
             }
@@ -236,18 +236,19 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 state.TurnStateData = {
                     p_move_damage: 0,
-                    p_move_status: STATUS.NONE,
+                    p_move_status: Status.None,
                     p_platform: state.player1_platform,
 
                     wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
                     wb_move_damage: 0,
-                    wb_move_status: STATUS.NONE,
+                    wb_move_status: Status.None,
                     wb_platform: state.wild_blast_platform,
 
                     wb_turn_type: TurnType.NONE,
 
                     catched: false
                 }
+
 
                 switch (message.opCode) {
                     case OpCodes.PLAYER_ATTACK:
@@ -258,7 +259,6 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             ({ state } = ErrorFunc(state, "Player 1 move null", dispatcher));
                             return;
                         }
-
 
                         state = performAttackSequence(state, move, dispatcher, nk, logger);
                         break;
@@ -342,6 +342,11 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         ({ state } = executeWildBlastAttack(state, dispatcher));
                         break;
                 }
+
+                ({ blast: state.player1_current_blast!, otherBlast: state.wild_blast! } = applyStatusEffectAtEndOfTurn(state.player1_current_blast!, state.wild_blast!));
+                ({ blast: state.wild_blast!, otherBlast: state.player1_current_blast! } = applyStatusEffectAtEndOfTurn(state.wild_blast!, state.player1_current_blast!));
+
+                ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
 
                 if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
 
@@ -499,34 +504,35 @@ function applyBlastAttack(attacker: Blast, defender: Blast, move: Move, state: W
 
 function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkruntime.MatchDispatcher): { state: WildBattleData } {
 
-    if (move.platform_cost > 0) {
+    if ((move.platform_cost ?? 0) > 0) {
         let amountType = getAmountOfPlatformTypeByType(state.player1_platform, move.type);
 
-        if (amountType < move.platform_cost) {
+        if (amountType < (move.platform_cost ?? 0)) {
             ({ state } = ErrorFunc(state, "Player not enough platform type", dispatcher));
             return { state };
         }
 
-        state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, move.platform_cost);
+        if (move.effect != null) state.player1_current_blast! = calculateEffect(state.player1_current_blast!, move);
 
+        state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, (move.platform_cost ?? 0));
     } else {
 
         if (state.player1_current_blast!.mana < move.cost) {
             return { state };
         }
 
+        if (move.effect != null) state.player1_current_blast! = calculateEffectWithProbability(state.player1_current_blast!, move);
+
         state.player1_platform = addPlatformType(state.player1_platform, move.type);
+        if (calculateWeatherModifier(state.meteo, move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, move.type);
     }
+
 
 
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);
     state.TurnStateData.p_move_damage = damage;
-    state.TurnStateData.p_move_status = STATUS.NONE;
+    state.TurnStateData.p_move_status = Status.None;
     state.TurnStateData.p_platform = state.player1_platform;
-    
-    if (move.platform_cost > 0) { 
-
-    }
 
     return { state };
 }
@@ -535,15 +541,17 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
 
     let wb_move = getMoveById(state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index]);
 
-    if (wb_move.platform_cost > 0) {
+    if ((wb_move.platform_cost ?? 0) > 0) {
         let amountType = getAmountOfPlatformTypeByType(state.wild_blast_platform, wb_move.type);
 
-        if (amountType < wb_move.platform_cost) {
+        if (amountType < (wb_move.platform_cost ?? 0)) {
             ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
             return { state };
         }
 
-        state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, wb_move.platform_cost);
+        if (wb_move.effect != null) state.wild_blast = calculateEffect(state.wild_blast!, wb_move);
+
+        state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, (wb_move.platform_cost ?? 0));
 
     } else {
         if (state.wild_blast!.mana < wb_move.cost) {
@@ -552,14 +560,18 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
             state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, true);
             state.TurnStateData.wb_turn_type = TurnType.WAIT;
         } else {
+
+            if (wb_move.effect != null) state.wild_blast = calculateEffectWithProbability(state.wild_blast!, wb_move);
+
             const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
-    
+
             state.TurnStateData.wb_move_damage = damage;
-            state.TurnStateData.wb_move_status = STATUS.NONE;
+            state.TurnStateData.wb_move_status = Status.None;
             state.TurnStateData.wb_turn_type = TurnType.ATTACK;
         }
 
         state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
+        if (calculateWeatherModifier(state.meteo, wb_move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
     }
 
     state.TurnStateData.wb_platform = state.wild_blast_platform;

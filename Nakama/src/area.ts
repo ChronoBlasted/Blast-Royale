@@ -116,7 +116,7 @@ function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: numb
         attack: calculateBlastStat(randomData.attack, randomIv, level),
         defense: calculateBlastStat(randomData.defense, randomIv, level),
         speed: calculateBlastStat(randomData.speed, randomIv, level),
-        status: STATUS.NONE,
+        status: Status.None,
         activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level))
     };
 }
