@@ -52,7 +52,103 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return expGain;
     }
 
+    public static (Blast, Blast) ApplyStatusEffectAtEndOfTurn(Blast blast, Blast otherBlast)
+    {
+        switch (blast.status)
+        {
+            case Status.Burn:
+                blast.Hp = Mathf.Max(0, blast.Hp - Mathf.FloorToInt(blast.MaxHp / 8f));
+                break;
 
+            case Status.Seeded:
+                int healAmount = Mathf.FloorToInt(blast.MaxHp / 16f);
+
+                blast.Hp = Mathf.Max(0, blast.Hp - healAmount);
+                otherBlast.Hp = Mathf.Min(otherBlast.MaxHp, otherBlast.Hp + healAmount);
+                break;
+
+            default:
+                break;
+        }
+
+        return (blast, otherBlast);
+    }
+
+    public static void ApplyEffect(Blast blast, Move move)
+    {
+        if (move.effect == null)
+            return;
+
+        float modifier;
+
+        switch (move.effect)
+        {
+            case MoveEffect.Burn:
+                blast.status = Status.Burn;
+                break;
+
+            case MoveEffect.Seeded:
+                blast.status = Status.Seeded;
+                break;
+
+            case MoveEffect.Wet:
+                blast.status = Status.Wet;
+                break;
+
+            case MoveEffect.ManaExplosion:
+                int manaDmg = Mathf.FloorToInt(blast.MaxMana / 2f);
+                blast.Hp = Mathf.Max(0, blast.Hp - manaDmg);
+                blast.Mana = Mathf.FloorToInt(blast.Mana / 2f);
+                break;
+
+            case MoveEffect.HpExplosion:
+                int hpCost = Mathf.FloorToInt(blast.MaxHp / 3f);
+                blast.Hp = Mathf.Max(0, blast.Hp - hpCost);
+                break;
+
+            case MoveEffect.ManaRestore:
+                blast.Mana += move.power;
+                break;
+
+            case MoveEffect.HpRestore:
+                blast.Hp += move.power;
+                break;
+
+            case MoveEffect.AttackBoost:
+                modifier = Mathf.FloorToInt(blast.Attack * 1.5f);
+                blast.AttackModifer = Mathf.Min(modifier, 500);
+                break;
+
+            case MoveEffect.DefenseBoost:
+                modifier = Mathf.FloorToInt(blast.Defense * 1.5f);
+                blast.DefenseModifier = Mathf.Min(modifier, 500);
+                break;
+
+            case MoveEffect.SpeedBoost:
+                modifier = Mathf.FloorToInt(blast.Speed * 1.5f);
+                blast.SpeedModifier = Mathf.Min(modifier, 500);
+                break;
+
+            case MoveEffect.AttackReduce:
+                modifier = Mathf.FloorToInt(blast.Attack * 0.75f);
+                blast.AttackModifer = Mathf.Max(1, modifier);
+                break;
+
+            case MoveEffect.DefenseReduce:
+                modifier = Mathf.FloorToInt(blast.Defense * 0.75f);
+                blast.DefenseModifier = Mathf.Max(1, modifier);
+                break;
+
+            case MoveEffect.SpeedReduce:
+                modifier = Mathf.FloorToInt(blast.Speed * 0.75f);
+                blast.SpeedModifier = Mathf.Max(1, modifier);
+                break;
+
+            case MoveEffect.Cleanse:
+                blast.status = Status.None;
+                break;
+        }
+    }
 
     public static int CalculateLevelFromExperience(int experience)
     {
@@ -86,7 +182,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
 
         int experienceNiveau = 0;
 
-        // Utiliser une formule simplifiée pour les niveaux jusqu'à 100
         for (int i = 1; i <= level; i++)
         {
             experienceNiveau = Mathf.FloorToInt((Mathf.Pow(i, 3) * 100) / 2); // Exemple de formule croissante

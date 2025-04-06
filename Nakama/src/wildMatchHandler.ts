@@ -36,7 +36,6 @@ interface WildBattleData {
     player1_items: Item[];
     player1_platform: Type[];
 
-
     wild_blast: Blast | null;
     wild_blast_platform: Type[];
 
@@ -58,13 +57,11 @@ interface StartStateData {
 interface TurnStateData {
     p_move_damage: number;
     p_move_status: Status;
-    p_platform: Type[];
 
     wb_turn_type: TurnType;
     wb_move_index: number;
     wb_move_damage: number;
     wb_move_status: Status;
-    wb_platform: Type[];
 
     catched: boolean;
 }
@@ -98,12 +95,12 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         TurnStateData: {
             p_move_damage: 0,
             p_move_status: Status.None,
-            p_platform: [],
+
             wb_turn_type: TurnType.NONE,
             wb_move_index: 0,
             wb_move_damage: 0,
             wb_move_status: Status.None,
-            wb_platform: [],
+
             catched: false
         },
     };
@@ -237,12 +234,10 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 state.TurnStateData = {
                     p_move_damage: 0,
                     p_move_status: Status.None,
-                    p_platform: state.player1_platform,
 
                     wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
                     wb_move_damage: 0,
                     wb_move_status: Status.None,
-                    wb_platform: state.wild_blast_platform,
 
                     wb_turn_type: TurnType.NONE,
 
@@ -512,7 +507,7 @@ function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkru
             return { state };
         }
 
-        if (move.effect != null) state.player1_current_blast! = calculateEffect(state.player1_current_blast!, move);
+        if (move.effect != null) state.player1_current_blast! = applyEffect(state.player1_current_blast!, move);
 
         state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, (move.platform_cost ?? 0));
     } else {
@@ -531,8 +526,7 @@ function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkru
 
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);
     state.TurnStateData.p_move_damage = damage;
-    state.TurnStateData.p_move_status = Status.None;
-    state.TurnStateData.p_platform = state.player1_platform;
+    state.TurnStateData.p_move_status = state.player1_current_blast!.status;
 
     return { state };
 }
@@ -549,7 +543,7 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
             return { state };
         }
 
-        if (wb_move.effect != null) state.wild_blast = calculateEffect(state.wild_blast!, wb_move);
+        if (wb_move.effect != null) state.wild_blast = applyEffect(state.wild_blast!, wb_move);
 
         state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, (wb_move.platform_cost ?? 0));
 
@@ -566,15 +560,13 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
             const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
 
             state.TurnStateData.wb_move_damage = damage;
-            state.TurnStateData.wb_move_status = Status.None;
+            state.TurnStateData.wb_move_status = state.wild_blast!.status;
             state.TurnStateData.wb_turn_type = TurnType.ATTACK;
         }
 
         state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
         if (calculateWeatherModifier(state.meteo, wb_move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
     }
-
-    state.TurnStateData.wb_platform = state.wild_blast_platform;
 
     return { state };
 }

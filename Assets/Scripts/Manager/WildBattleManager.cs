@@ -221,6 +221,20 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             await Task.Delay(TimeSpan.FromMilliseconds(500));
         }
 
+        if (_playerBlast.status != Status.None)
+        {
+            NakamaLogic.ApplyStatusEffectAtEndOfTurn(_playerBlast, _wildBlast);
+
+            await _gameView.ApplyStatusEndTurn(true, _playerBlast, _wildBlast);
+        }
+
+        if (_wildBlast.status != Status.None)
+        {
+            NakamaLogic.ApplyStatusEffectAtEndOfTurn(_wildBlast, _playerBlast);
+
+            await _gameView.ApplyStatusEndTurn(false, _wildBlast, _playerBlast);
+        }
+
         EndTurn();
 
         NakamaManager.Instance.NakamaWildBattle.PlayerReady();
@@ -233,6 +247,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         _gameView.EndTurn(_playerBlast, _wildBlast);
     }
+
+
 
     async Task<bool> CheckIfKO()
     {
@@ -300,8 +316,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             await _gameView.CantAttack(isPlayerAttack, attacker, move);
         }
     }
-
-
     private void UpdateOpponentTurn(TurnStateData turnState)
     {
         _wbAction.TurnType = turnState.wb_turn_type;
@@ -313,7 +327,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             _wbAction.MoveStatus = turnState.wb_move_status;
         }
     }
-
 
     public void MatchEnd(string data)
     {

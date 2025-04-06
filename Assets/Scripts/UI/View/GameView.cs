@@ -143,6 +143,28 @@ public class GameView : View
         waiterHUD.UpdateManaBar(blast.Mana);
     }
 
+    public async Task ApplyStatusEndTurn(bool isPlayer, Blast blast, Blast otherBlast)
+    {
+        HUDLayout blastHUD;
+        HUDLayout otherHUD;
+
+        blastHUD = isPlayer ? _playerHUD : _opponentHUD;
+        otherHUD = isPlayer ? _opponentHUD : _playerHUD;
+
+        string isWild = isPlayer ? "" : "Wild ";
+
+        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() +
+            " suffer from " +
+            ResourceObjectHolder.Instance.GetResourceByType((ResourceType)blast.status));
+
+
+        blastHUD.UpdateManaBar(blast.Mana);
+        blastHUD.UpdateHpBar(blast.Hp);
+
+        otherHUD.UpdateManaBar(otherBlast.Mana);
+        otherHUD.UpdateHpBar(otherBlast.Hp);
+    }
+
     public async Task AllPlayerBlastFainted()
     {
         await _dialogLayout.UpdateTextAsync("All your blast are fainted !");
@@ -222,7 +244,7 @@ public class GameView : View
         }
     }
 
-    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, Status status = Status.NONE)
+    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, Status status = Status.None)
     {
         HUDLayout attackerHUD;
         HUDLayout defenderHUD;

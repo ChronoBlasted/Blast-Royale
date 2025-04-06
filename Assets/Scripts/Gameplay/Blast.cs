@@ -26,12 +26,14 @@ public class Blast
     public int MaxMana { get => CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data_id).mana, iv, Level); }
     public int Hp { get => hp; set => hp = Math.Clamp(value, 0, MaxHp); }
     public int Mana { get => mana; set => mana = Math.Clamp(value, 0, MaxMana); }
-    public int Attack { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).attack, Level, iv); }
-    public int Defense { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).defense, Level, iv); }
-    public int Speed { get => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, Level, iv); }
+    public int Attack { get => CalculateBlastStat(Mathf.FloorToInt(NakamaData.Instance.GetBlastDataById(data_id).attack * AttackModifer), Level, iv); }
+    public int Defense { get => CalculateBlastStat(Mathf.FloorToInt(NakamaData.Instance.GetBlastDataById(data_id).defense * DefenseModifier), Level, iv); }
+    public int Speed { get => CalculateBlastStat(Mathf.FloorToInt(NakamaData.Instance.GetBlastDataById(data_id).speed * SpeedModifier), Level, iv); }
     public int Level { get => NakamaLogic.CalculateLevelFromExperience(exp); }
 
-    public Blast(string uuid, int data, int exp, int iv, List<int> moveset, Status status = Status.NONE)
+    public float AttackModifer = 1, DefenseModifier = 1, SpeedModifier = 1;
+
+    public Blast(string uuid, int data, int exp, int iv, List<int> moveset, Status status = Status.None)
     {
         this.uuid = uuid;
         this.data_id = data;

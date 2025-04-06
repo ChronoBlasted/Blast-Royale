@@ -241,86 +241,86 @@ function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
 }
 
 function calculateEffectWithProbability(blast: Blast, move: Move): Blast {
-    const statusEffectProbabilities: { [key in StatusEffect]?: number } = {
-        [StatusEffect.Burn]: 0.1,
-        [StatusEffect.Seeded]: 0.1,
-        [StatusEffect.Wet]: 0.1,
-        [StatusEffect.ManaExplosion]: 0.2,
-        [StatusEffect.HpExplosion]: 0.2,
-        [StatusEffect.ManaRestore]: 0.2,
-        [StatusEffect.HpRestore]: 0.2,
-        [StatusEffect.AttackBoost]: 0.5,
-        [StatusEffect.DefenseBoost]: 0.5,
-        [StatusEffect.SpeedBoost]: 0.5,
-        [StatusEffect.AttackReduce]: 0.5,
-        [StatusEffect.DefenseReduce]: 0.5,
-        [StatusEffect.SpeedReduce]: 0.5,
-        [StatusEffect.Cleanse]: 0.5,
+    const statusEffectProbabilities: { [key in MoveEffect]?: number } = {
+        [MoveEffect.Burn]: 0.1,
+        [MoveEffect.Seeded]: 0.1,
+        [MoveEffect.Wet]: 0.1,
+        [MoveEffect.ManaExplosion]: 0.2,
+        [MoveEffect.HpExplosion]: 0.2,
+        [MoveEffect.ManaRestore]: 0.2,
+        [MoveEffect.HpRestore]: 0.2,
+        [MoveEffect.AttackBoost]: 0.5,
+        [MoveEffect.DefenseBoost]: 0.5,
+        [MoveEffect.SpeedBoost]: 0.5,
+        [MoveEffect.AttackReduce]: 0.5,
+        [MoveEffect.DefenseReduce]: 0.5,
+        [MoveEffect.SpeedReduce]: 0.5,
+        [MoveEffect.Cleanse]: 0.5,
     };
 
     // Ajuste la probabilité en fonction de l'entrée "probability"
     const effectProbability = statusEffectProbabilities[move.effect!];
     if (Math.random() < effectProbability!) {
-        return calculateEffect(blast, move);
+        return applyEffect(blast, move);
     }
 
     return blast;
 }
 
 
-function calculateEffect(blast: Blast, move: Move): Blast {
+function applyEffect(blast: Blast, move: Move): Blast {
     switch (move.effect) {
-        case StatusEffect.Burn:
+        case MoveEffect.Burn:
             blast.status = Status.Burn;
             break;
-        case StatusEffect.Seeded:
+        case MoveEffect.Seeded:
             blast.status = Status.Seeded;
             break;
-        case StatusEffect.Wet:
+        case MoveEffect.Wet:
             blast.status = Status.Wet;
             break;
 
-        case StatusEffect.ManaExplosion:
+        case MoveEffect.ManaExplosion:
             const manaDmg = Math.floor(blast.maxMana / 2);
             blast.hp = Math.max(0, blast.hp - manaDmg);
             blast.mana = Math.floor(blast.mana / 2);
             break;
-        case StatusEffect.HpExplosion:
+        case MoveEffect.HpExplosion:
             const hpCost = Math.floor(blast.maxHp / 3);
             blast.hp = Math.max(0, blast.hp - hpCost);
             break;
 
-        case StatusEffect.ManaRestore:
+        case MoveEffect.ManaRestore:
             blast.mana = Math.min(blast.maxMana, blast.mana + move.power);
             break;
-        case StatusEffect.HpRestore:
+        case MoveEffect.HpRestore:
             blast.hp = Math.min(blast.maxHp, blast.hp + move.power);
             break;
 
-        case StatusEffect.AttackBoost:
+        case MoveEffect.AttackBoost:
             blast.attack = Math.floor(blast.attack * 1.5);
             blast.attack = Math.min(blast.attack, 500);
             break;
-        case StatusEffect.DefenseBoost:
+        case MoveEffect.DefenseBoost:
             blast.defense = Math.floor(blast.defense * 1.5);
             blast.defense = Math.min(blast.defense, 500);
             break;
-        case StatusEffect.SpeedBoost:
+        case MoveEffect.SpeedBoost:
             blast.speed = Math.floor(blast.speed * 1.5);
             blast.speed = Math.min(blast.speed, 500);
             break;
 
-        case StatusEffect.AttackReduce:
+        case MoveEffect.AttackReduce:
             blast.attack = Math.max(1, Math.floor(blast.attack * 0.75));
             break;
-        case StatusEffect.DefenseReduce:
+        case MoveEffect.DefenseReduce:
             blast.defense = Math.max(1, Math.floor(blast.defense * 0.75));
             break;
-        case StatusEffect.SpeedReduce:
+        case MoveEffect.SpeedReduce:
             blast.speed = Math.max(1, Math.floor(blast.speed * 0.75));
             break;
 
-        case StatusEffect.Cleanse:
+        case MoveEffect.Cleanse:
             blast.status = Status.None;
             break;
     }

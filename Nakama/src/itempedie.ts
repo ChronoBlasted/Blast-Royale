@@ -16,9 +16,9 @@ interface ItemData {
     id: number;
     behaviour: ITEM_BEHAVIOUR;
     gain_amount: number
-    status: Status;
-    catchRate: number;
     rarity:Rarity;
+    status?: Status;
+    catchRate?: number;
 }
 
 interface ItemUseJSON {
@@ -30,8 +30,6 @@ const healthPotionData: ItemData = { // healthPotionData
     id: 0,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 20,
-    status: Status.None,
-    catchRate: 0,
     rarity: Rarity.COMMON,
 };
 
@@ -39,8 +37,6 @@ const superHealthPotionData: ItemData = { // superHealthPotionData
     id: 1,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 50,
-    status: Status.None,
-    catchRate: 0,
     rarity:Rarity.UNCOMMON,
 };
 
@@ -48,8 +44,6 @@ const hyperHealthPotionData: ItemData = { // hyperHealthPotionData
     id: 2,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 200,
-    status: Status.None,
-    catchRate: 0,
     rarity:Rarity.RARE,
 };
 
@@ -57,8 +51,6 @@ const manaPotionData: ItemData = { // manaPotionData
     id: 3,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 10,
-    status: Status.None,
-    catchRate: 0,
     rarity:Rarity.COMMON,
 };
 
@@ -66,8 +58,6 @@ const superManaPotionData: ItemData = { // superManaPotionData
     id: 4,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 25,
-    status: Status.None,
-    catchRate: 0,
     rarity:Rarity.UNCOMMON,
 };
 
@@ -75,8 +65,6 @@ const hyperManaPotionData: ItemData = { // hyperManaPotionData
     id: 5,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 50,
-    status: Status.None,
-    catchRate: 0,
     rarity:Rarity.RARE,
 };
 
@@ -84,7 +72,6 @@ const blastTrapData: ItemData = { // blastTrapData
     id: 6,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.None,
     catchRate: 1,
     rarity:Rarity.COMMON,
 };
@@ -93,7 +80,6 @@ const superBlastTrapData: ItemData = { // superBlastTrapData
     id: 7,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.None,
     catchRate: 1.5,
     rarity:Rarity.COMMON,
 };
@@ -102,8 +88,31 @@ const hyperBlastTrapData: ItemData = { // hyperBlastTrapData
     id: 8,
     behaviour: ITEM_BEHAVIOUR.CATCH,
     gain_amount: 0,
-    status: Status.None,
     catchRate: 2,
+    rarity:Rarity.COMMON,
+};
+
+const AntiBurnData: ItemData = { // hyperBlastTrapData
+    id: 9,
+    behaviour: ITEM_BEHAVIOUR.STATUS,
+    gain_amount: 0,
+    status: Status.Burn,
+    rarity:Rarity.COMMON,
+};
+
+const AntiSeededData: ItemData = { // hyperBlastTrapData
+    id: 10,
+    behaviour: ITEM_BEHAVIOUR.STATUS,
+    gain_amount: 0,
+    status: Status.Seeded,
+    rarity:Rarity.COMMON,
+};
+
+const AntiWetData: ItemData = { // hyperBlastTrapData
+    id: 11,
+    behaviour: ITEM_BEHAVIOUR.STATUS,
+    gain_amount: 0,
+    status: Status.Wet,
     rarity:Rarity.COMMON,
 };
 

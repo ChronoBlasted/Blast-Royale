@@ -12,7 +12,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     // Blast
     initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
     initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
-    initializer.registerRpc('evolveBlast', rpcUpgradeBlast);
+    initializer.registerRpc('evolveBlast', rpcEvolveBlast);
     initializer.registerRpc('swapMove', rpcSwapBlastMove);
 
     // Bag
@@ -142,9 +142,11 @@ enum Status {
     Burn,
     Seeded,
     Wet,
+    All,
 };
 
-enum StatusEffect {
+enum MoveEffect {
+    None,
     Burn,
     Seeded,
     Wet,

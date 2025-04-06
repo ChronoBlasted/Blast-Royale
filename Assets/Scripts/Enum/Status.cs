@@ -1,8 +1,7 @@
 public enum Status
 {
-    NONE,
-    SLEEP,
-    BURN,
-    POISONOUS,
-    WET,
+    None = ResourceType.None,
+    Burn = ResourceType.Burn,
+    Seeded = ResourceType.Seeded,
+    Wet = ResourceType.Wet,
 }

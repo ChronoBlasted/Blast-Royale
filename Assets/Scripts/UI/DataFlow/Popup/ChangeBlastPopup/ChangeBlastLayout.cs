@@ -66,7 +66,11 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
-                else LockBlast("ALREADY or FAINTED");  // TODO Translate
+                else
+                {
+                    if (WildBattleManager.Instance.PlayerBlast == _blast) LockBlast("IN BATTLE");  // TODO Translate
+                    if (_blast.Hp <= 0) LockBlast("FAINTED");  // TODO Translate
+                }
 
                 break;
         }

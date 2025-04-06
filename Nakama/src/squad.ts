@@ -182,7 +182,7 @@ const rpcSwapDeckBlast: nkruntime.RpcFunction =
         return JSON.stringify(userBlasts);
     }
 
-const rpcUpgradeBlast: nkruntime.RpcFunction =
+const rpcEvolveBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
 
         const uuid: string = JSON.parse(payload);
@@ -217,7 +217,6 @@ const rpcUpgradeBlast: nkruntime.RpcFunction =
         }
 
         let blastdata = getBlastDataById(selectedBlast.data_id)
-
 
         if (isInDeck) {
             if (blastdata.nextEvolution !== null) {
@@ -296,11 +295,9 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
     };
 
     if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
-        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid)!;
         isInDeck = true;
     }
     else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
-        selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === uuid)!;
         isInDeck = false;
     }
 

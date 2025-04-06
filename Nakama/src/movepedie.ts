@@ -10,7 +10,7 @@ interface Move {
     cost: number
     priority: number;
     platform_cost?: number
-    effect?: StatusEffect; 
+    effect?: MoveEffect; 
 }
 
 const Tackle: Move = {
@@ -44,7 +44,7 @@ const Slam: Move = {
     cost: 30,
     priority: 0,
     platform_cost: 1,
-    effect: StatusEffect.HpExplosion,
+    effect: MoveEffect.HpExplosion,
 };
 
 const Growl: Move = {
@@ -53,7 +53,7 @@ const Growl: Move = {
     power: 0,
     cost: 3,
     priority: 0,
-    effect: StatusEffect.AttackReduce,
+    effect: MoveEffect.AttackReduce,
 };
 
 const Harden: Move = {
@@ -62,7 +62,7 @@ const Harden: Move = {
     power: 0,
     cost: 4,
     priority: 0,
-    effect: StatusEffect.DefenseBoost,
+    effect: MoveEffect.DefenseBoost,
 };
 
 const Ember: Move = {
@@ -71,7 +71,7 @@ const Ember: Move = {
     power: 50,
     cost: 12,
     priority: 0,
-    effect: StatusEffect.Burn,
+    effect: MoveEffect.Burn,
 };
 
 const FirePunch: Move = {
@@ -89,7 +89,7 @@ const Flamethrower: Move = {
     cost: 30,
     priority: 0,
     platform_cost: 1,
-    effect: StatusEffect.AttackBoost,
+    effect: MoveEffect.AttackBoost,
 };
 
 const FireBlast: Move = {
@@ -99,7 +99,7 @@ const FireBlast: Move = {
     cost: 40,
     priority: 0,
     platform_cost: 2,
-    effect: StatusEffect.Burn,
+    effect: MoveEffect.Burn,
 };
 
 const Bubble: Move = {
@@ -108,7 +108,7 @@ const Bubble: Move = {
     power: 50,
     cost: 5,
     priority: 0,
-    effect: StatusEffect.Wet,
+    effect: MoveEffect.Wet,
 };
 
 const BubbleBeam: Move = {
@@ -126,7 +126,7 @@ const Waterfall: Move = {
     cost: 25,
     priority: 0,
     platform_cost: 1,
-    effect: StatusEffect.SpeedBoost,
+    effect: MoveEffect.SpeedBoost,
 };
 
 const HydroPump: Move = {
@@ -136,7 +136,7 @@ const HydroPump: Move = {
     cost: 40,
     priority: 0,
     platform_cost: 2,
-    effect: StatusEffect.Wet,
+    effect: MoveEffect.Wet,
 };
 
 const VineWhip: Move = {
@@ -145,7 +145,7 @@ const VineWhip: Move = {
     power: 50,
     cost: 7,
     priority: 0,
-    effect: StatusEffect.Seeded,
+    effect: MoveEffect.Seeded,
 };
 
 const RazorLeaf: Move = {
@@ -155,7 +155,7 @@ const RazorLeaf: Move = {
     cost: 15,
     priority: 0,
     platform_cost: 1,
-    effect: StatusEffect.DefenseBoost,
+    effect: MoveEffect.DefenseBoost,
 };
 
 const SolarBeam: Move = {
@@ -165,7 +165,7 @@ const SolarBeam: Move = {
     cost: 50,
     priority: 0,
     platform_cost: 2,
-    effect: StatusEffect.Seeded,
+    effect: MoveEffect.Seeded,
 };
 
 const QuickAttack: Move = {
@@ -207,7 +207,7 @@ const ElectroBall: Move = {
     cost: 30,
     priority: 0,
     platform_cost: 1,
-    effect: StatusEffect.ManaExplosion,
+    effect: MoveEffect.ManaExplosion,
 };
 
 const Cleanse: Move = {
@@ -217,7 +217,7 @@ const Cleanse: Move = {
     cost: 0,
     priority: 0,
     platform_cost: 3,
-    effect: StatusEffect.Cleanse,
+    effect: MoveEffect.Cleanse,
 };
 
 

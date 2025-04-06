@@ -37,6 +37,7 @@ interface nextEvolutionStruct {
     levelRequired:number
 }
 
+
 // BlastData
 
 const Pantin: BlastData = { // Pantin
@@ -74,7 +75,7 @@ const Lizzy: BlastData = { // Lizzy
     ],
     nextEvolution: null,
     catchRate: 35,
-    expYield: 142,
+    expYield: 64,
     rarity: Rarity.RARE,
 };
 
@@ -93,7 +94,7 @@ const Punchball: BlastData = { // Punchball
     ],
     nextEvolution: null,
     catchRate: 40,
-    expYield: 192,
+    expYield: 64,
     rarity: Rarity.RARE,
 };
 
@@ -131,7 +132,7 @@ const Kitchi: BlastData = { // Kitchi
     ],
     nextEvolution: null,
     catchRate: 30,
-    expYield: 50,
+    expYield: 32,
     rarity: Rarity.COMMON,
 };
 
@@ -150,7 +151,7 @@ const Kenchi: BlastData = { // Kenchi
     ],
     nextEvolution: null,
     catchRate: 35,
-    expYield: 80,
+    expYield: 48,
     rarity: Rarity.COMMON,
 };
 

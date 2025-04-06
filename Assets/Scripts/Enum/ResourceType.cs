@@ -30,6 +30,26 @@ public enum ResourceType
     Sun = 440,
     Rain = 441,
     Leaves = 442,
+
+    Burn = 460,
+    Seeded = 461,
+    Wet = 462,
+
+    ManaExplosion = 463,
+    HpExplosion = 464,
+
+    ManaRestore = 465,
+    HpRestore = 466,
+
+    AttackBoost = 467,
+    DefenseBoost = 468,
+    SpeedBoost =  469,
+
+    AttackReduce = 470,
+    DefenseReduce = 471,
+    SpeedReduce = 472,
+
+    Cleanse = 473,
 }
 
 public enum UIType
