@@ -9,8 +9,8 @@ interface Move {
     power: number
     cost: number
     priority: number;
-    platform_cost?: number
-    effect?: MoveEffect; 
+    platform_cost: number
+    effect: MoveEffect; 
 }
 
 const Tackle: Move = {
@@ -19,6 +19,8 @@ const Tackle: Move = {
     power: 40,
     cost: 7,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Punch: Move = {
@@ -27,6 +29,8 @@ const Punch: Move = {
     power: 50,
     cost: 15,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Stomp: Move = {
@@ -35,6 +39,8 @@ const Stomp: Move = {
     power: 65,
     cost: 25,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Slam: Move = {
@@ -53,6 +59,7 @@ const Growl: Move = {
     power: 0,
     cost: 3,
     priority: 0,
+    platform_cost: 0,
     effect: MoveEffect.AttackReduce,
 };
 
@@ -62,6 +69,7 @@ const Harden: Move = {
     power: 0,
     cost: 4,
     priority: 0,
+    platform_cost: 0,
     effect: MoveEffect.DefenseBoost,
 };
 
@@ -71,6 +79,7 @@ const Ember: Move = {
     power: 50,
     cost: 12,
     priority: 0,
+    platform_cost: 0,
     effect: MoveEffect.Burn,
 };
 
@@ -80,6 +89,8 @@ const FirePunch: Move = {
     power: 75,
     cost: 15,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Flamethrower: Move = {
@@ -108,6 +119,7 @@ const Bubble: Move = {
     power: 50,
     cost: 5,
     priority: 0,
+    platform_cost: 0,
     effect: MoveEffect.Wet,
 };
 
@@ -117,6 +129,8 @@ const BubbleBeam: Move = {
     power: 65,
     cost: 15,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Waterfall: Move = {
@@ -145,6 +159,7 @@ const VineWhip: Move = {
     power: 50,
     cost: 7,
     priority: 0,
+    platform_cost: 0,
     effect: MoveEffect.Seeded,
 };
 
@@ -174,6 +189,8 @@ const QuickAttack: Move = {
     power: 40,
     cost: 5,
     priority: 1,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const Gust: Move = {
@@ -182,6 +199,8 @@ const Gust: Move = {
     power: 40,
     cost: 10,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const HyperFang: Move = {
@@ -190,6 +209,8 @@ const HyperFang: Move = {
     power: 80,
     cost: 15,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const ThunderShock: Move = {
@@ -198,6 +219,8 @@ const ThunderShock: Move = {
     power: 40,
     cost: 5,
     priority: 0,
+    platform_cost: 0,
+    effect: MoveEffect.None,
 };
 
 const ElectroBall: Move = {

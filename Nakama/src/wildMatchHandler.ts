@@ -56,12 +56,12 @@ interface StartStateData {
 
 interface TurnStateData {
     p_move_damage: number;
-    p_move_status: Status;
+    p_move_effect: MoveEffect;
 
     wb_turn_type: TurnType;
     wb_move_index: number;
     wb_move_damage: number;
-    wb_move_status: Status;
+    wb_move_effect: MoveEffect;
 
     catched: boolean;
 }
@@ -94,12 +94,12 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
         TurnStateData: {
             p_move_damage: 0,
-            p_move_status: Status.None,
+            p_move_effect: MoveEffect.None,
 
             wb_turn_type: TurnType.NONE,
             wb_move_index: 0,
             wb_move_damage: 0,
-            wb_move_status: Status.None,
+            wb_move_effect: MoveEffect.None,
 
             catched: false
         },
@@ -233,11 +233,11 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 state.TurnStateData = {
                     p_move_damage: 0,
-                    p_move_status: Status.None,
+                    p_move_effect: MoveEffect.None,
 
                     wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
                     wb_move_damage: 0,
-                    wb_move_status: Status.None,
+                    wb_move_effect: MoveEffect.None,
 
                     wb_turn_type: TurnType.NONE,
 
@@ -292,7 +292,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             case ITEM_BEHAVIOUR.CATCH:
                                 var wildBlastCaptured = false;
 
-                                wildBlastCaptured = isBlastCaptured(state.wild_blast!.hp, state.wild_blast!.maxHp, getBlastDataById(state.wild_blast!.data_id).catchRate, itemData.catchRate, 1)
+                                wildBlastCaptured = isBlastCaptured(state.wild_blast!.hp, state.wild_blast!.maxHp, getBlastDataById(state.wild_blast!.data_id).catchRate, itemData.catchRate!, 1)
 
                                 if (wildBlastCaptured) {
                                     logger.debug('Wild blast Captured !', wildBlastCaptured);
@@ -516,17 +516,18 @@ function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkru
             return { state };
         }
 
-        if (move.effect != null) state.player1_current_blast! = calculateEffectWithProbability(state.player1_current_blast!, move);
+        if (move.effect != null) {
+            const result = calculateEffectWithProbability(state.player1_current_blast!, move);
+            state.player1_current_blast = result.blast;
+            state.TurnStateData.p_move_effect = result.moveEffect;
+        }
 
         state.player1_platform = addPlatformType(state.player1_platform, move.type);
         if (calculateWeatherModifier(state.meteo, move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, move.type);
     }
 
-
-
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);
     state.TurnStateData.p_move_damage = damage;
-    state.TurnStateData.p_move_status = state.player1_current_blast!.status;
 
     return { state };
 }
@@ -555,12 +556,15 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
             state.TurnStateData.wb_turn_type = TurnType.WAIT;
         } else {
 
-            if (wb_move.effect != null) state.wild_blast = calculateEffectWithProbability(state.wild_blast!, wb_move);
-
+            if (wb_move.effect != null) {
+                const result = calculateEffectWithProbability(state.player1_current_blast!, wb_move);
+                state.wild_blast = result.blast;
+                state.TurnStateData.wb_move_effect = result.moveEffect;
+            }
+            
             const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
 
             state.TurnStateData.wb_move_damage = damage;
-            state.TurnStateData.wb_move_status = state.wild_blast!.status;
             state.TurnStateData.wb_turn_type = TurnType.ATTACK;
         }
 

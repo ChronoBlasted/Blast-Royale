@@ -8,7 +8,7 @@ public class Move
     public int power;
     public int cost;
     public int priority;
-    public int? platform_cost;
-    public MoveEffect? effect;
+    public int platform_cost;
+    public MoveEffect effect;
 }
 

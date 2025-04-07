@@ -73,82 +73,82 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
 
         return (blast, otherBlast);
     }
-
-    public static void ApplyEffect(Blast blast, Move move)
+    public static (string, Blast) ApplyEffect(Blast blast, Move move)
     {
-        if (move.effect == null)
-            return;
-
         float modifier;
 
         switch (move.effect)
         {
             case MoveEffect.Burn:
                 blast.status = Status.Burn;
-                break;
+                return ("Is now burned", blast);
 
             case MoveEffect.Seeded:
                 blast.status = Status.Seeded;
-                break;
+                return ("Is now seeded", blast);
 
             case MoveEffect.Wet:
                 blast.status = Status.Wet;
-                break;
+                return ("Is now wet", blast);
 
             case MoveEffect.ManaExplosion:
                 int manaDmg = Mathf.FloorToInt(blast.MaxMana / 2f);
                 blast.Hp = Mathf.Max(0, blast.Hp - manaDmg);
                 blast.Mana = Mathf.FloorToInt(blast.Mana / 2f);
-                break;
+                return ("Suffered a mana explosion", blast);
 
             case MoveEffect.HpExplosion:
                 int hpCost = Mathf.FloorToInt(blast.MaxHp / 3f);
                 blast.Hp = Mathf.Max(0, blast.Hp - hpCost);
-                break;
+                return ("Suffered an HP explosion", blast);
 
             case MoveEffect.ManaRestore:
                 blast.Mana += move.power;
-                break;
+                return ("Mana has been restored", blast);
 
             case MoveEffect.HpRestore:
                 blast.Hp += move.power;
-                break;
+                return ("HP has been restored", blast);
 
             case MoveEffect.AttackBoost:
                 modifier = Mathf.FloorToInt(blast.Attack * 1.5f);
-                blast.AttackModifer = Mathf.Min(modifier, 500);
-                break;
+                blast.AttackModifier = Mathf.Min((int)modifier, 500);
+                return ("Attack boosted", blast);
 
             case MoveEffect.DefenseBoost:
                 modifier = Mathf.FloorToInt(blast.Defense * 1.5f);
-                blast.DefenseModifier = Mathf.Min(modifier, 500);
-                break;
+                blast.DefenseModifier = Mathf.Min((int)modifier, 500);
+                return ("Defense boosted", blast);
 
             case MoveEffect.SpeedBoost:
                 modifier = Mathf.FloorToInt(blast.Speed * 1.5f);
-                blast.SpeedModifier = Mathf.Min(modifier, 500);
-                break;
+                blast.SpeedModifier = Mathf.Min((int)modifier, 500);
+                return ("Speed boosted", blast);
 
             case MoveEffect.AttackReduce:
                 modifier = Mathf.FloorToInt(blast.Attack * 0.75f);
-                blast.AttackModifer = Mathf.Max(1, modifier);
-                break;
+                blast.AttackModifier = Mathf.Max((int)modifier, 1);
+                return ("Attack reduced", blast);
 
             case MoveEffect.DefenseReduce:
                 modifier = Mathf.FloorToInt(blast.Defense * 0.75f);
-                blast.DefenseModifier = Mathf.Max(1, modifier);
-                break;
+                blast.DefenseModifier = Mathf.Max((int)modifier, 1);
+                return ("Defense reduced", blast);
 
             case MoveEffect.SpeedReduce:
                 modifier = Mathf.FloorToInt(blast.Speed * 0.75f);
-                blast.SpeedModifier = Mathf.Max(1, modifier);
-                break;
+                blast.SpeedModifier = Mathf.Max((int)modifier, 1);
+                return ("Speed reduced", blast);
 
             case MoveEffect.Cleanse:
                 blast.status = Status.None;
-                break;
+                return ("All status effects cleansed", blast);
+
+            default:
+                return ("No effect applied", blast);
         }
     }
+
 
     public static int CalculateLevelFromExperience(int experience)
     {

@@ -214,12 +214,12 @@ public class StartStateData
 public class TurnStateData
 {
     public int p_move_damage;
-    public Status p_move_status;
+    public MoveEffect p_move_effect;
 
     public TurnType wb_turn_type;
     public int wb_move_index;
     public int wb_move_damage;
-    public Status wb_move_status;
+    public MoveEffect wb_move_effect;
 
     public bool catched;
 }

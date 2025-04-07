@@ -1,3 +1,6 @@
+
+using System;
+
 public enum MoveEffect
 {
     None = ResourceType.None,

@@ -223,14 +223,14 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (_playerBlast.status != Status.None)
         {
-            NakamaLogic.ApplyStatusEffectAtEndOfTurn(_playerBlast, _wildBlast);
+            (_playerBlast, _wildBlast) = NakamaLogic.ApplyStatusEffectAtEndOfTurn(_playerBlast, _wildBlast);
 
             await _gameView.ApplyStatusEndTurn(true, _playerBlast, _wildBlast);
         }
 
         if (_wildBlast.status != Status.None)
         {
-            NakamaLogic.ApplyStatusEffectAtEndOfTurn(_wildBlast, _playerBlast);
+            (_wildBlast, _playerBlast) = NakamaLogic.ApplyStatusEffectAtEndOfTurn(_wildBlast, _playerBlast);
 
             await _gameView.ApplyStatusEndTurn(false, _wildBlast, _playerBlast);
         }
@@ -298,10 +298,9 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         Blast attacker = isPlayerAttack ? _playerBlast : _wildBlast;
         Blast defender = isPlayerAttack ? _wildBlast : _playerBlast;
         int moveDamage = isPlayerAttack ? turnState.p_move_damage : turnState.wb_move_damage;
-        Status moveStatus = isPlayerAttack ? turnState.p_move_status : turnState.wb_move_status;
+        MoveEffect moveEffect = isPlayerAttack ? turnState.p_move_effect : turnState.wb_move_effect;
 
         defender.Hp -= moveDamage;
-        defender.status -= moveStatus;
 
         Move move = isPlayerAttack ? _dataUtils.GetMoveById(attacker.activeMoveset[_playerAction.MoveIndex]) : _dataUtils.GetMoveById(attacker.activeMoveset[_wbAction.MoveIndex]);
 
@@ -309,11 +308,16 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             attacker.Mana -= move.cost;
 
-            await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveStatus);
+            await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
         }
         else
         {
             await _gameView.CantAttack(isPlayerAttack, attacker, move);
+        }
+
+        if (moveEffect != MoveEffect.None)
+        {
+            (_, defender) = NakamaLogic.ApplyEffect(defender, move);
         }
     }
     private void UpdateOpponentTurn(TurnStateData turnState)
@@ -324,7 +328,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             _wbAction.MoveIndex = turnState.wb_move_index;
             _wbAction.MoveDamage = turnState.wb_move_damage;
-            _wbAction.MoveStatus = turnState.wb_move_status;
+            _wbAction.MoveEffect = turnState.wb_move_effect;
         }
     }
 
@@ -471,7 +475,7 @@ public struct TurnAction
 
     public int MoveIndex;
     public int MoveDamage;
-    public Status MoveStatus;
+    public MoveEffect MoveEffect;
 
     public int ItemIndex;
     public int SelectedBlastIndex;

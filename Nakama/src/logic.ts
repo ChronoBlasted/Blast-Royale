@@ -240,7 +240,7 @@ function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
     return modifier;
 }
 
-function calculateEffectWithProbability(blast: Blast, move: Move): Blast {
+function calculateEffectWithProbability(blast: Blast, move: Move): { blast: Blast, moveEffect: MoveEffect } {
     const statusEffectProbabilities: { [key in MoveEffect]?: number } = {
         [MoveEffect.Burn]: 0.1,
         [MoveEffect.Seeded]: 0.1,
@@ -261,10 +261,10 @@ function calculateEffectWithProbability(blast: Blast, move: Move): Blast {
     // Ajuste la probabilité en fonction de l'entrée "probability"
     const effectProbability = statusEffectProbabilities[move.effect!];
     if (Math.random() < effectProbability!) {
-        return applyEffect(blast, move);
+        return { blast: applyEffect(blast, move), moveEffect: move.effect! };
     }
 
-    return blast;
+    return { blast, moveEffect: MoveEffect.None };
 }
 
 
@@ -343,7 +343,7 @@ function applyStatusEffectAtStartOfTurn(blast: Blast, otherBlast: Blast, move: M
     return { blast, otherBlast, move };
 }
 
-function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast: Blast, otherBlast: Blast} {
+function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast: Blast, otherBlast: Blast } {
     switch (blast.status) {
         case Status.Burn:
             blast.hp = Math.max(0, blast.hp - Math.floor(blast.maxHp / 8));
@@ -419,9 +419,9 @@ function healManaBlast(blast: Blast, amount: number): Blast {
     return blast;
 }
 
-function calculateCaptureProbability(currentHP: number, maxHP: number, catchRate: number, temCardBonus: number, statusBonus: number): number {
+function calculateCaptureProbability(currentHP: number, maxHP: number, catchRate: number, trapBonus: number, statusBonus: number): number {
     const hpFactor = (3 * maxHP - 2 * currentHP) / (3 * maxHP);
-    const baseProbability = catchRate * hpFactor * temCardBonus * statusBonus;
+    const baseProbability = catchRate * hpFactor * trapBonus * statusBonus;
 
     const captureProbability = Math.min(Math.max(baseProbability, 0), 1);
 
@@ -432,10 +432,10 @@ function isBlastCaptured(
     currentHP: number,
     maxHP: number,
     catchRate: number,
-    temCardBonus: number,
+    trapBonus: number,
     statusBonus: number
 ): boolean {
-    const captureProbability = calculateCaptureProbability(currentHP, maxHP, catchRate, temCardBonus, statusBonus) * 100;
+    const captureProbability = calculateCaptureProbability(currentHP, maxHP, catchRate, trapBonus, statusBonus) * 100;
 
     const randomValue = Math.random() * 100;
 

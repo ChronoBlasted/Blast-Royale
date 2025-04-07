@@ -244,7 +244,7 @@ public class GameView : View
         }
     }
 
-    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, Status status = Status.None)
+    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, MoveEffect moveEffect)
     {
         HUDLayout attackerHUD;
         HUDLayout defenderHUD;
@@ -276,8 +276,14 @@ public class GameView : View
             await _dialogLayout.UpdateTextAsync("It's not super affective !");
         }
 
-        await Task.Delay(TimeSpan.FromMilliseconds(500));
+        if (moveEffect != MoveEffect.None)
+        {
+            string dialogText;
+            (dialogText, _) = NakamaLogic.ApplyEffect(defender, move);
+            await _dialogLayout.UpdateTextAsync(dialogText);
+        }
 
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
     public async Task CantAttack(bool isPlayer, Blast blast, Move move)

@@ -13,12 +13,14 @@ public enum ResourceType
     Unlock = 405,
     FloatingText = 406,
     BlastDefeated = 407,
+
     Blast = 408,
     Item = 409,
     BlastPedia = 410,
     ItemPedia = 411,
-    ErrorMsg = 412,
     MovePedia = 413,
+
+    ErrorMsg = 412,
 
     Health = 420,
     Mana = 421,
@@ -44,12 +46,16 @@ public enum ResourceType
     AttackBoost = 467,
     DefenseBoost = 468,
     SpeedBoost =  469,
-
     AttackReduce = 470,
     DefenseReduce = 471,
     SpeedReduce = 472,
 
     Cleanse = 473,
+
+    AttackDamage = 500,
+    AttackStatus = 501,
+
+    PlatformCost = 510,
 }
 
 public enum UIType
