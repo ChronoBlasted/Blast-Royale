@@ -252,6 +252,11 @@ function getMoveById(id: number): Move {
     return move;
 }
 
+function getMovesByIds(ids: number[]): Move[] {
+    return ids.map(id => getMoveById(id));
+}
+
+
 const movePedia: Move[] = [
     Tackle,
     Punch,

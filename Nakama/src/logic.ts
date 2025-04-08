@@ -447,6 +447,33 @@ function getRandomMeteo(): Meteo {
     return randomElement(values);
 }
 
+function getRandomUsableMove(
+    allMoves: Move[], 
+    currentMana: number, 
+    currentPlatformTypes: Type[]
+): number {
+
+    const usableMoves: Move[] = [];
+
+    for (const move of allMoves) {
+        if (move.cost > currentMana) continue;
+
+        const energyCount = currentPlatformTypes.filter(t => t === move.type).length;
+        if (energyCount < move.platform_cost) continue;
+
+        usableMoves.push(move);
+    }
+
+    if (usableMoves.length === 0) {
+        return -1;
+    }
+
+    const randomIndex = Math.floor(Math.random() * usableMoves.length);
+    return randomIndex;
+}
+
+
+
 //#endregion
 
 

@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class MoveSelectorPopup : Popup
 {
-    [SerializeField] Image _bg;
     [SerializeField] MoveLayout _currentMoveToReplace;
     [SerializeField] Transform _scrollMoveAvaible;
     [SerializeField] MoveLayout _moveLayoutPrefab;
@@ -33,8 +32,6 @@ public class MoveSelectorPopup : Popup
     {
         _uuidBlast = blast.uuid;
         _outMoveIndex = outMoveIndex;
-
-        _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(moveToReplace.type).Color;
 
         List<Move> blastMoveset = blast.activeMoveset.Select(index => NakamaData.Instance.GetMoveById(index)).ToList();
         List<Move> availablesMoves = new List<Move>();
@@ -68,8 +65,6 @@ public class MoveSelectorPopup : Popup
 
     public void HandleChangeMove()
     {
-
-        Debug.Log("SWAP");
         NakamaManager.Instance.NakamaUserAccount.SwitchMoveBlast(_uuidBlast, _outMoveIndex, _newMoveIndex);
     }
 }

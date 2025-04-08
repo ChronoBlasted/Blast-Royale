@@ -26,10 +26,11 @@ public class MoveLayout : MonoBehaviour
 
         if (move.effect != MoveEffect.None)
         {
+            _moveDescTxt.gameObject.SetActive(true);
             string Can = move.platform_cost > 0 ? "" : "Can ";
             _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
         }
-        else _moveDescTxt.text = "";
+        else _moveDescTxt.gameObject.SetActive(false);
 
         _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Sprite;
 
@@ -62,6 +63,7 @@ public class MoveLayout : MonoBehaviour
         else
         {
             _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackStatus).Sprite;
+
             _movePowerTxt.text = "";
         }
     }

@@ -263,7 +263,15 @@ public class GameView : View
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
         defenderHUD = isPlayer ? _opponentHUD : _playerHUD;
 
-        attackerHUD.UpdateManaBar(attacker.Mana);
+        if (move.IsPlatformAttack())
+        {
+            attackerHUD.PlatformLayout.RemoveEnergyByType(move.type, move.platform_cost);
+        }
+        else
+        {
+            attackerHUD.UpdateManaBar(attacker.Mana);
+            attackerHUD.PlatformLayout.AddEnergy(move.type);
+        }
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);
 

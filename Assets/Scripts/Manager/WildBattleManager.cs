@@ -297,22 +297,23 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     {
         Blast attacker = isPlayerAttack ? _playerBlast : _wildBlast;
         Blast defender = isPlayerAttack ? _wildBlast : _playerBlast;
+        Move move = isPlayerAttack ? _dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]) : _dataUtils.GetMoveById(_wildBlast.activeMoveset[_wbAction.MoveIndex]);
+
         int moveDamage = isPlayerAttack ? turnState.p_move_damage : turnState.wb_move_damage;
         MoveEffect moveEffect = isPlayerAttack ? turnState.p_move_effect : turnState.wb_move_effect;
 
         defender.Hp -= moveDamage;
 
-        Move move = isPlayerAttack ? _dataUtils.GetMoveById(attacker.activeMoveset[_playerAction.MoveIndex]) : _dataUtils.GetMoveById(attacker.activeMoveset[_wbAction.MoveIndex]);
 
-        if (attacker.Mana >= move.cost)
+        if (move.platform_cost > 0)
         {
-            attacker.Mana -= move.cost;
-
             await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
         }
         else
         {
-            await _gameView.CantAttack(isPlayerAttack, attacker, move);
+            attacker.Mana -= move.cost;
+
+            await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
         }
 
         if (moveEffect != MoveEffect.None)

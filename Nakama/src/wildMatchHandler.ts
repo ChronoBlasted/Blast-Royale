@@ -235,7 +235,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     p_move_damage: 0,
                     p_move_effect: MoveEffect.None,
 
-                    wb_move_index: getRandomNumber(0, state.wild_blast!.activeMoveset!.length - 1),
+                    wb_move_index: getRandomUsableMove(getMovesByIds(state.wild_blast!.activeMoveset!), state.wild_blast!.mana, state.wild_blast_platform),
                     wb_move_damage: 0,
                     wb_move_effect: MoveEffect.None,
 
@@ -561,7 +561,7 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
                 state.wild_blast = result.blast;
                 state.TurnStateData.wb_move_effect = result.moveEffect;
             }
-            
+
             const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
 
             state.TurnStateData.wb_move_damage = damage;

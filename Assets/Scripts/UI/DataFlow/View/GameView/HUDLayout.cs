@@ -13,6 +13,7 @@ public class HUDLayout : MonoBehaviour
     [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
     [SerializeField] Image _blastImg, _coverWhite, _borderHUD;
     [SerializeField] SliderBar _hpSlider, _manaSlider;
+    [SerializeField] PlatformLayout _platformLayout;
 
     [SerializeField] bool _isPlayerBlast;
 
@@ -20,6 +21,8 @@ public class HUDLayout : MonoBehaviour
     Vector3 _startPos;
 
     Tweener _attackAnimTween, _takeDamageAnimTween;
+
+    public PlatformLayout PlatformLayout { get => _platformLayout; }
 
     public void Init(Blast blast)
     {
