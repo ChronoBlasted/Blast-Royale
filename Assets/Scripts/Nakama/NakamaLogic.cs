@@ -143,10 +143,9 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             case MoveEffect.Cleanse:
                 blast.status = Status.None;
                 return ("All status effects cleansed", blast);
-
-            default:
-                return ("No effect applied", blast);
         }
+
+        return ("No effect applied", blast);
     }
 
 

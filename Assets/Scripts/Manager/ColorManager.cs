@@ -6,6 +6,7 @@ using UnityEngine;
 public class ColorManager : MonoSingleton<ColorManager>
 {
     [SerializeField] Color _healColor, _manaColor, _catchColor, _statusColor;
+    [SerializeField] Color _burnColor, _seededColor, _wetColor;
 
     [SerializeField] Sprite _activeSprite, _inactiveSprite;
 
@@ -33,5 +34,20 @@ public class ColorManager : MonoSingleton<ColorManager>
         }
 
         return colorToReturn;
+    }
+
+    public Color GetStatusColor(Status status)
+    {
+        switch (status)
+        {
+            case Status.Burn:
+                return _burnColor;
+            case Status.Seeded:
+                return _seededColor;
+            case Status.Wet:
+                return _wetColor;
+        }
+
+        return Color.white;
     }
 }

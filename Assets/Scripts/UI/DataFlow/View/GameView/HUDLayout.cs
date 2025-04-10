@@ -9,38 +9,43 @@ using UnityEngine.UI;
 
 public class HUDLayout : MonoBehaviour
 {
-    [SerializeField] CanvasGroup _cg;
-    [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
-    [SerializeField] Image _blastImg, _coverWhite, _borderHUD;
-    [SerializeField] SliderBar _hpSlider, _manaSlider;
-    [SerializeField] PlatformLayout _platformLayout;
-
     [SerializeField] bool _isPlayerBlast;
+    [SerializeField] CanvasGroup _cg;
+    [SerializeField] Image _borderHUD;
+    [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
+    [SerializeField] SliderBar _hpSlider, _manaSlider;
+
+    [SerializeField] RectTransform _blastTransformInUI;
+    [SerializeField] BlastInWorld _blastInWorld;
+
+    [SerializeField] ModifierManager _modifierManager;
+    [SerializeField] StatusLayout _statusLayout;
 
     Blast _blast;
-    Vector3 _startPos;
 
     Tweener _attackAnimTween, _takeDamageAnimTween;
 
-    public PlatformLayout PlatformLayout { get => _platformLayout; }
+    public RectTransform BlastTransformInUI { get => _blastTransformInUI; }
+    public BlastInWorld BlastInWorld { get => _blastInWorld; }
 
     public void Init(Blast blast)
     {
         BlastData data = NakamaData.Instance.GetBlastDataById(blast.data_id);
 
         _blast = blast;
-        _startPos = transform.position;
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
-
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
 
-        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
-        _coverWhite.sprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
         _borderHUD.color = ResourceObjectHolder.Instance.GetTypeDataByType(data.type).Color;
 
         _hpSlider.Init(_blast.Hp, _blast.MaxHp);
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);
+
+        Sprite blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
+
+        _blastInWorld.Init(blastSprite);
+        _blastInWorld.PlatformLayout.Init();
     }
 
     public void UpdateHpBar(int newHp, float duration = .2f, float delay = 0f)
@@ -61,8 +66,8 @@ public class HUDLayout : MonoBehaviour
             _attackAnimTween = null;
         }
 
-        if (_isPlayerBlast) _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(100, 100), 0.5f).SetLoops(2, LoopType.Yoyo);
-        else _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(-100, -100), 0.5f).SetLoops(2, LoopType.Yoyo);
+        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(2, 2), 0.5f).SetLoops(2, LoopType.Yoyo);
+        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(-2, -2), 0.5f).SetLoops(2, LoopType.Yoyo);
 
         opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
 
@@ -77,11 +82,10 @@ public class HUDLayout : MonoBehaviour
             _takeDamageAnimTween = null;
         }
 
-        _takeDamageAnimTween = _coverWhite.DOFade(1, .1f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutQuad).SetDelay(delay);
+        _takeDamageAnimTween = _blastInWorld.BlastRender.DOColor(Color.black, .1f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutQuad).SetDelay(delay);
 
         opponentHUD.UpdateHpBar(defender.Hp, .2f * effective, delay + .1f);
     }
-
 
     public async Task DoFaintedAnim()
     {
@@ -91,17 +95,15 @@ public class HUDLayout : MonoBehaviour
             _attackAnimTween = null;
         }
 
-        _blastImg.DOFade(0, .5f);
+        _blastInWorld.BlastRender.DOFade(0, .5f);
 
-        if (_isPlayerBlast) _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(0, -100), 0.5f);
-        else _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(0, -100), 0.5f);
+        _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(0, -2), 0.5f);
 
         transform.DOScale(0f, .5f);
         _cg.DOFade(0f, .5f);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
-
 
     public async Task ComeBackBlast(bool isIntant = false)
     {
@@ -113,11 +115,11 @@ public class HUDLayout : MonoBehaviour
             _attackAnimTween = null;
         }
 
-        if (_isPlayerBlast) _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(-100, -100), duration);
-        else _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(new Vector2(100, 100), duration);
+        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(-2, -2), duration);
+        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(2, 2), duration);
 
         _cg.DOFade(0f, duration);
-        _blastImg.DOFade(0, duration);
+        _blastInWorld.BlastRender.DOFade(0, duration);
 
         transform.DOScale(0f, duration);
 
@@ -134,14 +136,40 @@ public class HUDLayout : MonoBehaviour
             _attackAnimTween = null;
         }
 
-        if (_isPlayerBlast) _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(Vector2.zero, duration);
-        else _attackAnimTween = _blastImg.rectTransform.DOAnchorPos(Vector2.zero, duration);
+        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
+        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
 
         _cg.DOFade(1f, duration);
-        _blastImg.DOFade(1f, duration);
+        _blastInWorld.BlastRender.DOFade(1f, duration);
 
         transform.DOScale(1f, duration);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
+    }
+
+    public void SetStatus(Status newStatus)
+    {
+        if (newStatus == Status.None)
+        {
+            _statusLayout.gameObject.SetActive(false); // TODO DO A SMOOTH RELAY
+            return;
+        }
+        else _statusLayout.gameObject.SetActive(true);
+
+        _statusLayout.Init(newStatus);
+    }
+
+    public void AddModifier(MoveEffect newModifier)
+    {
+        if (newModifier == MoveEffect.AttackBoost ||
+            newModifier == MoveEffect.AttackReduce ||
+            newModifier == MoveEffect.DefenseBoost ||
+            newModifier == MoveEffect.DefenseReduce ||
+            newModifier == MoveEffect.SpeedBoost ||
+            newModifier == MoveEffect.SpeedReduce
+            )
+        {
+            _modifierManager.AddModifier(newModifier);
+        }
     }
 }

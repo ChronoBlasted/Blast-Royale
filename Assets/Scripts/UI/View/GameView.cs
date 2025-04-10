@@ -51,7 +51,6 @@ public class GameView : View
     public override void CloseView()
     {
         base.CloseView();
-
     }
 
     void ChangePanel(Panel newMiniPanel)
@@ -109,13 +108,15 @@ public class GameView : View
 
     #region WildBlastBattle
 
-    public void SetMeteo(Meteo meteo)
+    public void SetMeteo(Meteo startDataMeteo)
     {
+        var meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startDataMeteo);
+
         var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
 
         DialogLayout.SetMeteo(meteoData.Name.GetLocalizedString());
 
-        //Instantiate(meteoData.Prefab); TODO mettre un fx de meteo
+        EnvironmentManager.Instance.SetMeteo(meteo);
     }
 
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
@@ -155,8 +156,7 @@ public class GameView : View
 
         await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() +
             " suffer from " +
-            ResourceObjectHolder.Instance.GetResourceByType((ResourceType)blast.status));
-
+            ResourceObjectHolder.Instance.GetResourceByType((ResourceType)blast.status).Name.GetLocalizedString());
 
         blastHUD.UpdateManaBar(blast.Mana);
         blastHUD.UpdateHpBar(blast.Hp);
@@ -265,12 +265,12 @@ public class GameView : View
 
         if (move.IsPlatformAttack())
         {
-            attackerHUD.PlatformLayout.RemoveEnergyByType(move.type, move.platform_cost);
+            attackerHUD.BlastInWorld.PlatformLayout.RemoveEnergyByType(move.type, move.platform_cost);
         }
         else
         {
             attackerHUD.UpdateManaBar(attacker.Mana);
-            attackerHUD.PlatformLayout.AddEnergy(move.type);
+            attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
         }
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);
@@ -288,6 +288,10 @@ public class GameView : View
         {
             string dialogText;
             (dialogText, _) = NakamaLogic.ApplyEffect(defender, move);
+
+            defenderHUD.SetStatus(defender.status);
+            defenderHUD.AddModifier(moveEffect);
+
             await _dialogLayout.UpdateTextAsync(dialogText);
         }
 

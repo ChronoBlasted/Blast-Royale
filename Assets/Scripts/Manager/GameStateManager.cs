@@ -15,6 +15,7 @@ public class GameStateManager : MonoSingleton<GameStateManager>
 
         Debug.Log("New GameState : " + _gameState);
 
+
         switch (_gameState)
         {
             case GameState.MENU:

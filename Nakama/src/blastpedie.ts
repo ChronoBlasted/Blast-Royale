@@ -25,7 +25,7 @@ interface BlastData {
     attack: number
     defense: number
     speed: number
-    movepool: MoveToLearn[]
+    movepool: moveToLearn[]
     nextEvolution: nextEvolutionStruct | null
     catchRate: number
     expYield: number
@@ -35,6 +35,11 @@ interface BlastData {
 interface nextEvolutionStruct {
     id :number
     levelRequired:number
+}
+
+interface modifierBlastStruct {
+    modifier: MoveEffect
+    amount: number
 }
 
 
@@ -122,14 +127,14 @@ const Jellys: BlastData = { // Jellys
 const Kitchi: BlastData = { // Kitchi
     id: 4,
     type: Type.NORMAL,
-    hp: 70,
+    hp: 5000,
     mana: 70,
     attack: 75,
     defense: 65,
     speed: 80,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Ember.id, levelMin: 5 },
+        { move_id: Ember.id, levelMin: 3 },
         { move_id: FirePunch.id, levelMin: 10 },
     ],
     nextEvolution: null,
@@ -141,14 +146,14 @@ const Kitchi: BlastData = { // Kitchi
 const Kenchi: BlastData = { // Kenchi
     id: 5,
     type: Type.NORMAL,
-    hp: 75,
+    hp: 5000,
     mana: 70,
     attack: 80,
     defense: 70,
     speed: 65,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Ember.id, levelMin: 5 },
+        { move_id: Ember.id, levelMin: 2 },
         { move_id: FireBlast.id, levelMin: 10 },
     ],
     nextEvolution: null,
@@ -160,14 +165,14 @@ const Kenchi: BlastData = { // Kenchi
 const Mousy: BlastData = { // Mousy
     id: 6,
     type: Type.NORMAL,
-    hp: 70,
+    hp: 5000,
     mana: 75,
     attack: 65,
     defense: 70,
     speed: 80,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Bubble.id, levelMin: 5 },
+        { move_id: Bubble.id, levelMin: 2 },
         { move_id: BubbleBeam.id, levelMin: 10 },
     ],
     nextEvolution: null,
@@ -179,7 +184,7 @@ const Mousy: BlastData = { // Mousy
 const Clawball: BlastData = { // Clawball
     id: 7,
     type: Type.GROUND,
-    hp: 80,
+    hp: 5000,
     mana: 70,
     attack: 75,
     defense: 80,

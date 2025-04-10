@@ -17,6 +17,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         PoolManager.Instance.Init();
 
+        EnvironmentManager.Instance.Init();
+
         WildBattleManager.Instance.Init();
 
         NakamaManager.Instance.Init();

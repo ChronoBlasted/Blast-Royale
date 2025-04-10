@@ -22,7 +22,7 @@ public class MoveLayout : MonoBehaviour
 
         _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString();
 
-        var moveEffect = NakamaLogic.GetEnumFromIndex<MoveEffect>((int)move.effect);
+        var moveEffect = move.effect;
 
         if (move.effect != MoveEffect.None)
         {
@@ -70,8 +70,32 @@ public class MoveLayout : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (_move.cost > _blast.Mana) _moveCostTxt.color = Color.red;
-        else _moveCostTxt.color = Color.white;
+        if (_move.platform_cost > 0)
+        {
+            if (_move.platform_cost > UIManager.Instance.GameView.PlayerHUD.BlastInWorld.PlatformLayout.GetAmountOfType(_move.type))
+            {
+                _moveCostTxt.color = Color.red;
+                Lock();
+            }
+            else
+            {
+                _moveCostTxt.color = Color.white;
+                Unlock();
+            }
+        }
+        else
+        {
+            if (_move.cost > _blast.Mana)
+            {
+                _moveCostTxt.color = Color.red;
+                Lock();
+            }
+            else
+            {
+                _moveCostTxt.color = Color.white;
+                Unlock();
+            }
+        }
     }
 
     public void UpdateOnClick(UnityAction action)

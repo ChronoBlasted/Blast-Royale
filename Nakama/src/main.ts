@@ -146,26 +146,27 @@ enum Status {
 };
 
 enum MoveEffect {
-    None,
-    Burn,
-    Seeded,
-    Wet,
+    None = 0,
+    
+    Burn = 460,
+    Seeded = 461,
+    Wet = 462,
 
-    ManaExplosion,
-    HpExplosion,
+    ManaExplosion = 463,
+    HpExplosion = 464,
 
-    ManaRestore,
-    HpRestore,
+    ManaRestore = 465,
+    HpRestore = 466,
 
-    AttackBoost,
-    DefenseBoost,
-    SpeedBoost,
+    AttackBoost = 467,
+    DefenseBoost = 468,
+    SpeedBoost = 469,
 
-    AttackReduce,
-    DefenseReduce,
-    SpeedReduce,
+    AttackReduce = 470,
+    DefenseReduce = 471,
+    SpeedReduce = 472,
 
-    Cleanse,
+    Cleanse = 473,
 }
 
 enum Rarity {

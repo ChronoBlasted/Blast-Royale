@@ -13,6 +13,5 @@ public class Move
 
     public bool IsPlatformAttack() => platform_cost > 0;
     public bool IsStatusAttack() => power > 0;
-
 }
 

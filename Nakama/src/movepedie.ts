@@ -1,4 +1,4 @@
-interface MoveToLearn {
+interface moveToLearn {
     move_id: number
     levelMin: number
 }
@@ -177,7 +177,7 @@ const SolarBeam: Move = {
     id: 17,
     type: Type.GRASS,
     power: 120,
-    cost: 50,
+    cost: 0,
     priority: 0,
     platform_cost: 2,
     effect: MoveEffect.Seeded,
@@ -234,7 +234,7 @@ const ElectroBall: Move = {
 };
 
 const Cleanse: Move = {
-    id: 22,
+    id: 23,
     type: Type.NORMAL,
     power: 0,
     cost: 0,

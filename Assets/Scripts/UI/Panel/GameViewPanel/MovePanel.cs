@@ -24,6 +24,7 @@ public class MovePanel : Panel
         for (int i = 0; i < moveInBatleLayouts.Count; i++)
         {
             if (i < _blast.activeMoveset.Count) moveInBatleLayouts[i].UpdateUI();
+
         }
     }
 
