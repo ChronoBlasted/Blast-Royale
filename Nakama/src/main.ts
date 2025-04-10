@@ -199,4 +199,11 @@ enum Meteo {
     Leaves,
 }
 
+enum Stats {
+    None,
+    Attack,
+    Defense,
+    Speed,
+}
+
 //#endregion

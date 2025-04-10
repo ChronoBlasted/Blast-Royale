@@ -39,7 +39,7 @@ interface nextEvolutionStruct {
 }
 
 interface modifierBlastStruct {
-    modifier: MoveEffect
+    stats: Stats
     amount: number
 }
 

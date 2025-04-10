@@ -43,7 +43,8 @@ const DefaultDeckBlasts: Blast[] = [
             defense: calculateBlastStat(Lizzy.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Lizzy.speed, iv, DefaultBlastLevel),
             status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Lizzy, calculateExperienceFromLevel(DefaultBlastLevel))
+            activeMoveset: getRandomActiveMoveset(Lizzy, calculateExperienceFromLevel(DefaultBlastLevel)),
+            modifier: []
         };
     })(),
     (() => {
@@ -61,7 +62,9 @@ const DefaultDeckBlasts: Blast[] = [
             defense: calculateBlastStat(Punchball.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Punchball.speed, iv, DefaultBlastLevel),
             status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Punchball, calculateExperienceFromLevel(DefaultBlastLevel))
+            activeMoveset: getRandomActiveMoveset(Punchball, calculateExperienceFromLevel(DefaultBlastLevel)),
+            modifier: []
+
         };
     })(),
     (() => {
@@ -79,7 +82,9 @@ const DefaultDeckBlasts: Blast[] = [
             defense: calculateBlastStat(Jellys.defense, iv, DefaultBlastLevel),
             speed: calculateBlastStat(Jellys.speed, iv, DefaultBlastLevel),
             status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Jellys, calculateExperienceFromLevel(DefaultBlastLevel))
+            activeMoveset: getRandomActiveMoveset(Jellys, calculateExperienceFromLevel(DefaultBlastLevel)),
+            modifier: []
+
         };
     })(),
 ];
@@ -126,7 +131,8 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
             defense: 0,
             speed: 0,
             status: Status.None,
-            activeMoveset: []
+            activeMoveset: [],
+            modifier: []
         };
 
         if (userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
@@ -204,7 +210,8 @@ const rpcEvolveBlast: nkruntime.RpcFunction =
             defense: 0,
             speed: 0,
             status: Status.None,
-            activeMoveset: []
+            activeMoveset: [],
+            modifier: []
         };
 
         if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
@@ -278,21 +285,6 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
     userCards = loadUserBlast(nk, logger, userId);
 
     let isInDeck: boolean = false;
-    let selectedBlast: Blast = {
-        uuid: "",
-        data_id: 0,
-        exp: 0,
-        iv: 0,
-        hp: 0,
-        maxHp: 0,
-        mana: 0,
-        maxMana: 0,
-        attack: 0,
-        defense: 0,
-        speed: 0,
-        status: Status.None,
-        activeMoveset: []
-    };
 
     if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
         isInDeck = true;

@@ -298,26 +298,23 @@ function applyEffect(blast: Blast, move: Move): Blast {
             break;
 
         case MoveEffect.AttackBoost:
-            blast.attack = Math.floor(blast.attack * 1.5);
-            blast.attack = Math.min(blast.attack, 500);
+            blast.modifier = updateModifier(blast.modifier, Stats.Attack, +1); 
             break;
         case MoveEffect.DefenseBoost:
-            blast.defense = Math.floor(blast.defense * 1.5);
-            blast.defense = Math.min(blast.defense, 500);
+            blast.modifier = updateModifier(blast.modifier, Stats.Defense, +1); 
+
             break;
         case MoveEffect.SpeedBoost:
-            blast.speed = Math.floor(blast.speed * 1.5);
-            blast.speed = Math.min(blast.speed, 500);
+            blast.modifier = updateModifier(blast.modifier, Stats.Speed, +1); 
             break;
-
         case MoveEffect.AttackReduce:
-            blast.attack = Math.max(1, Math.floor(blast.attack * 0.75));
+            blast.modifier = updateModifier(blast.modifier, Stats.Attack, -1); 
             break;
         case MoveEffect.DefenseReduce:
-            blast.defense = Math.max(1, Math.floor(blast.defense * 0.75));
+            blast.modifier = updateModifier(blast.modifier, Stats.Defense, -1); 
             break;
         case MoveEffect.SpeedReduce:
-            blast.speed = Math.max(1, Math.floor(blast.speed * 0.75));
+            blast.modifier = updateModifier(blast.modifier, Stats.Speed, -1); 
             break;
 
         case MoveEffect.Cleanse:
@@ -328,20 +325,20 @@ function applyEffect(blast: Blast, move: Move): Blast {
     return blast;
 }
 
+function updateModifier(mods: modifierBlastStruct[], stat: Stats, delta: number): modifierBlastStruct[] {
 
-function applyStatusEffectAtStartOfTurn(blast: Blast, otherBlast: Blast, move: Move): { blast: Blast, otherBlast: Blast, move: Move } {
-
-    switch (blast.status) {
-        case Status.Wet:
-            move.priority = Math.max(-2, move.priority - 1);
-            break;
-
-        default:
-            break;
+    const index = mods.findIndex((m) => m.stats === stat);
+    
+    if (index >= 0) {
+      mods[index].amount += delta;
+      if (mods[index].amount <= 0) mods.splice(index, 1);
+    } else if (delta > 0) {
+      mods.push({ stats: stat, amount: delta });
     }
+    return mods;
+  }
+  
 
-    return { blast, otherBlast, move };
-}
 
 function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast: Blast, otherBlast: Blast } {
     switch (blast.status) {
@@ -356,6 +353,9 @@ function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast:
             otherBlast.hp = Math.min(otherBlast.maxHp, otherBlast.hp + healAmount);
             break;
 
+        case Status.Wet:
+            blast.mana = Math.max(0, blast.mana - Math.floor(blast.maxMana / 16));
+            break;
         default:
             break;
     }
@@ -448,8 +448,8 @@ function getRandomMeteo(): Meteo {
 }
 
 function getRandomUsableMove(
-    allMoves: Move[], 
-    currentMana: number, 
+    allMoves: Move[],
+    currentMana: number,
     currentPlatformTypes: Type[]
 ): number {
 
