@@ -15,6 +15,7 @@ interface Blast {
     speed: number;
     status: Status;
     activeMoveset: number[];
+    modifier : modifierBlastStruct[];
 }
 
 interface BlastData {
@@ -41,7 +42,6 @@ interface modifierBlastStruct {
     modifier: MoveEffect
     amount: number
 }
-
 
 // BlastData
 

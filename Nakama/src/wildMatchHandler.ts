@@ -545,30 +545,30 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
 
         if (wb_move.platform_cost > 0) {
             let amountType = getAmountOfPlatformTypeByType(state.wild_blast_platform, wb_move.type);
-    
+
             if (amountType < wb_move.platform_cost) {
                 ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
                 return { state };
             }
-    
+
             if (wb_move.effect != MoveEffect.None) state.player1_current_blast = applyEffect(state.player1_current_blast!, wb_move);
-    
+
             state.TurnStateData.wb_move_effect = wb_move.effect;
             state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, wb_move.platform_cost);
-    
+
         } else {
-    
+
             if (wb_move.effect != MoveEffect.None) {
                 const result = calculateEffectWithProbability(state.player1_current_blast!, wb_move);
                 state.player1_current_blast = result.blast;
                 state.TurnStateData.wb_move_effect = result.moveEffect;
             }
-    
+
             const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
-    
+
             state.TurnStateData.wb_move_damage = damage;
             state.TurnStateData.wb_turn_type = TurnType.ATTACK;
-    
+
             state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
             if (calculateWeatherModifier(state.meteo, wb_move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
         }
@@ -588,6 +588,27 @@ function handleAttackTurn(isPlayerFaster: boolean, state: WildBattleData, move: 
 }
 
 function performAttackSequence(state: WildBattleData, playerMove: Move, dispatcher: nkruntime.MatchDispatcher, nk: nkruntime.Nakama, logger: nkruntime.Logger): WildBattleData {
+
+    if (state.TurnStateData.wb_move_index >= 0) {
+
+        var wb_move_priority = getMoveById(state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index]).priority;
+
+        if (playerMove.priority > wb_move_priority) {
+            ({ state } = handleAttackTurn(true, state, playerMove, dispatcher, nk, logger));
+
+            if (state.battle_state == BattleState.READY) ({ state } = handleAttackTurn(false, state, playerMove, dispatcher, nk, logger));
+
+            return state;
+
+        } else if (playerMove.priority < wb_move_priority) {
+            ({ state } = handleAttackTurn(false, state, playerMove, dispatcher, nk, logger));
+
+            if (state.battle_state == BattleState.READY) ({ state } = handleAttackTurn(true, state, playerMove, dispatcher, nk, logger));
+
+            return state;
+
+        }
+    }
 
     ({ state } = handleAttackTurn(getFasterBlast(state.player1_current_blast!, state.wild_blast!), state, playerMove, dispatcher, nk, logger));
 

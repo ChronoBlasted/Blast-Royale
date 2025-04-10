@@ -168,6 +168,15 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             bool isPlayerBlastFaster = NakamaLogic.GetFasterBlast(_playerBlast, _wildBlast);
 
+            if (_dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]).priority > _dataUtils.GetMoveById(_playerBlast.activeMoveset[_wbAction.MoveIndex]).priority)
+            {
+                isPlayerBlastFaster = true;
+            }
+            else if (_dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]).priority < _dataUtils.GetMoveById(_playerBlast.activeMoveset[_wbAction.MoveIndex]).priority)
+            {
+                isPlayerBlastFaster = false;
+            }
+
             if (isPlayerBlastFaster) await Attack(turnState, true);
             else await Attack(turnState, false);
 
