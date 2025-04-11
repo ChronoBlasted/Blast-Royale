@@ -31,12 +31,12 @@ interface WildBattleData {
     player1_state: PlayerState;
     player1_id: string;
 
-    player1_current_blast: Blast | null;
-    player1_blasts: Blast[];
+    player1_current_blast: BlastEntity | null;
+    player1_blasts: BlastEntity[];
     player1_items: Item[];
     player1_platform: Type[];
 
-    wild_blast: Blast | null;
+    wild_blast: BlastEntity | null;
     wild_blast_platform: Type[];
 
 
@@ -175,7 +175,9 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-            state.wild_blast = getRandomBlastInAllPlayerArea(state.player1_id, nk);
+
+            var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk);
+            state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
             state.meteo = getRandomMeteo();
 
@@ -479,11 +481,11 @@ function connectedPlayers(s: WildBattleData): number {
 //#region  Attack Logic
 
 
-function applyBlastAttack(attacker: Blast, defender: Blast, move: Move, state: WildBattleData): number {
+function applyBlastAttack(attacker: BlastEntity, defender: BlastEntity, move: Move, state: WildBattleData): number {
     let damage = calculateDamage(
         calculateLevelFromExperience(attacker.exp),
-        attacker.attack,
-        defender.defense,
+        attacker.attack * getModifierMultiplier(Stats.Attack, attacker.modifiers),
+        defender.defense * getModifierMultiplier(Stats.Defense, defender.modifiers),
         move.type,
         getBlastDataById(defender.data_id!).type,
         move.power,
@@ -536,45 +538,44 @@ function executeWildBlastAttack(state: WildBattleData, dispatcher: nkruntime.Mat
 
     if (state.TurnStateData.wb_move_index == -1) {
 
-        state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, true);
+        state.wild_blast!.mana = calculateStaminaRecovery(state.wild_blast!.mana, state.wild_blast!.mana, true);
         state.TurnStateData.wb_turn_type = TurnType.WAIT;
+
+        return { state };
     }
-    else {
 
-        let wb_move = getMoveById(state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index]);
+    let wb_move = getMoveById(state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index]);
 
-        if (wb_move.platform_cost > 0) {
-            let amountType = getAmountOfPlatformTypeByType(state.wild_blast_platform, wb_move.type);
+    if (wb_move.platform_cost > 0) {
+        let amountType = getAmountOfPlatformTypeByType(state.wild_blast_platform, wb_move.type);
 
-            if (amountType < wb_move.platform_cost) {
-                ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
-                return { state };
-            }
-
-            if (wb_move.effect != MoveEffect.None) state.player1_current_blast = applyEffect(state.player1_current_blast!, wb_move);
-
-            state.TurnStateData.wb_move_effect = wb_move.effect;
-            state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, wb_move.platform_cost);
-
-        } else {
-
-            if (wb_move.effect != MoveEffect.None) {
-                const result = calculateEffectWithProbability(state.player1_current_blast!, wb_move);
-                state.player1_current_blast = result.blast;
-                state.TurnStateData.wb_move_effect = result.moveEffect;
-            }
-
-            const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
-
-            state.TurnStateData.wb_move_damage = damage;
-            state.TurnStateData.wb_turn_type = TurnType.ATTACK;
-
-            state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
-            if (calculateWeatherModifier(state.meteo, wb_move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
+        if (amountType < wb_move.platform_cost) {
+            ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
+            return { state };
         }
+
+        if (wb_move.effect != MoveEffect.None) state.player1_current_blast = applyEffect(state.player1_current_blast!, wb_move);
+
+        state.TurnStateData.wb_move_effect = wb_move.effect;
+        state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, wb_move.type, wb_move.platform_cost);
+
+    } else {
+
+        if (wb_move.effect != MoveEffect.None) {
+            const result = calculateEffectWithProbability(state.player1_current_blast!, wb_move);
+            state.player1_current_blast = result.blast;
+            state.TurnStateData.wb_move_effect = result.moveEffect;
+        }
+
+
+        state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
+        if (calculateWeatherModifier(state.meteo, wb_move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, wb_move.type);
     }
 
+    const damage = applyBlastAttack(state.wild_blast!, state.player1_current_blast!, wb_move, state);
 
+    state.TurnStateData.wb_move_damage = damage;
+    state.TurnStateData.wb_turn_type = TurnType.ATTACK;
 
     return { state };
 }

@@ -6,16 +6,7 @@ interface Blast {
     data_id: number;
     exp: number;
     iv: number;
-    hp: number;
-    maxHp: number;
-    mana: number;
-    maxMana: number;
-    attack: number;
-    defense: number;
-    speed: number;
-    status: Status;
     activeMoveset: number[];
-    modifier : modifierBlastStruct[];
 }
 
 interface BlastData {
@@ -34,14 +25,57 @@ interface BlastData {
 }
 
 interface nextEvolutionStruct {
-    id :number
-    levelRequired:number
+    id: number
+    levelRequired: number
 }
 
 interface modifierBlastStruct {
     stats: Stats
     amount: number
 }
+
+class BlastEntity {
+    uuid: string;
+    data_id: number;
+    exp: number;
+    iv: number;
+
+    maxHp:number;
+    hp: number;
+    maxMana: number;
+    mana: number;
+
+    status: Status;
+    activeMoveset: number[];
+    modifiers: modifierBlastStruct[];
+    level: number;
+
+    attack: number;
+    defense: number;
+    speed: number;
+
+    constructor(uuid: string, data_id: number, exp: number, iv: number, moveset: number[]) {
+        this.uuid = uuid;
+        this.data_id = data_id;
+        this.exp = exp;
+        this.iv = iv;
+        this.status = Status.None;
+        this.activeMoveset = moveset;
+        this.modifiers = [];
+
+        this.level = calculateLevelFromExperience(this.exp);
+
+        this.maxHp = calculateBlastHp(getBlastDataById(this.data_id).hp, this.iv, this.level);
+        this.hp = this.maxHp;
+        this.maxMana = calculateBlastMana(getBlastDataById(this.data_id).mana, this.iv, this.level);
+        this.mana = this.maxMana;
+
+        this.attack = calculateBlastStat(getBlastDataById(this.data_id).attack, this.iv, this.level);
+        this.defense = calculateBlastStat(getBlastDataById(this.data_id).defense, this.iv, this.level);
+        this.speed =calculateBlastStat(getBlastDataById(this.data_id).speed, this.iv, this.level);
+    }
+}
+
 
 // BlastData
 

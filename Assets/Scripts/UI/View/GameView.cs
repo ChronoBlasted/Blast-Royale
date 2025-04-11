@@ -136,7 +136,9 @@ public class GameView : View
         }
         else
         {
-            await _dialogLayout.UpdateTextAsync("Wild " + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
+            string isWild = isPlayer ? "" : "Wild ";
+
+            await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
 
             waiterHUD = _opponentHUD;
         }
@@ -251,7 +253,7 @@ public class GameView : View
 
         float effective = NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
-        var isWild = isPlayer ? "Wild " : "";
+        var isWild = isPlayer ? "" : "Wild";
 
         await _dialogLayout.UpdateTextAsync(
             isWild +
@@ -287,12 +289,12 @@ public class GameView : View
         if (moveEffect != MoveEffect.None)
         {
             string dialogText;
-            (dialogText, _) = NakamaLogic.ApplyEffect(defender, move);
+            dialogText = NakamaLogic.GetEffectMessage(moveEffect);
 
             defenderHUD.SetStatus(defender.status);
             defenderHUD.AddModifier(moveEffect);
 
-            await _dialogLayout.UpdateTextAsync(dialogText);
+            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
@@ -306,7 +308,7 @@ public class GameView : View
 
         attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
 
-        var isWild = isPlayer ? "Wild " : "";
+        var isWild = isPlayer ? "" : "Wild";
 
         await _dialogLayout.UpdateTextAsync(
             isWild +
@@ -317,7 +319,7 @@ public class GameView : View
 
     public async Task MultiplierAttack(bool isPlayer, Blast blast, Move move)
     {
-        var isWild = isPlayer ? "Wild " : "";
+        var isWild = isPlayer ? "" : "Wild";
         await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
     }
 

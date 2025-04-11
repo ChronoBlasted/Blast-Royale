@@ -87,7 +87,7 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
 //     return newBlast;
 // }
 
-function getRandomBlastInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Blast {
+function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Blast {
 
     let metadata = nk.accountGetId(userId).user.metadata;
 
@@ -105,21 +105,12 @@ function getRandomBlastInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Bl
 
 function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, level: number): Blast {
     return {
-        uuid: nk.uuidv4(),
-        data_id: randomBlastId,
-        exp: calculateExperienceFromLevel(level),
-        iv: randomIv,
-        hp: calculateBlastHp(randomData.hp, randomIv, level),
-        maxHp: calculateBlastHp(randomData.hp, randomIv, level),
-        mana: calculateBlastMana(randomData.mana, randomIv, level),
-        maxMana: calculateBlastMana(randomData.mana, randomIv, level),
-        attack: calculateBlastStat(randomData.attack, randomIv, level),
-        defense: calculateBlastStat(randomData.defense, randomIv, level),
-        speed: calculateBlastStat(randomData.speed, randomIv, level),
-        status: Status.None,
-        activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level)),
-        modifier: []
-    };
+    uuid: nk.uuidv4(),
+    data_id: randomBlastId,
+    exp: calculateExperienceFromLevel(level),
+    iv: randomIv,
+    activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level)),
+};
 }
 
 function getRandomBlastIdWithAreaId(id: number): number {

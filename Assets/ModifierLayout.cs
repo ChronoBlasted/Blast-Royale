@@ -27,7 +27,9 @@ public class ModifierLayout : MonoBehaviour
 
     public void Add(int amountToAdd = 1)
     {
-        _amount = amountToAdd;
+        _amount += amountToAdd;
+        _amount = Mathf.Clamp(_amount, -3, 3);
+
         _amountTxt.text = _amount.ToString();
     }
 }

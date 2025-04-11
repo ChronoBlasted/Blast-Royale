@@ -149,12 +149,7 @@ public class HUDLayout : MonoBehaviour
 
     public void SetStatus(Status newStatus)
     {
-        if (newStatus == Status.None)
-        {
-            _statusLayout.gameObject.SetActive(false); // TODO DO A SMOOTH RELAY
-            return;
-        }
-        else _statusLayout.gameObject.SetActive(true);
+        _statusLayout.gameObject.SetActive(newStatus != Status.None);
 
         _statusLayout.Init(newStatus);
     }

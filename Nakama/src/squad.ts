@@ -26,67 +26,43 @@ function generateUUID() {
     }
     return uuid;
 }
-
-const DefaultDeckBlasts: Blast[] = [
+const DefaultDeckBlast: Blast[] = [
     (() => {
         const iv = getRandomIV(10, MaxIV);
-        return {
+        const exp = calculateExperienceFromLevel(DefaultBlastLevel);
+        const blast: Blast = {
             uuid: generateUUID(),
             data_id: Lizzy.id,
-            exp: calculateExperienceFromLevel(DefaultBlastLevel),
-            iv: iv,
-            hp: calculateBlastHp(Lizzy.hp, iv, DefaultBlastLevel),
-            maxHp: calculateBlastHp(Lizzy.hp, iv, DefaultBlastLevel),
-            mana: calculateBlastMana(Lizzy.mana, iv, DefaultBlastLevel),
-            maxMana: calculateBlastMana(Lizzy.mana, iv, DefaultBlastLevel),
-            attack: calculateBlastStat(Lizzy.attack, iv, DefaultBlastLevel),
-            defense: calculateBlastStat(Lizzy.defense, iv, DefaultBlastLevel),
-            speed: calculateBlastStat(Lizzy.speed, iv, DefaultBlastLevel),
-            status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Lizzy, calculateExperienceFromLevel(DefaultBlastLevel)),
-            modifier: []
+            exp,
+            iv,
+            activeMoveset: getRandomActiveMoveset(Lizzy, exp),
         };
+        return blast;
     })(),
     (() => {
         const iv = getRandomIV(10, MaxIV);
-        return {
+        const exp = calculateExperienceFromLevel(DefaultBlastLevel);
+        const blast: Blast = {
             uuid: generateUUID(),
             data_id: Punchball.id,
-            exp: calculateExperienceFromLevel(DefaultBlastLevel),
-            iv: iv,
-            hp: calculateBlastHp(Punchball.hp, iv, DefaultBlastLevel),
-            maxHp: calculateBlastHp(Punchball.hp, iv, DefaultBlastLevel),
-            mana: calculateBlastMana(Punchball.mana, iv, DefaultBlastLevel),
-            maxMana: calculateBlastMana(Punchball.mana, iv, DefaultBlastLevel),
-            attack: calculateBlastStat(Punchball.attack, iv, DefaultBlastLevel),
-            defense: calculateBlastStat(Punchball.defense, iv, DefaultBlastLevel),
-            speed: calculateBlastStat(Punchball.speed, iv, DefaultBlastLevel),
-            status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Punchball, calculateExperienceFromLevel(DefaultBlastLevel)),
-            modifier: []
-
+            exp,
+            iv,
+            activeMoveset: getRandomActiveMoveset(Punchball, exp),
         };
+        return blast;
     })(),
     (() => {
         const iv = getRandomIV(10, MaxIV);
-        return {
+        const exp = calculateExperienceFromLevel(DefaultBlastLevel);
+        const blast: Blast  = {
             uuid: generateUUID(),
             data_id: Jellys.id,
-            exp: calculateExperienceFromLevel(DefaultBlastLevel),
-            iv: iv,
-            hp: calculateBlastHp(Jellys.hp, iv, DefaultBlastLevel),
-            maxHp: calculateBlastHp(Jellys.hp, iv, DefaultBlastLevel),
-            mana: calculateBlastMana(Jellys.mana, iv, DefaultBlastLevel),
-            maxMana: calculateBlastMana(Jellys.mana, iv, DefaultBlastLevel),
-            attack: calculateBlastStat(Jellys.attack, iv, DefaultBlastLevel),
-            defense: calculateBlastStat(Jellys.defense, iv, DefaultBlastLevel),
-            speed: calculateBlastStat(Jellys.speed, iv, DefaultBlastLevel),
-            status: Status.None,
-            activeMoveset: getRandomActiveMoveset(Jellys, calculateExperienceFromLevel(DefaultBlastLevel)),
-            modifier: []
-
+            exp,
+            iv,
+            activeMoveset: getRandomActiveMoveset(Jellys, exp),
         };
-    })(),
+        return blast;
+    })()
 ];
 
 interface BlastCollection {
@@ -123,16 +99,7 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
             data_id: 0,
             exp: 0,
             iv: 0,
-            hp: 0,
-            maxHp: 0,
-            mana: 0,
-            maxMana: 0,
-            attack: 0,
-            defense: 0,
-            speed: 0,
-            status: Status.None,
             activeMoveset: [],
-            modifier: []
         };
 
         if (userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
@@ -202,16 +169,7 @@ const rpcEvolveBlast: nkruntime.RpcFunction =
             data_id: 0,
             exp: 0,
             iv: 0,
-            hp: 0,
-            maxHp: 0,
-            mana: 0,
-            maxMana: 0,
-            attack: 0,
-            defense: 0,
-            speed: 0,
-            status: Status.None,
             activeMoveset: [],
-            modifier: []
         };
 
         if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
@@ -256,10 +214,6 @@ const rpcEvolveBlast: nkruntime.RpcFunction =
     }
 
 function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newBlastToAdd: Blast): BlastCollection {
-
-    newBlastToAdd.hp = newBlastToAdd.maxHp;
-    newBlastToAdd.mana = newBlastToAdd.maxMana;
-    newBlastToAdd.status = Status.None;
 
     let userCards: BlastCollection;
 
@@ -306,15 +260,22 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
     return userCards.deckBlasts;
 }
 
-function getDeckBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): Blast[] {
+function getDeckBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastEntity[] {
 
     let userCards: BlastCollection;
     userCards = loadUserBlast(nk, logger, userId);
 
+    let deckBlasts: BlastEntity[] = [];
+    for (let i = 0; i < userCards.deckBlasts.length; i++) {
+        var blast = ConvertBlastToBlastEntity(userCards.deckBlasts[i]);
+        deckBlasts.push(blast);
+    }
     logger.debug("user '%s' successfully get deck blast", userId);
 
-    return userCards.deckBlasts;
+    return deckBlasts;
 }
+
+
 
 function loadUserBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastCollection {
     let storageReadReq: nkruntime.StorageReadRequest = {
@@ -361,14 +322,14 @@ function storeUserBlasts(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId:
 function defaultBlastCollection(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastCollection {
 
     let cards: BlastCollection = {
-        deckBlasts: DefaultDeckBlasts,
-        storedBlasts: DefaultDeckBlasts,
+        deckBlasts: DefaultDeckBlast,
+        storedBlasts: DefaultDeckBlast,
     }
 
     storeUserBlasts(nk, logger, userId, cards);
 
     return {
-        deckBlasts: DefaultDeckBlasts,
-        storedBlasts: DefaultDeckBlasts,
+        deckBlasts: DefaultDeckBlast,
+        storedBlasts: DefaultDeckBlast,
     }
 }

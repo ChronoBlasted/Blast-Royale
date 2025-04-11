@@ -201,9 +201,9 @@ enum Meteo {
 
 enum Stats {
     None,
-    Attack,
-    Defense,
-    Speed,
+    Attack = 422,
+    Defense = 423,
+    Speed = 424,
 }
 
 //#endregion

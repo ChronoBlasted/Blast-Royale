@@ -63,6 +63,13 @@ function getRandomActiveMoveset(blastData: BlastData, exp: number): number[] {
     return randomMoveset;
 }
 
+function ConvertBlastToBlastEntity(blast: Blast): BlastEntity {
+    const blastEntity: BlastEntity = new BlastEntity(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset);
+
+    return blastEntity as BlastEntity;
+}
+
+
 //#region Battle
 
 function addPlatformType(p_platform: Type[], newType: Type): Type[] {
@@ -240,7 +247,7 @@ function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
     return modifier;
 }
 
-function calculateEffectWithProbability(blast: Blast, move: Move): { blast: Blast, moveEffect: MoveEffect } {
+function calculateEffectWithProbability(blast: BlastEntity, move: Move): { blast: BlastEntity, moveEffect: MoveEffect } {
     const statusEffectProbabilities: { [key in MoveEffect]?: number } = {
         [MoveEffect.Burn]: 0.1,
         [MoveEffect.Seeded]: 0.1,
@@ -268,7 +275,7 @@ function calculateEffectWithProbability(blast: Blast, move: Move): { blast: Blas
 }
 
 
-function applyEffect(blast: Blast, move: Move): Blast {
+function applyEffect(blast: BlastEntity, move: Move): BlastEntity {
     switch (move.effect) {
         case MoveEffect.Burn:
             blast.status = Status.Burn;
@@ -298,23 +305,23 @@ function applyEffect(blast: Blast, move: Move): Blast {
             break;
 
         case MoveEffect.AttackBoost:
-            blast.modifier = updateModifier(blast.modifier, Stats.Attack, +1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, +1);
             break;
         case MoveEffect.DefenseBoost:
-            blast.modifier = updateModifier(blast.modifier, Stats.Defense, +1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, +1);
 
             break;
         case MoveEffect.SpeedBoost:
-            blast.modifier = updateModifier(blast.modifier, Stats.Speed, +1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, +1);
             break;
         case MoveEffect.AttackReduce:
-            blast.modifier = updateModifier(blast.modifier, Stats.Attack, -1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, -1);
             break;
         case MoveEffect.DefenseReduce:
-            blast.modifier = updateModifier(blast.modifier, Stats.Defense, -1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, -1);
             break;
         case MoveEffect.SpeedReduce:
-            blast.modifier = updateModifier(blast.modifier, Stats.Speed, -1); 
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, -1);
             break;
 
         case MoveEffect.Cleanse:
@@ -325,25 +332,41 @@ function applyEffect(blast: Blast, move: Move): Blast {
     return blast;
 }
 
+function getModifierMultiplier(stat: Stats, modifiers: modifierBlastStruct[]): number {
+    var modifier = modifiers.find(m => m.stats === stat);
+    if (!modifier) return 1;
+
+    const amount = modifier.amount;
+    if (amount > 0) {
+        if (amount === 1) return 1.5;
+        if (amount === 2) return 2;
+        return 3;
+    } else if (amount < 0) {
+        if (amount === -1) return 0.8;
+        if (amount === -2) return 0.6;
+        return 0.2;
+    }
+
+    return 1;
+}
+
 function updateModifier(mods: modifierBlastStruct[], stat: Stats, delta: number): modifierBlastStruct[] {
 
     const index = mods.findIndex((m) => m.stats === stat);
-    
+
     if (index >= 0) {
-      mods[index].amount += delta;
-      if (mods[index].amount <= 0) mods.splice(index, 1);
+        mods[index].amount += delta;
+        if (mods[index].amount <= 0) mods.splice(index, 1);
     } else if (delta > 0) {
-      mods.push({ stats: stat, amount: delta });
+        mods.push({ stats: stat, amount: delta });
     }
     return mods;
-  }
-  
+}
 
-
-function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast: Blast, otherBlast: Blast } {
+function applyStatusEffectAtEndOfTurn(blast: BlastEntity, otherBlast: BlastEntity): { blast: BlastEntity, otherBlast: BlastEntity } {
     switch (blast.status) {
         case Status.Burn:
-            blast.hp = Math.max(0, blast.hp - Math.floor(blast.maxHp / 8));
+            blast.hp = Math.max(0, blast.hp - Math.floor(blast.maxHp / 16));
             break;
 
         case Status.Seeded:
@@ -354,7 +377,7 @@ function applyStatusEffectAtEndOfTurn(blast: Blast, otherBlast: Blast): { blast:
             break;
 
         case Status.Wet:
-            blast.mana = Math.max(0, blast.mana - Math.floor(blast.maxMana / 16));
+            blast.mana = Math.max(0, blast.mana - Math.floor(blast.maxMana / 32));
             break;
         default:
             break;
@@ -382,19 +405,16 @@ function calculateStaminaRecovery(
     return Math.floor(recoveredStamina);
 }
 
-function getFasterBlast(blast1: Blast, blast2: Blast): boolean {
-    if (blast1.speed > blast2.speed) {
-        return true;
-    } else {
-        return false;
-    }
+function getFasterBlast(blast1: BlastEntity, blast2: BlastEntity): boolean {
+
+    return blast1.speed > blast2.speed;
 }
 
-function isAllBlastDead(allPlayerBlasts: Blast[]): boolean {
+function isAllBlastDead(allPlayerBlasts: BlastEntity[]): boolean {
     return allPlayerBlasts.every((blast) => blast.hp === 0);
 }
 
-function isBlastAlive(blast: Blast): boolean {
+function isBlastAlive(blast: BlastEntity): boolean {
     return blast.hp > 0;
 }
 
@@ -403,7 +423,7 @@ function addExpOnBlastInGame(nk: nkruntime.Nakama, logger: nkruntime.Logger, pla
     addExpOnBlast(nk, logger, playerId, currentPlayerBlast.uuid, expToAdd);
 }
 
-function healHealthBlast(blast: Blast, amount: number): Blast {
+function healHealthBlast(blast: BlastEntity, amount: number): BlastEntity {
     blast.hp += amount;
 
     if (blast.hp > blast.maxHp) blast.hp = blast.maxHp;
@@ -411,7 +431,7 @@ function healHealthBlast(blast: Blast, amount: number): Blast {
     return blast;
 }
 
-function healManaBlast(blast: Blast, amount: number): Blast {
+function healManaBlast(blast: BlastEntity, amount: number): BlastEntity {
     blast.mana += amount;
 
     if (blast.mana > blast.maxMana) blast.mana = blast.maxMana;

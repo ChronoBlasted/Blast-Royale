@@ -55,7 +55,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         foreach (var blast in _userAccount.LastBlastCollection.deckBlasts)
         {
-            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset, blast.status));
+            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset));
         }
 
         _playerBlast = _playerSquads[0];
@@ -65,7 +65,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             _playerItems.Add(new Item(item.data_id, item.amount));
         }
 
-        _wildBlast = new Blast("", startData.id, startData.exp, startData.iv, startData.activeMoveset, startData.status);
+        _wildBlast = new Blast("", startData.id, startData.exp, startData.iv, startData.activeMoveset);
 
         _gameView.SetMeteo(startData.meteo);
 
@@ -310,6 +310,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         defender.Hp -= moveDamage;
 
+        if (moveEffect != MoveEffect.None)
+        {
+            defender = NakamaLogic.ApplyEffectToBlast(defender, move);
+        }
+
         if (move.platform_cost > 0)
         {
             await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
@@ -321,10 +326,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
         }
 
-        if (moveEffect != MoveEffect.None)
-        {
-            (_, defender) = NakamaLogic.ApplyEffect(defender, move);
-        }
     }
     private void UpdateOpponentTurn(TurnStateData turnState)
     {
