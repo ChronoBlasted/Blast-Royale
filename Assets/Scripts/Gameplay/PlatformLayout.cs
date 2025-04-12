@@ -9,7 +9,7 @@ public class PlatformLayout : MonoBehaviour
     [SerializeField] SpriteRenderer _circle1, _circle2, _circle3, _circle4;
 
     List<SpriteRenderer> _circles;
-    List<TYPE> _platformType = new List<TYPE>();
+    List<Type> _platformType = new List<Type>();
 
     readonly float[] _scalesX = { 2f, 3.3f, 4.25f, 5.5f };
     readonly float[] _scalesY = { 1f, 1.3f, 1.75f, 2.5f };
@@ -28,7 +28,7 @@ public class PlatformLayout : MonoBehaviour
         _platformType.Clear();
     }
 
-    public void AddEnergy(TYPE type)
+    public void AddEnergy(Type type)
     {
         if (_platformType.Count == 4)
         {
@@ -52,7 +52,7 @@ public class PlatformLayout : MonoBehaviour
         UpdateVisuals();
     }
 
-    public void RemoveEnergyByType(TYPE type, int amount)
+    public void RemoveEnergyByType(Type type, int amount)
     {
         int removedCount = 0;
 
@@ -80,7 +80,7 @@ public class PlatformLayout : MonoBehaviour
 
             if (i < _platformType.Count)
             {
-                TYPE type = _platformType[i];
+                Type type = _platformType[i];
                 Color baseColor = ResourceObjectHolder.Instance.GetTypeDataByType(type).Color;
                 float tintFactor = Mathf.Clamp01(i * 0.1f);
 
@@ -117,8 +117,8 @@ public class PlatformLayout : MonoBehaviour
         }
     }
 
-    public int GetAmountOfType(TYPE type)
+    public int GetAmountOfType(Type type)
     {
-        return _platformType.Count(item => EqualityComparer<TYPE>.Default.Equals(item, type));
+        return _platformType.Count(item => EqualityComparer<Type>.Default.Equals(item, type));
     }
 }

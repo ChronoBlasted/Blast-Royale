@@ -14,7 +14,7 @@ public class ResourceObjectHolder : MonoSingleton<ResourceObjectHolder>
         return _resources.First(resource => resource.Type == resourceType);
     }
 
-    public TypeData GetTypeDataByType(TYPE type)
+    public TypeData GetTypeDataByType(Type type)
     {
         return _typeData.First(resource => resource.Type == type);
     }

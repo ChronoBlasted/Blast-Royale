@@ -525,7 +525,8 @@ function executePlayerAttack(state: WildBattleData, move: Move, dispatcher: nkru
         }
 
         state.player1_platform = addPlatformType(state.player1_platform, move.type);
-        if (calculateWeatherModifier(state.meteo, move.type) > 1) state.wild_blast_platform = addPlatformType(state.wild_blast_platform, move.type);
+        if (calculateWeatherModifier(state.meteo, move.type) > 1) state.player1_platform = addPlatformType(state.player1_platform, move.type);
+
     }
 
     const damage = applyBlastAttack(state.player1_current_blast!, state.wild_blast!, move, state);

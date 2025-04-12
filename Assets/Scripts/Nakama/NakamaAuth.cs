@@ -13,7 +13,6 @@ public class NakamaAuth : MonoBehaviour
 
     public void Init()
     {
-        // Use "https" scheme if you've setup SSL.
         _client = new Client(_scheme, _host, _port, serverkey);
 
         AuthenticateWithDevice();

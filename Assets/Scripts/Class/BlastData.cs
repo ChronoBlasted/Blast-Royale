@@ -5,7 +5,7 @@ public class BlastData
 {
     public int id;
     public string desc;
-    public TYPE type;
+    public Type type;
     public int hp;
     public int mana;
     public int attack;

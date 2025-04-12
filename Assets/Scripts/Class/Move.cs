@@ -4,7 +4,7 @@ using System;
 public class Move
 {
     public int id;
-    public TYPE type;
+    public Type type;
     public int power;
     public int cost;
     public int priority;

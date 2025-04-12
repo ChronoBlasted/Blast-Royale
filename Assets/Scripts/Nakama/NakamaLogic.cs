@@ -13,7 +13,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         else return false;
     }
 
-    public static int CalculateDamage(int attackerLevel, int attackerAttack, int defenderDefense, TYPE attackerType, TYPE defenderType, int movePower)
+    public static int CalculateDamage(int attackerLevel, int attackerAttack, int defenderDefense, Type attackerType, Type defenderType, int movePower)
     {
         float damage = ((2 * attackerLevel / 5 + 2) * movePower * GetTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
         return Mathf.FloorToInt(damage);
@@ -50,6 +50,24 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         int expGain = Mathf.FloorToInt(((expYield * enemyLevel / 7f) * ((2f * enemyLevel + 10) / (enemyLevel + yourLevel + 10f)) + 1));
 
         return expGain;
+    }
+
+    public static bool IsWeatherBoosted(Meteo weather, Type moveType)
+    {
+        switch (weather)
+        {
+            case Meteo.Sun:
+                return moveType == Type.Fire;
+
+            case Meteo.Rain:
+                return moveType == Type.Water;
+
+            case Meteo.Leaves:
+                return moveType == Type.Grass;
+
+            default:
+                return false;
+        }
     }
 
     public static (Blast, Blast) ApplyStatusEffectAtEndOfTurn(Blast blast, Blast otherBlast)
@@ -252,108 +270,108 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return experienceNiveau;
     }
 
-    public static float GetTypeMultiplier(TYPE moveType, TYPE defenderType)
+    public static float GetTypeMultiplier(Type moveType, Type defenderType)
     {
         switch (moveType)
         {
-            case TYPE.FIRE:
+            case Type.Fire:
                 switch (defenderType)
                 {
-                    case TYPE.GRASS:
+                    case Type.Grass:
                         return 2;
-                    case TYPE.WATER:
+                    case Type.Water:
                         return 0.5f;
                     default:
                         return 1;
                 }
 
-            case TYPE.WATER:
+            case Type.Water:
                 switch (defenderType)
                 {
-                    case TYPE.FIRE:
+                    case Type.Fire:
                         return 2;
-                    case TYPE.GRASS:
+                    case Type.Grass:
                         return 0.5f;
                     default:
                         return 1;
                 }
 
-            case TYPE.GRASS:
+            case Type.Grass:
                 switch (defenderType)
                 {
-                    case TYPE.WATER:
+                    case Type.Water:
                         return 2;
-                    case TYPE.FIRE:
+                    case Type.Fire:
                         return 0.5f;
                     default:
                         return 1;
                 }
 
-            case TYPE.NORMAL:
+            case Type.Normal:
                 switch (defenderType)
                 {
-                    case TYPE.LIGHT:
+                    case Type.Light:
                         return 0.5f;
-                    case TYPE.DARK:
+                    case Type.Dark:
                         return 0.5f;
                     default:
                         return 1;
                 }
 
-            case TYPE.GROUND:
+            case Type.Ground:
                 switch (defenderType)
                 {
-                    case TYPE.ELECTRIC:
+                    case Type.Electric:
                         return 2;
-                    case TYPE.FLY:
+                    case Type.Fly:
                         return 0;
                     default:
                         return 1;
                 }
 
-            case TYPE.FLY:
+            case Type.Fly:
                 switch (defenderType)
                 {
-                    case TYPE.ELECTRIC:
+                    case Type.Electric:
                         return 0;
-                    case TYPE.GROUND:
+                    case Type.Ground:
                         return 2;
                     default:
                         return 1;
                 }
 
-            case TYPE.ELECTRIC:
+            case Type.Electric:
                 switch (defenderType)
                 {
-                    case TYPE.GROUND:
+                    case Type.Ground:
                         return 0;
-                    case TYPE.FLY:
+                    case Type.Fly:
                         return 2;
                     default:
                         return 1;
                 }
 
-            case TYPE.LIGHT:
+            case Type.Light:
                 switch (defenderType)
                 {
-                    case TYPE.DARK:
+                    case Type.Dark:
                         return 2;
-                    case TYPE.NORMAL:
+                    case Type.Normal:
                         return 2;
-                    case TYPE.LIGHT:
+                    case Type.Light:
                         return 0.5f;
                     default:
                         return 1;
                 }
 
-            case TYPE.DARK:
+            case Type.Dark:
                 switch (defenderType)
                 {
-                    case TYPE.LIGHT:
+                    case Type.Light:
                         return 2;
-                    case TYPE.NORMAL:
+                    case Type.Normal:
                         return 2;
-                    case TYPE.DARK:
+                    case Type.Dark:
                         return 0.5f;
                     default:
                         return 1;

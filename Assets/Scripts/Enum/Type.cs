@@ -1,1 +1,13 @@
-public enum TYPE { NORMAL, FIRE, WATER, GRASS, GROUND, FLY, ELECTRIC, LIGHT, DARK }
+public enum Type
+{
+    Normal,
+    Fire,
+    Water,
+    Grass,
+    Ground,
+    Fly,
+    Electric,
+    Light,
+    Dark
+}
+

@@ -25,6 +25,8 @@ public class GameView : View
     WildBattleManager _wildBattleManager;
     NakamaData _dataUtils;
 
+    Meteo _currentMeteo;
+
     public override void Init()
     {
         base.Init();
@@ -113,6 +115,8 @@ public class GameView : View
         var meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startDataMeteo);
 
         var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
+
+        _currentMeteo = meteo;
 
         DialogLayout.SetMeteo(meteoData.Name.GetLocalizedString());
 
@@ -273,6 +277,7 @@ public class GameView : View
         {
             attackerHUD.UpdateManaBar(attacker.Mana);
             attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
+            if (NakamaLogic.IsWeatherBoosted(_currentMeteo, move.type)) attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
         }
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);

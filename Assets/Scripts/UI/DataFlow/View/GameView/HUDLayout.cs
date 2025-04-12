@@ -44,6 +44,8 @@ public class HUDLayout : MonoBehaviour
 
         Sprite blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
 
+        SetStatus(_blast.status);
+
         _blastInWorld.Init(blastSprite);
         _blastInWorld.PlatformLayout.Init();
     }
