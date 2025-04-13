@@ -176,7 +176,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             state.player1_items = allPlayer1Items;
 
 
-            var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk);
+            var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
             state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
             state.meteo = getRandomMeteo();
@@ -415,6 +415,14 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         case BattleState.END:
 
             updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200)
+
+            if (state.TurnStateData.catched) incrementMetadataStat(nk, state.player1_id, "blast_catched", 1);
+            else incrementMetadataStat(nk, state.player1_id, "blast_defeated", 1);
+
+            logger.debug("OwnerID: %s", ctx.userId);
+            logger.debug("Username: %s", ctx.username);
+
+            writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, 1);
 
             state.battle_state = BattleState.START;
             state.player1_state = PlayerState.BUSY;

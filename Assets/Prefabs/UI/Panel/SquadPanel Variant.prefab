@@ -400,7 +400,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -64}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 256, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9027192575028040063
 MonoBehaviour:
@@ -2153,7 +2153,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -64}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 256, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &431775259051183525
 MonoBehaviour:
@@ -2282,6 +2282,10 @@ PrefabInstance:
     - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7962276885134453634, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 41.99
       objectReference: {fileID: 0}
     - target: {fileID: 8424477934951821808, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_Pivot.x
@@ -2805,9 +2809,61 @@ PrefabInstance:
       value: BagTabButton
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6017071915108667649}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2164538510247822155}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 2164538510247822155}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: QuitSoloItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: QuitSoloItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3455,6 +3511,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemLayout
       objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8089988490982180549}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemLayout, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8435924648132359611, guid: 5973c5ed7060c5247b6da49750fbf7b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3593,9 +3661,61 @@ PrefabInstance:
       value: BlastTabButton
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6017071915108667649}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2164538510247822155}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 2164538510247822155}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: QuitSoloBlast
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: QuitSoloItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3704,6 +3824,18 @@ PrefabInstance:
     - target: {fileID: 4146188510042624427, guid: 13d569da243657244a477929dc9d6b00, type: 3}
       propertyPath: m_Name
       value: ItemLayout (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5357452664220176700}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemLayout, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8435924648132359611, guid: 5973c5ed7060c5247b6da49750fbf7b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3962,6 +4094,18 @@ PrefabInstance:
     - target: {fileID: 4146188510042624427, guid: 13d569da243657244a477929dc9d6b00, type: 3}
       propertyPath: m_Name
       value: ItemLayout (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6342864374863420728}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleOnInfoButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224695392470890740, guid: 13d569da243657244a477929dc9d6b00, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemLayout, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8435924648132359611, guid: 5973c5ed7060c5247b6da49750fbf7b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

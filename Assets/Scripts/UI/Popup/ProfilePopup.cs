@@ -8,6 +8,8 @@ public class ProfilePopup : Popup
 {
     [SerializeField] TMP_Text _winTxt, _looseTxt, _blastDefeatedTxt, _blastCapturedtxt;
 
+    Metadata _lastData;
+
     public override void Init()
     {
         base.Init();
@@ -16,7 +18,6 @@ public class ProfilePopup : Popup
     public override void OpenPopup()
     {
         base.OpenPopup();
-
     }
 
     public override void ClosePopup()
@@ -24,13 +25,25 @@ public class ProfilePopup : Popup
         base.ClosePopup();
     }
 
-    public void UpdateData(string metadata)
+    public void UpdateData(Metadata metadata, string playerName)
     {
-        var data = Nakama.TinyJson.JsonParser.FromJson<Metadata>(metadata);
+        _lastData = metadata;
 
-        _winTxt.text = data.win.ToString();
-        _looseTxt.text = data.loose.ToString();
-        _blastDefeatedTxt.text = data.blast_defeated.ToString();
-        _blastCapturedtxt.text = data.blast_captured.ToString();
+        _winTxt.text = _lastData.win.ToString();
+        _looseTxt.text = _lastData.loose.ToString();
+        _blastDefeatedTxt.text = _lastData.blast_defeated.ToString();
+        _blastCapturedtxt.text = _lastData.blast_captured.ToString();
+
+
+        if (!_lastData.updated_nickname)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup();
+
+            UIManager.Instance.ConfirmPopup.UpdateDataWithInputField("Change username", "Enter your new username", playerName, (x) =>
+            {
+                _ = NakamaManager.Instance.NakamaUserAccount.UpdateUsername(x); // TODO Secure cette fonction
+
+            },false);
+        }
     }
 }

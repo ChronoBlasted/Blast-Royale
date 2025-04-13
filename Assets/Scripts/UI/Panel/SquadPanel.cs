@@ -51,6 +51,9 @@ public class SquadPanel : Panel
     public override void ClosePanel()
     {
         base.ClosePanel();
+
+        QuitSoloBlast();
+        QuitSoloItem();
     }
 
     public void SwitchToSoloBlast(Blast blast)

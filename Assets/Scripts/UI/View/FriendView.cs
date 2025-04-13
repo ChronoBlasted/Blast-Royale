@@ -1,6 +1,4 @@
 using Nakama;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -72,7 +70,7 @@ public class FriendView : View
 
     public void UpdateUsername(string username)
     {
-        _userName.text = "Your username : " + username;
+        _userName.text = "Your username : <b>" + username + "</b>";
     }
 
     public void HandleOnAddFriendButton()

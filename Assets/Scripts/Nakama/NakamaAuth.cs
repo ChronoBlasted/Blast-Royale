@@ -35,9 +35,10 @@ public class NakamaAuth : MonoBehaviour
         vars["DeviceModel"] = SystemInfo.deviceModel;
         vars["GameVersion"] = Application.version;
 
+
         try
         {
-            _session = await _client.AuthenticateDeviceAsync(deviceId, null, true, vars);
+            var _session = await _client.AuthenticateDeviceAsync(deviceId, null, true, vars);
 
             ISocket socket = _client.NewSocket();
 
@@ -47,10 +48,12 @@ public class NakamaAuth : MonoBehaviour
             await socket.ConnectAsync(_session, appearOnline, connectionTimeout);
 
             NakamaManager.Instance.AuthUser(_client, _session, socket);
+
         }
-        catch (ApiResponseException ex)
+        catch (Exception ex)
         {
-            Debug.LogFormat("Error authenticating with Device ID: {0}", ex.Message);
+            UIManager.Instance.ConfirmPopup.OpenPopup();
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
         }
     }
 }

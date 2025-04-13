@@ -1,5 +1,5 @@
 const LeaderboardTrophyId = "leaderboard_trophy";
-const LeaderboardBlastDefeated = "leaderboard_blast_defeated";
+const LeaderboardBlastDefeatedId = "leaderboard_blast_defeated";
 
 function createTrophyLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
 
@@ -18,7 +18,7 @@ function createTrophyLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger,
 
 function createBlastDefeatedLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
 
-    let id = LeaderboardBlastDefeated;
+    let id = LeaderboardBlastDefeatedId;
     let authoritative = true;
     let sort = nkruntime.SortOrder.DESCENDING;
     let operator = nkruntime.Operator.INCREMENTAL;
@@ -30,25 +30,6 @@ function createBlastDefeatedLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.
         // Handle error
     }
 }
-
-const rpcGetAroundTrophyLeaderboard: nkruntime.RpcFunction =
-    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama): string {
-
-        let result: nkruntime.LeaderboardRecordList;
-        let id = LeaderboardTrophyId;
-        let ownerIds: string[] = [ctx.userId];
-        let limit = 100;
-        let cursor = '';
-        let overrideExpiry = 3600;
-
-        try {
-            result = nk.leaderboardRecordsList(id, ownerIds, limit, cursor, overrideExpiry);
-        } catch (error) {
-            // Handle error
-        }
-        return JSON.stringify(loadUserBlast(nk, logger, ctx.userId));
-    }
-
 
 let leaderboardReset: nkruntime.LeaderboardResetFunction = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, leaderboard: nkruntime.Leaderboard, reset: number) {
 
@@ -68,35 +49,29 @@ let leaderboardReset: nkruntime.LeaderboardResetFunction = function (ctx: nkrunt
     });
 };
 
-function writeRecordTrophyLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
+function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId:string, leaderboardId: string, score: number) {
 
-    let id = LeaderboardTrophyId;
-    let ownerID = ctx.userId;
-    let username = ctx.username;
-    let score = getCurrencyInWallet(nk,ctx.userId,Currency.Trophies);
-    
-    let result: nkruntime.LeaderboardRecord;
-    
+    const incrementType: nkruntime.OverrideOperator =
+        score > 0 ? nkruntime.OverrideOperator.INCREMENTAL : nkruntime.OverrideOperator.DECREMENTAL;
+
     try {
-      result = nk.leaderboardRecordWrite(id, ownerID, username, score, undefined, undefined);
-    } catch(error) {
-      // Handle error
+        nk.leaderboardsGetId([leaderboardId]);
+        logger.error("Leaderboard exist !");
+
+    } catch (error: any) {
+        logger.error("Leaderboard dont exist error: %s", JSON.stringify(error));
+    }
+
+    logger.debug("Writing to leaderboard: %s", leaderboardId);
+    logger.debug("OwnerID: %s", userId);
+    logger.debug("Score: %s", score);
+    logger.debug("IncrementType: %s", incrementType);
+
+
+    try {
+        nk.leaderboardRecordWrite(leaderboardId, userId, undefined, score, 0, undefined, incrementType);
+        logger.debug("Successfully wrote to leaderboard.");
+    } catch (error: any) {
+        logger.error("Leaderboard write error: %s", JSON.stringify(error));
     }
 }
-
-function writeRecordBlastDefeatedLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context,amount:number) {
-
-    let id = LeaderboardBlastDefeated;
-    let ownerID = ctx.userId;
-    let username = ctx.username;
-    let score = amount;
-    
-    let result: nkruntime.LeaderboardRecord;
-    
-    try {
-      result = nk.leaderboardRecordWrite(id, ownerID, username, score, undefined, undefined);
-    } catch(error) {
-      // Handle error
-    }
-}
-

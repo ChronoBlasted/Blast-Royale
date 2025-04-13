@@ -29,7 +29,7 @@ function getLastDailyShopObject(context: nkruntime.Context, logger: nkruntime.Lo
 
     var dailyShop: any = {
         lastClaimUnix: 0,
-        lastDailyShop: generateRandomDailyShop(nk, context.userId),
+        lastDailyShop: generateRandomDailyShop(nk, context.userId,logger),
     }
 
     objects.forEach(function (object) {
@@ -71,7 +71,7 @@ function rpcGetDailyShopOffer(context: nkruntime.Context, logger: nkruntime.Logg
 
     if (canUserClaimDailyShop(dailyShop)) {
 
-        var newShop: StoreOffer[] = generateRandomDailyShop(nk, context.userId);
+        var newShop: StoreOffer[] = generateRandomDailyShop(nk, context.userId,logger);
 
         dailyShop.lastClaimUnix = msecToSec(Date.now());
         dailyShop.lastDailyShop = newShop;
@@ -152,17 +152,17 @@ function rpcBuyDailyShopOffer(context: nkruntime.Context, logger: nkruntime.Logg
     return result;
 }
 
-function generateRandomDailyShop(nk: nkruntime.Nakama, userId: string): StoreOffer[] {
+function generateRandomDailyShop(nk: nkruntime.Nakama, userId: string,logger:nkruntime.Logger): StoreOffer[] {
 
     var dailyShop: StoreOffer[];
 
     dailyShop = [
-        getRandomStoreOffer(nk, userId),
-        getRandomStoreOffer(nk, userId),
-        getRandomStoreOffer(nk, userId),
-        getRandomStoreOffer(nk, userId),
-        getRandomStoreOffer(nk, userId),
-        getRandomStoreOffer(nk, userId),
+        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId,logger),
     ]
 
     return dailyShop;
@@ -174,7 +174,7 @@ function getRandomOfferType(): OfferType {
     return offerTypeValues[randomIndex] as OfferType;
 }
 
-function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string): StoreOffer {
+function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string,logger:nkruntime.Logger): StoreOffer {
 
     let offer: StoreOffer = {
         offer_id : -1,
@@ -189,7 +189,7 @@ function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string): StoreOffer {
     };
 
     if (Math.random() < 0.5) {
-        offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk);
+        offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk,logger);
         offer.price = getBlastPrice(offer.blast);
         offer.currency = Currency.Coins;
     } else {

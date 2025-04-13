@@ -87,9 +87,10 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
 //     return newBlast;
 // }
 
-function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama): Blast {
+function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama,logger: nkruntime.Logger): Blast {
 
-    let metadata = nk.accountGetId(userId).user.metadata;
+    const account = nk.accountGetId(userId);
+    const metadata = account.user.metadata as PlayerMetadata;
 
     let randomBlastId = getRandomBlastIdInPlayerAreaWithTrophy(getCurrencyInWallet(nk, userId, Currency.Trophies));
     let randomData = getBlastDataById(randomBlastId);

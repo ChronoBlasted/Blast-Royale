@@ -161,7 +161,7 @@ const Jellys: BlastData = { // Jellys
 const Kitchi: BlastData = { // Kitchi
     id: 4,
     type: Type.NORMAL,
-    hp: 5000,
+    hp: 40,
     mana: 70,
     attack: 75,
     defense: 65,
@@ -180,7 +180,7 @@ const Kitchi: BlastData = { // Kitchi
 const Kenchi: BlastData = { // Kenchi
     id: 5,
     type: Type.NORMAL,
-    hp: 5000,
+    hp: 50,
     mana: 70,
     attack: 80,
     defense: 70,
@@ -199,7 +199,7 @@ const Kenchi: BlastData = { // Kenchi
 const Mousy: BlastData = { // Mousy
     id: 6,
     type: Type.NORMAL,
-    hp: 5000,
+    hp: 45,
     mana: 75,
     attack: 65,
     defense: 70,
@@ -218,7 +218,7 @@ const Mousy: BlastData = { // Mousy
 const Clawball: BlastData = { // Clawball
     id: 7,
     type: Type.GROUND,
-    hp: 5000,
+    hp: 47,
     mana: 70,
     attack: 75,
     defense: 80,

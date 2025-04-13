@@ -34,7 +34,7 @@ function calculateLevelFromExperience(experience: number): number {
 
 function calculateExperienceFromLevel(level: number): number {
     if (level < 1 || level > 100) {
-        throw new Error("Le niveau doit être compris entre 1 et 100.");
+        throw new Error("Le niveau doit être compris entre 1 et 100. Le level : " + level);
     }
 
     let experienceNiveau = 0;

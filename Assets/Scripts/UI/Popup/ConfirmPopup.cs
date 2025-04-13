@@ -12,6 +12,9 @@ public class ConfirmPopup : Popup
     [SerializeField] TMP_InputField _inputField;
     [SerializeField] CustomButton _acceptButton, _cancelButton;
 
+    bool _lastCanClose;
+    UnityAction _lastUnityAction;
+
     public override void Init()
     {
         base.Init();
@@ -20,6 +23,9 @@ public class ConfirmPopup : Popup
     public override void OpenPopup()
     {
         base.OpenPopup();
+
+
+        if (_lastCanClose == false) UIManager.Instance.BlackShadeButton.onClick.RemoveAllListeners();
     }
 
     public override void ClosePopup()
@@ -27,36 +33,51 @@ public class ConfirmPopup : Popup
         base.ClosePopup();
     }
 
-    public void UpdateData(string title, string desc, UnityAction acceptAction)
+    public void UpdateData(string title, string desc, UnityAction acceptAction, bool canClose = true)
     {
+        _lastCanClose = canClose;
+        _lastUnityAction = acceptAction;
+
         _titleTxt.text = title;
         _descTxt.text = desc;
 
         _inputField.gameObject.SetActive(false);
 
         _acceptButton.onClick.RemoveAllListeners();
-        _cancelButton.onClick.RemoveAllListeners();
-
         _acceptButton.onClick.AddListener(acceptAction);
-        _cancelButton.onClick.AddListener(ClosePopup);
+        _acceptButton.onClick.AddListener(ClosePopup);
+
+        _cancelButton.gameObject.SetActive(canClose);
+
+        if (canClose)
+        {
+            _cancelButton.onClick.RemoveAllListeners();
+            _cancelButton.onClick.AddListener(ClosePopup);
+        }
     }
 
-    public void UpdateDataWithInputField(string title, string desc, string placeHolder, UnityAction<string> acceptAction)
+    public void UpdateDataWithInputField(string title, string desc, string placeHolder, UnityAction<string> acceptAction, bool canClose = true)
     {
+        _lastCanClose = canClose;
+
         _titleTxt.text = title;
         _descTxt.text = desc;
         _placeHolderTxt.text = placeHolder;
-
-        _acceptButton.onClick.RemoveAllListeners();
-        _cancelButton.onClick.RemoveAllListeners();
 
         _inputField.gameObject.SetActive(true);
 
         _inputField.text = "";
 
+        _acceptButton.onClick.RemoveAllListeners();
         _acceptButton.onClick.AddListener(() => acceptAction.Invoke(_inputField.text));
+        _acceptButton.onClick.AddListener(ClosePopup);
 
-        _cancelButton.onClick.AddListener(ClosePopup);
+        _cancelButton.gameObject.SetActive(canClose);
+
+        if (canClose)
+        {
+            _cancelButton.onClick.RemoveAllListeners();
+            _cancelButton.onClick.AddListener(ClosePopup);
+        }
     }
-
 }

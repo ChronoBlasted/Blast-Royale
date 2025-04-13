@@ -27,7 +27,7 @@ public class NakamaLeaderboards : MonoBehaviour
 
     public async Task GetTrophyLeaderboard()
     {
-        var result = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardTrophyId);
+        var result = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardTrophyId, null, null, 100);
 
         UIManager.Instance.LeaderboardView.UpdateTrophyLeaderboard(result);
     }
@@ -35,16 +35,17 @@ public class NakamaLeaderboards : MonoBehaviour
     public async Task GetTrophyAroundMeLeaderboard()
     {
         var limit = 20;
-        var result = await _client.ListLeaderboardRecordsAroundOwnerAsync(_session, LeaderboardTrophyId, _session.UserId, expiry: null, limit);
+        var result = await _client.ListLeaderboardRecordsAroundOwnerAsync(_session, LeaderboardTrophyId, _session.UserId, null, limit);
 
         UIManager.Instance.LeaderboardView.UpdateTrophyAroundMeLeaderboard(result);
     }
 
     public async Task GetTrophyFriendLeaderboard()
     {
-        var friendsList = await _client.ListFriendsAsync(_session, 0, 100, cursor: null);
+        int amount = 100;
+        var friendsList = await _client.ListFriendsAsync(_session, 0, amount, cursor: null);
         var userIds = friendsList.Friends.Select(f => f.User.Id);
-        var recordList = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardTrophyId, userIds, expiry: null, 100, cursor: null);
+        var recordList = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardTrophyId, userIds, null, amount);
 
         UIManager.Instance.LeaderboardView.UpdateTrophyFriendLeaderboard(recordList);
     }
@@ -59,16 +60,17 @@ public class NakamaLeaderboards : MonoBehaviour
     public async Task GetBlastDefeatedAroundMeLeaderboard()
     {
         var limit = 20;
-        var result = await _client.ListLeaderboardRecordsAroundOwnerAsync(_session, LeaderboardBlastDefeated, _session.UserId, expiry: null, limit);
+        var result = await _client.ListLeaderboardRecordsAroundOwnerAsync(_session, LeaderboardBlastDefeated, _session.UserId, null, limit);
 
         UIManager.Instance.LeaderboardView.UpdateBlastDefeatedAroundMeLeaderboard(result);
     }
 
     public async Task GetBlastDefeatedFriendLeaderboard()
     {
-        var friendsList = await _client.ListFriendsAsync(_session, 0, 100, cursor: null);
+        int amount = 100;
+        var friendsList = await _client.ListFriendsAsync(_session, 0, amount, cursor: null);
         var userIds = friendsList.Friends.Select(f => f.User.Id);
-        var recordList = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardBlastDefeated, userIds, expiry: null, 100, cursor: null);
+        var recordList = await _client.ListLeaderboardRecordsAsync(_session, LeaderboardBlastDefeated, userIds, null, amount);
 
         UIManager.Instance.LeaderboardView.UpdateBlastDefeatedFriendLeaderboard(recordList);
     }

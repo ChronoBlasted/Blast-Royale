@@ -15,7 +15,7 @@ public class LeaderboardRowLayout : MonoBehaviour
     {
         _playerRank.text = result.Rank;
         _playerName.text = result.Username;
-        _playerStat.text = result.Score;
+        _playerStat.text = result.Score ?? "0";
 
         switch (leaderBoardType)
         {
