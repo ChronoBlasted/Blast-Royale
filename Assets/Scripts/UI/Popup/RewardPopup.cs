@@ -44,11 +44,33 @@ public class RewardPopup : Popup
 
         if (reward.coinsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, "Coins", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite));
+            if (reward.offer_id == -1)
+            {
+                var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
+
+                _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, coinData.Name.GetLocalizedString(), coinData.Sprite));
+            }
+            else
+            {
+                var storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id);
+
+                _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, storeOfferRef.Name.GetLocalizedString(), storeOfferRef.Sprite));
+            }
         }
         if (reward.gemsReceived != 0)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, "Gems", ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite));
+            if (reward.offer_id == -1)
+            {
+                var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
+
+                _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, coinData.Name.GetLocalizedString(), coinData.Sprite));
+            }
+            else
+            {
+                var storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id);
+
+                _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, storeOfferRef.Name.GetLocalizedString(), storeOfferRef.Sprite));
+            }
         }
         if (reward.blastReceived != null)
         {

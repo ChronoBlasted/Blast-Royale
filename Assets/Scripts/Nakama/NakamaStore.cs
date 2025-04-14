@@ -198,8 +198,6 @@ public class StoreOffer
     public bool isAlreadyBuyed;
 }
 
-
-
 public class CanClaimDailyShop
 {
     public bool canClaimDailyShop;

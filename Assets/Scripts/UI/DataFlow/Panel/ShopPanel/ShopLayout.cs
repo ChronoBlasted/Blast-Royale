@@ -22,7 +22,6 @@ public class ShopLayout : MonoBehaviour
 
         StoreOfferDataRef storeOfferRef;
 
-
         if (_offer.coinsAmount > 0)
         {
             storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(_offer.offer_id);
@@ -44,6 +43,8 @@ public class ShopLayout : MonoBehaviour
         if (_offer.blast != null)
         {
             BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(storeOffer.blast.data_id);
+
+            _ico.sprite = blastData.Sprite;
 
             _nameTxt.text = blastData.Name.GetLocalizedString();
             _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(storeOffer.blast.exp);
@@ -162,6 +163,7 @@ public class ShopLayout : MonoBehaviour
     {
         RewardCollection reward = new RewardCollection();
 
+        reward.offer_id = _offer.offer_id;
         reward.coinsReceived = _offer.coinsAmount;
         reward.gemsReceived = _offer.gemsAmount;
 

@@ -330,6 +330,6 @@ function defaultBlastCollection(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
 
     return {
         deckBlasts: DefaultDeckBlast,
-        storedBlasts: DefaultDeckBlast,
+        storedBlasts: [],
     }
 }

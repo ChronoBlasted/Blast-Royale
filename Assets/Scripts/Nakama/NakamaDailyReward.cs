@@ -86,6 +86,7 @@ public class NakamaDailyReward : MonoBehaviour
 [Serializable]
 public class RewardCollection
 {
+    public int offer_id = -1;
     public int coinsReceived;
     public int gemsReceived;
     public Blast blastReceived;
