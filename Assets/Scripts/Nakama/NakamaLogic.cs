@@ -227,6 +227,19 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return message;
     }
 
+    public static MoveEffect GetOppositeEffect(MoveEffect effect)
+    {
+        switch (effect)
+        {
+            case MoveEffect.AttackBoost: return MoveEffect.AttackReduce;
+            case MoveEffect.AttackReduce: return MoveEffect.AttackBoost;
+            case MoveEffect.DefenseBoost: return MoveEffect.DefenseReduce;
+            case MoveEffect.DefenseReduce: return MoveEffect.DefenseBoost;
+            case MoveEffect.SpeedBoost: return MoveEffect.SpeedReduce;
+            case MoveEffect.SpeedReduce: return MoveEffect.SpeedBoost;
+            default: return MoveEffect.None;
+        }
+    }
 
 
 

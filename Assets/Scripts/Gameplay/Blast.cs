@@ -118,7 +118,6 @@ public class Blast
 
     private void UpdateModifier(StatType stat, int amount)
     {
-
         var existingModifier = modifiers.Find(m => m.stats == stat);
 
         if (existingModifier != null)

@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,6 @@ public class ModifierLayout : MonoBehaviour
         _amount += amountToAdd;
         _amount = Mathf.Clamp(_amount, -3, 3);
 
-        _amountTxt.text = _amount.ToString();
+        _amountTxt.text = _amount.ToString("+0;-0;0");
     }
 }

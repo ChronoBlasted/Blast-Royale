@@ -72,6 +72,10 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _gameView.PlayerHUD.Init(_playerBlast);
         _gameView.OpponentHUD.Init(_wildBlast);
 
+        _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
+        _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
+
+
         _ = _gameView.PlayerHUD.ComeBackBlast(true);
         _ = _gameView.OpponentHUD.ComeBackBlast(true);
 

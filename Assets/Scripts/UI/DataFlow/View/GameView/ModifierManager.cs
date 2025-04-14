@@ -10,10 +10,16 @@ public class ModifierManager : MonoBehaviour
 
     List<ModifierLayout> _modifiers = new List<ModifierLayout>();
 
-    public void AddModifier(MoveEffect effectToAdd, int amount = 1)
+    public void Init()
     {
-        var oppositeEffect = GetOpposite(effectToAdd);
+        foreach (Transform t in _modifierTransform)
+        {
+            Destroy(t.gameObject);
+        }
+    }
 
+    public void AddModifier(MoveEffect effectToAdd, MoveEffect oppositeEffect, int amount = 1)
+    {
         var oppositeModifier = _modifiers.FirstOrDefault(m => m.MoveEffect == oppositeEffect);
 
         if (oppositeModifier != null)
@@ -41,16 +47,16 @@ public class ModifierManager : MonoBehaviour
         _modifiers.Add(newModifier);
     }
 
-    MoveEffect GetOpposite(MoveEffect effect)
+    public MoveEffect GetMoveEffectFromStat(StatType stat, int amount)
     {
-        switch (effect)
+        bool isBoost = amount > 0;
+
+        switch (stat)
         {
-            case MoveEffect.AttackBoost: return MoveEffect.AttackReduce;
-            case MoveEffect.AttackReduce: return MoveEffect.AttackBoost;
-            case MoveEffect.DefenseBoost: return MoveEffect.DefenseReduce;
-            case MoveEffect.DefenseReduce: return MoveEffect.DefenseBoost;
-            case MoveEffect.SpeedBoost: return MoveEffect.SpeedReduce;
-            case MoveEffect.SpeedReduce: return MoveEffect.SpeedBoost;
+            case StatType.Attack: return isBoost ? MoveEffect.AttackBoost : MoveEffect.AttackReduce;
+            case StatType.Defense: return isBoost ? MoveEffect.DefenseBoost : MoveEffect.DefenseReduce;
+            case StatType.Speed: return isBoost ? MoveEffect.SpeedBoost : MoveEffect.SpeedReduce;
+
             default: return MoveEffect.None;
         }
     }

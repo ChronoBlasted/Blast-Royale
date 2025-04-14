@@ -299,7 +299,7 @@ public class GameView : View
             dialogText = NakamaLogic.GetEffectMessage(moveEffect);
 
             defenderHUD.SetStatus(defender.status);
-            defenderHUD.AddModifier(moveEffect);
+            defenderHUD.AddModifier(moveEffect, 1);
 
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
         }

@@ -46,8 +46,10 @@ public class HUDLayout : MonoBehaviour
 
         SetStatus(_blast.status);
 
+        _modifierManager.Init();
+        ApplyAllModifiers(_blast);
+
         _blastInWorld.Init(blastSprite);
-        _blastInWorld.PlatformLayout.Init();
     }
 
     public void UpdateHpBar(int newHp, float duration = .2f, float delay = 0f)
@@ -156,17 +158,28 @@ public class HUDLayout : MonoBehaviour
         _statusLayout.Init(newStatus);
     }
 
-    public void AddModifier(MoveEffect newModifier)
+    public void AddModifier(MoveEffect newModifier, int amount)
     {
-        if (newModifier == MoveEffect.AttackBoost ||
-            newModifier == MoveEffect.AttackReduce ||
-            newModifier == MoveEffect.DefenseBoost ||
-            newModifier == MoveEffect.DefenseReduce ||
-            newModifier == MoveEffect.SpeedBoost ||
-            newModifier == MoveEffect.SpeedReduce
-            )
+        MoveEffect oppositeEffect = NakamaLogic.GetOppositeEffect(newModifier);
+
+        if (oppositeEffect != MoveEffect.None)
         {
-            _modifierManager.AddModifier(newModifier);
+            _modifierManager.AddModifier(newModifier, oppositeEffect, amount);
         }
     }
+
+    public void ApplyAllModifiers(Blast newBlast)
+    {
+        foreach (var mod in newBlast.modifiers)
+        {
+            if (mod.amount == 0) continue;
+
+            MoveEffect effect = _modifierManager.GetMoveEffectFromStat(mod.stats, mod.amount);
+            if (effect != MoveEffect.None)
+            {
+                AddModifier(effect, Mathf.Abs(mod.amount));
+            }
+        }
+    }
+
 }
