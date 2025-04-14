@@ -5,11 +5,11 @@ const BagCollectionKey = 'user_items';
 
 const DefaultDeckItems: Item[] = [
     {
-        data_id: healthPotionData.id,
+        data_id: potionData.id,
         amount: 5,
     },
     {
-        data_id: manaPotionData.id,
+        data_id: elixirData.id,
         amount: 5,
     },
     {

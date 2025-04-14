@@ -31,8 +31,6 @@ public class GameView : View
     {
         base.Init();
 
-        _currentPanel = null;
-
         _attackPanel.Init();
         _bagPanel.Init();
 
@@ -43,6 +41,8 @@ public class GameView : View
     public override void OpenView(bool _instant = false)
     {
         base.OpenView(_instant);
+
+        _currentPanel = null;
 
         _bottomNavBar.Init();
 
@@ -180,7 +180,9 @@ public class GameView : View
     {
         HUDLayout waiterHUD;
 
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " fainted !");
+        var isWild = isPlayer ? "" : "Wild ";
+
+        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " fainted !");
 
         waiterHUD = isPlayer ? _playerHUD : _opponentHUD;
 
@@ -257,7 +259,7 @@ public class GameView : View
 
         float effective = NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
-        var isWild = isPlayer ? "" : "Wild";
+        var isWild = isPlayer ? "" : "Wild ";
 
         await _dialogLayout.UpdateTextAsync(
             isWild +
@@ -313,19 +315,13 @@ public class GameView : View
 
         attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
 
-        var isWild = isPlayer ? "" : "Wild";
+        var isWild = isPlayer ? "" : "Wild ";
 
         await _dialogLayout.UpdateTextAsync(
             isWild +
             NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString()
             + " don't have enough mana to do "
             + NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString());
-    }
-
-    public async Task MultiplierAttack(bool isPlayer, Blast blast, Move move)
-    {
-        var isWild = isPlayer ? "" : "Wild";
-        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " don't have enough mana to do " + NakamaData.Instance.GetItemDataRef(move.id).Name.GetLocalizedString());
     }
 
     public async void DoEndMatch(string textToShow)

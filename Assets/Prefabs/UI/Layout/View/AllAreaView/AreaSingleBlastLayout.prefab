@@ -72,6 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blastNameTxt: {fileID: 8802551473447875823}
+  _bg: {fileID: 6255112463050331414}
   _ico: {fileID: 2692466019550789753}
   _typeIco: {fileID: 7330815363637317952}
 --- !u!114 &4561945167948521523
@@ -149,12 +150,20 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3266173927702715368, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7161272064996550279, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7161272064996550279, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7962276885134453634, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}

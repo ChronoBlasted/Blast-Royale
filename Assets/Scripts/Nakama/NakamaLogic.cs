@@ -237,20 +237,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             throw new System.ArgumentOutOfRangeException("L'expérience totale ne peut pas être négative.");
         }
 
-        int niveau = 1;
-        int experienceNiveau = 0;
-
-        for (int i = 1; i <= 100; i++)
-        {
-            experienceNiveau = Mathf.FloorToInt((Mathf.Pow(i, 3) * 100) / 2);
-            if (experience < experienceNiveau)
-            {
-                break;
-            }
-            niveau = i;
-        }
-
-        return niveau;
+        return Mathf.FloorToInt(Mathf.Pow(experience, 1f / 3f));
     }
 
     public static int CalculateExperienceFromLevel(int level)
@@ -260,14 +247,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             throw new System.ArgumentOutOfRangeException("Le niveau doit être compris entre 1 et 100.");
         }
 
-        int experienceNiveau = 0;
-
-        for (int i = 1; i <= level; i++)
-        {
-            experienceNiveau = Mathf.FloorToInt((Mathf.Pow(i, 3) * 100) / 2); // Exemple de formule croissante
-        }
-
-        return experienceNiveau;
+        return Mathf.FloorToInt(Mathf.Pow(level, 3));
     }
 
     public static float GetTypeMultiplier(Type moveType, Type defenderType)

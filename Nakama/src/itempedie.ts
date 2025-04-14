@@ -26,42 +26,42 @@ interface ItemUseJSON {
     index_blast: number
 }
 
-const healthPotionData: ItemData = { // healthPotionData
+const potionData: ItemData = { // healthPotionData
     id: 0,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 20,
     rarity: Rarity.COMMON,
 };
 
-const superHealthPotionData: ItemData = { // superHealthPotionData
+const superPotionData: ItemData = { // superHealthPotionData
     id: 1,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 50,
     rarity:Rarity.UNCOMMON,
 };
 
-const hyperHealthPotionData: ItemData = { // hyperHealthPotionData
+const hyperPotionData: ItemData = { // hyperHealthPotionData
     id: 2,
     behaviour: ITEM_BEHAVIOUR.HEAL,
     gain_amount: 200,
     rarity:Rarity.RARE,
 };
 
-const manaPotionData: ItemData = { // manaPotionData
+const elixirData: ItemData = { // manaPotionData
     id: 3,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 10,
     rarity:Rarity.COMMON,
 };
 
-const superManaPotionData: ItemData = { // superManaPotionData
+const superElixirData: ItemData = { // superManaPotionData
     id: 4,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 25,
     rarity:Rarity.UNCOMMON,
 };
 
-const hyperManaPotionData: ItemData = { // hyperManaPotionData
+const hyperElixirData: ItemData = { // hyperManaPotionData
     id: 5,
     behaviour: ITEM_BEHAVIOUR.MANA,
     gain_amount: 50,
@@ -117,12 +117,12 @@ const AntiWetData: ItemData = { // hyperBlastTrapData
 };
 
 const itemPedia: ItemData[] = [
-    healthPotionData,
-    superHealthPotionData,
-    hyperHealthPotionData,
-    manaPotionData,
-    superManaPotionData,
-    hyperManaPotionData,
+    potionData,
+    superPotionData,
+    hyperPotionData,
+    elixirData,
+    superElixirData,
+    hyperElixirData,
     blastTrapData,
     superBlastTrapData,
     hyperBlastTrapData,

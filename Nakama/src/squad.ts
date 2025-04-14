@@ -323,7 +323,7 @@ function defaultBlastCollection(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
 
     let cards: BlastCollection = {
         deckBlasts: DefaultDeckBlast,
-        storedBlasts: DefaultDeckBlast,
+        storedBlasts: [],
     }
 
     storeUserBlasts(nk, logger, userId, cards);

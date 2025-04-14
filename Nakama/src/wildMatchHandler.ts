@@ -616,7 +616,6 @@ function performAttackSequence(state: WildBattleData, playerMove: Move, dispatch
             if (state.battle_state == BattleState.READY) ({ state } = handleAttackTurn(true, state, playerMove, dispatcher, nk, logger));
 
             return state;
-
         }
     }
 

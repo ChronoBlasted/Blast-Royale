@@ -76,7 +76,6 @@ class BlastEntity {
     }
 }
 
-
 // BlastData
 
 const Pantin: BlastData = { // Pantin

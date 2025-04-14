@@ -10,7 +10,7 @@ function calculateBlastHp(baseHp: number, iv: number, level: number): number {
 }
 
 function calculateBlastMana(baseMana: number, iv: number, level: number): number {
-    return Math.floor(((baseMana + iv) * (level / 100) + level / 2) + 10);
+    return Math.floor(((2 * baseMana + iv) * (level / 2)) / 100 + (level / 2) + 10);
 }
 
 function calculateLevelFromExperience(experience: number): number {
@@ -18,18 +18,7 @@ function calculateLevelFromExperience(experience: number): number {
         throw new Error("L'expérience totale ne peut pas être négative.");
     }
 
-    let niveau = 1;
-    let experienceNiveau = 0;
-
-    for (let i = 1; i <= 100; i++) {
-        experienceNiveau = Math.floor((i ** 3) * 100 / 2);
-        if (experience < experienceNiveau) {
-            break;
-        }
-        niveau = i;
-    }
-
-    return niveau;
+    return Math.floor(Math.cbrt(experience));
 }
 
 function calculateExperienceFromLevel(level: number): number {
@@ -37,13 +26,7 @@ function calculateExperienceFromLevel(level: number): number {
         throw new Error("Le niveau doit être compris entre 1 et 100. Le level : " + level);
     }
 
-    let experienceNiveau = 0;
-
-    for (let i = 1; i <= level; i++) {
-        experienceNiveau = Math.floor((i ** 3) * 100 / 2);
-    }
-
-    return experienceNiveau;
+    return Math.pow(level, 3);
 }
 
 function calculateExperienceGain(expYield: number, enemyLevel: number, yourLevel: number): number {
