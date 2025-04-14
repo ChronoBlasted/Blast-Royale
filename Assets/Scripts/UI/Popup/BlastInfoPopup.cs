@@ -40,7 +40,7 @@ public class BlastInfoPopup : Popup
         _currentBlastData = _nakamaData.GetBlastDataById(blast.data_id);
 
         _blastNameTxt.text = _nakamaData.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
-        _blastDescTxt.text = _currentBlastData.desc;
+        _blastDescTxt.text = _nakamaData.GetBlastDataRef(blast.data_id).Desc.GetLocalizedString();
         _blastLevel.text = "Lvl." + _currentBlast.Level;
         _blastExp.text = _currentBlast.GetRatioExp() + " / " + _currentBlast.GetRatioExpNextLevel();
 
@@ -69,7 +69,7 @@ public class BlastInfoPopup : Popup
         }
 
 
-        _prestigeEvolveLayout.SetActive(true);
+        //_prestigeEvolveLayout.SetActive(true);
     }
 
     public void UpdateData(BlastData blast)
@@ -77,7 +77,7 @@ public class BlastInfoPopup : Popup
         _currentBlastData = blast;
 
         _blastNameTxt.text = _nakamaData.GetBlastDataRef(_currentBlastData.id).Name.GetLocalizedString();
-        _blastDescTxt.text = _currentBlastData.desc;
+        _blastDescTxt.text = _nakamaData.GetBlastDataRef(_currentBlastData.id).Desc.GetLocalizedString();
         _blastLevel.text = "";
         _blastExp.text = "";
 

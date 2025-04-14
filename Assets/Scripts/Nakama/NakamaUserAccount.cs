@@ -40,12 +40,17 @@ public class NakamaUserAccount : MonoBehaviour
         _lastData = JsonParser.FromJson<Metadata>(_lastAccount.User.Metadata);
 
         var username = _lastAccount.User.Username;
-        var avatarUrl = _lastAccount.User.AvatarUrl;
 
-        UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
+        GetPlayerMetadata(username);
 
-        UIManager.Instance.FriendView.UpdateUsername(username);
-        UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(username);
+        UpdateUsernameFront(username);
+    }
+
+    public async void GetPlayerMetadata(string username)
+    {
+        _lastAccount = await _client.GetAccountAsync(_session);
+
+        UIManager.Instance.ProfilePopup.UpdateData(_lastData);
     }
 
     #region ApiAccountUpdate
@@ -64,6 +69,11 @@ public class NakamaUserAccount : MonoBehaviour
 
         HaveUpdateDisplayName();
 
+        UpdateUsernameFront(newUsername);
+    }
+
+    private static void UpdateUsernameFront(string newUsername)
+    {
         UIManager.Instance.FriendView.UpdateUsername(newUsername);
         UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(newUsername);
     }

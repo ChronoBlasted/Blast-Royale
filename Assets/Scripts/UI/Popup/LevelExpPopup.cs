@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class LevelExpPopup : Popup
 {
-    [SerializeField] TMP_Text _blastNameTxt, _blastLvlTxt;
+    [SerializeField] TMP_Text _blastNameTxt, _blastLvlTxt, _nextBlastLvlTxt;
     [SerializeField] SliderBar _expBar;
     [SerializeField] Image _blastImg;
 
@@ -34,6 +34,7 @@ public class LevelExpPopup : Popup
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
         _blastLvlTxt.text = "LVL." + blast.Level;
+        _nextBlastLvlTxt.text = "LVL." + (blast.Level + 1);
 
         _expBar.Init(blast.GetRatioExp(), blast.GetRatioExpNextLevel());
 

@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8524961853518039903
 CanvasRenderer:
@@ -142,10 +142,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 16
     m_Right: 16
-    m_Top: 16
-    m_Bottom: 196
+    m_Top: 272
+    m_Bottom: 512
   m_ChildAlignment: 1
-  m_Spacing: 48
+  m_Spacing: 16
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -219,10 +219,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 16
     m_Right: 16
-    m_Top: 16
-    m_Bottom: 196
+    m_Top: 272
+    m_Bottom: 512
   m_ChildAlignment: 1
-  m_Spacing: 48
+  m_Spacing: 16
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -364,7 +364,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8441315312066992767
 CanvasRenderer:
@@ -454,7 +454,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5074334762653985547
 CanvasRenderer:
@@ -546,7 +546,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 160}
+  m_AnchoredPosition: {x: 0, y: 192}
   m_SizeDelta: {x: -64, y: 96}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &4815106897202728903
@@ -742,7 +742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.16078432, b: 0.41960785, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -831,8 +831,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 16
     m_Right: 16
-    m_Top: 16
-    m_Bottom: 196
+    m_Top: 272
+    m_Bottom: 512
   m_ChildAlignment: 1
   m_Spacing: 16
   m_ChildForceExpandWidth: 0
@@ -1550,11 +1550,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 256
+      value: 320
       objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 96
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1590,7 +1590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 80
+      value: 96
       objectReference: {fileID: 0}
     - target: {fileID: 1512074958427544450, guid: 8c4bf4fb684e87a45b8e4e771e842259, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

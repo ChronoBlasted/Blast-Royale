@@ -25,7 +25,7 @@ public class ProfilePopup : Popup
         base.ClosePopup();
     }
 
-    public void UpdateData(Metadata metadata, string playerName)
+    public void UpdateData(Metadata metadata, string playerName = null)
     {
         _lastData = metadata;
 

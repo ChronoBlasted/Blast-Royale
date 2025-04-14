@@ -44,33 +44,19 @@ public class RewardPopup : Popup
 
         if (reward.coinsReceived != 0)
         {
-            if (reward.offer_id == -1)
-            {
-                var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
+            var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
 
-                _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, coinData.Name.GetLocalizedString(), coinData.Sprite));
-            }
-            else
-            {
-                var storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id);
+            Sprite sprite = reward.offer_id == -1 ? coinData.Sprite : NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id).Sprite;
 
-                _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, storeOfferRef.Name.GetLocalizedString(), storeOfferRef.Sprite));
-            }
+            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, coinData.Name.GetLocalizedString(), sprite));
         }
         if (reward.gemsReceived != 0)
         {
-            if (reward.offer_id == -1)
-            {
-                var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
+            var gemData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
 
-                _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, coinData.Name.GetLocalizedString(), coinData.Sprite));
-            }
-            else
-            {
-                var storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id);
+            Sprite sprite = reward.offer_id == -1 ? gemData.Sprite : NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id).Sprite;
 
-                _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, storeOfferRef.Name.GetLocalizedString(), storeOfferRef.Sprite));
-            }
+            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, gemData.Name.GetLocalizedString(), sprite));
         }
         if (reward.blastReceived != null)
         {
