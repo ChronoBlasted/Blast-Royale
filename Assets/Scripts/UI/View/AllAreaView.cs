@@ -50,7 +50,7 @@ public class AllAreaView : View
     {
         for (int i = 0; i < _allArea.Count; i++)
         {
-            if (NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.trophies.ToString()] >= _allArea[i].trophyRequired)
+            if (NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Trophies.ToString()] >= _allArea[i].trophyRequired)
             {
                 UIManager.ScrollToItem(_scrollRect, _areaContent, i);
                 return;

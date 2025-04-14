@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum OfferType { COIN, GEM, BLAST, ITEM }
 
 public class NakamaStore : MonoBehaviour
 {
@@ -184,11 +183,10 @@ public class NakamaStore : MonoBehaviour
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class StoreOffer
 {
-    public OfferType type;
-
+    public int offer_id;
     public int coinsAmount;
     public int gemsAmount;
     public Blast blast;
@@ -199,6 +197,8 @@ public class StoreOffer
 
     public bool isAlreadyBuyed;
 }
+
+
 
 public class CanClaimDailyShop
 {

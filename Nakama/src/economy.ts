@@ -1,8 +1,9 @@
 enum Currency {
-  Coins = "coins",
-  Gems = "gems",
-  Trophies = "trophies",
-  Hard = "hard",
+  None,
+  Coins = "Coins",
+  Gems = "Gems",
+  Trophies = "Trophies",
+  Hard = "Hard",
 };
 
 let DefaultWallet = {
@@ -11,7 +12,7 @@ let DefaultWallet = {
   [Currency.Trophies]: 0,
 };
 
-function storeUserWallet(nk: nkruntime.Nakama, user_id: string, changeset: { coins: number; gems: number; trophies: number; }, logger: nkruntime.Logger) {
+function storeUserWallet(nk: nkruntime.Nakama, user_id: string, changeset: { Coins: number; Gems: number; Trophies: number; }, logger: nkruntime.Logger) {
   try {
       nk.walletUpdate(user_id, changeset);
   } catch (error) {

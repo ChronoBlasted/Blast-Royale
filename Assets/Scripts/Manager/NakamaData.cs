@@ -13,6 +13,7 @@ public class NakamaData : MonoSingleton<NakamaData>
     [SerializeField] List<ItemDataRef> _allItemData;
     [SerializeField] List<MoveDataRef> _allMoveData;
     [SerializeField] List<AreaDataRef> _allAreaDataRef;
+    [SerializeField] List<StoreOfferDataRef> _allStoreOfferDataRef;
 
     BlastCollection _blastCollection;
     ItemCollection _itemCollection;
@@ -50,6 +51,10 @@ public class NakamaData : MonoSingleton<NakamaData>
         return _allAreaDataRef.Find(x => x.DataID == id);
     }
 
+    public StoreOfferDataRef GetStoreOfferDataRef(int id)
+    {
+        return _allStoreOfferDataRef.Find(x => x.DataID == id);
+    }
 
     public BlastData GetBlastDataById(int id)
     {
@@ -86,6 +91,11 @@ public class NakamaData : MonoSingleton<NakamaData>
         _allAreaDataRef = AssetDatabase.FindAssets("t:AreaDataRef")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<AreaDataRef>)
+            .ToList();
+
+        _allStoreOfferDataRef = AssetDatabase.FindAssets("t:StoreOfferDataRef")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<StoreOfferDataRef>)
             .ToList();
 
         EditorUtility.SetDirty(this);

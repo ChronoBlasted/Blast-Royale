@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public enum Currency { coins, gems, trophies, hard }
-
 public class NakamaUserAccount : MonoBehaviour
 {
     IClient _client;
@@ -134,15 +132,15 @@ public class NakamaUserAccount : MonoBehaviour
 
         foreach (var currency in LastWalletData.Keys)
         {
-            if (currency == Currency.coins.ToString())
+            if (currency == Currency.Coins.ToString())
             {
                 UIManager.Instance.MenuView.TopBar.UpdateCoin(LastWalletData[currency]);
             }
-            if (currency == Currency.gems.ToString())
+            if (currency == Currency.Gems.ToString())
             {
                 UIManager.Instance.MenuView.TopBar.UpdateGem(LastWalletData[currency]);
             }
-            if (currency == Currency.trophies.ToString())
+            if (currency == Currency.Trophies.ToString())
             {
                 UIManager.Instance.MenuView.TopBar.UpdateTrophy(LastWalletData[currency]);
             }
