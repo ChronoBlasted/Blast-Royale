@@ -62,6 +62,7 @@ public class BlastInfoPopup : Popup
         {
             if (i < _currentBlast.activeMoveset.Count)
             {
+
                 movesLayout[i].gameObject.SetActive(true);
                 movesLayout[i].Init(_nakamaData.GetMoveById(_currentBlast.activeMoveset[i]), null);
             }

@@ -244,6 +244,8 @@ public class NakamaUserAccount : MonoBehaviour
             UIManager.Instance.MenuView.SquadPanel.UpdateDeckBlast(_lastBlastCollection.deckBlasts);
             UIManager.Instance.MenuView.SquadPanel.UpdateStoredBlast(_lastBlastCollection.storedBlasts);
 
+            UIManager.Instance.BlastInfoPopup.UpdateData(NakamaLogic.GetBlastByUUID(uuidBlast, _lastBlastCollection));
+
             //Update Fight Panel
             UIManager.Instance.MenuView.FightPanel.UpdateDeckBlast(_lastBlastCollection.deckBlasts);
         }

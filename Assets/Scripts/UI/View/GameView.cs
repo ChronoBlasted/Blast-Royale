@@ -231,6 +231,9 @@ public class GameView : View
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
             case ItemBehaviour.STATUS:
+                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+
+                _playerHUD.SetStatus(selectedBlast.status);
                 break;
             case ItemBehaviour.CATCH:
 
@@ -254,8 +257,8 @@ public class GameView : View
 
     public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, MoveEffect moveEffect)
     {
-        HUDLayout attackerHUD;
-        HUDLayout defenderHUD;
+        HUDLayout attackerHUD = null;
+        HUDLayout defenderHUD = null;
 
         float effective = NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
@@ -269,17 +272,30 @@ public class GameView : View
             " !");
 
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
-        defenderHUD = isPlayer ? _opponentHUD : _playerHUD;
 
-        if (move.IsPlatformAttack())
+        switch (move.target)
         {
-            attackerHUD.BlastInWorld.PlatformLayout.RemoveEnergyByType(move.type, move.platform_cost);
+            case Target.Opponent:
+                defenderHUD = isPlayer ? _opponentHUD : _playerHUD;
+                break;
+            case Target.Self:
+                defenderHUD = isPlayer ? _playerHUD : _opponentHUD;
+                break;
         }
-        else
+
+        switch (move.attackType)
         {
-            attackerHUD.UpdateManaBar(attacker.Mana);
-            attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
-            if (NakamaLogic.IsWeatherBoosted(_currentMeteo, move.type)) attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
+            case AttackType.None:
+                break;
+            case AttackType.Normal:
+            case AttackType.Status:
+                attackerHUD.UpdateManaBar(attacker.Mana);
+                attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
+                if (NakamaLogic.IsWeatherBoosted(_currentMeteo, move.type)) attackerHUD.BlastInWorld.PlatformLayout.AddEnergy(move.type);
+                break;
+            case AttackType.Special:
+                attackerHUD.BlastInWorld.PlatformLayout.RemoveEnergyByType(move.type, move.cost);
+                break;
         }
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);
@@ -299,7 +315,9 @@ public class GameView : View
             dialogText = NakamaLogic.GetEffectMessage(moveEffect);
 
             defenderHUD.SetStatus(defender.status);
-            defenderHUD.AddModifier(moveEffect, 1);
+
+            var isStatusMove = move.attackType == AttackType.Status;
+            defenderHUD.AddModifier(moveEffect, isStatusMove ? move.power : 1);
 
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
         }

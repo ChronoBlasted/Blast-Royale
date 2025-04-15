@@ -20,83 +20,86 @@ public class MoveLayout : MonoBehaviour
         _move = move;
         _indexMove = index;
 
-        _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString();
+        _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(_move.id).Name.GetLocalizedString();
 
-        var moveEffect = move.effect;
+        var moveEffect = _move.effect;
 
-        if (move.effect != MoveEffect.None)
+        if (moveEffect != MoveEffect.None)
         {
             _moveDescTxt.gameObject.SetActive(true);
-            string Can = move.platform_cost > 0 ? "" : "Can ";
+            string Can = _move.attackType == AttackType.Special ? "" : "Can ";
             _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
         }
         else _moveDescTxt.gameObject.SetActive(false);
 
-        _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Sprite;
+        _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Sprite;
 
         SetAttackCostData();
 
         if (_blast != null) UpdateUI();
         else _moveCostTxt.color = Color.white;
 
-        _moveBorder.color = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Color;
+        _moveBorder.color = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Color;
     }
 
     void SetAttackCostData()
     {
-        if (_move.platform_cost > 0)
+        switch (_move.attackType)
         {
-            _costIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.PlatformCost).Sprite;
-            _moveCostTxt.text = _move.platform_cost.ToString();
-        }
-        else
-        {
-            _costIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Mana).Sprite;
-            _moveCostTxt.text = _move.cost.ToString();
-        }
+            case AttackType.None:
+                break;
+            case AttackType.Normal:
+                _costIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Mana).Sprite;
+                _moveCostTxt.text = _move.cost.ToString();
 
-        if (_move.power > 0)
-        {
-            _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackDamage).Sprite;
-            _movePowerTxt.text = _move.power.ToString();
-        }
-        else
-        {
-            _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackStatus).Sprite;
+                _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackDamage).Sprite;
+                _movePowerTxt.text = _move.power.ToString();
+                break;
+            case AttackType.Status:
+                _costIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Mana).Sprite;
+                _moveCostTxt.text = _move.cost.ToString();
 
-            _movePowerTxt.text = "";
+                _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackStatus).Sprite;
+                _movePowerTxt.text = "";
+                break;
+            case AttackType.Special:
+                _costIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.PlatformCost).Sprite;
+                _moveCostTxt.text = _move.cost.ToString();
+
+                _damageIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.AttackDamage).Sprite;
+                _movePowerTxt.text = _move.power.ToString();
+                break;
         }
     }
 
     public void UpdateUI()
     {
-        if (_move.platform_cost > 0)
+        bool canUseMove = false;
+
+        switch (_move.attackType)
         {
-            if (_move.platform_cost > UIManager.Instance.GameView.PlayerHUD.BlastInWorld.PlatformLayout.GetAmountOfType(_move.type))
-            {
-                _moveCostTxt.color = Color.red;
-                Lock();
-            }
-            else
-            {
-                _moveCostTxt.color = Color.white;
-                Unlock();
-            }
+            case AttackType.Normal:
+            case AttackType.Status:
+                canUseMove = _move.cost <= _blast.Mana;
+                break;
+
+            case AttackType.Special:
+                canUseMove = _move.cost <= UIManager.Instance.GameView.PlayerHUD.BlastInWorld.PlatformLayout.GetAmountOfType(_move.type);
+                break;
+        }
+
+        _moveCostTxt.color = canUseMove ? Color.white : Color.red;
+
+        if (canUseMove)
+        {
+            Unlock();
         }
         else
         {
-            if (_move.cost > _blast.Mana)
-            {
-                _moveCostTxt.color = Color.red;
-                Lock();
-            }
-            else
-            {
-                _moveCostTxt.color = Color.white;
-                Unlock();
-            }
+            Lock();
         }
     }
+
 
     public void UpdateOnClick(UnityAction action)
     {

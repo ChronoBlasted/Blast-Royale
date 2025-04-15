@@ -55,6 +55,7 @@ function ConvertBlastToBlastEntity(blast: Blast): BlastEntity {
 
 //#region Battle
 
+
 function addPlatformType(p_platform: Type[], newType: Type): Type[] {
     if (p_platform.length < 3) {
         p_platform.push(newType);
@@ -259,6 +260,9 @@ function calculateEffectWithProbability(blast: BlastEntity, move: Move): { blast
 
 
 function applyEffect(blast: BlastEntity, move: Move): BlastEntity {
+
+    var isStatusMove = move.attackType === AttackType.Status;
+
     switch (move.effect) {
         case MoveEffect.Burn:
             blast.status = Status.Burn;
@@ -288,23 +292,23 @@ function applyEffect(blast: BlastEntity, move: Move): BlastEntity {
             break;
 
         case MoveEffect.AttackBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, +1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? move.power : 1);
             break;
         case MoveEffect.DefenseBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, +1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? move.power : 1);
 
             break;
         case MoveEffect.SpeedBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, +1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? move.power : 1);
             break;
         case MoveEffect.AttackReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? -move.power : -1);
             break;
         case MoveEffect.DefenseReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? -move.power : -1);
             break;
         case MoveEffect.SpeedReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? -move.power : -1);
             break;
 
         case MoveEffect.Cleanse:
@@ -371,22 +375,23 @@ function applyStatusEffectAtEndOfTurn(blast: BlastEntity, otherBlast: BlastEntit
 
 
 
-function calculateStaminaRecovery(
-    maxStamina: number,
-    currentStamina: number,
+function calculateManaRecovery(
+    maxMana: number,
+    currentMana: number,
     useWait: boolean = false
 ): number {
-    const normalRecovery: number = maxStamina * 0.2;
-    const waitRecovery: number = maxStamina * 0.5;
+    const normalRecovery: number = Math.floor(maxMana * 0.2);
+    const waitRecovery: number = Math.floor(maxMana * 0.5);
 
-    let recoveredStamina: number = currentStamina + (useWait ? waitRecovery : normalRecovery);
+    let recoveredMana: number = currentMana + (useWait ? waitRecovery : normalRecovery);
 
-    if (recoveredStamina > maxStamina) {
-        recoveredStamina = maxStamina;
+    if (recoveredMana > maxMana) {
+        recoveredMana = maxMana;
     }
 
-    return Math.floor(recoveredStamina);
+    return recoveredMana;
 }
+
 
 function getFasterBlast(blast1: BlastEntity, blast2: BlastEntity): boolean {
 
@@ -422,6 +427,12 @@ function healManaBlast(blast: BlastEntity, amount: number): BlastEntity {
     return blast;
 }
 
+function healStatusBlast(blast: BlastEntity, status: Status): BlastEntity {
+    if (blast.status == status || status == Status.All) blast.status = Status.None;
+
+    return blast;
+}
+
 function calculateCaptureProbability(currentHP: number, maxHP: number, catchRate: number, trapBonus: number, statusBonus: number): number {
     const hpFactor = (3 * maxHP - 2 * currentHP) / (3 * maxHP);
     const baseProbability = catchRate * hpFactor * trapBonus * statusBonus;
@@ -450,19 +461,22 @@ function getRandomMeteo(): Meteo {
     return randomElement(values);
 }
 
-function getRandomUsableMove(
-    allMoves: Move[],
-    currentMana: number,
-    currentPlatformTypes: Type[]
-): number {
-
+function getRandomUsableMove(allMoves: Move[], currentMana: number, currentPlatformTypes: Type[]): number {
     const usableMoves: Move[] = [];
 
     for (const move of allMoves) {
-        if (move.cost > currentMana) continue;
+        switch (move.attackType) {
+            case AttackType.Normal:
+            case AttackType.Status:
+                if (currentMana < move.cost) continue;
+                break;
 
-        const energyCount = currentPlatformTypes.filter(t => t === move.type).length;
-        if (energyCount < move.platform_cost) continue;
+            case AttackType.Special: {
+                const energyCount = getAmountOfPlatformTypeByType(currentPlatformTypes, move.type);
+                if (energyCount < move.cost) continue;
+                break;
+            }
+        }
 
         usableMoves.push(move);
     }
@@ -472,13 +486,15 @@ function getRandomUsableMove(
     }
 
     const randomIndex = Math.floor(Math.random() * usableMoves.length);
-    return randomIndex;
+    return allMoves.indexOf(usableMoves[randomIndex]);
 }
+
 
 
 
 //#endregion
 
+// region Utils
 
 
 function clamp(value: number, min: number, max: number): number {

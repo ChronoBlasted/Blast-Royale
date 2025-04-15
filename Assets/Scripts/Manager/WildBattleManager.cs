@@ -170,23 +170,30 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (_playerAction.TurnType == TurnType.ATTACK && _wbAction.TurnType == TurnType.ATTACK)
         {
-            bool isPlayerBlastFaster = NakamaLogic.GetFasterBlast(_playerBlast, _wildBlast);
+            var playerMove = _dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]);
+            var wildMove = _dataUtils.GetMoveById(_wildBlast.activeMoveset[_wbAction.MoveIndex]);
 
-            if (_dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]).priority > _dataUtils.GetMoveById(_playerBlast.activeMoveset[_wbAction.MoveIndex]).priority)
+            bool isPlayerFirst;
+
+            if (playerMove.priority > wildMove.priority)
             {
-                isPlayerBlastFaster = true;
+                isPlayerFirst = true;
             }
-            else if (_dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]).priority < _dataUtils.GetMoveById(_playerBlast.activeMoveset[_wbAction.MoveIndex]).priority)
+            else if (playerMove.priority < wildMove.priority)
             {
-                isPlayerBlastFaster = false;
+                isPlayerFirst = false;
+            }
+            else
+            {
+                isPlayerFirst = NakamaLogic.GetFasterBlast(_playerBlast, _wildBlast);
             }
 
-            if (isPlayerBlastFaster) await Attack(turnState, true);
+            if (isPlayerFirst) await Attack(turnState, true);
             else await Attack(turnState, false);
 
             if (await CheckIfKO()) return;
 
-            if (isPlayerBlastFaster == false) await Attack(turnState, true);
+            if (!isPlayerFirst) await Attack(turnState, true);
             else await Attack(turnState, false);
 
             if (await CheckIfKO()) return;
@@ -200,8 +207,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             if (await CheckIfKO()) return;
         }
-
-
 
         if (_playerAction.TurnType != TurnType.ATTACK && _wbAction.TurnType == TurnType.ATTACK)
         {
@@ -306,31 +311,45 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     async Task Attack(TurnStateData turnState, bool isPlayerAttack)
     {
         Blast attacker = isPlayerAttack ? _playerBlast : _wildBlast;
-        Blast defender = isPlayerAttack ? _wildBlast : _playerBlast;
         Move move = isPlayerAttack ? _dataUtils.GetMoveById(_playerBlast.activeMoveset[_playerAction.MoveIndex]) : _dataUtils.GetMoveById(_wildBlast.activeMoveset[_wbAction.MoveIndex]);
+
+        Blast target = null;
+
+        switch (move.target)
+        {
+            case Target.Opponent:
+                target = isPlayerAttack ? _wildBlast : _playerBlast;
+                break;
+            case Target.Self:
+                target = isPlayerAttack ? _playerBlast : _wildBlast;
+                break;
+        }
 
         int moveDamage = isPlayerAttack ? turnState.p_move_damage : turnState.wb_move_damage;
         MoveEffect moveEffect = isPlayerAttack ? turnState.p_move_effect : turnState.wb_move_effect;
 
-        defender.Hp -= moveDamage;
+        target.Hp -= moveDamage;
 
         if (moveEffect != MoveEffect.None)
         {
-            defender = NakamaLogic.ApplyEffectToBlast(defender, move);
+            target = NakamaLogic.ApplyEffectToBlast(target, move);
         }
 
-        if (move.platform_cost > 0)
+        switch (move.attackType)
         {
-            await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
+            case AttackType.None:
+                break;
+            case AttackType.Normal:
+            case AttackType.Status:
+                attacker.Mana -= move.cost;
+                await _gameView.BlastAttack(isPlayerAttack, attacker, target, move, moveDamage, moveEffect);
+                break;
+            case AttackType.Special:
+                await _gameView.BlastAttack(isPlayerAttack, attacker, target, move, moveDamage, moveEffect);
+                break;
         }
-        else
-        {
-            attacker.Mana -= move.cost;
-
-            await _gameView.BlastAttack(isPlayerAttack, attacker, defender, move, moveDamage, moveEffect);
-        }
-
     }
+
     private void UpdateOpponentTurn(TurnStateData turnState)
     {
         _wbAction.TurnType = turnState.wb_turn_type;

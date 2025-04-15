@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ModifierLayout : MonoBehaviour
 {
-    public MoveEffect MoveEffect;
+    public StatType StatType;
 
     [SerializeField] Image _ico;
     [SerializeField] TMP_Text _amountTxt;
@@ -14,11 +14,11 @@ public class ModifierLayout : MonoBehaviour
 
     public int Amount { get => _amount;}
 
-    public void Init(MoveEffect newEffect, int amount)
+    public void Init(StatType newStatType, int amount)
     {
-        MoveEffect = newEffect;
+        StatType = newStatType;
 
-        var data = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)MoveEffect);
+        var data = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)StatType);
 
         _ico.sprite = data.Sprite;
         _amount = 0;

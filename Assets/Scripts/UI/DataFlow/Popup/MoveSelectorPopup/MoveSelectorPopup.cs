@@ -49,7 +49,7 @@ public class MoveSelectorPopup : Popup
             Destroy(t.gameObject);
         }
 
-        for (int i = 0; i < availablesMoves.Count; i++)
+        for (int i = 0; i < availablesMoves.Count - 1; i++)
         {
             var currentMove = Instantiate(_moveLayoutPrefab, _scrollMoveAvaible);
             currentMove.Init(availablesMoves[i], null, i);
@@ -66,5 +66,7 @@ public class MoveSelectorPopup : Popup
     public void HandleChangeMove()
     {
         NakamaManager.Instance.NakamaUserAccount.SwitchMoveBlast(_uuidBlast, _outMoveIndex, _newMoveIndex);
+
+        ClosePopup();
     }
 }

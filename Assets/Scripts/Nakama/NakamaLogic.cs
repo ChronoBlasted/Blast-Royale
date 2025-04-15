@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class NakamaLogic : MonoSingleton<NakamaLogic>
@@ -32,7 +33,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     public int CalculateStaminaRecovery(int maxStamina, int currentStamina, bool useWait = false)
     {
         int normalRecovery = Mathf.FloorToInt(maxStamina * 0.2f);
-
         int waitRecovery = Mathf.FloorToInt(maxStamina * 0.5f);
 
         int recoveredStamina = currentStamina + (useWait ? waitRecovery : normalRecovery);
@@ -44,6 +44,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
 
         return recoveredStamina;
     }
+
 
     public static int CalculateExpGain(int expYield, int yourLevel, int enemyLevel)
     {
@@ -93,6 +94,8 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     }
     public static Blast ApplyEffectToBlast(Blast blast, Move move)
     {
+        var isStatusMove = move.attackType == AttackType.Status;
+
         switch (move.effect)
         {
             case MoveEffect.Burn:
@@ -127,27 +130,27 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
                 break;
 
             case MoveEffect.AttackBoost:
-                blast.ApplyModifier(MoveEffect.AttackBoost);
+                blast.ApplyModifier(MoveEffect.AttackBoost, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.DefenseBoost:
-                blast.ApplyModifier(MoveEffect.DefenseBoost);
+                blast.ApplyModifier(MoveEffect.DefenseBoost, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.SpeedBoost:
-                blast.ApplyModifier(MoveEffect.SpeedBoost);
+                blast.ApplyModifier(MoveEffect.SpeedBoost, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.AttackReduce:
-                blast.ApplyModifier(MoveEffect.AttackReduce);
+                blast.ApplyModifier(MoveEffect.AttackReduce, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.DefenseReduce:
-                blast.ApplyModifier(MoveEffect.DefenseReduce);
+                blast.ApplyModifier(MoveEffect.DefenseReduce, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.SpeedReduce:
-                blast.ApplyModifier(MoveEffect.SpeedReduce);
+                blast.ApplyModifier(MoveEffect.SpeedReduce, isStatusMove ? move.power : 1);
                 break;
 
             case MoveEffect.Cleanse:
@@ -156,6 +159,29 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         }
 
         return blast;
+    }
+
+    public static StatType GetStatTypeByMoveEffect(MoveEffect moveEffect)
+    {
+        StatType stat = StatType.None;
+
+        switch (moveEffect)
+        {
+            case MoveEffect.AttackBoost:
+            case MoveEffect.AttackReduce:
+                stat = StatType.Attack;
+                break;
+            case MoveEffect.DefenseBoost:
+            case MoveEffect.DefenseReduce:
+                stat = StatType.Defense;
+                break;
+            case MoveEffect.SpeedBoost:
+            case MoveEffect.SpeedReduce:
+                stat = StatType.Speed;
+                break;
+        }
+
+        return stat;
     }
 
     public static string GetEffectMessage(MoveEffect move)
@@ -227,22 +253,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return message;
     }
 
-    public static MoveEffect GetOppositeEffect(MoveEffect effect)
-    {
-        switch (effect)
-        {
-            case MoveEffect.AttackBoost: return MoveEffect.AttackReduce;
-            case MoveEffect.AttackReduce: return MoveEffect.AttackBoost;
-            case MoveEffect.DefenseBoost: return MoveEffect.DefenseReduce;
-            case MoveEffect.DefenseReduce: return MoveEffect.DefenseBoost;
-            case MoveEffect.SpeedBoost: return MoveEffect.SpeedReduce;
-            case MoveEffect.SpeedReduce: return MoveEffect.SpeedBoost;
-            default: return MoveEffect.None;
-        }
-    }
-
-
-
     public static int CalculateLevelFromExperience(int experience)
     {
         if (experience < 0)
@@ -261,6 +271,16 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         }
 
         return Mathf.FloorToInt(Mathf.Pow(level, 3));
+    }
+
+    public static Blast GetBlastByUUID(string uuid, BlastCollection allBlasts)
+    {
+        Blast selectedBlast = null;
+
+        selectedBlast = allBlasts.deckBlasts.FirstOrDefault(blast => blast.uuid == uuid);
+        if (selectedBlast == null) selectedBlast = allBlasts.storedBlasts.FirstOrDefault(blast => blast.uuid == uuid);
+
+        return selectedBlast;
     }
 
     public static float GetTypeMultiplier(Type moveType, Type defenderType)

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -160,11 +161,13 @@ public class HUDLayout : MonoBehaviour
 
     public void AddModifier(MoveEffect newModifier, int amount)
     {
-        MoveEffect oppositeEffect = NakamaLogic.GetOppositeEffect(newModifier);
+        StatType statType = NakamaLogic.GetStatTypeByMoveEffect(newModifier);
 
-        if (oppositeEffect != MoveEffect.None)
+        if (statType != StatType.None)
         {
-            _modifierManager.AddModifier(newModifier, oppositeEffect, amount);
+            int modAmount = (statType.ToString().Contains("Reduce") ? -amount : amount);
+
+            _modifierManager.AddModifier(statType, modAmount);
         }
     }
 
@@ -177,7 +180,7 @@ public class HUDLayout : MonoBehaviour
             MoveEffect effect = _modifierManager.GetMoveEffectFromStat(mod.stats, mod.amount);
             if (effect != MoveEffect.None)
             {
-                AddModifier(effect, Mathf.Abs(mod.amount));
+                AddModifier(effect, mod.amount);
             }
         }
     }

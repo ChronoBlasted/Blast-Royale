@@ -1,6 +1,7 @@
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 [Serializable]
@@ -90,31 +91,33 @@ public class Blast
         return 1f;
     }
 
-    public void ApplyModifier(MoveEffect effect)
+    public void ApplyModifier(MoveEffect effect, int amount = 1)
     {
+
         switch (effect)
         {
             case MoveEffect.AttackBoost:
-                UpdateModifier(StatType.Attack, 1);
+                UpdateModifier(StatType.Attack, amount);
                 break;
             case MoveEffect.DefenseBoost:
-                UpdateModifier(StatType.Defense, 1);
+                UpdateModifier(StatType.Defense, amount);
                 break;
             case MoveEffect.SpeedBoost:
-                UpdateModifier(StatType.Speed, 1);
+                UpdateModifier(StatType.Speed, amount);
                 break;
 
             case MoveEffect.AttackReduce:
-                UpdateModifier(StatType.Attack, -1);
+                UpdateModifier(StatType.Attack, -amount);
                 break;
             case MoveEffect.DefenseReduce:
-                UpdateModifier(StatType.Defense, -1);
+                UpdateModifier(StatType.Defense, -amount);
                 break;
             case MoveEffect.SpeedReduce:
-                UpdateModifier(StatType.Speed, -1);
+                UpdateModifier(StatType.Speed, -amount);
                 break;
         }
     }
+
 
     private void UpdateModifier(StatType stat, int amount)
     {

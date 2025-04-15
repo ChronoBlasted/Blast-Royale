@@ -16,34 +16,23 @@ public class ModifierManager : MonoBehaviour
         {
             Destroy(t.gameObject);
         }
+
+        _modifiers.Clear();
     }
 
-    public void AddModifier(MoveEffect effectToAdd, MoveEffect oppositeEffect, int amount = 1)
+    public void AddModifier(StatType statType, int amount = 1)
     {
-        var oppositeModifier = _modifiers.FirstOrDefault(m => m.MoveEffect == oppositeEffect);
-
-        if (oppositeModifier != null)
-        {
-            oppositeModifier.Add(-amount);
-
-            if (oppositeModifier.Amount <= 0)
-            {
-                _modifiers.Remove(oppositeModifier);
-                Destroy(oppositeModifier.gameObject);
-            }
-
-            return;
-        }
-
-        var existingModifier = _modifiers.FirstOrDefault(m => m.MoveEffect == effectToAdd);
+        var existingModifier = _modifiers.FirstOrDefault(m => m.StatType == statType);
         if (existingModifier != null)
         {
             existingModifier.Add(amount);
+
+            if (existingModifier.Amount == 0) Destroy(existingModifier.gameObject);
             return;
         }
 
         var newModifier = Instantiate(_modifierLayoutPrefab, _modifierTransform);
-        newModifier.Init(effectToAdd, amount);
+        newModifier.Init(statType, amount);
         _modifiers.Add(newModifier);
     }
 
