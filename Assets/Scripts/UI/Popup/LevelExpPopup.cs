@@ -11,8 +11,6 @@ public class LevelExpPopup : Popup
     [SerializeField] SliderBar _expBar;
     [SerializeField] Image _blastImg;
 
-    [SerializeField] Button _closeButton;
-
     public override void Init()
     {
         base.Init();
@@ -47,9 +45,9 @@ public class LevelExpPopup : Popup
 
     public void UpdateClose(UnityAction unityAction)
     {
-        _closeButton.onClick.RemoveAllListeners();
+        UIManager.Instance.BlackShadeView.CloseButton.onClick.RemoveAllListeners();
 
-        _closeButton.onClick.AddListener(ClosePopup);
-        _closeButton.onClick.AddListener(unityAction);
+        UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(ClosePopup);
+        UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(unityAction);
     }
 }

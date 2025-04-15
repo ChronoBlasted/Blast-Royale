@@ -22,10 +22,10 @@ public class ConfirmPopup : Popup
 
     public override void OpenPopup()
     {
-        base.OpenPopup();
+        base.OpenPopup(true, false);
 
 
-        if (_lastCanClose == false) UIManager.Instance.BlackShadeButton.onClick.RemoveAllListeners();
+        if (_lastCanClose == false) UIManager.Instance.BlackShadeView.ShadeButton.onClick.RemoveAllListeners();
     }
 
     public override void ClosePopup()

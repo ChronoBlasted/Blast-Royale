@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class View : MonoBehaviour
 {
-    [SerializeField] CanvasGroup _canvasGroup;
+    [SerializeField] protected CanvasGroup _canvasGroup;
 
     public virtual void Init()
     {

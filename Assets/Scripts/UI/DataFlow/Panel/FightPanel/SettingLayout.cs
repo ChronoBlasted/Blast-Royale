@@ -10,7 +10,7 @@ public class SettingLayout : MonoBehaviour
     Tweener _settingFadeTweener;
     public void OpenSettingMenu()
     {
-        UIManager.Instance.ShowBlackShade(CloseSettingMenu);
+        UIManager.Instance.BlackShadeView.ShowBlackShade(CloseSettingMenu);
 
         _settingMenu.gameObject.SetActive(true);
 
@@ -28,7 +28,7 @@ public class SettingLayout : MonoBehaviour
 
     public void CloseSettingMenu()
     {
-        UIManager.Instance.HideBlackShade();
+        UIManager.Instance.BlackShadeView.HideBlackShade();
 
         if (_settingFadeTweener.IsActive()) _settingFadeTweener.Kill();
 

@@ -22,6 +22,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
     [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
     [field: SerializeField] public ErrorView ErrorView { get; protected set; }
+    [field: SerializeField] public BlackShadeView BlackShadeView { get; protected set; }
 
     [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
     [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
@@ -33,13 +34,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
 
-    [Header("Black Shade Ref")]
-    [SerializeField] Image _blackShadeImg;
-    [field: SerializeField] public Button BlackShadeButton { get; protected set; }
-
-
     View _currentView;
-    Tweener _blackShadeTweener;
 
     public void Init()
     {
@@ -76,7 +71,7 @@ public class UIManager : MonoSingleton<UIManager>
         LevelExpPopup.Init();
         ConfirmPopup.Init();
 
-        HideBlackShade();
+        BlackShadeView.HideBlackShade();
     }
 
     #region View
@@ -163,28 +158,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     #endregion
 
-    public void ShowBlackShade(UnityAction _onClickAction)
-    {
-        if (_blackShadeTweener.IsActive()) _blackShadeTweener.Kill();
 
-        _blackShadeTweener = _blackShadeImg.DOFade(.8f, .1f);
-
-        _blackShadeImg.raycastTarget = true;
-
-        BlackShadeButton.onClick.AddListener(_onClickAction);
-    }
-
-    public void HideBlackShade(bool _instant = true)
-    {
-        if (_blackShadeTweener.IsActive()) _blackShadeTweener.Kill();
-
-        if (_instant) _blackShadeTweener = _blackShadeImg.DOFade(0f, 0);
-        else _blackShadeTweener = _blackShadeImg.DOFade(0f, .1f);
-
-        _blackShadeImg.raycastTarget = false;
-
-        BlackShadeButton.onClick.RemoveAllListeners();
-    }
 
     public static void ScrollToItem(ScrollRect scrollRect, Transform content, int indexToScroll)
     {

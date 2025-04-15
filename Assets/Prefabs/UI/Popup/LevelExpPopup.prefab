@@ -915,6 +915,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4132091382611440742, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5131712485992490782, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -980,33 +984,23 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4132091382611440742, guid: 6b677807674d05c438664e6209f434eb, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
-      insertIndex: 1
+      insertIndex: -1
       addedObject: {fileID: 6252319494866929219}
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
-      insertIndex: 2
+      insertIndex: -1
       addedObject: {fileID: 909267950411868203}
     - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 6234232338763974561}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2285152607345297428, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6900317131109780440}
   m_SourcePrefab: {fileID: 100100000, guid: 6b677807674d05c438664e6209f434eb, type: 3}
---- !u!114 &2615987025847959287 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5131712485992490782, guid: 6b677807674d05c438664e6209f434eb, type: 3}
-  m_PrefabInstance: {fileID: 7168141839008422377}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eb5570ddae87224cb0821ff1581563f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &5668372953748572026 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
@@ -1037,10 +1031,10 @@ MonoBehaviour:
   _canvasGroup: {fileID: 7096552252492584250}
   _blastNameTxt: {fileID: 924080001427573530}
   _blastLvlTxt: {fileID: 2117713132695095751}
-  _nextBlastLvlTxt: {fileID: 0}
+  _nextBlastLvlTxt: {fileID: 6912002654788711054}
   _expBar: {fileID: 8005517448832164951}
   _blastImg: {fileID: 1453770221476066966}
-  _closeButton: {fileID: 2615987025847959287}
+  _closeButton: {fileID: 0}
 --- !u!1001 &8748636190813330829
 PrefabInstance:
   m_ObjectHideFlags: 0

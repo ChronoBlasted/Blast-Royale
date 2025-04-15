@@ -14,9 +14,9 @@ public class Popup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public virtual void OpenPopup(bool shouldOpenBlackShade = true)
+    public virtual void OpenPopup(bool openBlackShade = true, bool openCloseButton = true)
     {
-        if (shouldOpenBlackShade) UIManager.Instance.ShowBlackShade(ClosePopup);
+        if (openBlackShade) UIManager.Instance.BlackShadeView.ShowBlackShade(ClosePopup, openCloseButton);
 
         gameObject.SetActive(true);
 
@@ -34,7 +34,7 @@ public class Popup : MonoBehaviour
 
     public virtual void ClosePopup(bool shouldCloseBlackShade = true)
     {
-        if (shouldCloseBlackShade) UIManager.Instance.HideBlackShade();
+        if (shouldCloseBlackShade) UIManager.Instance.BlackShadeView.HideBlackShade();
 
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;

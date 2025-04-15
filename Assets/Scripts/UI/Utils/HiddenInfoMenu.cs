@@ -12,7 +12,7 @@ public class HiddenInfoMenu : MonoBehaviour
     {
         _button.interactable = false;
 
-        UIManager.Instance.ShowBlackShade(HandleOnClose);
+        UIManager.Instance.BlackShadeView.ShowBlackShade(HandleOnClose);
 
         _hiddenMenu.SetActive(true);
         _canvas.overrideSorting = true;
@@ -23,7 +23,7 @@ public class HiddenInfoMenu : MonoBehaviour
     {
         _button.interactable = true;
 
-        UIManager.Instance.HideBlackShade();
+        UIManager.Instance.BlackShadeView.HideBlackShade();
 
         _hiddenMenu.SetActive(false);
         _canvas.overrideSorting = false;

@@ -56,20 +56,21 @@ public class ChangeBlastPopup : Popup
 
     public void UpdateClose(UnityAction action, bool canClose = true)
     {
-        closeButton.onClick.RemoveAllListeners();
+        UIManager.Instance.BlackShadeView.CloseButton.onClick.RemoveAllListeners();
 
-        closeButton.gameObject.SetActive(canClose);
+        if (canClose) UIManager.Instance.BlackShadeView.HideCloseButton();
+        else UIManager.Instance.BlackShadeView.ShowCloseButton();
 
         if (canClose)
         {
-            closeButton.onClick.AddListener(action);
-            closeButton.onClick.AddListener(ClosePopup);
+            UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(action);
+            UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(ClosePopup);
 
-            UIManager.Instance.BlackShadeButton.onClick.AddListener(action);
+            UIManager.Instance.BlackShadeView.ShadeButton.onClick.AddListener(action);
         }
         else
         {
-            UIManager.Instance.BlackShadeButton.onClick.RemoveAllListeners();
+            UIManager.Instance.BlackShadeView.ShadeButton.onClick.RemoveAllListeners();
         }
     }
 }
