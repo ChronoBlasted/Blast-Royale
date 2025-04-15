@@ -54,6 +54,11 @@ public class LeaderboardView : View
 
     public void UpdateTrophyLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _trophyTransform)
+        {
+            Destroy(child.gameObject);
+        }
+
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyTransform);
@@ -63,6 +68,11 @@ public class LeaderboardView : View
 
     public void UpdateTrophyAroundMeLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _trophyAroundMeTransform)
+        {
+            Destroy(child.gameObject);
+        }
+
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyAroundMeTransform);
@@ -72,6 +82,10 @@ public class LeaderboardView : View
 
     public void UpdateTrophyFriendLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _trophyFriendTransform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _trophyFriendTransform);
@@ -81,6 +95,10 @@ public class LeaderboardView : View
 
     public void UpdateBlastDefeatedLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _blastDefeatedTranform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedTranform);
@@ -90,6 +108,10 @@ public class LeaderboardView : View
 
     public void UpdateBlastDefeatedAroundMeLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _blastDefeatedAroundMeTranform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedAroundMeTranform);
@@ -99,6 +121,10 @@ public class LeaderboardView : View
 
     public void UpdateBlastDefeatedFriendLeaderboard(IApiLeaderboardRecordList trophyLeaderboard)
     {
+        foreach (Transform child in _blastDefeatedFriendTranform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedFriendTranform);

@@ -1,10 +1,7 @@
 using DG.Tweening;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -161,13 +158,26 @@ public class HUDLayout : MonoBehaviour
 
     public void AddModifier(MoveEffect newModifier, int amount)
     {
-        StatType statType = NakamaLogic.GetStatTypeByMoveEffect(newModifier);
-
-        if (statType != StatType.None)
+        switch (newModifier)
         {
-            int modAmount = (statType.ToString().Contains("Reduce") ? -amount : amount);
-
-            _modifierManager.AddModifier(statType, modAmount);
+            case MoveEffect.AttackBoost:
+                _modifierManager.AddModifier(StatType.Attack, amount);
+                break;
+            case MoveEffect.DefenseBoost:
+                _modifierManager.AddModifier(StatType.Defense, amount);
+                break;
+            case MoveEffect.SpeedBoost:
+                _modifierManager.AddModifier(StatType.Speed, amount);
+                break;
+            case MoveEffect.AttackReduce:
+                _modifierManager.AddModifier(StatType.Attack, -amount);
+                break;
+            case MoveEffect.DefenseReduce:
+                _modifierManager.AddModifier(StatType.Defense, -amount);
+                break;
+            case MoveEffect.SpeedReduce:
+                _modifierManager.AddModifier(StatType.Speed, -amount);
+                break;
         }
     }
 
@@ -184,5 +194,4 @@ public class HUDLayout : MonoBehaviour
             }
         }
     }
-
 }

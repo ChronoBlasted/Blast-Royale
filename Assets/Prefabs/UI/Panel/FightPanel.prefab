@@ -941,8 +941,9 @@ GameObject:
   - component: {fileID: 6667712309421393362}
   - component: {fileID: 5813132041688472448}
   - component: {fileID: 5127885950001899247}
+  - component: {fileID: 7735326203295089207}
   m_Layer: 0
-  m_Name: BG
+  m_Name: SquadLayout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -955,7 +956,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2982056979239443813}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -963,12 +964,12 @@ RectTransform:
   - {fileID: 6198242657180705587}
   - {fileID: 2671790144406173371}
   - {fileID: 3542417371021017305}
-  m_Father: {fileID: 668994930920502581}
+  m_Father: {fileID: 205295751894806448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -32, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6667712309421393362
 CanvasRenderer:
@@ -1034,6 +1035,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7735326203295089207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982056979239443813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553b871c7ad5c24699106ecc7cb1971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _decksBlastLayout:
+  - {fileID: 8026371745071078859}
+  - {fileID: 2050238115165259843}
+  - {fileID: 598630877101948449}
 --- !u!1 &3143926671964515056
 GameObject:
   m_ObjectHideFlags: 0
@@ -2278,80 +2295,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 2278361309704080422}
---- !u!1 &8828800395225287726
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 668994930920502581}
-  - component: {fileID: 2623158178321290622}
-  - component: {fileID: 7908370043690740640}
-  m_Layer: 0
-  m_Name: SquadLayout
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &668994930920502581
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8828800395225287726}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4538931651161805386}
-  m_Father: {fileID: 205295751894806448}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2623158178321290622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8828800395225287726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: 352
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: 0
-  m_LayoutPriority: 1
---- !u!114 &7908370043690740640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8828800395225287726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a553b871c7ad5c24699106ecc7cb1971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _decksBlastLayout:
-  - {fileID: 8026371745071078859}
-  - {fileID: 2050238115165259843}
-  - {fileID: 598630877101948449}
 --- !u!1 &9201820461802022794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3133,7 +3076,7 @@ PrefabInstance:
       addedObject: {fileID: 8773668229625845120}
     - targetCorrespondingSourceObject: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 668994930920502581}
+      addedObject: {fileID: 4538931651161805386}
     - targetCorrespondingSourceObject: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2525482800090883312}
@@ -3171,7 +3114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 256898423816986338}
   _profileLayout: {fileID: 8264244916385527048}
-  _squadLayout: {fileID: 7908370043690740640}
+  _squadLayout: {fileID: 7735326203295089207}
   _areaLayoutFightPanel: {fileID: 8723330345261686247}
 --- !u!1001 &4665346167550308028
 PrefabInstance:

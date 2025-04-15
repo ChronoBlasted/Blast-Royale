@@ -75,7 +75,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
         _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
 
-
         _ = _gameView.PlayerHUD.ComeBackBlast(true);
         _ = _gameView.OpponentHUD.ComeBackBlast(true);
 
@@ -257,8 +256,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
     void EndTurn()
     {
-        if (NakamaLogic.IsBlastAlive(_playerBlast) && _playerAction.TurnType != TurnType.WAIT) _playerBlast.Mana = NakamaLogic.Instance.CalculateStaminaRecovery(_playerBlast.MaxMana, _playerBlast.Mana, false);
-        if (NakamaLogic.IsBlastAlive(_wildBlast) && _wbAction.TurnType != TurnType.WAIT) _wildBlast.Mana = NakamaLogic.Instance.CalculateStaminaRecovery(_wildBlast.MaxMana, _wildBlast.Mana, false);
+        if (NakamaLogic.IsBlastAlive(_playerBlast)) _playerBlast.Mana = NakamaLogic.Instance.CalculateStaminaRecovery(_playerBlast.MaxMana, _playerBlast.Mana, false);
+        if (NakamaLogic.IsBlastAlive(_wildBlast)) _wildBlast.Mana = NakamaLogic.Instance.CalculateStaminaRecovery(_wildBlast.MaxMana, _wildBlast.Mana, false);
 
         _gameView.EndTurn(_playerBlast, _wildBlast);
     }

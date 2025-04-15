@@ -161,29 +161,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return blast;
     }
 
-    public static StatType GetStatTypeByMoveEffect(MoveEffect moveEffect)
-    {
-        StatType stat = StatType.None;
-
-        switch (moveEffect)
-        {
-            case MoveEffect.AttackBoost:
-            case MoveEffect.AttackReduce:
-                stat = StatType.Attack;
-                break;
-            case MoveEffect.DefenseBoost:
-            case MoveEffect.DefenseReduce:
-                stat = StatType.Defense;
-                break;
-            case MoveEffect.SpeedBoost:
-            case MoveEffect.SpeedReduce:
-                stat = StatType.Speed;
-                break;
-        }
-
-        return stat;
-    }
-
     public static string GetEffectMessage(MoveEffect move)
     {
         string message;

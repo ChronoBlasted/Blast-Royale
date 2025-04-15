@@ -1,7 +1,5 @@
 using System;
-using System.Buffers.Text;
 using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 [Serializable]
@@ -72,6 +70,8 @@ public class Blast
         if (modifiers.Count > 0)
         {
             var mod = modifiers.Find(m => m.stats == stat);
+
+            if (mod == null) return 1f;
 
             int amount = mod.amount;
             if (amount > 0)

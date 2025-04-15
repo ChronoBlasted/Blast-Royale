@@ -621,15 +621,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.b
-      value: 0.82431763
+      value: 0.9764706
       objectReference: {fileID: 0}
     - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.g
-      value: 0.4198113
+      value: 0.38431373
       objectReference: {fileID: 0}
     - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.99607843
       objectReference: {fileID: 0}
     - target: {fileID: 8028987742431339642, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
@@ -653,11 +653,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8765136229423921073, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.b
-      value: 0.585423
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8765136229423921073, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.30588236
       objectReference: {fileID: 0}
     - target: {fileID: 8765136229423921073, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_Color.r
@@ -957,7 +957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8518086827190402651, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1030,11 +1030,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 7096552252492584250}
   _blastNameTxt: {fileID: 924080001427573530}
-  _blastLvlTxt: {fileID: 2117713132695095751}
+  _blastLvlTxt: {fileID: 8670158516941969358}
   _nextBlastLvlTxt: {fileID: 6912002654788711054}
   _expBar: {fileID: 8005517448832164951}
   _blastImg: {fileID: 1453770221476066966}
-  _closeButton: {fileID: 0}
 --- !u!1001 &8748636190813330829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1193,17 +1192,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2117713132695095751 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7208792529644721226, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
-  m_PrefabInstance: {fileID: 8748636190813330829}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2579535107382684164 stripped

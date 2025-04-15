@@ -123,7 +123,7 @@ const Flamethrower: Move = {
     power: 80,
     cost: 1,
     priority: 0,
-    effect: MoveEffect.AttackBoost,
+    effect: MoveEffect.AttackReduce,
 };
 
 const FireBlast: Move = {
@@ -312,6 +312,7 @@ const movePedia: Move[] = [
     VineWhip,
     RazorLeaf,
     SolarBeam,
+    QuickAttack,
     Cleanse,
 ];
 

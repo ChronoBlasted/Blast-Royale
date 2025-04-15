@@ -35,6 +35,8 @@ public class ProfilePopup : Popup
         _blastCapturedtxt.text = _lastData.blast_captured.ToString();
 
 
+        Debug.Log(_lastData.blast_defeated);
+        
         if (!_lastData.updated_nickname)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();

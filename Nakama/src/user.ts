@@ -22,7 +22,6 @@ const DefaultMetadata: PlayerMetadata = {
     blast_defeated: 0,
 };
 
-
 function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, data: nkruntime.Session) {
     if (!data.created) {
         logger.info('User with id: %s account data already existing', ctx.userId);

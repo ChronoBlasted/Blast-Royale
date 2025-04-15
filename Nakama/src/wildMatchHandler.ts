@@ -350,15 +350,21 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
 
-                if (state.battle_state == BattleState.END || state.battle_state == BattleState.WAITFORPLAYERSWAP) {
+                if (state.battle_state == BattleState.END) {
+                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    return;
+                }
+                else if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
+                    state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
+
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
                     return;
                 }
                 else {
                     state.battle_state = BattleState.WAITING;
 
-                    if (message.opCode != OpCodes.PLAYER_WAIT) state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, false);
-                    if (state.TurnStateData.wb_turn_type != TurnType.WAIT) state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
+                    state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, false);
+                    state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
                     //Send matchTurn
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
@@ -514,7 +520,8 @@ function executePlayerAttack(
         if (move.effect === MoveEffect.None) return;
 
         if (move.attackType === AttackType.Special) {
-            state.wild_blast = applyEffect(state.wild_blast!, move);
+            const updated = applyEffect(getTargetBlast(), move);
+            setTargetBlast(updated);
             state.TurnStateData.p_move_effect = move.effect;
         } else {
             const result = calculateEffectWithProbability(getTargetBlast(), move);
@@ -543,17 +550,10 @@ function executePlayerAttack(
 
     switch (move.attackType) {
         case AttackType.Normal:
-            if (!hasEnoughMana()) return { state };
-            reduceMana();
-            applyEffectIfNeeded();
-            handlePlatformBoost();
-            break;
-
         case AttackType.Status:
             if (!hasEnoughMana()) return { state };
             reduceMana();
-            applyEffectIfNeeded();
-            state.p1_blasts[playerIndex] = applyEffect(state.p1_blasts[playerIndex]!, move);
+            handlePlatformBoost();
             break;
 
         case AttackType.Special: {
@@ -562,11 +562,12 @@ function executePlayerAttack(
                 ({ state } = ErrorFunc(state, "Player not enough platform type", dispatcher));
                 return { state };
             }
-            applyEffectIfNeeded();
             state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, move.cost);
             break;
         }
     }
+
+    applyEffectIfNeeded();
 
     if (move.target === Target.Opponent) {
         const damage = applyBlastAttack(
@@ -575,6 +576,7 @@ function executePlayerAttack(
             move,
             state.meteo
         );
+
         state.TurnStateData.p_move_damage = damage;
     }
 
@@ -617,6 +619,14 @@ function executeWildBlastAttack(
         }
     };
 
+    const reduceMana = () => {
+        state.wild_blast!.mana = clamp(
+            state.wild_blast!.mana - move.cost,
+            0,
+            Number.POSITIVE_INFINITY
+        );
+    };
+
     const applyEffectIfNeeded = () => {
         if (move.effect === MoveEffect.None) return;
 
@@ -646,17 +656,18 @@ function executeWildBlastAttack(
                 return { state };
             }
 
-            applyEffectIfNeeded();
             state.wild_blast_platform = removePlatformTypeByType(state.wild_blast_platform, move.type, move.cost);
             break;
         }
 
         case AttackType.Normal:
         case AttackType.Status:
-            applyEffectIfNeeded();
+            reduceMana();
             handlePlatformBonus();
             break;
     }
+
+    applyEffectIfNeeded();
 
     if (move.target === Target.Opponent) {
         const damage = applyBlastAttack(

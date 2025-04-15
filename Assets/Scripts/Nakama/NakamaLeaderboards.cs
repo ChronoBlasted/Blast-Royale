@@ -16,6 +16,11 @@ public class NakamaLeaderboards : MonoBehaviour
         _client = client;
         _session = session;
 
+        await UpdateLeaderboards();
+    }
+
+    public async Task UpdateLeaderboards()
+    {
         await GetTrophyLeaderboard();
         await GetTrophyAroundMeLeaderboard();
         await GetTrophyFriendLeaderboard();

@@ -16,6 +16,9 @@ public class EndView : View
     public override void OpenView(bool _instant = false)
     {
         base.OpenView(_instant);
+
+        _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
+        _ = NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
     }
 
     public override void CloseView()

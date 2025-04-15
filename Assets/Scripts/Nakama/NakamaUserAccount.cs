@@ -41,16 +41,17 @@ public class NakamaUserAccount : MonoBehaviour
 
         var username = _lastAccount.User.Username;
 
-        GetPlayerMetadata(username);
+        await GetPlayerMetadata(username);
 
         UpdateUsernameFront(username);
     }
 
-    public async void GetPlayerMetadata(string username)
+    public async Task GetPlayerMetadata(string username = null)
     {
         _lastAccount = await _client.GetAccountAsync(_session);
+        _lastData = JsonParser.FromJson<Metadata>(_lastAccount.User.Metadata);
 
-        UIManager.Instance.ProfilePopup.UpdateData(_lastData);
+        UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
     }
 
     #region ApiAccountUpdate
