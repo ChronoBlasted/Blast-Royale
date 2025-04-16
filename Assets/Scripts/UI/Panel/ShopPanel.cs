@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopPanel : Panel
 {
+    [SerializeField] ScrollRect _scroll;
+
     [SerializeField] List<ShopLayout> _blastTrapShopLayouts;
     [SerializeField] List<ShopLayout> _coinShopLayouts;
     [SerializeField] List<ShopLayout> _gemShopLayouts;
@@ -17,6 +20,8 @@ public class ShopPanel : Panel
     public override void OpenPanel()
     {
         base.OpenPanel();
+
+        UIManager.ResetScroll(_scroll);
 
         UIManager.Instance.MenuView.TopBar.ShowTopBar();
     }

@@ -49,7 +49,7 @@ let leaderboardReset: nkruntime.LeaderboardResetFunction = function (ctx: nkrunt
     });
 };
 
-function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId:string, leaderboardId: string, score: number) {
+function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, leaderboardId: string, score: number) {
 
     const incrementType: nkruntime.OverrideOperator =
         score > 0 ? nkruntime.OverrideOperator.INCREMENTAL : nkruntime.OverrideOperator.DECREMENTAL;
@@ -67,9 +67,10 @@ function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
     logger.debug("Score: %s", score);
     logger.debug("IncrementType: %s", incrementType);
 
+    var username = nk.accountGetId(userId).user.username
 
     try {
-        nk.leaderboardRecordWrite(leaderboardId, userId, undefined, score, 0, undefined, incrementType);
+        nk.leaderboardRecordWrite(leaderboardId, userId, username, score, 0, undefined, incrementType);
         logger.debug("Successfully wrote to leaderboard.");
     } catch (error: any) {
         logger.error("Leaderboard write error: %s", JSON.stringify(error));

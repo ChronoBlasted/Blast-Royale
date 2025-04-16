@@ -158,7 +158,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     #endregion
 
-
+    public static void ResetScroll(ScrollRect scrollRect)
+    {
+        scrollRect.normalizedPosition = new Vector2(scrollRect.normalizedPosition.x, 1);
+    }
 
     public static void ScrollToItem(ScrollRect scrollRect, Transform content, int indexToScroll)
     {

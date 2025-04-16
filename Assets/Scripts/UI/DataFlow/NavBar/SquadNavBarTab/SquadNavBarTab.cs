@@ -10,6 +10,7 @@ public class SquadNavBarTab : NavBarTab
 {
     [SerializeField] GameObject _deckTab;
     [SerializeField] GameObject _storedTab;
+    [SerializeField] ScrollRect _scrollRect;
     [SerializeField] Image _tabIco;
     [SerializeField] TMP_Text _titleTxt;
     [SerializeField] Color _offColor;
@@ -25,6 +26,11 @@ public class SquadNavBarTab : NavBarTab
         _tabIco.enabled = true;
 
         _titleTxt.color = Color.white;
+
+        UIManager.Instance.MenuView.SquadPanel.QuitSoloBlast();
+        UIManager.Instance.MenuView.SquadPanel.QuitSoloItem();
+
+        UIManager.ResetScroll(_scrollRect);
 
         UIManager.Instance.MenuView.SquadPanel.UpdateMiddleTitle(_type);
     }

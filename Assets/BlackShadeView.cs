@@ -31,6 +31,8 @@ public class BlackShadeView : View
 
         if (showCloseButton)
         {
+            _closeButton.onClick.RemoveAllListeners();
+
             _closeButton.onClick.AddListener(_onClickAction);
 
             ShowCloseButton();

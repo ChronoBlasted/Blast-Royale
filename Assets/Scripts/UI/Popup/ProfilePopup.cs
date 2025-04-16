@@ -34,8 +34,6 @@ public class ProfilePopup : Popup
         _blastDefeatedTxt.text = _lastData.blast_defeated.ToString();
         _blastCapturedtxt.text = _lastData.blast_captured.ToString();
 
-
-        Debug.Log(_lastData.blast_defeated);
         
         if (!_lastData.updated_nickname)
         {

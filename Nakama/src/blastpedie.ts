@@ -134,7 +134,6 @@ const Punchball: BlastData = { // Punchball
         { move_id: FirePunch.id, levelMin: 3 },
         { move_id: Flamethrower.id, levelMin: 4 },
         { move_id: FireBlast.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 5 },
     ],
     nextEvolution: null,
     catchRate: 40,
@@ -213,8 +212,8 @@ const Mousy: BlastData = { // Mousy
     speed: 80,
     movepool: [
         { move_id: Tackle.id, levelMin: 0 },
-        { move_id: Bubble.id, levelMin: 2 },
-        { move_id: BubbleBeam.id, levelMin: 10 },
+        { move_id: Stomp.id, levelMin: 2 },
+        { move_id: Harden.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 40,
