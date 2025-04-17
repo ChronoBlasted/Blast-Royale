@@ -28,6 +28,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     List<Item> _playerItems = new List<Item>();
 
     Blast _wildBlast;
+    Meteo _meteo;
 
     // Logic
     TurnStateData _turnStateData;
@@ -36,6 +37,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     public List<Blast> PlayerSquads { get => _playerSquads; }
     public List<Item> PlayerItems { get => _playerItems; }
     public Blast PlayerBlast { get => _playerBlast; }
+    public Blast WildBlast { get => _wildBlast; }
+    public Meteo Meteo { get => _meteo; }
 
     public void Init()
     {
@@ -68,6 +71,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _wildBlast = new Blast("", startData.id, startData.exp, startData.iv, startData.activeMoveset);
 
         _gameView.SetMeteo(startData.meteo);
+        _meteo = startData.meteo;
 
         _gameView.PlayerHUD.Init(_playerBlast);
         _gameView.OpponentHUD.Init(_wildBlast);

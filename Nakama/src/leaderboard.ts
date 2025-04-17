@@ -62,11 +62,6 @@ function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
         logger.error("Leaderboard dont exist error: %s", JSON.stringify(error));
     }
 
-    logger.debug("Writing to leaderboard: %s", leaderboardId);
-    logger.debug("OwnerID: %s", userId);
-    logger.debug("Score: %s", score);
-    logger.debug("IncrementType: %s", incrementType);
-
     var username = nk.accountGetId(userId).user.username
 
     try {

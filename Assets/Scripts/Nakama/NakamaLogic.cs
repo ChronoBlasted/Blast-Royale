@@ -13,10 +13,24 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         else return false;
     }
 
-    public static int CalculateDamage(int attackerLevel, int attackerAttack, int defenderDefense, Type attackerType, Type defenderType, int movePower)
+    public static int CalculateDamage(
+        int attackerLevel,
+        float attackerAttack,
+        float defenderDefense,
+        Type attackerType,
+        Type defenderType,
+        int movePower,
+        Meteo meteo
+    )
     {
-        float damage = ((2 * attackerLevel / 5 + 2) * movePower * GetTypeMultiplier(attackerType, defenderType) * (attackerAttack / defenderDefense) / 50) + 1;
-        return Mathf.FloorToInt(damage);
+        float weatherModifier = CalculateWeatherModifier(meteo, attackerType);
+        float typeMultiplier = GetTypeMultiplier(attackerType, defenderType);
+
+        float baseDamage = ((2f * attackerLevel / 5f + 2f) * movePower * typeMultiplier * ((float)attackerAttack / defenderDefense)) / 50f;
+
+        float finalDamage = baseDamage * weatherModifier;
+
+        return Mathf.FloorToInt(finalDamage);
     }
 
     public static bool IsBlastAlive(Blast blast)
@@ -44,7 +58,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return recoveredStamina;
     }
 
-
     public static int CalculateExpGain(int expYield, int yourLevel, int enemyLevel)
     {
         int expGain = Mathf.FloorToInt(((expYield * enemyLevel / 7f) * ((2f * enemyLevel + 10) / (enemyLevel + yourLevel + 10f)) + 1));
@@ -69,6 +82,36 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
                 return false;
         }
     }
+
+    public static float CalculateWeatherModifier(Meteo weather, Type moveType)
+    {
+        float modifier = 1.0f;
+
+        switch (weather)
+        {
+            case Meteo.Sun:
+                if (moveType == Type.Fire)
+                    modifier = 1.5f;
+                break;
+
+            case Meteo.Rain:
+                if (moveType == Type.Water)
+                    modifier = 1.5f;
+                break;
+
+            case Meteo.Leaves:
+                if (moveType == Type.Grass)
+                    modifier = 1.5f;
+                break;
+
+            case Meteo.None:
+            default:
+                break;
+        }
+
+        return modifier;
+    }
+
 
     public static (Blast, Blast) ApplyStatusEffectAtEndOfTurn(Blast blast, Blast otherBlast)
     {

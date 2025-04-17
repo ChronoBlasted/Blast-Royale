@@ -21,9 +21,9 @@ public class Blast
     public int MaxMana { get => CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data_id).mana, iv, Level); }
     public int Hp { get => hp; set => hp = Math.Clamp(value, 0, MaxHp); }
     public int Mana { get => mana; set => mana = Math.Clamp(value, 0, MaxMana); }
-    public float Attack => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).attack, Level, iv) * GetModifierMultiplier(StatType.Attack);
-    public float Defense => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).defense, Level, iv) * GetModifierMultiplier(StatType.Defense);
-    public float Speed => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, Level, iv) * GetModifierMultiplier(StatType.Speed);
+    public float Attack => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).attack, iv, Level) * GetModifierMultiplier(StatType.Attack);
+    public float Defense => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).defense, iv, Level) * GetModifierMultiplier(StatType.Defense);
+    public float Speed => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, iv, Level) * GetModifierMultiplier(StatType.Speed);
     public int Level { get => NakamaLogic.CalculateLevelFromExperience(exp); }
 
     public Blast(string uuid, int data, int exp, int iv, List<int> moveset)
@@ -36,22 +36,33 @@ public class Blast
         mana = CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data).mana, iv, Level);
         status = Status.None;
         activeMoveset = moveset;
+
     }
 
     int CalculateBlastStat(int baseStat, int iv, int level)
     {
-        return Mathf.FloorToInt(((2 * baseStat + iv) * level) / 100f + 5);
+        float result = (((2 * baseStat + iv) * level) / 100) + 5;
+
+        Debug.Log("Final Result :" + Mathf.FloorToInt(result));
+
+        return Mathf.FloorToInt(result);
     }
 
     int CalculateBlastHp(int baseHp, int iv, int level)
     {
-        return Mathf.FloorToInt(((2 * baseHp + iv) * level) / 100f + level + 10);
+        float result = (((2 * baseHp + iv) * level) / 100) + level + 10;
+        return Mathf.FloorToInt(result);
     }
 
-    int CalculateBlastMana(int baseMana, int iv, int level)
+    int CalculateBlastMana(float baseMana, float iv, float level)
     {
-        return Mathf.FloorToInt(((2 * baseMana + iv) * (level / 2f) / 100f + (level / 2f) + 10));
+        float halfLevel = level / 2f;
+
+        float result = (((2 * baseMana + iv) * halfLevel) / 100) + halfLevel + 10;
+        return Mathf.FloorToInt(result);
     }
+
+
 
     public int GetRatioExp()
     {
