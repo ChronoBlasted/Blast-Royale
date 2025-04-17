@@ -234,31 +234,42 @@ function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string
 
 
 function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, uuid: string, expToAdd: number): Blast[] {
+    const userCards: BlastCollection = loadUserBlast(nk, logger, userId);
 
-    let userCards: BlastCollection;
-    userCards = loadUserBlast(nk, logger, userId);
+    let blast = userCards.deckBlasts.find(b => b.uuid === uuid);
+    if (!blast) blast = userCards.storedBlasts.find(b => b.uuid === uuid);
 
-    let isInDeck: boolean = false;
-
-    if (userCards.deckBlasts.find(blast => blast.uuid === uuid) != null) {
-        isInDeck = true;
-    }
-    else if (userCards.storedBlasts.find(blast => blast.uuid === uuid) != null) {
-        isInDeck = false;
+    if (!blast) {
+        logger.error(`Blast with UUID '${uuid}' not found for user '${userId}'`);
+        return userCards.deckBlasts;
     }
 
-    if (isInDeck) {
-        userCards.deckBlasts.find(blast => blast.uuid === uuid)!.exp += expToAdd;
-    } else {
-        userCards.storedBlasts.find(blast => blast.uuid === uuid)!.exp += expToAdd;
+    const oldLevel = calculateLevelFromExperience(blast.exp);
+    blast.exp += expToAdd;
+    const newLevel = calculateLevelFromExperience(blast.exp);
+
+    // Si level up et moveset incomplet, tenter d’ajouter un move
+    if (newLevel > oldLevel && blast.activeMoveset.length < 4) {
+        const blastData = getBlastDataById(blast.data_id); 
+
+        const newMoves = blastData.movepool
+            .filter(m => m.levelMin <= newLevel)
+            .map(m => m.move_id)
+            .filter(moveId => !blast!.activeMoveset.includes(moveId));
+
+        if (newMoves.length > 0) {
+            blast!.activeMoveset.push(newMoves[0]);
+            logger.debug(`Blast '${uuid}' gained new move '${newMoves[0]}' at level ${newLevel}`);
+        }
     }
 
     storeUserBlasts(nk, logger, userId, userCards);
 
-    logger.debug("user '%s' succesfully add exp on blast with uuid '%s'", userId, uuid);
+    logger.debug("User '%s' successfully added exp on blast with uuid '%s'", userId, uuid);
 
     return userCards.deckBlasts;
 }
+
 
 function getDeckBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string): BlastEntity[] {
 

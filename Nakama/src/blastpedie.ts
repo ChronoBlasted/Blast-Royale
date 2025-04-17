@@ -108,8 +108,8 @@ const Lizzy: BlastData = { // Lizzy
         { move_id: Growl.id, levelMin: 3 },
         { move_id: VineWhip.id, levelMin: 5 },
         { move_id: Harden.id, levelMin: 7 },
-        { move_id: RazorLeaf.id, levelMin: 5 },
-        { move_id: SolarBeam.id, levelMin: 5 },
+        { move_id: RazorLeaf.id, levelMin: 10 },
+        { move_id: SolarBeam.id, levelMin: 12 },
         { move_id: QuickAttack.id, levelMin: 15 },
     ],
     nextEvolution: null,
@@ -133,7 +133,7 @@ const Punchball: BlastData = { // Punchball
         { move_id: Harden.id, levelMin: 7 },
         { move_id: FirePunch.id, levelMin: 10 },
         { move_id: Flamethrower.id, levelMin: 13 },
-        { move_id: FireBlast.id, levelMin: 5 },
+        { move_id: FireBlast.id, levelMin: 15 },
     ],
     nextEvolution: null,
     catchRate: 40,
@@ -154,7 +154,7 @@ const Jellys: BlastData = { // Jellys
         { move_id: Stomp.id, levelMin: 3 },
         { move_id: Bubble.id, levelMin: 5 },
         { move_id: Waterfall.id, levelMin: 7 },
-        { move_id: HydroPump.id, levelMin: 5 },
+        { move_id: HydroPump.id, levelMin: 10 },
         { move_id: Cleanse.id, levelMin: 12 },
     ],
     nextEvolution: null,
@@ -178,7 +178,7 @@ const Kitchi: BlastData = { // Kitchi
     ],
     nextEvolution: { id: 5, levelRequired: 7 },
     catchRate: 30,
-    expYield: 32,
+    expYield: 320,
     rarity: Rarity.COMMON,
 };
 
@@ -197,7 +197,7 @@ const Kenchi: BlastData = { // Kenchi
     ],
     nextEvolution: null,
     catchRate: 35,
-    expYield: 48,
+    expYield: 480,
     rarity: Rarity.UNCOMMON,
 };
 
@@ -216,7 +216,7 @@ const Mousy: BlastData = { // Mousy
     ],
     nextEvolution: null,
     catchRate: 40,
-    expYield: 50,
+    expYield: 500,
     rarity: Rarity.COMMON,
 };
 
@@ -235,7 +235,7 @@ const Clawball: BlastData = { // Clawball
     ],
     nextEvolution: null,
     catchRate: 45,
-    expYield: 90,
+    expYield: 900,
     rarity: Rarity.UNCOMMON,
 };
 
