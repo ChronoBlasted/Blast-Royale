@@ -33,14 +33,19 @@ public class MoveSelectorPopup : Popup
         _uuidBlast = blast.uuid;
         _outMoveIndex = outMoveIndex;
 
-        List<Move> blastMoveset = blast.activeMoveset.Select(index => NakamaData.Instance.GetMoveById(index)).ToList();
-        List<Move> availablesMoves = new List<Move>();
-
-        availablesMoves = NakamaData.Instance.GetBlastDataById(blast.data_id)
-            .movepool
-            .Where(move => NakamaLogic.CalculateLevelFromExperience(blast.exp) >= move.levelMin)
-            .Select(move => NakamaData.Instance.GetMoveById(move.move_id))
+        var blastData = NakamaData.Instance.GetBlastDataById(blast.data_id);
+        var blastMoveset = blast.activeMoveset
+            .Select(id => NakamaData.Instance.GetMoveById(id))
             .ToList();
+
+        var availableMoves = new List<(Move move, bool isUnlocked)>();
+
+        foreach (var moveInfo in blastData.movepool)
+        {
+            var move = NakamaData.Instance.GetMoveById(moveInfo.move_id);
+            bool isUnlocked = blast.Level >= moveInfo.levelMin;
+            availableMoves.Add((move, isUnlocked));
+        }
 
         _currentMoveToReplace.Init(moveToReplace, null);
 
@@ -49,19 +54,31 @@ public class MoveSelectorPopup : Popup
             Destroy(t.gameObject);
         }
 
-        for (int i = 0; i < availablesMoves.Count - 1; i++)
+        int index = 0;
+        foreach (var (move, isUnlocked) in availableMoves)
         {
             var currentMove = Instantiate(_moveLayoutPrefab, _scrollMoveAvaible);
-            currentMove.Init(availablesMoves[i], null, i);
+            currentMove.Init(move, null, index);
+            index++;
 
-            currentMove.UpdateOnClick(HandleChangeMove);
+            if (isUnlocked)
+            {
+                currentMove.UpdateOnClick(HandleChangeMove);
+                currentMove.Unlock();
 
-            if (blastMoveset.Contains(availablesMoves[i])) currentMove.Lock();
-            else currentMove.Unlock();
+                if (blastMoveset.Contains(move))
+                    currentMove.Lock("Already in use");
+            }
+            else
+            {
+                int requiredLevel = blastData.movepool.First(m => m.move_id == move.id).levelMin;
+                currentMove.Lock($"Unlock at level {requiredLevel}");
+            }
         }
 
         _noMoveAvailable.enabled = _scrollMoveAvaible.childCount <= 0;
     }
+
 
     public void HandleChangeMove()
     {
