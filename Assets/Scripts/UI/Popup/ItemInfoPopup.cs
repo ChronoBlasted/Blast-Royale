@@ -31,7 +31,7 @@ public class ItemInfoPopup : Popup
         ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
 
         _itemNameTxt.text = NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString();
-        _itemDescTxt.text = NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString();
+        _itemDescTxt.text = NakamaData.Instance.GetItemDataRef(item.data_id).Desc.GetLocalizedString();
         _itemAmount.text = "X" + item.amount;
 
         _itemBehaviour.text = itemData.behaviour.ToString();

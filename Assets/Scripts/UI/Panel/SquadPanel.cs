@@ -27,12 +27,15 @@ public class SquadPanel : Panel
     [SerializeField] GameObject _soloItemGO;
     [SerializeField] ItemLayout _soloItemLayout;
 
+    [SerializeField] HiddenInfoMenu _lastHiddenInfoMenu;
+
     bool _isSwapMode = false;
     int _currentIndexStored;
     public bool IsSwapMode { get => _isSwapMode; set => _isSwapMode = value; }
     public int CurrentIndexStored { get => _currentIndexStored; set => _currentIndexStored = value; }
     public Transform StoredBlastTransform { get => _storedBlastTransform; }
     public Transform StoredItemTransform { get => _storedItemTransform; }
+    public HiddenInfoMenu LastHiddenInfoMenu { get => _lastHiddenInfoMenu; set => _lastHiddenInfoMenu = value; }
 
     public override void Init()
     {
