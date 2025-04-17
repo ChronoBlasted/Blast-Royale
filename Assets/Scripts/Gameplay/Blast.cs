@@ -43,8 +43,6 @@ public class Blast
     {
         float result = (((2 * baseStat + iv) * level) / 100) + 5;
 
-        Debug.Log("Final Result :" + Mathf.FloorToInt(result));
-
         return Mathf.FloorToInt(result);
     }
 
