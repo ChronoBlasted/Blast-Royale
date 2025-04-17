@@ -71,9 +71,6 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
         throw error;
     }
 
-    writeRecordLeaderboard(nk, logger, user_id, LeaderboardTrophyId, 0);
-    writeRecordLeaderboard(nk, logger, user_id, LeaderboardBlastDefeatedId, 0);
-
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
 
