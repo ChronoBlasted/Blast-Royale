@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class NakamaAuth : MonoBehaviour
 {
-    [SerializeField] string _scheme = "http", _host = "127.0.0.1", serverkey = "defaultkey";
-    [SerializeField] int _port = 7350;
+    [SerializeField] NakamaClientConnexion _nakamaClientConnexion;
 
     IClient _client;
     ISession _session;
 
     public void Init()
     {
-        _client = new Client(_scheme, _host, _port, serverkey);
+        _client = new Client(_nakamaClientConnexion.Scheme, _nakamaClientConnexion.Host, _nakamaClientConnexion.Port, _nakamaClientConnexion.ServerKey);
 
         AuthenticateWithDevice();
     }
@@ -38,7 +37,7 @@ public class NakamaAuth : MonoBehaviour
 
         try
         {
-            var _session = await _client.AuthenticateDeviceAsync(deviceId, null, true, vars);
+            _session = await _client.AuthenticateDeviceAsync(deviceId, null, true, vars);
 
             ISocket socket = _client.NewSocket();
 
