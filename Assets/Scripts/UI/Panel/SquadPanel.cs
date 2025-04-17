@@ -53,7 +53,7 @@ public class SquadPanel : Panel
         base.ClosePanel();
 
         QuitSoloBlast();
-        QuitSoloItem();
+        QuitSoloItem(false);
     }
 
     public void SwitchToSoloBlast(Blast blast)
@@ -65,12 +65,14 @@ public class SquadPanel : Panel
         _squadDeckLayout.DoShakeRotate();
     }
 
-    public void QuitSoloBlast()
+    public void QuitSoloBlast(bool activeDefaultTransform = true)
     {
         _soloBlastGO.SetActive(false);
-        _storedBlastTransform.gameObject.SetActive(true);
+        _storedBlastTransform.gameObject.SetActive(activeDefaultTransform);
 
         _squadDeckLayout.StopShakeRotate();
+
+        IsSwapMode = false;
     }
 
     public void SwitchToSoloItem(Item item)
@@ -82,12 +84,15 @@ public class SquadPanel : Panel
         _bagDeckLayout.DoShakeRotate();
     }
 
-    public void QuitSoloItem()
+
+    public void QuitSoloItem(bool activeDefaultTransform = true)
     {
         _soloItemGO.SetActive(false);
-        _storedItemTransform.gameObject.SetActive(true);
+        _storedItemTransform.gameObject.SetActive(activeDefaultTransform);
 
         _bagDeckLayout.StopShakeRotate();
+
+        IsSwapMode = false;
     }
 
     public void UpdateStoredBlast(List<Blast> decks)

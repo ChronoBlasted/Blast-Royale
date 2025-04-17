@@ -20,7 +20,7 @@ public class GameNavBar : NavBar
         _cg.blocksRaycasts = true;
 
         _showHideBarTween
-            .Join(rectTransform.DOAnchorPosY(118, .2f).SetEase(Ease.OutBack))
+            .Join(rectTransform.DOAnchorPosY(120, .2f).SetEase(Ease.OutBack))
             .Join(_cg.DOFade(1, .1f));
 
     }
@@ -37,7 +37,7 @@ public class GameNavBar : NavBar
         _cg.blocksRaycasts = false;
 
         _showHideBarTween
-            .Join(rectTransform.DOAnchorPosY(-150, .2f).SetEase(Ease.OutBack))
-            .Join(_cg.DOFade(0, .1f));
+            .Join(rectTransform.DOAnchorPosY(-128, .2f).SetEase(Ease.InBack))
+            .Join(_cg.DOFade(0, .1f).SetDelay(.1f));
     }
 }

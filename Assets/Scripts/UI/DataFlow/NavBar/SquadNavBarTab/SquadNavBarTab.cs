@@ -27,8 +27,16 @@ public class SquadNavBarTab : NavBarTab
 
         _titleTxt.color = Color.white;
 
-        UIManager.Instance.MenuView.SquadPanel.QuitSoloBlast();
-        UIManager.Instance.MenuView.SquadPanel.QuitSoloItem();
+        switch (_type)
+        {
+            case SquadTabType.BLAST:
+                UIManager.Instance.MenuView.SquadPanel.QuitSoloItem(false);
+                break;
+            case SquadTabType.ITEM:
+                UIManager.Instance.MenuView.SquadPanel.QuitSoloBlast(false);
+                break;
+        }
+
 
         UIManager.ResetScroll(_scrollRect);
 

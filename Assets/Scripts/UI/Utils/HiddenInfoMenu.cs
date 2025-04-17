@@ -1,13 +1,13 @@
 using Chrono.UI;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HiddenInfoMenu : MonoBehaviour
 {
     [SerializeField] Canvas _canvas;
     [SerializeField] GameObject _hiddenMenu;
     [SerializeField] CustomButton _button;
+
     public void HandleOnClick()
     {
         _button.interactable = false;
@@ -21,13 +21,9 @@ public class HiddenInfoMenu : MonoBehaviour
 
     public void HandleOnClose()
     {
-        _button.interactable = true;
-
         UIManager.Instance.BlackShadeView.HideBlackShade();
 
-        _hiddenMenu.SetActive(false);
-        _canvas.overrideSorting = false;
-        _canvas.sortingOrder = 0;
+        HandleOnContinueFlow();
     }
 
     public void HandleOnContinueFlow()

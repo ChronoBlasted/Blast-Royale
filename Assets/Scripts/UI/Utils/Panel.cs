@@ -28,7 +28,7 @@ public abstract class Panel : MonoBehaviour
             _fadeTweener = null;
         }
 
-        _fadeTweener =_canvasGroup.DOFade(1, 0).OnComplete(() =>
+        _fadeTweener = _canvasGroup.DOFade(1, 0f).OnComplete(() =>
         {
             _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
@@ -46,7 +46,7 @@ public abstract class Panel : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
 
-        _fadeTweener =_canvasGroup.DOFade(0, 0f)
+        _fadeTweener = _canvasGroup.DOFade(0, 0f)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);
@@ -65,7 +65,7 @@ public abstract class Panel : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
 
-        _fadeTweener = _canvasGroup.DOFade(0.5f, .1f);
+        _fadeTweener = _canvasGroup.DOFade(0f, .2f);
     }
 
     public virtual void Enable()
