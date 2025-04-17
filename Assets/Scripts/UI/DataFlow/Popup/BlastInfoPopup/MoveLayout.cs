@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MoveLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt;
-    [SerializeField] Image _moveBG, _damageIco;
+    [SerializeField] Image _moveBG, _moveTypeIco, _damageIco;
     [SerializeField] Button _button;
     [SerializeField] List<PlatformSlotLayout> _platformSlotLayouts;
 
@@ -41,6 +41,7 @@ public class MoveLayout : MonoBehaviour
         else _moveCostTxt.color = Color.white;
 
         _moveBG.color = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Color;
+        _moveTypeIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Sprite;
     }
 
     void SetAttackCostData()

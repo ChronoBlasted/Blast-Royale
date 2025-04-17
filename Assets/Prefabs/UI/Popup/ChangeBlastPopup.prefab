@@ -225,9 +225,9 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 640
   m_PreferredHeight: 32
-  m_FlexibleWidth: 1
+  m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
 --- !u!1001 &908333839328012490
@@ -722,6 +722,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ChangeBlastPopup, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5458481187989947836, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_FlexibleWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458481187989947836, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_PreferredWidth
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -882,6 +890,10 @@ PrefabInstance:
     - target: {fileID: 244343777615782315, guid: 2dc8ee24cb62f7b4989d3f10bbc4095f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 542396859946234018, guid: 2dc8ee24cb62f7b4989d3f10bbc4095f, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 640
       objectReference: {fileID: 0}
     - target: {fileID: 620516268770831487, guid: 2dc8ee24cb62f7b4989d3f10bbc4095f, type: 3}
       propertyPath: m_AnchorMax.y

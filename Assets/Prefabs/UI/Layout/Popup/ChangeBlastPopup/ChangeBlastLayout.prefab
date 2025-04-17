@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.85
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -470,7 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16078432, g: 0.7490196, b: 0.07058824, a: 1}
+  m_Color: {r: 0.015686275, g: 0.4784314, b: 0.7960785, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -640,7 +640,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 1080
+  m_PreferredWidth: -1
   m_PreferredHeight: 256
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -688,7 +688,7 @@ MonoBehaviour:
   _cantTxt: {fileID: 6066524230766662490}
   _hpBar: {fileID: 991632024201837147}
   _manaBar: {fileID: 5371239419505094478}
-  _borderImg: {fileID: 2127709722007568032}
+  _borderImg: {fileID: 219030044688588882}
   _blastImg: {fileID: 9005854097181145611}
   _cantLayout: {fileID: 7546699480737810196}
 --- !u!114 &6478613931088424113
@@ -1174,7 +1174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3854938812587777504
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1585,6 +1585,18 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 26.25
       objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.b
+      value: 0.504717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781635015025860644, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Color.r
+      value: 0.57056385
+      objectReference: {fileID: 0}
     - target: {fileID: 8123672433485208253, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1685,6 +1697,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9216791123946857114, guid: da5ab1484a3389a43998247e14bc6d27, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c55f443156bfe423a9041e55ab7f669f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
