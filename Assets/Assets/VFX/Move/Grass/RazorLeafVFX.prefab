@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4479739809599243280}
   - component: {fileID: 4149953111665356673}
   - component: {fileID: 8666922632597353835}
-  - component: {fileID: 1013882921311736897}
   m_Layer: 0
   m_Name: RazorLeafVFX
   m_TagString: Untagged
@@ -4745,19 +4744,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &1013882921311736897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5815696389783654075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd2e8874f60266498a388d7229a1bac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnlyDeactivate: 0
 --- !u!1 &7555131173210042072
 GameObject:
   m_ObjectHideFlags: 0
@@ -4769,7 +4755,6 @@ GameObject:
   - component: {fileID: 7849574628807833161}
   - component: {fileID: 2108820505916815501}
   - component: {fileID: 2888661966804032948}
-  - component: {fileID: 4231273443663816781}
   m_Layer: 0
   m_Name: CFXM3 Leaves CCW
   m_TagString: Untagged
@@ -9574,16 +9559,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &4231273443663816781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7555131173210042072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd2e8874f60266498a388d7229a1bac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnlyDeactivate: 0

@@ -260,7 +260,9 @@ public class GameView : View
         HUDLayout attackerHUD = null;
         HUDLayout defenderHUD = null;
 
-        float effective = NakamaLogic.GetTypeMultiplier(NakamaData.Instance.GetBlastDataById(attacker.data_id).type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
+        MoveDataRef moveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
+
+        float effective = NakamaLogic.GetTypeMultiplier(move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
         var isWild = isPlayer ? "" : "Wild ";
 
@@ -268,7 +270,7 @@ public class GameView : View
             isWild +
             _dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() +
             " do " +
-            NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString() +
+            moveDataRef.Name.GetLocalizedString() +
             " !");
 
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
@@ -298,16 +300,10 @@ public class GameView : View
                 break;
         }
 
-        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, effective);
+        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, moveDataRef, effective);
 
-        if (effective == 2)
-        {
-            await _dialogLayout.UpdateTextAsync("It's super affective !");
-        }
-        else if (effective == .5f)
-        {
-            await _dialogLayout.UpdateTextAsync("It's not super affective !");
-        }
+        if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super affective !");
+        else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super affective !");
 
         if (moveEffect != MoveEffect.None)
         {

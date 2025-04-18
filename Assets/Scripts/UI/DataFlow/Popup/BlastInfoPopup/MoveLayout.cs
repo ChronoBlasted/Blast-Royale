@@ -118,6 +118,9 @@ public class MoveLayout : MonoBehaviour
                 else Lock("Not enough mana");
                 break;
             case AttackType.Special:
+
+                canUseMove = GetAmountPlatformByType() >= _move.cost;
+
                 for (int i = 0; i < _move.cost; i++)
                 {
                     if (i < GetAmountPlatformByType())

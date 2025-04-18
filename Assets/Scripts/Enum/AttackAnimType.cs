@@ -7,8 +7,6 @@ public enum AttackAnimType
     DistanceLaser,
     DistanceOverOpponent,
     DistanceUnderOpponent,
-    StatusUp,
-    StatusDown,
 
     SelfOver
 }

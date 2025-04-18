@@ -60,7 +60,7 @@ public class HUDLayout : MonoBehaviour
         _manaSlider.SetValueSmooth(newMana);
     }
 
-    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, float effective)
+    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, MoveDataRef moveDataRef, float effective)
     {
         if (_attackAnimTween.IsActive())
         {
@@ -68,13 +68,62 @@ public class HUDLayout : MonoBehaviour
             _attackAnimTween = null;
         }
 
-        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(2, 2), 0.5f).SetLoops(2, LoopType.Yoyo);
-        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(-2, -2), 0.5f).SetLoops(2, LoopType.Yoyo);
+        ParticleSystem currentFX = null;
 
-        opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+        switch (moveDataRef.AttackAnimType)
+        {
+            case AttackAnimType.None:
+                break;
+            case AttackAnimType.Self:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform); // TODO put delay
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.MoveToOponent:
+                _attackAnimTween = _blastInWorld.BlastRender.transform.DOMove(opponentHUD.BlastInWorld.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo);
+
+                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform); // TODO put delay
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.DistanceProjectile:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform);
+
+                _attackAnimTween = currentFX.transform.DOMove(opponentHUD.BlastInWorld.transform.position, 0.5f);
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.DistanceLaser:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform);
+
+                currentFX.transform.LookAt(opponentHUD.BlastInWorld.transform.position);
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.DistanceOverOpponent:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform.position + (Vector3.up * 2), Quaternion.identity); // TODO put delay
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.DistanceUnderOpponent:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform); // TODO put delay
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            case AttackAnimType.SelfOver:
+                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform.position + (Vector3.up * 2), Quaternion.identity); // TODO put delay
+
+                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                break;
+            default:
+                break;
+        }
+
+        Destroy(currentFX, .5f);
 
         await Task.Delay(TimeSpan.FromMilliseconds(1000));
     }
+
 
     public void DoTakeDamageAnim(HUDLayout opponentHUD, Blast defender, float delay, float effective)
     {
