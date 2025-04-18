@@ -300,7 +300,7 @@ public class GameView : View
                 break;
         }
 
-        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, moveDataRef, effective);
+        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, effective);
 
         if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super affective !");
         else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super affective !");
@@ -314,6 +314,10 @@ public class GameView : View
 
             var isStatusMove = move.attackType == AttackType.Status;
             defenderHUD.AddModifier(moveEffect, isStatusMove ? move.power : 1);
+
+            GameObject statusFX = Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
+
+            Destroy(statusFX, 2f);
 
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
         }

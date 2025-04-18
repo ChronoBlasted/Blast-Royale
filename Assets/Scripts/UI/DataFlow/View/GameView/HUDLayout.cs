@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -22,6 +23,10 @@ public class HUDLayout : MonoBehaviour
     Blast _blast;
 
     Tweener _attackAnimTween, _takeDamageAnimTween;
+
+    MoveDataRef _lastMoveDataRef;
+    Move _lastMove;
+    HUDLayout _lastOpponentHUD;
 
     public RectTransform BlastTransformInUI { get => _blastTransformInUI; }
     public BlastInWorld BlastInWorld { get => _blastInWorld; }
@@ -60,82 +65,98 @@ public class HUDLayout : MonoBehaviour
         _manaSlider.SetValueSmooth(newMana);
     }
 
-    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, MoveDataRef moveDataRef, float effective)
+    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, float effective)
     {
-        if (_attackAnimTween.IsActive())
+        if (_attackAnimTween != null)
         {
             _attackAnimTween.Kill(true);
             _attackAnimTween = null;
         }
 
+        _lastMoveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
+        _lastMove = move;
+        _lastOpponentHUD = opponentHUD;
+
         ParticleSystem currentFX = null;
+        var attackerTransform = _blastInWorld.BlastRender.transform;
+        var defenderTransform = _lastOpponentHUD.BlastInWorld.BlastRender.transform;
+        var animType = _lastMoveDataRef.AttackAnimType;
 
-        switch (moveDataRef.AttackAnimType)
+        switch (animType)
         {
-            case AttackAnimType.None:
-                break;
             case AttackAnimType.Self:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform); // TODO put delay
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
                 break;
+
             case AttackAnimType.MoveToOponent:
-                _attackAnimTween = _blastInWorld.BlastRender.transform.DOMove(opponentHUD.BlastInWorld.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo);
-
-                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform); // TODO put delay
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                _attackAnimTween = attackerTransform.DOMove(defenderTransform.position, 0.5f)
+                                                     .SetLoops(2, LoopType.Yoyo);
                 break;
+
             case AttackAnimType.DistanceProjectile:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform);
-
-                _attackAnimTween = currentFX.transform.DOMove(opponentHUD.BlastInWorld.transform.position, 0.5f);
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
+                _attackAnimTween = currentFX.transform.DOMove(defenderTransform.position, 0.5f);
                 break;
+
             case AttackAnimType.DistanceLaser:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform);
-
-                currentFX.transform.LookAt(opponentHUD.BlastInWorld.transform.position);
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
+                currentFX.transform.LookAt(defenderTransform.position);
                 break;
+
             case AttackAnimType.DistanceOverOpponent:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform.position + (Vector3.up * 2), Quaternion.identity); // TODO put delay
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, defenderTransform.position + Vector3.up * 2, Quaternion.identity);
                 break;
+
             case AttackAnimType.DistanceUnderOpponent:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, opponentHUD.BlastInWorld.transform); // TODO put delay
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, defenderTransform);
                 break;
+
             case AttackAnimType.SelfOver:
-                currentFX = Instantiate(moveDataRef.ParticleSystem, _blastInWorld.transform.position + (Vector3.up * 2), Quaternion.identity); // TODO put delay
-
-                opponentHUD.DoTakeDamageAnim(opponentHUD, defender, .5f, effective);
-                break;
-            default:
+                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform.position + Vector3.up * 2, Quaternion.identity);
                 break;
         }
 
-        Destroy(currentFX, .5f);
+        DoTakeDamageAnim(defender, 0.5f, effective);
 
-        await Task.Delay(TimeSpan.FromMilliseconds(1000));
+        if (currentFX != null)
+            Destroy(currentFX, 2f);
+
+        await Task.Delay(2000);
     }
 
-
-    public void DoTakeDamageAnim(HUDLayout opponentHUD, Blast defender, float delay, float effective)
+    public void DoTakeDamageAnim(Blast defender, float delay, float effective)
     {
-        if (_takeDamageAnimTween.IsActive())
+        if (_takeDamageAnimTween != null)
         {
             _takeDamageAnimTween.Kill(true);
             _takeDamageAnimTween = null;
         }
 
-        _takeDamageAnimTween = _blastInWorld.BlastRender.DOColor(Color.black, .1f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.OutQuad).SetDelay(delay);
+        var render = _blastInWorld.BlastRender;
+        _takeDamageAnimTween = render.DOColor(Color.black, 0.1f)
+                                     .SetLoops(2, LoopType.Yoyo)
+                                     .SetEase(Ease.OutQuad)
+                                     .SetDelay(delay)
+                                     .OnStart(() =>
+                                     {
+                                         if (_lastMoveDataRef.AttackAnimType == AttackAnimType.MoveToOponent)
+                                         {
+                                             var hitFX = Instantiate(_lastMoveDataRef.ParticleSystem, _lastOpponentHUD.BlastInWorld.BlastRender.transform);
+                                             Destroy(hitFX, 2f);
+                                         }
+                                     });
 
-        opponentHUD.UpdateHpBar(defender.Hp, .2f * effective, delay + .1f);
+        StartCoroutine(HitMoveTypeFXCoroutine(delay));
+        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, delay + 0.1f);
+    }
+
+    private IEnumerator HitMoveTypeFXCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        var fx = ResourceObjectHolder.Instance.GetTypeDataByType(_lastMove.type).TypeHitFX;
+        var targetTransform = _lastOpponentHUD.BlastInWorld.BlastRender.transform;
+        var hitFX = Instantiate(fx, targetTransform);
+        Destroy(hitFX, 2f);
     }
 
     public async Task DoFaintedAnim()
