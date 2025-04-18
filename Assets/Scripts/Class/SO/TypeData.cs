@@ -8,4 +8,5 @@ public class TypeData : ScriptableObject
     public LocalizedString Name;
     public Color Color;
     public Sprite Sprite;
+    public ParticleSystem TypeHitFX;
 }

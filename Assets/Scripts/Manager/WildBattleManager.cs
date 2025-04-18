@@ -220,7 +220,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             if (await CheckIfKO()) return;
         }
 
-
         if (_playerAction.TurnType == TurnType.WAIT)
         {
             _playerBlast.Mana = NakamaLogic.Instance.CalculateStaminaRecovery(_playerBlast.MaxMana, _playerBlast.Mana, true);
