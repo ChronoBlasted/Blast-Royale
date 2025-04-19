@@ -54,7 +54,7 @@ public abstract class Panel : MonoBehaviour
             .SetUpdate(UpdateType.Normal, true);
     }
 
-    public virtual void Disable()
+    public virtual void Disable(bool instant = false)
     {
         if (_fadeTweener.IsActive())
         {
@@ -65,7 +65,9 @@ public abstract class Panel : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
 
-        _fadeTweener = _canvasGroup.DOFade(0f, .2f);
+        var duration = instant ? 0f : .2f;
+
+        _fadeTweener = _canvasGroup.DOFade(0f, duration);
     }
 
     public virtual void Enable()

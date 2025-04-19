@@ -5,6 +5,5 @@ using UnityEngine;
 public class MoveDataRef : NakamaDataRef
 {
     public ParticleSystem ParticleSystem;
-    public AttackAnimType AttackAnimType;
-    public Ease Ease;
+    public AAData AA_Data;
 }

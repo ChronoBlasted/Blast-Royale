@@ -5,11 +5,22 @@ using UnityEngine.Events;
 public class ChronoTweenHelper : MonoBehaviour
 {
     [SerializeField] UnityEvent _tweenAction;
-    [SerializeField] float _amountFloat, _duration, _startDelay;
+
+    [Space(5)]
+    [Header("Value")]
+    [SerializeField] float _amountFloat;
     [SerializeField] Vector3 _amountVector;
+
+    [Space(5)]
+    [Header("Timing")]
+    [SerializeField] float _duration;
     [SerializeField] Ease _ease;
-    [SerializeField] LoopType _loopType;
     [SerializeField] int _loopAmount;
+    [SerializeField] LoopType _loopType;
+
+    [Space(5)]
+    [Header("Start")]
+    [SerializeField] float _startDelay;
 
     Vector3 _startPos;
     Vector3 _startLocalPos;

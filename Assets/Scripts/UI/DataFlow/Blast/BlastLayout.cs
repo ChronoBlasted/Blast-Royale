@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BlastLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
-    [SerializeField] Image _blastImg, _bg, _blastTypeIco;
+    [SerializeField] Image _blastImg, _bg;
 
     Blast _blast;
     int _index;
@@ -24,8 +24,6 @@ public class BlastLayout : MonoBehaviour
 
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blast.data_id).Sprite;
         _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(blastData.type).Color;
-
-        _blastTypeIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(blastData.type).Sprite;
     }
 
     public void HandleOnInfoButton()

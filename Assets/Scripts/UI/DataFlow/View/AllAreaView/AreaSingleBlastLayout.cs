@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AreaSingleBlastLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _blastNameTxt;
-    [SerializeField] Image _bg,_ico, _typeIco;
+    [SerializeField] Image _bg, _blastIco;
 
     BlastData _blast;
 
@@ -19,8 +19,7 @@ public class AreaSingleBlastLayout : MonoBehaviour
 
         TypeData typeData = ResourceObjectHolder.Instance.GetTypeDataByType(_blast.type);
 
-        _ico.sprite = NakamaData.Instance.GetBlastDataRef(_blast.id).Sprite;
-        _typeIco.sprite = typeData.Sprite;
+        _blastIco.sprite = NakamaData.Instance.GetBlastDataRef(_blast.id).Sprite;
 
         _bg.color = typeData.Color;
     }

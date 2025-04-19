@@ -77,54 +77,15 @@ public class HUDLayout : MonoBehaviour
         _lastMove = move;
         _lastOpponentHUD = opponentHUD;
 
-        ParticleSystem currentFX = null;
-        var attackerTransform = _blastInWorld.BlastRender.transform;
-        var defenderTransform = _lastOpponentHUD.BlastInWorld.BlastRender.transform;
-        var animType = _lastMoveDataRef.AttackAnimType;
-
-        switch (animType)
+        await _lastMoveDataRef.AA_Data.PlayAnimation(_blastInWorld, _lastOpponentHUD.BlastInWorld, _lastMoveDataRef.ParticleSystem, () =>
         {
-            case AttackAnimType.Self:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
-                break;
+            DoTakeDamageAnim(defender, effective);
+        });
 
-            case AttackAnimType.MoveToOponent:
-                _attackAnimTween = attackerTransform.DOMove(defenderTransform.position, 0.5f)
-                                                     .SetLoops(2, LoopType.Yoyo);
-                break;
-
-            case AttackAnimType.DistanceProjectile:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
-                _attackAnimTween = currentFX.transform.DOMove(defenderTransform.position, 0.5f);
-                break;
-
-            case AttackAnimType.DistanceLaser:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform);
-                currentFX.transform.LookAt(defenderTransform.position);
-                break;
-
-            case AttackAnimType.DistanceOverOpponent:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, defenderTransform.position + Vector3.up * 2, Quaternion.identity);
-                break;
-
-            case AttackAnimType.DistanceUnderOpponent:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, defenderTransform);
-                break;
-
-            case AttackAnimType.SelfOver:
-                currentFX = Instantiate(_lastMoveDataRef.ParticleSystem, attackerTransform.position + Vector3.up * 2, Quaternion.identity);
-                break;
-        }
-
-        DoTakeDamageAnim(defender, 0.5f, effective);
-
-        if (currentFX != null)
-            Destroy(currentFX, 2f);
-
-        await Task.Delay(2000);
+        await Task.Delay(1500);
     }
 
-    public void DoTakeDamageAnim(Blast defender, float delay, float effective)
+    public void DoTakeDamageAnim(Blast defender, float effective)
     {
         if (_takeDamageAnimTween != null)
         {
@@ -132,29 +93,24 @@ public class HUDLayout : MonoBehaviour
             _takeDamageAnimTween = null;
         }
 
-        var render = _blastInWorld.BlastRender;
-        _takeDamageAnimTween = render.DOColor(Color.black, 0.1f)
-                                     .SetLoops(2, LoopType.Yoyo)
-                                     .SetEase(Ease.OutQuad)
-                                     .SetDelay(delay)
-                                     .OnStart(() =>
-                                     {
-                                         if (_lastMoveDataRef.AttackAnimType == AttackAnimType.MoveToOponent)
-                                         {
-                                             var hitFX = Instantiate(_lastMoveDataRef.ParticleSystem, _lastOpponentHUD.BlastInWorld.BlastRender.transform);
-                                             Destroy(hitFX, 2f);
-                                         }
-                                     });
+        var render = _lastOpponentHUD.BlastInWorld.BlastRender;
 
-        StartCoroutine(HitMoveTypeFXCoroutine(delay));
-        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, delay + 0.1f);
+        var tweenLoopDuration = .1f;
+
+        _takeDamageAnimTween = render.DOColor(Color.black, tweenLoopDuration)
+                                     .SetLoops(2, LoopType.Yoyo)
+                                     .SetEase(Ease.OutSine);
+
+        StartCoroutine(HitMoveTypeFXCoroutine(tweenLoopDuration));
+
+        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, tweenLoopDuration);
     }
 
     private IEnumerator HitMoveTypeFXCoroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
         var fx = ResourceObjectHolder.Instance.GetTypeDataByType(_lastMove.type).TypeHitFX;
-        var targetTransform = _lastOpponentHUD.BlastInWorld.BlastRender.transform;
+        var targetTransform = _lastOpponentHUD.BlastInWorld.transform;
         var hitFX = Instantiate(fx, targetTransform);
         Destroy(hitFX, 2f);
     }

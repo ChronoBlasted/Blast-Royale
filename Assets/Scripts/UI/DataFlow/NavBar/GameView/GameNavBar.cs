@@ -25,7 +25,7 @@ public class GameNavBar : NavBar
 
     }
 
-    public void Hide()
+    public void Hide(bool instant = false)
     {
         if (_showHideBarTween.IsActive()) _showHideBarTween.Kill(true);
 
@@ -36,8 +36,16 @@ public class GameNavBar : NavBar
         _cg.interactable = false;
         _cg.blocksRaycasts = false;
 
-        _showHideBarTween
-            .Join(rectTransform.DOAnchorPosY(-128, .2f).SetEase(Ease.InBack))
-            .Join(_cg.DOFade(0, .1f).SetDelay(.1f));
+        if (instant)
+        {
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -128);
+            _cg.alpha = 0;
+        }
+        else
+        {
+            _showHideBarTween
+                .Join(rectTransform.DOAnchorPosY(-128, .2f).SetEase(Ease.InBack))
+                .Join(_cg.DOFade(0, .1f).SetDelay(.1f));
+        }
     }
 }

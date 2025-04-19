@@ -46,8 +46,8 @@ public class GameView : View
 
         _bottomNavBar.Init();
 
-        DisableAttackPanel();
-        HideNavBar();
+        DisableAttackPanel(true);
+        HideNavBar(true);
     }
 
     public override void CloseView()
@@ -87,14 +87,14 @@ public class GameView : View
         _currentPanel = null;
     }
 
-    public void DisableAttackPanel()
+    public void DisableAttackPanel(bool instant = false)
     {
-        _attackPanel.Disable();
+        _attackPanel.Disable(instant);
     }
 
-    public void HideNavBar()
+    public void HideNavBar(bool instant = false)
     {
-        _bottomNavBar.Hide();
+        _bottomNavBar.Hide(instant);
     }
 
     public void ShowNavBar()
@@ -302,8 +302,8 @@ public class GameView : View
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, effective);
 
-        if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super affective !");
-        else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super affective !");
+        if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super effective !");
+        else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super effective !");
 
         if (moveEffect != MoveEffect.None)
         {

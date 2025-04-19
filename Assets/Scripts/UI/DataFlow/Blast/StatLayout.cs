@@ -14,6 +14,6 @@ public class StatLayout : MonoBehaviour
     {
         var data = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)_type);
         _title.text = data.Name.GetLocalizedString();
-        _ico.sprite = data.Sprite;
+        if (_type != StatType.Type) _ico.sprite = data.Sprite;
     }
 }

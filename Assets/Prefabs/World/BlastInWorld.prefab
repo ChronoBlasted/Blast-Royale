@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8599986884909377417}
   - component: {fileID: 6652734401649135949}
+  - component: {fileID: 5921108618508451010}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -25,12 +26,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 45350554938789226}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4145783069245333761}
+  m_Father: {fileID: 5868065583426791999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6652734401649135949
 SpriteRenderer:
@@ -84,6 +85,40 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5921108618508451010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45350554938789226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ac6d95f90ca5c47b6693ef2aa33e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tweenAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5921108618508451010}
+        m_TargetAssemblyTypeName: ChronoTweenHelper, Utils
+        m_MethodName: DoScale
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _amountFloat: 0
+  _amountVector: {x: 0.1, y: 0.05, z: 0}
+  _duration: 1
+  _ease: 4
+  _loopAmount: -1
+  _loopType: 1
+  _startDelay: 0
 --- !u!1 &1148874445669261684
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +287,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2899050594287180212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5868065583426791999}
+  m_Layer: 0
+  m_Name: RendererPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5868065583426791999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899050594287180212}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8599986884909377417}
+  m_Father: {fileID: 4145783069245333761}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3537969391708757132
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,7 +655,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3250480185533270705}
-  - {fileID: 8599986884909377417}
+  - {fileID: 5868065583426791999}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2433771644509717344
