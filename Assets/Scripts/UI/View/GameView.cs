@@ -160,15 +160,24 @@ public class GameView : View
 
         string isWild = isPlayer ? "" : "Wild ";
 
+        ResourceData resourceData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)blast.status);
+
+        Instantiate(resourceData.Prefab, blastHUD.BlastInWorld.BlastRender.transform);
+
+        blastHUD.BlastInWorld.BlastRender.transform.DOPunchPosition(new Vector3(.5f, 0), .5f);
+
         await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() +
             " suffer from " +
-            ResourceObjectHolder.Instance.GetResourceByType((ResourceType)blast.status).Name.GetLocalizedString());
+            resourceData.Name.GetLocalizedString());
 
         blastHUD.UpdateManaBar(blast.Mana);
         blastHUD.UpdateHpBar(blast.Hp);
 
         otherHUD.UpdateManaBar(otherBlast.Mana);
         otherHUD.UpdateHpBar(otherBlast.Hp);
+
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
     public async Task AllPlayerBlastFainted()
@@ -315,11 +324,11 @@ public class GameView : View
             var isStatusMove = move.attackType == AttackType.Status;
             defenderHUD.AddModifier(moveEffect, isStatusMove ? move.power : 1);
 
-            GameObject statusFX = Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
-
-            Destroy(statusFX, 2f);
+            Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
 
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
+
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));

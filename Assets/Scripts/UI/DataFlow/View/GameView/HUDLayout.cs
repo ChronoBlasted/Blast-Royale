@@ -22,8 +22,6 @@ public class HUDLayout : MonoBehaviour
 
     Blast _blast;
 
-    Tweener _attackAnimTween, _takeDamageAnimTween;
-
     MoveDataRef _lastMoveDataRef;
     Move _lastMove;
     HUDLayout _lastOpponentHUD;
@@ -67,12 +65,6 @@ public class HUDLayout : MonoBehaviour
 
     public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, float effective)
     {
-        if (_attackAnimTween != null)
-        {
-            _attackAnimTween.Kill(true);
-            _attackAnimTween = null;
-        }
-
         _lastMoveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
         _lastMove = move;
         _lastOpponentHUD = opponentHUD;
@@ -87,19 +79,18 @@ public class HUDLayout : MonoBehaviour
 
     public void DoTakeDamageAnim(Blast defender, float effective)
     {
-        if (_takeDamageAnimTween != null)
-        {
-            _takeDamageAnimTween.Kill(true);
-            _takeDamageAnimTween = null;
-        }
+
 
         var render = _lastOpponentHUD.BlastInWorld.BlastRender;
 
         var tweenLoopDuration = .1f;
 
-        _takeDamageAnimTween = render.DOColor(Color.black, tweenLoopDuration)
-                                     .SetLoops(2, LoopType.Yoyo)
-                                     .SetEase(Ease.OutSine);
+        render.DOColor(Color.black, tweenLoopDuration)
+                                    .SetLoops(2, LoopType.Yoyo)
+                                    .SetEase(Ease.OutSine);
+
+        render.transform.DOPunchPosition(new Vector3(.5f, 0), .5f);
+
 
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {
@@ -120,15 +111,9 @@ public class HUDLayout : MonoBehaviour
 
     public async Task DoFaintedAnim()
     {
-        if (_attackAnimTween.IsActive())
-        {
-            _attackAnimTween.Kill(true);
-            _attackAnimTween = null;
-        }
-
         _blastInWorld.BlastRender.DOFade(0, .5f);
 
-        _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(0, -2), 0.5f);
+        _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(0, -2), 0.5f);
 
         transform.DOScale(0f, .5f);
         _cg.DOFade(0f, .5f);
@@ -140,14 +125,8 @@ public class HUDLayout : MonoBehaviour
     {
         var duration = isIntant ? 0f : .5f;
 
-        if (_attackAnimTween.IsActive())
-        {
-            _attackAnimTween.Kill(true);
-            _attackAnimTween = null;
-        }
-
-        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(-2, -2), duration);
-        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(2, 2), duration);
+        if (_isPlayerBlast) _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(-2, -2), duration);
+        else _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(2, 2), duration);
 
         _cg.DOFade(0f, duration);
         _blastInWorld.BlastRender.DOFade(0, duration);
@@ -161,14 +140,8 @@ public class HUDLayout : MonoBehaviour
     {
         var duration = isIntant ? 0f : .5f;
 
-        if (_attackAnimTween.IsActive())
-        {
-            _attackAnimTween.Kill(true);
-            _attackAnimTween = null;
-        }
-
-        if (_isPlayerBlast) _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
-        else _attackAnimTween = _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
+        if (_isPlayerBlast) _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
+        else _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);
 
         _cg.DOFade(1f, duration);
         _blastInWorld.BlastRender.DOFade(1f, duration);
