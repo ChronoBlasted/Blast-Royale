@@ -662,7 +662,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_StartCorner: 0
+  m_StartCorner: 3
   m_StartAxis: 0
   m_CellSize: {x: 256, y: 320}
   m_Spacing: {x: 16, y: 16}
@@ -1284,7 +1284,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2464760911871528855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1301,8 +1301,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -652}
-  m_SizeDelta: {x: 800, y: 272}
+  m_AnchoredPosition: {x: 443.6019, y: -652}
+  m_SizeDelta: {x: 800, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &8189382024665515229
 MonoBehaviour:
@@ -3122,6 +3122,7 @@ MonoBehaviour:
   _soloBlastLayout: {fileID: 4976127512078826470}
   _soloItemGO: {fileID: 8564667498552900571}
   _soloItemLayout: {fileID: 8687962626953484373}
+  _lastHiddenInfoMenu: {fileID: 0}
 --- !u!224 &8941667812997849091 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3386784948550564165, guid: 7b61747944f6b65499d2af12a30d54d9, type: 3}

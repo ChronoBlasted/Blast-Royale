@@ -6,6 +6,7 @@ public class ResourceData : ScriptableObject
 {
     public ResourceType Type;
     public LocalizedString Name;
+    public LocalizedString Desc;
     public Sprite Sprite;
     public GameObject Prefab;
 }
