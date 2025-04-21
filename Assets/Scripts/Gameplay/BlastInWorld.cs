@@ -8,7 +8,6 @@ public class BlastInWorld : MonoBehaviour
     public SpriteRenderer BlastRender;
     public PlatformLayout PlatformLayout;
 
-
     public void Init(Sprite sprite)
     {
         BlastRender.sprite = sprite;
@@ -56,11 +55,13 @@ public class BlastInWorld : MonoBehaviour
 
     public void DoTakeDamageRender()
     {
-        var tweenLoopDuration = .1f;
 
-        BlastRender.DOColor(Color.black, tweenLoopDuration)
-                                    .SetLoops(2, LoopType.Yoyo)
-                                    .SetEase(Ease.OutSine);
+        Material flashMaterial = BlastRender.material;
+
+        DOVirtual.Float(flashMaterial.GetFloat("_FlashAmount"), 0, .15f, x =>
+        {
+            flashMaterial.SetFloat("_FlashAmount", x);
+        }).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
 
         BlastRender.transform.DOPunchPosition(new Vector3(.25f, 0), .5f, 15);
     }

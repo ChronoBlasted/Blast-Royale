@@ -11,8 +11,8 @@ public class PlatformLayout : MonoBehaviour
     List<SpriteRenderer> _circles;
     List<Type> _platformType = new List<Type>();
 
-    readonly float[] _scalesX = { 2f, 3.3f, 4.25f, 5.5f };
-    readonly float[] _scalesY = { 1f, 1.3f, 1.75f, 2.5f };
+    readonly float[] _scalesX = { 2f,3f, 4, 6 };
+    readonly float[] _scalesY = { 1f, 1.5f, 2f, 3f };
     readonly float _fadeDuration = .5f;
 
     public void Init()
@@ -82,7 +82,7 @@ public class PlatformLayout : MonoBehaviour
             {
                 Type type = _platformType[i];
                 Color baseColor = ResourceObjectHolder.Instance.GetTypeDataByType(type).Color;
-                float tintFactor = Mathf.Clamp01(i * 0.1f);
+                float tintFactor = Mathf.Clamp01(i * .2f);
 
                 Color targetColor = Color.Lerp(baseColor, Color.black, tintFactor);
                 circle.DOColor(targetColor, 0.3f);
