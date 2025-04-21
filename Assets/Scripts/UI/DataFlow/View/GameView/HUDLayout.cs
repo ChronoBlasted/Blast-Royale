@@ -82,7 +82,7 @@ public class HUDLayout : MonoBehaviour
             DoTakeDamageAnim(defender, effective);
         });
 
-        await Task.Delay(1500);
+        await Task.Delay(1000);
     }
 
     public void DoTakeDamageAnim(Blast defender, float effective)
@@ -101,9 +101,12 @@ public class HUDLayout : MonoBehaviour
                                      .SetLoops(2, LoopType.Yoyo)
                                      .SetEase(Ease.OutSine);
 
-        StartCoroutine(HitMoveTypeFXCoroutine(tweenLoopDuration));
+        if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
+        {
+            StartCoroutine(HitMoveTypeFXCoroutine(tweenLoopDuration));
+        }
 
-        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, tweenLoopDuration);
+        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .5f);
     }
 
     private IEnumerator HitMoveTypeFXCoroutine(float delay)
