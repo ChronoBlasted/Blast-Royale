@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using System.Linq;
 using UnityEngine;
 
@@ -27,10 +26,42 @@ public class BlastInWorld : MonoBehaviour
 
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, target.position);
 
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane ));
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane));
 
         worldPos.z = 0;
 
         transform.position = worldPos;
+    }
+
+    public void DoMoveToOpponentRender(Vector3 position)
+    {
+        BlastRender.transform.DOMove(position, 0.5f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
+    }
+
+    public void DoSelfRender()
+    {
+        BlastRender.transform.DOPunchPosition(new Vector3(0, .25f, 0), .5f, 1, 1);
+    }
+
+    public void DoCastProjectile(Vector3 direction)
+    {
+        BlastRender.transform.DOPunchPosition(direction, .5f, 1, 1);
+
+    }
+
+    public void DoCastLaser()
+    {
+        BlastRender.transform.DOShakePosition(.2f, new Vector3(.2f, .2f));
+    }
+
+    public void DoTakeDamageRender()
+    {
+        var tweenLoopDuration = .1f;
+
+        BlastRender.DOColor(Color.black, tweenLoopDuration)
+                                    .SetLoops(2, LoopType.Yoyo)
+                                    .SetEase(Ease.OutSine);
+
+        BlastRender.transform.DOPunchPosition(new Vector3(.25f, 0), .5f, 15);
     }
 }

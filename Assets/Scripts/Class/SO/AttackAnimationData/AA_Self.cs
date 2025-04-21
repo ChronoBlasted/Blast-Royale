@@ -8,7 +8,7 @@ public class AA_Self : AAData
 {
     public override async Task PlayAnimation(BlastInWorld attacker, BlastInWorld defender, ParticleSystem fxPrefab, Action onHitCallback)
     {
-        attacker.transform.DOShakePosition(.2f, new Vector3(.2f, .2f));
+        attacker.DoSelfRender();
 
         var fx = Instantiate(fxPrefab, attacker.transform);
         await Task.Delay(500);

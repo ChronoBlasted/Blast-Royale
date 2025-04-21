@@ -10,7 +10,7 @@ public class AA_DistanceProjectile : AAData
     {
         Vector3 direction = (defender.transform.position - attacker.transform.position).normalized;
 
-        attacker.BlastRender.transform.DOPunchPosition(direction * 0.2f, .2f, 1, 1);
+        attacker.DoCastProjectile(direction * 0.5f);
 
         var fx = Instantiate(fxPrefab, attacker.transform.position, Quaternion.identity);
         fx.transform.DOMove(defender.transform.position, 0.5f);

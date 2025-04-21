@@ -137,7 +137,7 @@ public class GameView : View
 
         string isWild = isPlayer ? "" : "Wild ";
 
-        Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Wait).Prefab, blastHUD.transform);
+        Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Wait).Prefab, blastHUD.BlastInWorld.transform);
 
         await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
 
@@ -160,7 +160,7 @@ public class GameView : View
 
         Instantiate(resourceData.Prefab, blastHUD.BlastInWorld.BlastRender.transform);
 
-        blastHUD.BlastInWorld.BlastRender.transform.DOPunchPosition(new Vector3(.5f, 0), .5f);
+        blastHUD.BlastInWorld.DoTakeDamageRender();
 
         await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() +
             " suffer from " +
@@ -322,29 +322,14 @@ public class GameView : View
 
             Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
 
+            defenderHUD.BlastInWorld.DoTakeDamageRender();
+
             await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
 
             await Task.Delay(TimeSpan.FromMilliseconds(500));
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
-    }
-
-    public async Task CantAttack(bool isPlayer, Blast blast, Move move)
-    {
-        HUDLayout attackerHUD;
-
-        attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
-
-        attackerHUD.gameObject.transform.DOShakePosition(.25f, new Vector3(100f, 0, 0));
-
-        var isWild = isPlayer ? "" : "Wild ";
-
-        await _dialogLayout.UpdateTextAsync(
-            isWild +
-            NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString()
-            + " don't have enough mana to do "
-            + NakamaData.Instance.GetMoveDataRef(move.id).Name.GetLocalizedString());
     }
 
     public async void DoEndMatch(string textToShow)

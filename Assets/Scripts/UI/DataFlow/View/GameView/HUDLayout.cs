@@ -79,22 +79,11 @@ public class HUDLayout : MonoBehaviour
 
     public void DoTakeDamageAnim(Blast defender, float effective)
     {
-
-
-        var render = _lastOpponentHUD.BlastInWorld.BlastRender;
-
-        var tweenLoopDuration = .1f;
-
-        render.DOColor(Color.black, tweenLoopDuration)
-                                    .SetLoops(2, LoopType.Yoyo)
-                                    .SetEase(Ease.OutSine);
-
-        render.transform.DOPunchPosition(new Vector3(.5f, 0), .5f);
-
+        _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
 
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {
-            StartCoroutine(HitMoveTypeFXCoroutine(tweenLoopDuration));
+            StartCoroutine(HitMoveTypeFXCoroutine(.1f));
         }
 
         _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .5f);
