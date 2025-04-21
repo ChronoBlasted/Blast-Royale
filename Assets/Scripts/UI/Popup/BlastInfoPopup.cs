@@ -53,7 +53,6 @@ public class BlastInfoPopup : Popup
 
         _blastImg.sprite = _nakamaData.GetBlastDataRef(blast.data_id).Sprite;
         _blastTypeImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
-        _blastTypeImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
         _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
 
         _moveLayout.SetActive(true);
@@ -91,7 +90,6 @@ public class BlastInfoPopup : Popup
 
         _blastImg.sprite = _nakamaData.GetBlastDataRef(_currentBlastData.id).Sprite;
         _blastTypeImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
-        _blastTypeImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
         _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
 
         _prestigeEvolveLayout.SetActive(false);

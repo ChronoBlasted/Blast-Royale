@@ -72,6 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blastNameTxt: {fileID: 8802551473447875823}
+  _blastLevelTxt: {fileID: 0}
   _bg: {fileID: 6255112463050331414}
   _blastIco: {fileID: 3422146583977936048}
 --- !u!114 &4561945167948521523
@@ -144,6 +145,10 @@ PrefabInstance:
     - target: {fileID: -3634914776561807608, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: _blastLevelTxt
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860559845559414597, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3266173927702715368, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
