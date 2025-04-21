@@ -115,8 +115,8 @@ public class HUDLayout : MonoBehaviour
         var fx = ResourceObjectHolder.Instance.GetTypeDataByType(_lastMove.type).TypeHitFX;
         var targetTransform = _lastOpponentHUD.BlastInWorld.transform;
         var hitFX = Instantiate(fx, targetTransform);
-        Destroy(hitFX, 2f);
     }
+
 
     public async Task DoFaintedAnim()
     {
