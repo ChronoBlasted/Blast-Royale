@@ -131,23 +131,19 @@ public class GameView : View
 
     public async Task BlastWait(bool isPlayer, Blast blast)
     {
-        HUDLayout waiterHUD;
+        HUDLayout blastHUD;
 
-        if (isPlayer)
-        {
-            await _dialogLayout.UpdateTextAsync("You wait and regen mana !");
-            waiterHUD = _playerHUD;
-        }
-        else
-        {
-            string isWild = isPlayer ? "" : "Wild ";
+        blastHUD = isPlayer ? _playerHUD : _opponentHUD;
 
-            await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
+        string isWild = isPlayer ? "" : "Wild ";
 
-            waiterHUD = _opponentHUD;
-        }
+        Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Wait).Prefab, blastHUD.transform);
 
-        waiterHUD.UpdateManaBar(blast.Mana);
+        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
+
+        blastHUD.UpdateManaBar(blast.Mana);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
     public async Task ApplyStatusEndTurn(bool isPlayer, Blast blast, Blast otherBlast)

@@ -52,6 +52,8 @@ public enum ResourceType
 
     Cleanse = 473,
 
+    Wait = 490,
+
     AttackDamage = 500,
     AttackStatus = 501,
 
