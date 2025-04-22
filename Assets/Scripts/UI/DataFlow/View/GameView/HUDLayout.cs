@@ -10,7 +10,6 @@ public class HUDLayout : MonoBehaviour
 {
     [SerializeField] bool _isPlayerBlast;
     [SerializeField] CanvasGroup _cg;
-    [SerializeField] Image _borderHUD;
     [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
     [SerializeField] SliderBar _hpSlider, _manaSlider;
 
@@ -37,8 +36,6 @@ public class HUDLayout : MonoBehaviour
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
-
-        _borderHUD.color = ResourceObjectHolder.Instance.GetTypeDataByType(data.type).Color;
 
         _hpSlider.Init(_blast.Hp, _blast.MaxHp);
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);
