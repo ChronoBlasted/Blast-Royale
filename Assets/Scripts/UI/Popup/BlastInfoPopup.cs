@@ -39,62 +39,72 @@ public class BlastInfoPopup : Popup
         _currentBlast = blast;
         _currentBlastData = _nakamaData.GetBlastDataById(blast.data_id);
 
-        _blastNameTxt.text = _nakamaData.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
-        _blastDescTxt.text = _nakamaData.GetBlastDataRef(blast.data_id).Desc.GetLocalizedString();
-        _blastLevel.text = "Lvl." + _currentBlast.Level;
-        _blastExp.text = _currentBlast.GetRatioExp() + " / " + _currentBlast.GetRatioExpNextLevel();
-
-        _blastHp.text = _currentBlast.MaxHp.ToString();
-        _blastMana.text = _currentBlast.MaxMana.ToString();
-        _blastAttack.text = _currentBlast.Attack.ToString();
-        _blastDefense.text = _currentBlast.Defense.ToString();
-        _blastSpeed.text = _currentBlast.Speed.ToString();
-        _blastType.text = _currentBlastData.type.ToString();
-
-        _blastImg.sprite = _nakamaData.GetBlastDataRef(blast.data_id).Sprite;
-        _blastTypeImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
-        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
+        SetBlastUI(_currentBlastData, blast.Level, blast.GetRatioExp(), blast.GetRatioExpNextLevel());
+        SetStatsUI(blast.MaxHp, blast.MaxMana, blast.Attack, blast.Defense, blast.Speed);
+        SetTypeUI(_currentBlastData.type);
+        SetMovesUI(blast.activeMoveset);
 
         _moveLayout.SetActive(true);
-
-        for (int i = 0; i < movesLayout.Count; i++)
-        {
-            if (i < _currentBlast.activeMoveset.Count)
-            {
-
-                movesLayout[i].gameObject.SetActive(true);
-                movesLayout[i].Init(_nakamaData.GetMoveById(_currentBlast.activeMoveset[i]), null);
-            }
-            else movesLayout[i].gameObject.SetActive(false);
-        }
-
-
         //_prestigeEvolveLayout.SetActive(true);
     }
 
-    public void UpdateData(BlastData blast)
+    public void UpdateData(BlastData blastData)
     {
-        _currentBlastData = blast;
+        _currentBlastData = blastData;
 
-        _blastNameTxt.text = _nakamaData.GetBlastDataRef(_currentBlastData.id).Name.GetLocalizedString();
-        _blastDescTxt.text = _nakamaData.GetBlastDataRef(_currentBlastData.id).Desc.GetLocalizedString();
-        _blastLevel.text = "";
-        _blastExp.text = "";
+        SetBlastUI(_currentBlastData);
+        SetStatsUI(blastData.hp, blastData.mana, blastData.attack, blastData.defense, blastData.speed);
+        SetTypeUI(blastData.type);
 
-        _blastHp.text = _currentBlastData.hp.ToString();
-        _blastMana.text = _currentBlastData.mana.ToString();
-        _blastAttack.text = _currentBlastData.attack.ToString();
-        _blastDefense.text = _currentBlastData.defense.ToString();
-        _blastSpeed.text = _currentBlastData.speed.ToString();
-        _blastType.text = _currentBlastData.type.ToString();
-
-        _blastImg.sprite = _nakamaData.GetBlastDataRef(_currentBlastData.id).Sprite;
-        _blastTypeImg.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Sprite;
-        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_currentBlastData.type).Color;
-
-        _prestigeEvolveLayout.SetActive(false);
         _moveLayout.SetActive(false);
+        _prestigeEvolveLayout.SetActive(false);
     }
+
+    private void SetBlastUI(BlastData blastData, int level = -1, float exp = -1, float nextExp = -1)
+    {
+        var refData = _nakamaData.GetBlastDataRef(blastData.id);
+        _blastNameTxt.text = refData.Name.GetLocalizedString();
+        _blastDescTxt.text = refData.Desc.GetLocalizedString();
+
+        _blastLevel.text = level >= 0 ? $"Lvl.{level}" : "";
+        _blastExp.text = (exp >= 0 && nextExp >= 0) ? $" EXP : {exp} / {nextExp}" : "";
+
+        _blastImg.sprite = refData.Sprite;
+    }
+
+    private void SetStatsUI(int hp, int mana, float attack, float defense, float speed)
+    {
+        _blastHp.text = hp.ToString();
+        _blastMana.text = mana.ToString();
+        _blastAttack.text = attack.ToString();
+        _blastDefense.text = defense.ToString();
+        _blastSpeed.text = speed.ToString();
+    }
+
+    private void SetTypeUI(Type type)
+    {
+        _blastType.text = type.ToString();
+        var typeData = ResourceObjectHolder.Instance.GetTypeDataByType(type);
+        _blastTypeImg.sprite = typeData.Sprite;
+        _borderImg.color = typeData.Color;
+    }
+
+    private void SetMovesUI(List<int> moveset)
+    {
+        for (int i = 0; i < movesLayout.Count; i++)
+        {
+            if (i < moveset.Count)
+            {
+                movesLayout[i].gameObject.SetActive(true);
+                movesLayout[i].Init(_nakamaData.GetMoveById(moveset[i]), null);
+            }
+            else
+            {
+                movesLayout[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
 
     public void HandleOnEvolve()
     {
