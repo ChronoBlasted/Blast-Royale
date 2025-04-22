@@ -222,37 +222,38 @@ public class GameView : View
     public async Task BlastUseItem(Item item, Blast selectedBlast = null, Blast wildBlast = null, bool isCaptured = false)
     {
         ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
+        ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(item.data_id);
+        BlastDataRef blastDataRef = NakamaData.Instance.GetBlastDataRef(selectedBlast.data_id);
 
         switch (itemData.behaviour)
         {
             case ItemBehaviour.HEAL:
-                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateHpBar(selectedBlast.Hp);
                 break;
             case ItemBehaviour.MANA:
-                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
             case ItemBehaviour.STATUS:
-                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(selectedBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.SetStatus(selectedBlast.status);
                 break;
             case ItemBehaviour.CATCH:
 
-                await _dialogLayout.UpdateTextAsync("You use " + NakamaData.Instance.GetItemDataRef(item.data_id).Name.GetLocalizedString() + " on " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 if (isCaptured)
                 {
-                    // DoBlastTrapAnim
-
+                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(4, itemDataRef.Sprite);
                     break;
                 }
                 else
                 {
-                    // DoBlastTrapAnim
+                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(UnityEngine.Random.Range(0, 3), itemDataRef.Sprite);
 
                     await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString() + " !");
                     break;
