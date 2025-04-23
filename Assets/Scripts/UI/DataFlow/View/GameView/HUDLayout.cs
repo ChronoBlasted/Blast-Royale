@@ -78,6 +78,8 @@ public class HUDLayout : MonoBehaviour
     {
         _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
 
+        if (effective > 1) TimeManager.Instance.DoLagTime(.2f, .15f);
+
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {
             StartCoroutine(HitMoveTypeFXCoroutine(.1f));

@@ -140,5 +140,7 @@ public class BlastInWorld : MonoBehaviour
 
             Destroy(_currentTrap, .5f);
         }
+
+        TimeManager.Instance.DoLagTime();
     }
 }

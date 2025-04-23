@@ -244,7 +244,7 @@ public class GameView : View
                 break;
             case ItemBehaviour.CATCH:
 
-                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
+                await _dialogLayout.UpdateTextAsync("You throw" + itemDataRef.Name.GetLocalizedString() + " on " + NakamaData.Instance.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString());
 
                 if (isCaptured)
                 {
