@@ -136,7 +136,7 @@ public class PlatformLayout : MonoBehaviour
         return _platformType.Count(item => EqualityComparer<Type>.Default.Equals(item, type));
     }
 
-    public async Task CatchAnimation(int amount)
+    public async Task CatchAnimation(int amount, float delay)
     {
         int count = Mathf.Min(amount, _outlineCircles.Count);
 
@@ -150,12 +150,10 @@ public class PlatformLayout : MonoBehaviour
                 _circles[i].DOFade(0.3f, 0.2f);
             }
 
-            _outlineCircles[i].transform.DOScale(0f, 0.2f).SetEase(Ease.InBack);
+            await _outlineCircles[i].transform.DOScale(0f, 0.2f).SetEase(Ease.InBack).AsyncWaitForCompletion();
 
-            await Task.Delay(500);
+            await Task.Delay((int)(delay * 1000));
         }
-
-        await Task.Delay(300);
 
         if (shouldReset)
         {

@@ -248,12 +248,12 @@ public class GameView : View
 
                 if (isCaptured)
                 {
-                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(4, itemDataRef.Sprite);
+                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(4, itemDataRef.Prefab);
                     break;
                 }
                 else
                 {
-                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(UnityEngine.Random.Range(0, 3), itemDataRef.Sprite);
+                    await _opponentHUD.BlastInWorld.DoCatchBlastTrap(UnityEngine.Random.Range(0, 3), itemDataRef.Prefab);
 
                     await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString() + " !");
                     break;

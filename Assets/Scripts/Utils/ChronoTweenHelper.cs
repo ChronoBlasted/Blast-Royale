@@ -27,6 +27,8 @@ public class ChronoTweenHelper : MonoBehaviour
     Vector3 _startLocalRotation;
     Vector3 _startLocalScale;
 
+    public UnityEvent TweenAction { get => _tweenAction; }
+
     public void Start()
     {
         _startPos = transform.position;

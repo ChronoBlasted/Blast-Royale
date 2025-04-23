@@ -312,7 +312,7 @@ Transform:
   m_GameObject: {fileID: 2899050594287180212}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.75, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -375,7 +375,6 @@ MonoBehaviour:
   _outlineCircle1: {fileID: 4869410700727690235}
   _outlineCircle2: {fileID: 4864851042730720100}
   _outlineCircle3: {fileID: 4500928709756742699}
-  _outlineCircle4: {fileID: 0}
 --- !u!1 &3668214789696700935
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,6 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPlayer: 1
+  _chronoTweenHelper: {fileID: 5921108618508451010}
   BlastRender: {fileID: 6652734401649135949}
   PlatformLayout: {fileID: 5441009692615221347}
 --- !u!1 &5813597775480476910

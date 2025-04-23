@@ -45,7 +45,7 @@ public enum ResourceType
 
     AttackBoost = 467,
     DefenseBoost = 468,
-    SpeedBoost =  469,
+    SpeedBoost = 469,
     AttackReduce = 470,
     DefenseReduce = 471,
     SpeedReduce = 472,
@@ -58,6 +58,9 @@ public enum ResourceType
     AttackStatus = 501,
 
     PlatformCost = 510,
+
+    CatchSuccess = 520,
+    CatchFailure = 521,
 }
 
 public enum UIType

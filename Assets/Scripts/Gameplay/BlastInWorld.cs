@@ -6,9 +6,12 @@ using UnityEngine;
 public class BlastInWorld : MonoBehaviour
 {
     [SerializeField] bool _isPlayer;
+    [SerializeField] ChronoTweenHelper _chronoTweenHelper;
     public SpriteRenderer BlastRender;
     public PlatformLayout PlatformLayout;
     Material _flashMaterial;
+    GameObject _currentTrap;
+
     public void Init(Sprite sprite)
     {
         BlastRender.sprite = sprite;
@@ -20,6 +23,12 @@ public class BlastInWorld : MonoBehaviour
         BlastRender.sortingLayerID = targetLayer.id;
 
         transform.localScale = Vector3.one;
+        BlastRender.transform.localScale = Vector3.one;
+
+        _chronoTweenHelper.TweenAction?.Invoke();
+
+        if (_currentTrap != null) Destroy(_currentTrap);
+
 
         _flashMaterial = BlastRender.material;
         _flashMaterial.SetFloat("_FlashAmount", 1);
@@ -72,20 +81,49 @@ public class BlastInWorld : MonoBehaviour
         BlastRender.transform.DOPunchPosition(new Vector3(.25f, 0), .5f, 15);
     }
 
-    public async Task DoCatchBlastTrap(int amount, Sprite trapSprite)
+    public async Task DoCatchBlastTrap(int amount, GameObject trapGO)
     {
-        DOVirtual.Float(_flashMaterial.GetFloat("_FlashAmount"), 0, .15f, x =>
-        {
-            _flashMaterial.SetFloat("_FlashAmount", x);
-        });
+        _currentTrap = Instantiate(trapGO, new Vector3(-16, -64, 0), Quaternion.identity);
 
-        await PlatformLayout.CatchAnimation(amount);
+        await _currentTrap.transform.DOJump(BlastRender.transform.position + new Vector3(0, .5f, 0), 2, 1, .5f).SetEase(Ease.OutSine).AsyncWaitForCompletion();
+
+        DOVirtual.Float(_flashMaterial.GetFloat("_FlashAmount"), 0, .2f, x =>
+       {
+           _flashMaterial.SetFloat("_FlashAmount", x);
+       });
+
+        DOTween.Kill(BlastRender.transform);
+        await BlastRender.transform.DOScale(0, .5f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            _currentTrap.transform.DOPunchPosition(new Vector3(0, -.25f, 0), .2f, 1, 1);
+        }).AsyncWaitForCompletion();
+
+        await Task.Delay(500);
+
+        float delay = 1f;
+
+        Sequence seq = DOTween.Sequence();
+
+        for (int i = 0; i < amount - 1; i++)
+        {
+            seq.Append(_currentTrap.transform
+                .DOPunchScale(new Vector3(.25f, .25f, 0), .2f, 1, 1)
+                .SetEase(Ease.OutSine));
+
+            seq.AppendInterval(delay);
+        }
+
+        await PlatformLayout.CatchAnimation(amount, delay);
 
         if (amount == 4)
         {
-            Instantiate(trapSprite, BlastRender.transform.position, Quaternion.identity);
+            Color targetColor = Color.Lerp(Color.white, Color.black, .5f);
 
-            transform.DOScale(0f, .5f).SetEase(Ease.InBack);
+            _currentTrap.GetComponentInChildren<SpriteRenderer>().color = targetColor;
+
+            _currentTrap.transform.DOPunchScale(new Vector3(.5f, .5f, 0), .2f, 1, 1);
+
+            Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CatchSuccess).Prefab, _currentTrap.transform.position, Quaternion.identity);
         }
         else
         {
@@ -94,8 +132,13 @@ public class BlastInWorld : MonoBehaviour
                 _flashMaterial.SetFloat("_FlashAmount", x);
             });
 
-            // TODO Add vfx out trap
-        }
+            _currentTrap.transform.DOMoveY(-64, .5f).SetEase(Ease.OutSine);
 
+            Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CatchFailure).Prefab, _currentTrap.transform.position, Quaternion.identity);
+
+            _chronoTweenHelper.TweenAction?.Invoke();
+
+            Destroy(_currentTrap, .5f);
+        }
     }
 }
