@@ -60,6 +60,16 @@ public class HUDLayout : MonoBehaviour
         _manaSlider.SetValueSmooth(newMana);
     }
 
+    public void Show()
+    {
+        _cg.DOFade(1f, .5f);
+    }
+
+    public void Hide()
+    {
+        _cg.DOFade(0f, .5f);
+    }
+
     public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, float effective)
     {
         _lastMoveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
@@ -79,6 +89,8 @@ public class HUDLayout : MonoBehaviour
         _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
 
         if (effective > 1) TimeManager.Instance.DoLagTime(.2f, .15f);
+
+        CameraManager.Instance.DoShakeCamera(4 * effective);
 
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {

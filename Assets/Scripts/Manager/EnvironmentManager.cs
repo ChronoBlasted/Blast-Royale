@@ -1,4 +1,5 @@
 using BaseTemplate.Behaviours;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class EnvironmentManager : MonoSingleton<EnvironmentManager>
 {
     [SerializeField] GameObject _environment;
     [SerializeField] Transform _meteoTransform;
+    [SerializeField] SpriteRenderer _backgroundArea;
 
     public void Init()
     {
@@ -25,6 +27,18 @@ public class EnvironmentManager : MonoSingleton<EnvironmentManager>
             var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
 
             var currentFX = Instantiate(meteoData.Prefab, _meteoTransform);
+        }
+    }
+
+    public void SetDarkBackground(bool isDark)
+    {
+        if (isDark)
+        {
+            _backgroundArea.DOColor(new Color(0.4f, 0.4f, 0.4f, 1), .5f);
+        }
+        else
+        {
+            _backgroundArea.DOColor(Color.white, .5f);
         }
     }
 

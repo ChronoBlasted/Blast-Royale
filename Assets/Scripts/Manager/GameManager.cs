@@ -21,6 +21,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         WildBattleManager.Instance.Init();
 
+        CameraManager.Instance.Init();
+
         NakamaManager.Instance.Init();
     }
 

@@ -48,6 +48,11 @@ public class GameView : View
 
         DisableAttackPanel(true);
         HideNavBar(true);
+
+        ShowHUD();
+
+        StartCoroutine(PlayerHUD.BlastInWorld.SetPos());
+        StartCoroutine(OpponentHUD.BlastInWorld.SetPos());
     }
 
     public override void CloseView()
@@ -101,6 +106,31 @@ public class GameView : View
     {
         _bottomNavBar.Show();
     }
+
+
+    public void HideHUD()
+    {
+        _playerHUD.Hide();
+        _opponentHUD.Hide();
+
+        _dialogLayout.Hide();
+    }
+
+    public void ShowHUD(bool shouldShowOpponentHUD = true)
+    {
+        if (shouldShowOpponentHUD)
+        {
+            _opponentHUD.Show();
+        }
+        else
+        {
+            _opponentHUD.Hide();
+        }
+
+        _playerHUD.Show();
+        _dialogLayout.Show();
+    }
+
 
     public void ResetTab()
     {

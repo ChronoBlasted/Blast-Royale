@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -29,13 +30,14 @@ public class BlastInWorld : MonoBehaviour
 
         if (_currentTrap != null) Destroy(_currentTrap);
 
-
         _flashMaterial = BlastRender.material;
         _flashMaterial.SetFloat("_FlashAmount", 1);
     }
 
-    void Update()
+    public IEnumerator SetPos()
     {
+        yield return new WaitForEndOfFrame();
+
         var target = _isPlayer ? UIManager.Instance.GameView.PlayerHUD.BlastTransformInUI : UIManager.Instance.GameView.OpponentHUD.BlastTransformInUI;
 
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, target.position);
@@ -43,10 +45,8 @@ public class BlastInWorld : MonoBehaviour
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane));
 
         worldPos.z = 0;
-
         transform.position = worldPos;
     }
-
     #region AA Action
     public void DoMoveToOpponentRender(Vector3 position)
     {
@@ -72,7 +72,6 @@ public class BlastInWorld : MonoBehaviour
 
     public void DoTakeDamageRender()
     {
-
         DOVirtual.Float(_flashMaterial.GetFloat("_FlashAmount"), 0, .15f, x =>
         {
             _flashMaterial.SetFloat("_FlashAmount", x);
@@ -98,7 +97,14 @@ public class BlastInWorld : MonoBehaviour
             _currentTrap.transform.DOPunchPosition(new Vector3(0, -.25f, 0), .2f, 1, 1);
         }).AsyncWaitForCompletion();
 
+        CameraManager.Instance.SetCameraPosition(_currentTrap.transform.position);
+        CameraManager.Instance.SetCameraZoom(6);
+
+        UIManager.Instance.GameView.HideHUD();
+
         await Task.Delay(500);
+
+        EnvironmentManager.Instance.SetDarkBackground(true);
 
         float delay = 1f;
 
@@ -106,9 +112,11 @@ public class BlastInWorld : MonoBehaviour
 
         for (int i = 0; i < amount - 1; i++)
         {
-            seq.Append(_currentTrap.transform
-                .DOPunchScale(new Vector3(.25f, .25f, 0), .2f, 1, 1)
-                .SetEase(Ease.OutSine));
+            seq.Append(_currentTrap.transform.DOPunchScale(new Vector3(.25f, .25f, 0), .2f, 1, 1).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                CameraManager.Instance.DoShakeCamera();
+                CameraManager.Instance.AddCameraZoom(-.5f);
+            }));
 
             seq.AppendInterval(delay);
         }
@@ -124,6 +132,8 @@ public class BlastInWorld : MonoBehaviour
             _currentTrap.transform.DOPunchScale(new Vector3(.5f, .5f, 0), .2f, 1, 1);
 
             Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CatchSuccess).Prefab, _currentTrap.transform.position, Quaternion.identity);
+
+            UIManager.Instance.GameView.ShowHUD(false);
         }
         else
         {
@@ -139,8 +149,14 @@ public class BlastInWorld : MonoBehaviour
             _chronoTweenHelper.TweenAction?.Invoke();
 
             Destroy(_currentTrap, .5f);
+
+            UIManager.Instance.GameView.ShowHUD(true);
         }
 
         TimeManager.Instance.DoLagTime();
+
+        EnvironmentManager.Instance.SetDarkBackground(false);
+
+        CameraManager.Instance.Reset();
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,11 +9,22 @@ using UnityEngine;
 public class DialogLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _dialogTxt, meteoTxt;
+    [SerializeField] CanvasGroup _cg;
 
     bool _skipAsync;
     public void UpdateText(string text)
     {
         _dialogTxt.text = text;
+    }
+
+    public void Show()
+    {
+        _cg.DOFade(1f, .5f);
+    }
+
+    public void Hide()
+    {
+        _cg.DOFade(0f, .5f);
     }
 
 
