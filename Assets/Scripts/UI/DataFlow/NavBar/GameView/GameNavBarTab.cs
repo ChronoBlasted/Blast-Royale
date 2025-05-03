@@ -12,6 +12,8 @@ public class GameNavBarTab : NavBarTab
     [SerializeField] Image _bg, _ico;
     [SerializeField] TMP_Text _title;
 
+    [SerializeField] Sprite _activeBG, _inactiveBG;
+
     [SerializeField] Panel _tab;
 
     Sequence _growSequence;
@@ -26,6 +28,7 @@ public class GameNavBarTab : NavBarTab
             .Join(_ico.rectTransform.DOSizeDelta(new Vector2(192, 192), .2f))
             .Join(_ico.rectTransform.DOAnchorPosY(32, .2f));
 
+        _bg.sprite = _activeBG;
 
         if (_tab != null)
         {
@@ -47,6 +50,7 @@ public class GameNavBarTab : NavBarTab
             .Join(_ico.rectTransform.DOSizeDelta(new Vector2(128, 128), .2f))
             .Join(_ico.rectTransform.DOAnchorPosY(0, .2f));
 
+        _bg.sprite = _inactiveBG;
 
         if (_tab != null)
         {

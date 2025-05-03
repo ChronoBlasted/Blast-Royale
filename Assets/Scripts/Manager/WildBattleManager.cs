@@ -112,7 +112,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
     public void WaitForOpponent()
     {
-        _gameView.DisableAttackPanel();
+        _gameView.DisablePanels();
         _gameView.HideNavBar();
 
         //_gameView.DialogLayout.UpdateText("Waiting for opponent..."); // ONLY IN PVP

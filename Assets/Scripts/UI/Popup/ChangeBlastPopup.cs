@@ -1,6 +1,7 @@
 using Chrono.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,7 @@ public class ChangeBlastPopup : Popup
     [SerializeField] List<CustomButton> customButtons;
 
     [SerializeField] CustomButton closeButton;
+    [SerializeField] TMP_Text _title;
 
     public override void Init()
     {
@@ -36,8 +38,22 @@ public class ChangeBlastPopup : Popup
         }
     }
 
-    public void UpdateAction(List<UnityAction<int>> actions, CHANGE_REASON changeReason)
+    public void UpdateAction(List<UnityAction<int>> actions, CHANGE_REASON changeReason, string itemName = "")
     {
+        switch (changeReason)
+        {
+            case CHANGE_REASON.HP:
+            case CHANGE_REASON.MANA:
+            case CHANGE_REASON.STATUS:
+                _title.text = "Use " + itemName + " On";
+                break;
+            case CHANGE_REASON.KO:
+            case CHANGE_REASON.SWAP:
+                _title.text = "Swap Blast With"; // TODO Translate
+                break;
+        }
+
+
         for (int i = 0; i < customButtons.Count; i++)
         {
             int buttonIndex = i;

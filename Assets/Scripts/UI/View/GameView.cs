@@ -9,7 +9,9 @@ public class GameView : View
     [SerializeField] BagPanel _bagPanel;
 
     [SerializeField] GameNavBar _bottomNavBar;
+    [SerializeField] CanvasGroup _headerCG;
     [SerializeField] CanvasGroup _runBtnCG;
+    [SerializeField] CanvasGroup _waitBtnCG;
 
     [SerializeField] HUDLayout _playerHUD, _opponentHUD;
     [SerializeField] DialogLayout _dialogLayout;
@@ -47,7 +49,7 @@ public class GameView : View
 
         _bottomNavBar.Init();
 
-        DisableAttackPanel(true);
+        DisablePanels(true);
         HideNavBar(true);
 
         ShowHUD();
@@ -95,9 +97,10 @@ public class GameView : View
         _currentPanel = null;
     }
 
-    public void DisableAttackPanel(bool instant = false)
+    public void DisablePanels(bool instant = false)
     {
         _attackPanel.Disable(instant);
+        _bagPanel.Disable(instant);
     }
 
     public void HideNavBar(bool instant = false)
@@ -107,6 +110,11 @@ public class GameView : View
         _runBtnCG.DOFade(0, .2f);
         _runBtnCG.interactable = false;
         _runBtnCG.blocksRaycasts = false;
+
+
+        _waitBtnCG.DOFade(0, .2f);
+        _waitBtnCG.interactable = false;
+        _waitBtnCG.blocksRaycasts = false;
     }
 
     public void ShowNavBar()
@@ -116,6 +124,10 @@ public class GameView : View
         _runBtnCG.DOFade(1, .2f);
         _runBtnCG.interactable = true;
         _runBtnCG.blocksRaycasts = true;
+
+        _waitBtnCG.DOFade(1, .2f);
+        _waitBtnCG.interactable = true;
+        _waitBtnCG.blocksRaycasts = true;
     }
 
 
@@ -125,6 +137,10 @@ public class GameView : View
         _opponentHUD.Hide();
 
         _dialogLayout.Hide();
+
+        _headerCG.DOFade(0, .2f);
+        _headerCG.interactable = false;
+        _headerCG.blocksRaycasts = false;
     }
 
     public void ShowHUD(bool shouldShowOpponentHUD = true)
@@ -139,6 +155,10 @@ public class GameView : View
         }
 
         _playerHUD.Show();
+
+        _headerCG.DOFade(1, .2f);
+        _headerCG.interactable = true;
+        _headerCG.blocksRaycasts = true;
     }
 
 

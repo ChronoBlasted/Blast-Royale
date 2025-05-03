@@ -72,18 +72,18 @@ public class BagPanel : Panel
             case ItemBehaviour.HEAL:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions,CHANGE_REASON.HP);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.HP, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
 
             case ItemBehaviour.MANA:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions,CHANGE_REASON.MANA);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.MANA, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
             case ItemBehaviour.STATUS:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
-                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.STATUS);
+                UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.STATUS, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
             case ItemBehaviour.CATCH:
                 UseItemOnBlast(_lastItemIndex);
