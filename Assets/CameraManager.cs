@@ -14,6 +14,8 @@ public class CameraManager : MonoSingleton<CameraManager>
     Vector3 _startPos;
     int _startSize;
 
+    public Vector3 StartPos { get => _startPos; }
+
     public void Init()
     {
         _startPos = _mainCamera.transform.position;
@@ -47,8 +49,8 @@ public class CameraManager : MonoSingleton<CameraManager>
         SetCameraZoom(_startSize);
     }
 
-    public void DoShakeCamera(float intensity = 4, float duration = .125f)
+    public void DoShakeCamera(float intensity = 4, float duration = .125f, float durationBeforeFade = 0f)
     {
-        _cinemachineShake.ShakeCamera(intensity, duration);
+        _cinemachineShake.ShakeCamera(intensity, duration, durationBeforeFade);
     }
 }

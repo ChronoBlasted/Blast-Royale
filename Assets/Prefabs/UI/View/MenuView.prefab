@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4341792754747108951}
   - component: {fileID: 7288896909359358901}
   - component: {fileID: 4266196138542502770}
+  - component: {fileID: 3947840019318841473}
+  - component: {fileID: 6005701904873499798}
   m_Layer: 0
   m_Name: Topbar
   m_TagString: Untagged
@@ -95,6 +97,46 @@ MonoBehaviour:
   _trophyTxt: {fileID: 8545643575932955415}
   _coinTxt: {fileID: 3002109386592534627}
   _gemTxt: {fileID: 3169238869291716870}
+--- !u!223 &3947840019318841473
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337388896373109892}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 2
+  m_TargetDisplay: 0
+--- !u!114 &6005701904873499798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337388896373109892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &684018949648815128
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,6 +148,8 @@ GameObject:
   - component: {fileID: 8499255371584852850}
   - component: {fileID: 6349860663247215103}
   - component: {fileID: 7529957411123449772}
+  - component: {fileID: 6635273382473359401}
+  - component: {fileID: 6371055245597960693}
   m_Layer: 0
   m_Name: Navbar
   m_TagString: Untagged
@@ -174,6 +218,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firstTab: {fileID: 2409789933501124319}
+--- !u!223 &6635273382473359401
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684018949648815128}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 2
+  m_TargetDisplay: 0
+--- !u!114 &6371055245597960693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684018949648815128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2826373530308542758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1625,7 +1709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2464760911871528855, guid: 7a22a1219a1730e4983da04b00a570e2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 443.6019
+      value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 2464760911871528855, guid: 7a22a1219a1730e4983da04b00a570e2, type: 3}
       propertyPath: m_AnchoredPosition.y

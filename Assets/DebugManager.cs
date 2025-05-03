@@ -30,7 +30,7 @@ public class DebugManager : MonoSingleton<DebugManager>
         }
 
 
-        UIManager.Instance.GameView.PlayerHUD.DoAttackAnimAsync(defenderHUD, target, move, 1);
+        _ = UIManager.Instance.GameView.PlayerHUD.DoAttackAnimAsync(defenderHUD, target, move, 1);
     }
 
 #endif

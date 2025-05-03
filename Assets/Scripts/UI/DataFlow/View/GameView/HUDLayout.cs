@@ -12,6 +12,7 @@ public class HUDLayout : MonoBehaviour
     [SerializeField] CanvasGroup _cg;
     [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
     [SerializeField] SliderBar _hpSlider, _manaSlider;
+    [SerializeField] AttackLayout _attackLayout;
 
     [SerializeField] RectTransform _blastTransformInUI;
     [SerializeField] BlastInWorld _blastInWorld;
@@ -27,6 +28,7 @@ public class HUDLayout : MonoBehaviour
 
     public RectTransform BlastTransformInUI { get => _blastTransformInUI; }
     public BlastInWorld BlastInWorld { get => _blastInWorld; }
+    public AttackLayout AttackLayout { get => _attackLayout; }
 
     public void Init(Blast blast)
     {
@@ -62,12 +64,12 @@ public class HUDLayout : MonoBehaviour
 
     public void Show()
     {
-        _cg.DOFade(1f, .5f);
+        _cg.DOFade(1f, .2f);
     }
 
     public void Hide()
     {
-        _cg.DOFade(0f, .5f);
+        _cg.DOFade(0f, .2f);
     }
 
     public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, float effective)

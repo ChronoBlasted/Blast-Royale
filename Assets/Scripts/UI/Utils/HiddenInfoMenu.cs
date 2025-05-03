@@ -6,6 +6,7 @@ public class HiddenInfoMenu : MonoBehaviour
 {
     [SerializeField] GameObject _hiddenMenu;
     [SerializeField] CustomButton _button;
+    [SerializeField] Canvas _canvas;
 
     public void HandleOnClick()
     {
@@ -19,6 +20,8 @@ public class HiddenInfoMenu : MonoBehaviour
         }
 
         UIManager.Instance.MenuView.SquadPanel.LastHiddenInfoMenu = this;
+
+        _canvas.overrideSorting = true;
     }
 
     public void HandleOnClose()
@@ -28,5 +31,7 @@ public class HiddenInfoMenu : MonoBehaviour
         _hiddenMenu.SetActive(false);
 
         UIManager.Instance.MenuView.SquadPanel.LastHiddenInfoMenu = null;
+
+        _canvas.overrideSorting = false;
     }
 }

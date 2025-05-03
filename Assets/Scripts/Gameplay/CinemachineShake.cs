@@ -14,13 +14,12 @@ public class CinemachineShake : MonoBehaviour
         cinemachineBasicMultiChannelPerlin = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
-    public void ShakeCamera(float intensity, float duration)
+    public void ShakeCamera(float intensity, float duration, float durationBeforeFade = 0f)
     {
         if (_shakeTween.IsActive()) _shakeTween.Kill();
 
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
 
-        _shakeTween = DOVirtual.Float(cinemachineBasicMultiChannelPerlin.m_AmplitudeGain, 0, duration, x => cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = x);
-
+        _shakeTween = DOVirtual.Float(cinemachineBasicMultiChannelPerlin.m_AmplitudeGain, 0, duration, x => cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = x).SetDelay(durationBeforeFade);
     }
 }

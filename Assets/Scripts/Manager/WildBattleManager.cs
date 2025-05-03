@@ -92,6 +92,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         UIManager.Instance.ChangeBlastPopup.UpdateData(_playerSquads);
 
         _gameView.DialogLayout.UpdateText("");
+        _gameView.DialogLayout.Hide();
 
         GameStateManager.Instance.UpdateStateToGame();
 
@@ -103,7 +104,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _playerAction = new TurnAction();
         _wbAction = new TurnAction();
 
-        _gameView.DialogLayout.UpdateText("Your turn !");
+        _gameView.DialogLayout.Hide();
 
         _gameView.ShowNavBar();
         _gameView.ResetTab();
@@ -273,14 +274,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             await _gameView.BlastFainted(false, _wildBlast);
 
-            await Task.Delay(TimeSpan.FromMilliseconds(500));
-
             UIManager.Instance.LevelExpPopup.UpdateData(_playerBlast, _wildBlast);
             UIManager.Instance.LevelExpPopup.OpenPopup();
 
             _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
             _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
-
 
             UIManager.Instance.LevelExpPopup.UpdateClose(GameStateManager.Instance.UpdateStateToEnd);
 
@@ -289,8 +287,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         else if (!NakamaLogic.IsBlastAlive(_playerBlast))
         {
             await _gameView.BlastFainted(true, _playerBlast);
-
-            await Task.Delay(TimeSpan.FromMilliseconds(500));
 
             if (NakamaLogic.IsAllBlastDead(_playerSquads))
             {

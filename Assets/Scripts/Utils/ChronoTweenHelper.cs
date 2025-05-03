@@ -27,9 +27,11 @@ public class ChronoTweenHelper : MonoBehaviour
     Vector3 _startLocalRotation;
     Vector3 _startLocalScale;
 
+    Tweener _currentTween;
+
     public UnityEvent TweenAction { get => _tweenAction; }
 
-    public void Start()
+    void Start()
     {
         _startPos = transform.position;
         _startLocalPos = transform.localPosition;
@@ -43,30 +45,26 @@ public class ChronoTweenHelper : MonoBehaviour
 
     public void DoLocalMoveY()
     {
-        transform.DOLocalMoveY(_startLocalPos.y + _amountFloat, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
+        _currentTween = transform.DOLocalMoveY(_startLocalPos.y + _amountFloat, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
     }
 
     public void DoMoveY()
     {
-        transform.DOMoveY(_startPos.y + _amountFloat, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
+        _currentTween = transform.DOMoveY(_startPos.y + _amountFloat, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
     }
 
     public void DoRotateZ()
     {
-        transform.DORotate(new Vector3(_startLocalRotation.x, _startLocalRotation.y, _startLocalRotation.z + _amountFloat), _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
+        _currentTween = transform.DORotate(new Vector3(_startLocalRotation.x, _startLocalRotation.y, _startLocalRotation.z + _amountFloat), _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
     }
 
     public void DoScale()
     {
-        transform.DOScale(_startLocalScale + _amountVector, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
+        _currentTween = transform.DOScale(_startLocalScale + _amountVector, _duration).SetDelay(_startDelay).SetEase(_ease).SetLoops(_loopAmount, _loopType);
     }
 
-    public void DoScaleXThenY()
+    private void OnDestroy()
     {
-        DOTween.Sequence()
-            .Join(transform.DOScaleX(_startLocalScale.x + _amountVector.x, _duration).SetEase(_ease))
-            .Append(transform.DOScaleY(_startLocalScale.y + _amountVector.y, _duration).SetEase(_ease))
-            .SetDelay(_startDelay)
-            .SetLoops(_loopAmount, _loopType);
+        _currentTween.Kill(true);
     }
 }

@@ -19,12 +19,12 @@ public class DialogLayout : MonoBehaviour
 
     public void Show()
     {
-        _cg.DOFade(1f, .5f);
+        _cg.DOFade(1f, .2f);
     }
 
     public void Hide()
     {
-        _cg.DOFade(0f, .5f);
+        _cg.DOFade(0f, .2f).OnComplete(() => _dialogTxt.text = "");
     }
 
 

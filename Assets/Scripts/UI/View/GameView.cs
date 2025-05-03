@@ -9,6 +9,7 @@ public class GameView : View
     [SerializeField] BagPanel _bagPanel;
 
     [SerializeField] GameNavBar _bottomNavBar;
+    [SerializeField] CanvasGroup _runBtnCG;
 
     [SerializeField] HUDLayout _playerHUD, _opponentHUD;
     [SerializeField] DialogLayout _dialogLayout;
@@ -50,6 +51,8 @@ public class GameView : View
         HideNavBar(true);
 
         ShowHUD();
+
+        DialogLayout.Hide();
 
         StartCoroutine(PlayerHUD.BlastInWorld.SetPos());
         StartCoroutine(OpponentHUD.BlastInWorld.SetPos());
@@ -100,11 +103,19 @@ public class GameView : View
     public void HideNavBar(bool instant = false)
     {
         _bottomNavBar.Hide(instant);
+
+        _runBtnCG.DOFade(0, .2f);
+        _runBtnCG.interactable = false;
+        _runBtnCG.blocksRaycasts = false;
     }
 
     public void ShowNavBar()
     {
         _bottomNavBar.Show();
+
+        _runBtnCG.DOFade(1, .2f);
+        _runBtnCG.interactable = true;
+        _runBtnCG.blocksRaycasts = true;
     }
 
 
@@ -128,7 +139,6 @@ public class GameView : View
         }
 
         _playerHUD.Show();
-        _dialogLayout.Show();
     }
 
 
@@ -165,11 +175,9 @@ public class GameView : View
 
         blastHUD = isPlayer ? _playerHUD : _opponentHUD;
 
-        string isWild = isPlayer ? "" : "Wild ";
-
         Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Wait).Prefab, blastHUD.BlastInWorld.transform);
 
-        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " wait and regen mana !");
+        // TODO Mettre en valeur la recovery de mana
 
         blastHUD.UpdateManaBar(blast.Mana);
 
@@ -192,9 +200,7 @@ public class GameView : View
 
         blastHUD.BlastInWorld.DoTakeDamageRender();
 
-        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() +
-            " suffer from " +
-            resourceData.Name.GetLocalizedString());
+        // TODO FAire un rappel du status / mettre en evidence
 
         blastHUD.UpdateManaBar(blast.Mana);
         blastHUD.UpdateHpBar(blast.Hp);
@@ -208,16 +214,16 @@ public class GameView : View
 
     public async Task AllPlayerBlastFainted()
     {
+        _dialogLayout.Show();
         await _dialogLayout.UpdateTextAsync("All your blast are fainted !");
+        _dialogLayout.Hide();
     }
 
     public async Task BlastFainted(bool isPlayer, Blast blast)
     {
         HUDLayout waiterHUD;
 
-        var isWild = isPlayer ? "" : "Wild ";
-
-        await _dialogLayout.UpdateTextAsync(isWild + NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString() + " fainted !");
+        // TODO Amplifie KO
 
         waiterHUD = isPlayer ? _playerHUD : _opponentHUD;
 
@@ -233,8 +239,6 @@ public class GameView : View
 
     public async Task ComeBackBlast(Blast currentBlast)
     {
-        await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(currentBlast.data_id).Name.GetLocalizedString() + " come back !");
-
         await _playerHUD.ComeBackBlast();
     }
 
@@ -255,27 +259,31 @@ public class GameView : View
         ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(item.data_id);
         BlastDataRef blastDataRef = NakamaData.Instance.GetBlastDataRef(selectedBlast.data_id);
 
+
         switch (itemData.behaviour)
         {
             case ItemBehaviour.HEAL:
+                _dialogLayout.Show();
+
                 await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateHpBar(selectedBlast.Hp);
                 break;
             case ItemBehaviour.MANA:
+                _dialogLayout.Show();
+
                 await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
             case ItemBehaviour.STATUS:
+                _dialogLayout.Show();
+
                 await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.SetStatus(selectedBlast.status);
                 break;
             case ItemBehaviour.CATCH:
-
-                await _dialogLayout.UpdateTextAsync("You throw" + itemDataRef.Name.GetLocalizedString() + " on " + NakamaData.Instance.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString());
-
                 if (isCaptured)
                 {
                     await _opponentHUD.BlastInWorld.DoCatchBlastTrap(4, itemDataRef.Prefab);
@@ -284,11 +292,11 @@ public class GameView : View
                 else
                 {
                     await _opponentHUD.BlastInWorld.DoCatchBlastTrap(UnityEngine.Random.Range(0, 3), itemDataRef.Prefab);
-
-                    await _dialogLayout.UpdateTextAsync("You didn't caught the wild " + _dataUtils.GetBlastDataRef(wildBlast.data_id).Name.GetLocalizedString() + " !");
                     break;
                 }
         }
+
+        _dialogLayout.Hide();
     }
 
     public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, MoveEffect moveEffect)
@@ -300,16 +308,29 @@ public class GameView : View
 
         float effective = NakamaLogic.GetTypeMultiplier(move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
 
-        var isWild = isPlayer ? "" : "Wild ";
-
-        await _dialogLayout.UpdateTextAsync(
-            isWild +
-            _dataUtils.GetBlastDataRef(attacker.data_id).Name.GetLocalizedString() +
-            " do " +
-            moveDataRef.Name.GetLocalizedString() +
-            " !");
-
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
+
+        HideHUD();
+
+        attackerHUD.AttackLayout.Show(moveDataRef.Name.GetLocalizedString(), move.type);
+
+        CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
+        CameraManager.Instance.SetCameraZoom(6);
+
+        float shakeIntensity = .5f;
+
+        if (damage > 50) shakeIntensity = 1f;
+        else if (damage > 100) shakeIntensity = 2f;
+        else if (damage > 200) shakeIntensity = 4f;
+
+        CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(1000));
+        attackerHUD.AttackLayout.Hide();
+
+        CameraManager.Instance.Reset();
+
+        ShowHUD();
 
         switch (move.target)
         {
@@ -338,8 +359,10 @@ public class GameView : View
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, effective);
 
-        if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super effective !");
-        else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super effective !");
+        //if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super effective !");
+        //else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super effective !");
+
+        // TODO Mettre FX super efficace / pas super efficace
 
         if (moveEffect != MoveEffect.None)
         {

@@ -49,5 +49,10 @@ public class LevelExpPopup : Popup
 
         UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(ClosePopup);
         UIManager.Instance.BlackShadeView.CloseButton.onClick.AddListener(unityAction);
+
+        UIManager.Instance.BlackShadeView.ShadeButton.onClick.RemoveAllListeners();
+
+        UIManager.Instance.BlackShadeView.ShadeButton.onClick.AddListener(ClosePopup);
+        UIManager.Instance.BlackShadeView.ShadeButton.onClick.AddListener(unityAction);
     }
 }
