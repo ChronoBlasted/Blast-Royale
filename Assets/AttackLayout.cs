@@ -10,6 +10,7 @@ public class AttackLayout : MonoBehaviour
     [SerializeField] CanvasGroup _cg;
     [SerializeField] Image _bg;
     [SerializeField] TMP_Text _attackName;
+    [SerializeField] bool isInverted;
 
     public void Show(string newAttackName, Type attackType)
     {
@@ -17,6 +18,9 @@ public class AttackLayout : MonoBehaviour
         _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(attackType).Color;
 
         _attackName.text = newAttackName;
+
+        transform.localPosition = new Vector3(isInverted ? -256 : 256, transform.localPosition.y, transform.localPosition.z);
+        transform.DOLocalMoveX(isInverted ? 128 : -128, 1f).SetEase(Ease.OutSine);
     }
 
     public void Hide()

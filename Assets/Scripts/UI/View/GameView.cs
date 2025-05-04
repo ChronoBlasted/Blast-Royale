@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class GameView : View
 {
-    [SerializeField] MovePanel _attackPanel;
-    [SerializeField] BagPanel _bagPanel;
+    [SerializeField] MoveMiniPanel _attackPanel;
+    [SerializeField] BagMiniPanel _bagPanel;
+    [SerializeField] SquadMiniPanel _squadPanel;
 
     [SerializeField] GameNavBar _bottomNavBar;
     [SerializeField] CanvasGroup _headerCG;
@@ -20,8 +21,9 @@ public class GameView : View
     public HUDLayout OpponentHUD { get => _opponentHUD; }
     public DialogLayout DialogLayout { get => _dialogLayout; }
 
-    public MovePanel AttackPanel { get => _attackPanel; }
-    public BagPanel BagPanel { get => _bagPanel; }
+    public MoveMiniPanel AttackPanel { get => _attackPanel; }
+    public BagMiniPanel BagPanel { get => _bagPanel; }
+    public SquadMiniPanel SquadPanel { get => _squadPanel; }
 
     Panel _currentPanel;
 
@@ -36,6 +38,7 @@ public class GameView : View
 
         _attackPanel.Init();
         _bagPanel.Init();
+        _squadPanel.Init();
 
         _wildBattleManager = WildBattleManager.Instance;
         _dataUtils = NakamaData.Instance;
@@ -93,6 +96,7 @@ public class GameView : View
     {
         _attackPanel.ClosePanel();
         _bagPanel.ClosePanel();
+        _squadPanel.ClosePanel();
 
         _currentPanel = null;
     }
@@ -101,6 +105,7 @@ public class GameView : View
     {
         _attackPanel.Disable(instant);
         _bagPanel.Disable(instant);
+        _squadPanel.Disable(instant);
     }
 
     public void HideNavBar(bool instant = false)
@@ -198,6 +203,8 @@ public class GameView : View
         Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Wait).Prefab, blastHUD.BlastInWorld.transform);
 
         // TODO Mettre en valeur la recovery de mana
+
+        Debug.Log("REC");
 
         blastHUD.UpdateManaBar(blast.Mana);
 
@@ -323,32 +330,27 @@ public class GameView : View
     {
         HUDLayout attackerHUD = null;
         HUDLayout defenderHUD = null;
-
         MoveDataRef moveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
-
         float effective = NakamaLogic.GetTypeMultiplier(move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
-
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
 
         HideHUD();
 
         attackerHUD.AttackLayout.Show(moveDataRef.Name.GetLocalizedString(), move.type);
-
         CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
         CameraManager.Instance.SetCameraZoom(6);
-
         float shakeIntensity = .5f;
-
         if (damage > 50) shakeIntensity = 1f;
         else if (damage > 100) shakeIntensity = 2f;
         else if (damage > 200) shakeIntensity = 4f;
-
         CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
+        EnvironmentManager.Instance.SetDarkBackground(true);
 
         await Task.Delay(TimeSpan.FromMilliseconds(1000));
-        attackerHUD.AttackLayout.Hide();
 
+        attackerHUD.AttackLayout.Hide();
         CameraManager.Instance.Reset();
+        EnvironmentManager.Instance.SetDarkBackground(false);
 
         ShowHUD();
 
@@ -397,8 +399,6 @@ public class GameView : View
             Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
 
             defenderHUD.BlastInWorld.DoTakeDamageRender();
-
-            await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(defender.data_id).Name.GetLocalizedString() + " " + dialogText);
 
             await Task.Delay(TimeSpan.FromMilliseconds(500));
         }

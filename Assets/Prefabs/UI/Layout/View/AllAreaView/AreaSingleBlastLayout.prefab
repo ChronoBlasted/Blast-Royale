@@ -72,8 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _blastNameTxt: {fileID: 8802551473447875823}
-  _blastLevelTxt: {fileID: 0}
-  _bg: {fileID: 6255112463050331414}
+  _bg: {fileID: 5434345972345071189}
   _blastIco: {fileID: 3422146583977936048}
 --- !u!114 &4561945167948521523
 MonoBehaviour:
@@ -115,7 +114,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6255112463050331414}
+  m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -161,6 +160,18 @@ PrefabInstance:
     - target: {fileID: 3739895132100334769, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724619519445843729, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_Color.b
+      value: 0.07058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724619519445843729, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724619519445843729, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+      propertyPath: m_Color.r
+      value: 0.16078432
       objectReference: {fileID: 0}
     - target: {fileID: 7161272064996550279, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -290,9 +301,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6255112463050331414 stripped
+--- !u!114 &5434345972345071189 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5968919207782255698, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5724619519445843729, guid: df5c9df847ef34948aff7758fe2f1214, type: 3}
   m_PrefabInstance: {fileID: 295904700872907076}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

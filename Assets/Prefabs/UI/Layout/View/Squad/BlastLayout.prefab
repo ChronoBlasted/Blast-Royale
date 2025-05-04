@@ -80,37 +80,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5192947940132462687, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5192947940132462687, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -32.00003
-      objectReference: {fileID: 0}
-    - target: {fileID: 5192947940132462687, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 5192947940132462687, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5192947940132462687, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 32
-      objectReference: {fileID: 0}
     - target: {fileID: 6576262711185224919, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 7125450088186805350, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -96
-      objectReference: {fileID: 0}
-    - target: {fileID: 7125450088186805350, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 7557881025482455462, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
       propertyPath: m_SortingLayerID
@@ -243,9 +215,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -3634914776561807608}
   m_SourcePrefab: {fileID: 100100000, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
---- !u!114 &5968919207782255698 stripped
+--- !u!114 &5724619519445843729 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6901701824922102275, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4783938002293201216, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
   m_PrefabInstance: {fileID: 941843151327045201}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -279,7 +251,7 @@ MonoBehaviour:
   _blastNameTxt: {fileID: 9093807977543396779}
   _blastLevelTxt: {fileID: 2461744281250964133}
   _blastImg: {fileID: 3127376030578744820}
-  _bg: {fileID: 5968919207782255698}
+  _bg: {fileID: 5724619519445843729}
 --- !u!114 &9093807977543396779 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8296100518496685050, guid: 4358783d86a39b14e930938c5777cb83, type: 3}
@@ -302,6 +274,22 @@ PrefabInstance:
     - target: {fileID: 6531696928567048073, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_Name
       value: BlastContainerLayout
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6913325247916284330, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_IsActive

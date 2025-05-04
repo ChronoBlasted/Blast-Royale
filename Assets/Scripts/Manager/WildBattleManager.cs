@@ -86,8 +86,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _ = _gameView.OpponentHUD.ThrowBlast();
 
         _gameView.AttackPanel.UpdateAttack(_playerBlast);
-
         _gameView.BagPanel.UpdateItem(_playerItems);
+        _gameView.SquadPanel.UpdateBlasts(_playerSquads);
 
         UIManager.Instance.ChangeBlastPopup.UpdateData(_playerSquads);
 
