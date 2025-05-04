@@ -8,9 +8,14 @@ public class BlastLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
     [SerializeField] Image _blastImg, _bg;
+    [SerializeField] HiddenInfoMenu _hiddenInfoMenu;
+
+    [SerializeField] bool _isDeckBlast;
 
     Blast _blast;
     int _index;
+
+    public Blast Blast { get => _blast; }
 
     public void Init(Blast blast, int index = -1)
     {
@@ -28,28 +33,15 @@ public class BlastLayout : MonoBehaviour
 
     public void HandleOnInfoButton()
     {
-        if (UIManager.Instance.MenuView.SquadPanel.IsSwapMode)
-        {
-            NakamaManager.Instance.NakamaUserAccount.SwitchPlayerBlast(_index, UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored);
+        UIManager.Instance.BlastInfoPopup.UpdateData(_blast);
 
-            foreach (Transform child in UIManager.Instance.MenuView.SquadPanel.StoredBlastTransform.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            HandleOnSwapDisable();
-        }
-        else
-        {
-            UIManager.Instance.BlastInfoPopup.UpdateData(_blast);
-
-            UIManager.Instance.BlastInfoPopup.OpenPopup();
-        }
+        UIManager.Instance.BlastInfoPopup.OpenPopup();
     }
 
-    public void HandleOnSwapEnable()
+    public void HandleOnSwap()
     {
         UIManager.Instance.MenuView.SquadPanel.IsSwapMode = true;
+        UIManager.Instance.MenuView.SquadPanel.IsDeckSwap = _isDeckBlast;
         UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored = _index;
 
         // Do feedback on select
@@ -57,7 +49,7 @@ public class BlastLayout : MonoBehaviour
         UIManager.Instance.MenuView.SquadPanel.SwitchToSoloBlast(_blast);
     }
 
-    public void HandleOnSwapDisable()
+     void DisableSwap()
     {
         UIManager.Instance.MenuView.SquadPanel.IsSwapMode = false;
         UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored = -1;
@@ -65,5 +57,24 @@ public class BlastLayout : MonoBehaviour
         // Do feedback on select
 
         UIManager.Instance.MenuView.SquadPanel.QuitSoloBlast();
+    }
+
+    public void HandleOnClick()
+    {
+        if (UIManager.Instance.MenuView.SquadPanel.IsSwapMode)
+        {
+            NakamaManager.Instance.NakamaUserAccount.SwitchPlayerBlast(_index, UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored, UIManager.Instance.MenuView.SquadPanel.IsDeckSwap);
+
+            foreach (Transform child in UIManager.Instance.MenuView.SquadPanel.StoredBlastTransform.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            DisableSwap();
+        }
+        else
+        {
+            _hiddenInfoMenu.HandleOnClick();
+        }
     }
 }

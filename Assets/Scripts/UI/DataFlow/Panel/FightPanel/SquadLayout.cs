@@ -9,6 +9,8 @@ public class SquadLayout : MonoBehaviour
 
     Sequence _shakeSeq;
 
+    public List<BlastLayout> DecksBlastLayout { get => _decksBlastLayout; }
+
     public void UpdateDeckBlast(List<Blast> decks)
     {
         for (int i = 0; i < _decksBlastLayout.Count; i++)
@@ -18,7 +20,7 @@ public class SquadLayout : MonoBehaviour
         }
     }
 
-    public void DoShakeRotate()
+    public void DoShakeRotate(Blast newBlast)
     {
         if (_shakeSeq.IsActive())
         {
@@ -30,6 +32,7 @@ public class SquadLayout : MonoBehaviour
 
         foreach (BlastLayout blast in _decksBlastLayout)
         {
+            if (newBlast == blast.Blast) blast.gameObject.SetActive(false);
             _shakeSeq.Join(blast.gameObject.transform.DOShakeRotation(.4f, new Vector3(0, 0, 3), 18, 90, false, ShakeRandomnessMode.Harmonic));
         }
 
@@ -47,6 +50,7 @@ public class SquadLayout : MonoBehaviour
 
         foreach (BlastLayout blast in _decksBlastLayout)
         {
+            blast.gameObject.SetActive(true);
             blast.gameObject.transform.rotation = Quaternion.identity;
         }
     }

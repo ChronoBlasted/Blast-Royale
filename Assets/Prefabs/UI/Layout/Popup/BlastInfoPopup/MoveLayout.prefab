@@ -419,7 +419,6 @@ MonoBehaviour:
   _damageIco: {fileID: 1986088757224141774}
   _button: {fileID: 5835879247934445361}
   _platformSlotLayout: {fileID: 9067498956454949139}
-  _platformSlotSprite: []
   _contentCG: {fileID: 8947355766955340911}
   _platformLayout: {fileID: 1446696421024330819}
   _manaLayout: {fileID: 5235831949923216326}
@@ -499,7 +498,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: 512
-  m_PreferredHeight: 184
+  m_PreferredHeight: 128
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -821,7 +820,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2366089490307927677
 RectTransform:
   m_ObjectHideFlags: 0
@@ -836,10 +835,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4580191984195757273}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 65.125, y: -62.989563}
+  m_SizeDelta: {x: 130.25, y: 26.020876}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8940039343552831429
 CanvasRenderer:
@@ -896,7 +895,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.9
+  m_fontSize: 22.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1202,7 +1201,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.85
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -29,13 +29,12 @@ public class MoveLayout : MonoBehaviour
 
         var moveEffect = _move.effect;
 
-
         if (moveEffect != MoveEffect.None)
         {
             string Can = _move.attackType == AttackType.Special ? "" : "Can ";
             _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
         }
-        _moveDescTxt.gameObject.SetActive(moveEffect != MoveEffect.None);
+        //_moveDescTxt.gameObject.SetActive(moveEffect != MoveEffect.None);
 
         SetAttackCostData();
 

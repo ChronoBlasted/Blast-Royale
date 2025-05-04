@@ -30,7 +30,9 @@ public class SquadPanel : Panel
     [SerializeField] HiddenInfoMenu _lastHiddenInfoMenu;
 
     bool _isSwapMode = false;
+    bool _isDeckSwap = false;
     int _currentIndexStored;
+    public bool IsDeckSwap { get => _isDeckSwap; set => _isDeckSwap = value; }
     public bool IsSwapMode { get => _isSwapMode; set => _isSwapMode = value; }
     public int CurrentIndexStored { get => _currentIndexStored; set => _currentIndexStored = value; }
     public Transform StoredBlastTransform { get => _storedBlastTransform; }
@@ -65,7 +67,7 @@ public class SquadPanel : Panel
         _soloBlastLayout.Init(blast);
         _storedBlastTransform.gameObject.SetActive(false);
 
-        _squadDeckLayout.DoShakeRotate();
+        _squadDeckLayout.DoShakeRotate(blast);
     }
 
     public void QuitSoloBlast(bool activeDefaultTransform = true)
@@ -84,7 +86,7 @@ public class SquadPanel : Panel
         _soloItemLayout.Init(item);
         _storedItemTransform.gameObject.SetActive(false);
 
-        _bagDeckLayout.DoShakeRotate();
+        _bagDeckLayout.DoShakeRotate(item);
     }
 
 
@@ -100,6 +102,8 @@ public class SquadPanel : Panel
 
     public void UpdateStoredBlast(List<Blast> decks)
     {
+        Debug.Log("Destroy");
+
         foreach (Transform child in _storedBlastTransform.transform)
         {
             Destroy(child.gameObject);

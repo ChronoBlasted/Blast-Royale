@@ -57,6 +57,8 @@ public class MoveSelectorPopup : Popup
         int index = 0;
         foreach (var (move, isUnlocked) in availableMoves)
         {
+            if (move == moveToReplace) continue;
+
             var currentMove = Instantiate(_moveLayoutPrefab, _scrollMoveAvaible);
             currentMove.Init(move, null, index);
             index++;
@@ -65,9 +67,6 @@ public class MoveSelectorPopup : Popup
             {
                 currentMove.UpdateOnClick(HandleChangeMove);
                 currentMove.Unlock();
-
-                if (blastMoveset.Contains(move))
-                    currentMove.Lock(true);
             }
             else
             {

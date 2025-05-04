@@ -14,16 +14,15 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
 
     // Blast
     initializer.registerRpc('loadUserBlast', rpcLoadUserBlast);
-    initializer.registerRpc('swapDeckBlast', rpcSwapDeckBlast);
+    initializer.registerRpc('swapStoredToDeckBlast', rpcSwapStoredToDeckBlast);
+    initializer.registerRpc('swapDeckToDeckBlast', rpcSwapDeckToDeckBlast);
     initializer.registerRpc('evolveBlast', rpcEvolveBlast);
     initializer.registerRpc('swapMove', rpcSwapBlastMove);
 
     // Bag
     initializer.registerRpc('loadUserItem', rpcLoadUserItems);
-    initializer.registerRpc('swapDeckItem', rpcSwapDeckItem);
-
-    // Leaderboard
-
+    initializer.registerRpc('swapStoredToDeckItem', rpcSwapStoredToDeckItem);
+    initializer.registerRpc('swapDeckToDeckItem', rpcSwapDeckToDeckItem)
 
     // Store
     initializer.registerRpc('loadBlastTrapOffer', rpcLoadBlastTrapOffer);

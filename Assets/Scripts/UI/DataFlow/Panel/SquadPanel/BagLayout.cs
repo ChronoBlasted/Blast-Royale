@@ -18,7 +18,7 @@ public class BagLayout : MonoBehaviour
         }
     }
 
-    public void DoShakeRotate()
+    public void DoShakeRotate(Item newItem)
     {
         if (_shakeSeq.IsActive())
         {
@@ -30,6 +30,7 @@ public class BagLayout : MonoBehaviour
 
         foreach (ItemLayout item in _decksItemLayout)
         {
+            if (newItem == item.Item) item.gameObject.SetActive(false);
             _shakeSeq.Join(item.gameObject.transform.DOShakeRotation(.4f, new Vector3(0, 0, 3), 18, 90, false, ShakeRandomnessMode.Harmonic));
         }
 
@@ -47,6 +48,7 @@ public class BagLayout : MonoBehaviour
 
         foreach (ItemLayout item in _decksItemLayout)
         {
+            item.gameObject.SetActive(true);
             item.gameObject.transform.rotation = Quaternion.identity;
         }
     }

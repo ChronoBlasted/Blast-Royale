@@ -23,46 +23,59 @@ interface ItemCollection {
     storedItems: Item[]
 }
 
-const rpcSwapDeckItem: nkruntime.RpcFunction =
-    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
-        const request: SwapDeckRequest = JSON.parse(payload);
+const rpcSwapStoredToDeckItem: nkruntime.RpcFunction = function (
+    ctx: nkruntime.Context,
+    logger: nkruntime.Logger,
+    nk: nkruntime.Nakama,
+    payload: string
+): string {
+    const request: SwapDeckRequest = JSON.parse(payload);
+    const userItems = loadUserItems(nk, logger, ctx.userId);
 
-        const userItems = loadUserItems(nk, logger, ctx.userId);
-
-        logger.debug("Payload on server '%s'", request);
-
-        if (userItems.deckItems[request.outIndex] == null) {
-            throw Error('invalid out item');
-        }
-
-        let outItem = userItems.deckItems[request.outIndex];
-        let inItem: any = null;
-        let inLocation: 'deck' | 'stored' | null = null;
-
-        if (userItems.storedItems[request.inIndex] != null) {
-            inItem = userItems.storedItems[request.inIndex];
-            inLocation = 'stored';
-        } else if (userItems.deckItems[request.inIndex] != null) {
-            inItem = userItems.deckItems[request.inIndex];
-            inLocation = 'deck';
-        } else {
-            throw Error('invalid in item');
-        }
-
-        if (inLocation === 'stored') {
-            userItems.deckItems[request.outIndex] = inItem;
-            userItems.storedItems[request.inIndex] = outItem;
-        } else if (inLocation === 'deck') {
-            userItems.deckItems[request.outIndex] = inItem;
-            userItems.deckItems[request.inIndex] = outItem;
-        }
-
-        storeUserItems(nk, logger, ctx.userId, userItems);
-
-        logger.debug("user '%s' swapped item '%s' (from %s) with deck item at index %d", ctx.userId, request.inIndex, inLocation, request.outIndex);
-
-        return JSON.stringify(userItems);
+    if (userItems.deckItems[request.outIndex] == null) {
+        throw Error('invalid out item (deck)');
     }
+
+    if (userItems.storedItems[request.inIndex] == null) {
+        throw Error('invalid in item (stored)');
+    }
+
+    const outItem = userItems.deckItems[request.outIndex];
+    const inItem = userItems.storedItems[request.inIndex];
+
+    userItems.deckItems[request.outIndex] = inItem;
+    userItems.storedItems[request.inIndex] = outItem;
+
+    storeUserItems(nk, logger, ctx.userId, userItems);
+    logger.debug("user '%s' swapped STORED item '%d' with DECK item at index %d", ctx.userId, request.inIndex, request.outIndex);
+
+    return JSON.stringify(userItems);
+};
+
+const rpcSwapDeckToDeckItem: nkruntime.RpcFunction = function (
+    ctx: nkruntime.Context,
+    logger: nkruntime.Logger,
+    nk: nkruntime.Nakama,
+    payload: string
+): string {
+    const request: SwapDeckRequest = JSON.parse(payload);
+    const userItems = loadUserItems(nk, logger, ctx.userId);
+
+    if (userItems.deckItems[request.outIndex] == null || userItems.deckItems[request.inIndex] == null) {
+        throw Error('invalid deck item index');
+    }
+
+    const outItem = userItems.deckItems[request.outIndex];
+    const inItem = userItems.deckItems[request.inIndex];
+
+    userItems.deckItems[request.outIndex] = inItem;
+    userItems.deckItems[request.inIndex] = outItem;
+
+    storeUserItems(nk, logger, ctx.userId, userItems);
+    logger.debug("user '%s' swapped DECK item '%d' with DECK item at index %d", ctx.userId, request.inIndex, request.outIndex);
+
+    return JSON.stringify(userItems);
+};
 
 
 

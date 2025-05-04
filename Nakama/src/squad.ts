@@ -129,46 +129,61 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
     }
 
 
-const rpcSwapDeckBlast: nkruntime.RpcFunction =
-    function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
-        const request: SwapDeckRequest = JSON.parse(payload);
+const rpcSwapStoredToDeckBlast: nkruntime.RpcFunction = function (
+    ctx: nkruntime.Context,
+    logger: nkruntime.Logger,
+    nk: nkruntime.Nakama,
+    payload: string
+): string {
+    const request: SwapDeckRequest = JSON.parse(payload);
+    const userBlasts = loadUserBlast(nk, logger, ctx.userId);
 
-        const userBlasts = loadUserBlast(nk, logger, ctx.userId);
-
-        logger.debug("Payload on server '%s'", request);
-
-        if (userBlasts.deckBlasts[request.outIndex] == null) {
-            throw Error('invalid out card');
-        }
-
-        let outCard = userBlasts.deckBlasts[request.outIndex];
-        let inCard: any = null;
-        let inLocation: 'deck' | 'stored' | null = null;
-
-        if (userBlasts.storedBlasts[request.inIndex] != null) {
-            inCard = userBlasts.storedBlasts[request.inIndex];
-            inLocation = 'stored';
-        } else if (userBlasts.deckBlasts[request.inIndex] != null) {
-            inCard = userBlasts.deckBlasts[request.inIndex];
-            inLocation = 'deck';
-        } else {
-            throw Error('invalid in card');
-        }
-
-        if (inLocation === 'stored') {
-            userBlasts.deckBlasts[request.outIndex] = inCard;
-            userBlasts.storedBlasts[request.inIndex] = outCard;
-        } else if (inLocation === 'deck') {
-            userBlasts.deckBlasts[request.outIndex] = inCard;
-            userBlasts.deckBlasts[request.inIndex] = outCard;
-        }
-
-        storeUserBlasts(nk, logger, ctx.userId, userBlasts);
-
-        logger.debug("user '%s' swapped card '%s' (from %s) with deck card at index %d", ctx.userId, request.inIndex, inLocation, request.outIndex);
-
-        return JSON.stringify(userBlasts);
+    if (userBlasts.deckBlasts[request.outIndex] == null) {
+        throw Error('invalid out card (deck)');
     }
+
+    if (userBlasts.storedBlasts[request.inIndex] == null) {
+        throw Error('invalid in card (stored)');
+    }
+
+    const outCard = userBlasts.deckBlasts[request.outIndex];
+    const inCard = userBlasts.storedBlasts[request.inIndex];
+
+    userBlasts.deckBlasts[request.outIndex] = inCard;
+    userBlasts.storedBlasts[request.inIndex] = outCard;
+
+    storeUserBlasts(nk, logger, ctx.userId, userBlasts);
+    logger.debug("user '%s' swapped STORED card '%d' with DECK card at index %d", ctx.userId, request.inIndex, request.outIndex);
+
+    return JSON.stringify(userBlasts);
+};
+
+const rpcSwapDeckToDeckBlast: nkruntime.RpcFunction = function (
+    ctx: nkruntime.Context,
+    logger: nkruntime.Logger,
+    nk: nkruntime.Nakama,
+    payload: string
+): string {
+    const request: SwapDeckRequest = JSON.parse(payload);
+    const userBlasts = loadUserBlast(nk, logger, ctx.userId);
+
+    if (userBlasts.deckBlasts[request.outIndex] == null || userBlasts.deckBlasts[request.inIndex] == null) {
+        throw Error('invalid deck card index');
+    }
+
+    const outCard = userBlasts.deckBlasts[request.outIndex];
+    const inCard = userBlasts.deckBlasts[request.inIndex];
+
+    userBlasts.deckBlasts[request.outIndex] = inCard;
+    userBlasts.deckBlasts[request.inIndex] = outCard;
+
+    storeUserBlasts(nk, logger, ctx.userId, userBlasts);
+    logger.debug("user '%s' swapped DECK card '%d' with DECK card at index %d", ctx.userId, request.inIndex, request.outIndex);
+
+    return JSON.stringify(userBlasts);
+};
+
+
 
 
 const rpcEvolveBlast: nkruntime.RpcFunction =

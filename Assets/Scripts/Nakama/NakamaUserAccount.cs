@@ -181,16 +181,19 @@ public class NakamaUserAccount : MonoBehaviour
         }
     }
 
-    public async void SwitchPlayerBlast(int indexDeckBlast, int indexStoredBlast)
+    public async void SwitchPlayerBlast(int indexOutBlast, int indexInBlast, bool isDeckToDeck)
     {
         try
         {
             SwapDeckRequest swapDeckBlastRequest = new SwapDeckRequest();
 
-            swapDeckBlastRequest.outIndex = indexDeckBlast;
-            swapDeckBlastRequest.inIndex = indexStoredBlast;
+            swapDeckBlastRequest.outIndex = indexOutBlast;
+            swapDeckBlastRequest.inIndex = indexInBlast;
 
-            var response = await _client.RpcAsync(_session, "swapDeckBlast", swapDeckBlastRequest.ToJson());
+            IApiRpc response = null;
+
+            if (isDeckToDeck) response = await _client.RpcAsync(_session, "swapDeckToDeckBlast", swapDeckBlastRequest.ToJson());
+            else response = await _client.RpcAsync(_session, "swapStoredToDeckBlast", swapDeckBlastRequest.ToJson());
 
             _lastBlastCollection = response.Payload.FromJson<BlastCollection>();
 
@@ -299,7 +302,7 @@ public class NakamaUserAccount : MonoBehaviour
         }
     }
 
-    public async void SwitchPlayerItem(int indexDeckItem, int indexStoredItem)
+    public async void SwitchPlayerItem(int indexDeckItem, int indexStoredItem, bool isDeckToDeck)
     {
         try
         {
@@ -308,7 +311,10 @@ public class NakamaUserAccount : MonoBehaviour
             swapDeckItemRequest.outIndex = indexDeckItem;
             swapDeckItemRequest.inIndex = indexStoredItem;
 
-            var response = await _client.RpcAsync(_session, "swapDeckItem", swapDeckItemRequest.ToJson());
+            IApiRpc response = null;
+
+            if (isDeckToDeck) response = await _client.RpcAsync(_session, "swapDeckToDeckItem", swapDeckItemRequest.ToJson());
+            else response = await _client.RpcAsync(_session, "swapStoredToDeckItem", swapDeckItemRequest.ToJson());
 
             _lastItemCollection = response.Payload.FromJson<ItemCollection>();
 
