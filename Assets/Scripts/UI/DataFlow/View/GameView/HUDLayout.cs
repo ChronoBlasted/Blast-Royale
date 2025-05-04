@@ -72,7 +72,7 @@ public class HUDLayout : MonoBehaviour
         _cg.DOFade(0f, .2f);
     }
 
-    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, float effective)
+    public async Task DoAttackAnimAsync(HUDLayout opponentHUD, Blast defender, Move move, int damage, float effective)
     {
         _lastMoveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
         _lastMove = move;
@@ -80,13 +80,13 @@ public class HUDLayout : MonoBehaviour
 
         await _lastMoveDataRef.AA_Data.PlayAnimation(_blastInWorld, _lastOpponentHUD.BlastInWorld, _lastMoveDataRef.ParticleSystem, () =>
         {
-            DoTakeDamageAnim(defender, effective);
+            DoTakeDamageAnim(defender, damage, effective);
         });
 
         await Task.Delay(1000);
     }
 
-    public void DoTakeDamageAnim(Blast defender, float effective)
+    public void DoTakeDamageAnim(Blast defender, int damage, float effective)
     {
         _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
 
@@ -96,18 +96,30 @@ public class HUDLayout : MonoBehaviour
 
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {
-            StartCoroutine(HitMoveTypeFXCoroutine(.1f));
+            StartCoroutine(HitCoroutineFX(.1f));
         }
+
+        StartCoroutine(HitCoroutine(damage, .1f, effective > 1));
 
         _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .5f);
     }
 
-    private IEnumerator HitMoveTypeFXCoroutine(float delay)
+    private IEnumerator HitCoroutineFX(float delay)
     {
         yield return new WaitForSeconds(delay);
+
         var fx = ResourceObjectHolder.Instance.GetTypeDataByType(_lastMove.type).TypeHitFX;
         var targetTransform = _lastOpponentHUD.BlastInWorld.transform;
         var hitFX = Instantiate(fx, targetTransform);
+    }
+
+    private IEnumerator HitCoroutine(int damage, float delay, bool isEffective)
+    {
+        yield return new WaitForSeconds(delay);
+
+        var currentFloatingText = PoolManager.Instance[ResourceType.FloatingText].Get();
+        currentFloatingText.transform.position = _lastOpponentHUD.BlastTransformInUI.position;
+        currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), Color.white, isEffective);
     }
 
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,12 +7,13 @@ using UnityEngine.UI;
 
 public class MoveLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _lockTxt;
-    [SerializeField] Image _moveGradientBG, _moveTypeIco, _damageIco;
+    [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _movePlatformCostTxt;
+    [SerializeField] Image _moveGradientBG, _damageIco;
     [SerializeField] Button _button;
     [SerializeField] List<PlatformSlotLayout> _platformSlotLayouts;
+    [SerializeField] CanvasGroup _contentCG;
 
-    [SerializeField] GameObject _lockLayout, _platformLayout, _manaLayout;
+    [SerializeField] GameObject  _platformLayout, _manaLayout;
 
     Blast _blast;
     Move _move;
@@ -41,15 +43,13 @@ public class MoveLayout : MonoBehaviour
         else _moveCostTxt.color = Color.white;
 
         _moveGradientBG.color = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Color;
-        _moveTypeIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(_move.type).Sprite;
     }
 
     void SetAttackCostData()
     {
         if (_move.attackType == AttackType.Special)
         {
-            _moveCostTxt.text = _move.cost.ToString();
-
+            _movePlatformCostTxt.text = _move.cost.ToString();
 
             for (int i = 0; i < _platformSlotLayouts.Count; i++)
             {
@@ -115,7 +115,7 @@ public class MoveLayout : MonoBehaviour
                 _moveCostTxt.color = canUseMove ? Color.white : Color.red;
 
                 if (canUseMove) Unlock();
-                else Lock("Not enough mana");
+                else Lock();
                 break;
             case AttackType.Special:
 
@@ -134,7 +134,7 @@ public class MoveLayout : MonoBehaviour
                 }
 
                 if (canUseMove) Unlock();
-                else Lock("Not enough platform power");
+                else Lock();
                 break;
         }
     }
@@ -148,18 +148,16 @@ public class MoveLayout : MonoBehaviour
         _button.onClick.AddListener(action);
     }
 
-    public void Lock(string lockReason)
+    public void Lock()
     {
-        _lockLayout.SetActive(true);
-
-        _lockTxt.text = lockReason;
+        _contentCG.alpha = .5f;
 
         _button.interactable = false;
     }
 
     public void Unlock()
     {
-        _lockLayout.SetActive(false);
+        _contentCG.DOFade(1f, .5f);
 
         _button.interactable = true;
     }

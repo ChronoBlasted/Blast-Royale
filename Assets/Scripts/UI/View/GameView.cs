@@ -379,7 +379,7 @@ public class GameView : View
                 break;
         }
 
-        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, effective);
+        await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, damage, effective);
 
         //if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super effective !");
         //else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super effective !");

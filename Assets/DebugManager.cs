@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class DebugManager : MonoSingleton<DebugManager>
 {
-    [SerializeField] int moveId;
+    [Header("Attack")]
+    [SerializeField] int _moveId;
+    [SerializeField] int _moveDamage;
+    [SerializeField] float _effectiveness;
 
 #if UNITY_EDITOR
     [ContextMenu("Do attack debug")]
     public void TestPlayerAttack()
     {
-        Move move = NakamaData.Instance.GetMoveById(moveId);
+        Move move = NakamaData.Instance.GetMoveById(_moveId);
         Blast target = null;
         HUDLayout defenderHUD = null;
 
@@ -30,7 +33,7 @@ public class DebugManager : MonoSingleton<DebugManager>
         }
 
 
-        _ = UIManager.Instance.GameView.PlayerHUD.DoAttackAnimAsync(defenderHUD, target, move, 1);
+        _ = UIManager.Instance.GameView.PlayerHUD.DoAttackAnimAsync(defenderHUD, target, move, _moveDamage, 1);
     }
 
 #endif

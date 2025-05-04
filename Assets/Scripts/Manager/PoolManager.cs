@@ -38,7 +38,12 @@ public class PoolManager : MonoSingleton<PoolManager>
             pools[resourceType] = new ObjectPool<GameObject>(
                 () =>
                 {
-                    return Instantiate(holder.GetResourceByType(resourceType).Prefab, container);
+                    var prefab = holder.GetResourceByType(resourceType).Prefab;
+                    Transform parent = prefab.transform is RectTransform
+                        ? UIManager.Instance.RectTransformPool
+                        : container;
+
+                    return Instantiate(prefab, parent);
                 },
                 OnTakeFromPool,
                 (gameObject) =>
