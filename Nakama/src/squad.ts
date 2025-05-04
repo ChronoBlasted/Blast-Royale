@@ -54,7 +54,7 @@ const DefaultDeckBlast: Blast[] = [
     (() => {
         const iv = getRandomIV(10, MaxIV);
         const exp = calculateExperienceFromLevel(DefaultBlastLevel);
-        const blast: Blast  = {
+        const blast: Blast = {
             uuid: generateUUID(),
             data_id: Jellys.id,
             exp,
@@ -90,41 +90,44 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
         const request: SwapMoveRequest = JSON.parse(payload);
 
-        let userCards: BlastCollection;
-        userCards = loadUserBlast(nk, logger, ctx.userId);
+        const userCards = loadUserBlast(nk, logger, ctx.userId);
 
-        let isInDeck: boolean = false;
-        let selectedBlast: Blast = {
-            uuid: "",
-            data_id: 0,
-            exp: 0,
-            iv: 0,
-            activeMoveset: [],
-        };
+        let selectedBlast: Blast | undefined = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)
+            || userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
 
-        if (userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
-            selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)!;
-            isInDeck = true;
-        }
-        else if (userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast) != null) {
-            selectedBlast = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)!;
-            isInDeck = false;
+        if (!selectedBlast) {
+            throw Error("Blast not found.");
         }
 
-        if (isInDeck) {
-            userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast);
+        const blastData = getBlastDataById(selectedBlast.data_id);
+        const newMove = blastData.movepool[request.newMoveIndex];
 
-            selectedBlast.activeMoveset![request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id;
+        if (!newMove) {
+            throw Error("Invalid new move index.");
+        }
+
+        const newMoveId = getMoveById(newMove.move_id).id;
+        const activeMoveset = selectedBlast.activeMoveset!;
+
+        const currentIndex = activeMoveset.indexOf(newMoveId);
+
+        if (currentIndex !== -1) {
+            if (currentIndex === request.outMoveIndex) {
+                throw Error("Cannot swap a move with itself.");
+            }
+
+            const temp = activeMoveset[request.outMoveIndex];
+            activeMoveset[request.outMoveIndex] = activeMoveset[currentIndex];
+            activeMoveset[currentIndex] = temp;
         } else {
-            userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
-
-            selectedBlast.activeMoveset![request.outMoveIndex] = getMoveById(getBlastDataById(selectedBlast.data_id).movepool[request.newMoveIndex].move_id).id
+            activeMoveset[request.outMoveIndex] = newMoveId;
         }
 
         storeUserBlasts(nk, logger, ctx.userId, userCards);
 
         return JSON.stringify(userCards);
     }
+
 
 const rpcSwapDeckBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
@@ -134,26 +137,39 @@ const rpcSwapDeckBlast: nkruntime.RpcFunction =
 
         logger.debug("Payload on server '%s'", request);
 
-
         if (userBlasts.deckBlasts[request.outIndex] == null) {
             throw Error('invalid out card');
         }
-        if (userBlasts.storedBlasts[request.inIndex] == null) {
+
+        let outCard = userBlasts.deckBlasts[request.outIndex];
+        let inCard: any = null;
+        let inLocation: 'deck' | 'stored' | null = null;
+
+        if (userBlasts.storedBlasts[request.inIndex] != null) {
+            inCard = userBlasts.storedBlasts[request.inIndex];
+            inLocation = 'stored';
+        } else if (userBlasts.deckBlasts[request.inIndex] != null) {
+            inCard = userBlasts.deckBlasts[request.inIndex];
+            inLocation = 'deck';
+        } else {
             throw Error('invalid in card');
         }
 
-        let outCard = userBlasts.deckBlasts[request.outIndex];
-        let inCard = userBlasts.storedBlasts[request.inIndex];
-
-        userBlasts.deckBlasts[request.outIndex] = inCard;
-        userBlasts.storedBlasts[request.inIndex] = outCard;
+        if (inLocation === 'stored') {
+            userBlasts.deckBlasts[request.outIndex] = inCard;
+            userBlasts.storedBlasts[request.inIndex] = outCard;
+        } else if (inLocation === 'deck') {
+            userBlasts.deckBlasts[request.outIndex] = inCard;
+            userBlasts.deckBlasts[request.inIndex] = outCard;
+        }
 
         storeUserBlasts(nk, logger, ctx.userId, userBlasts);
 
-        logger.debug("user '%s' deck card '%s' swapped with '%s'", ctx.userId);
+        logger.debug("user '%s' swapped card '%s' (from %s) with deck card at index %d", ctx.userId, request.inIndex, inLocation, request.outIndex);
 
         return JSON.stringify(userBlasts);
     }
+
 
 const rpcEvolveBlast: nkruntime.RpcFunction =
     function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
@@ -250,7 +266,7 @@ function addExpOnBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: s
 
     // Si level up et moveset incomplet, tenter d’ajouter un move
     if (newLevel > oldLevel && blast.activeMoveset.length < 4) {
-        const blastData = getBlastDataById(blast.data_id); 
+        const blastData = getBlastDataById(blast.data_id);
 
         const newMoves = blastData.movepool
             .filter(m => m.levelMin <= newLevel)

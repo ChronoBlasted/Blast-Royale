@@ -6,29 +6,20 @@ using UnityEngine.UI;
 
 public class PlatformSlotLayout : MonoBehaviour
 {
-    [SerializeField] Image _bg;
+    [SerializeField] Image _bg, _border;
     [SerializeField] int _index;
+    [SerializeField] Sprite _circle4, _circle8, _circle16;
 
     Color _currentColor;
-    Color _activeColor;
 
-    public void Init(Type newType)
+    public void Init(Type newType, int amount)
     {
         _currentColor = ResourceObjectHolder.Instance.GetTypeDataByType(newType).Color;
-        _activeColor = Color.Lerp(_currentColor, Color.black, _index * .2f);
 
-        _bg.color = _activeColor;
+        _bg.color = _currentColor;
 
-        SetOff();
-    }
-
-    public void SetOn()
-    {
-        _bg.DOFade(1, .2f);
-    }
-
-    public void SetOff()
-    {
-        _bg.DOFade(_index * .2f, .2f);
+        if (amount == 1) _border.sprite = _circle4;
+        else if (amount == 2) _border.sprite = _circle8;
+        else if (amount == 3) _border.sprite = _circle16;
     }
 }

@@ -67,13 +67,12 @@ public class MoveSelectorPopup : Popup
                 currentMove.Unlock();
 
                 if (blastMoveset.Contains(move))
-                    currentMove.Lock();
+                    currentMove.Lock(true);
             }
             else
             {
                 int requiredLevel = blastData.movepool.First(m => m.move_id == move.id).levelMin;
-                currentMove.Lock();
-                //currentMove.Lock($"Unlock at level {requiredLevel}"); // TODO mettre 
+                currentMove.Lock(true, $"Unlock at level {requiredLevel}");
             }
         }
 

@@ -7,13 +7,13 @@ using UnityEngine.UI;
 
 public class MoveLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _movePlatformCostTxt;
+    [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _movePlatformCostTxt, _lockTxt;
     [SerializeField] Image _moveGradientBG, _damageIco;
     [SerializeField] Button _button;
-    [SerializeField] List<PlatformSlotLayout> _platformSlotLayouts;
+    [SerializeField] PlatformSlotLayout _platformSlotLayout;
     [SerializeField] CanvasGroup _contentCG;
 
-    [SerializeField] GameObject  _platformLayout, _manaLayout;
+    [SerializeField] GameObject _platformLayout, _manaLayout, _lockLayout;
 
     Blast _blast;
     Move _move;
@@ -51,12 +51,7 @@ public class MoveLayout : MonoBehaviour
         {
             _movePlatformCostTxt.text = _move.cost.ToString();
 
-            for (int i = 0; i < _platformSlotLayouts.Count; i++)
-            {
-                _platformSlotLayouts[i].Init(_move.type);
-
-                _platformSlotLayouts[i].gameObject.SetActive(_move.cost > i);
-            }
+            _platformSlotLayout.Init(_move.type, _move.cost);
 
             _platformLayout.SetActive(true);
             _manaLayout.SetActive(false);
@@ -118,20 +113,8 @@ public class MoveLayout : MonoBehaviour
                 else Lock();
                 break;
             case AttackType.Special:
-
                 canUseMove = GetAmountPlatformByType() >= _move.cost;
-
-                for (int i = 0; i < _move.cost; i++)
-                {
-                    if (i < GetAmountPlatformByType())
-                    {
-                        _platformSlotLayouts[i].SetOn();
-                    }
-                    else
-                    {
-                        _platformSlotLayouts[i].SetOff();
-                    }
-                }
+                _movePlatformCostTxt.color = canUseMove ? Color.white : Color.red;
 
                 if (canUseMove) Unlock();
                 else Lock();
@@ -148,9 +131,20 @@ public class MoveLayout : MonoBehaviour
         _button.onClick.AddListener(action);
     }
 
-    public void Lock()
+    public void Lock(bool hardLock = false, string lockReason = "")
     {
-        _contentCG.alpha = .5f;
+
+        if (hardLock)
+        {
+            _contentCG.alpha = 1f;
+            _lockLayout.SetActive(true);
+            _lockTxt.text = lockReason;
+        }
+        else
+        {
+            _lockLayout.SetActive(false);
+            _contentCG.alpha = .5f;
+        }
 
         _button.interactable = false;
     }
