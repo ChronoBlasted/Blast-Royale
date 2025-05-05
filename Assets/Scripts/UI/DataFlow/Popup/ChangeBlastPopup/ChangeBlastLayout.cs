@@ -1,3 +1,4 @@
+using Chrono.UI;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +10,24 @@ public class ChangeBlastLayout : MonoBehaviour
 {
     Blast _blast;
 
-    [SerializeField] TMP_Text _nameTxt, _lvlTxt, _cantTxt;
+    [SerializeField] TMP_Text _nameTxt, _lvlTxt;
     [SerializeField] SliderBar _hpBar, _manaBar;
     [SerializeField] Image _borderImg, _blastImg;
-    [SerializeField] GameObject _cantLayout;
+    [SerializeField] LockLayout _lockLayout;
+    [SerializeField] CustomButton _button;
+
+    ErrorManager _errorManager;
+
+    public CustomButton Button { get => _button; }
+
+    private void Awake()
+    {
+        _errorManager = ErrorManager.Instance;
+    }
 
     public void Init(Blast newBlast)
     {
+
         BlastData blastData = NakamaData.Instance.GetBlastDataById(newBlast.data_id);
 
         _blast = newBlast;
@@ -40,39 +52,37 @@ public class ChangeBlastLayout : MonoBehaviour
                     UnlockBlast();
                     return true;
                 }
-                else LockBlast("FULL LIFE"); // TODO Translate
-
                 break;
+
             case CHANGE_REASON.MANA:
                 if (_blast.MaxMana != _blast.Mana)
                 {
                     UnlockBlast();
                     return true;
                 }
-                else LockBlast("FULL MANA");  // TODO Translate
-
                 break;
+
             case CHANGE_REASON.KO:
                 if (_blast.Hp > 0)
                 {
                     UnlockBlast();
                     return true;
                 }
-                else LockBlast("FAINTED");  // TODO Translate
                 break;
+
             case CHANGE_REASON.SWAP:
                 if (WildBattleManager.Instance.PlayerBlast != _blast && _blast.Hp > 0)
                 {
                     UnlockBlast();
                     return true;
                 }
-                else
-                {
-                    if (WildBattleManager.Instance.PlayerBlast == _blast) LockBlast("IN BATTLE");  // TODO Translate
-                    if (_blast.Hp <= 0) LockBlast("FAINTED");  // TODO Translate
-                }
-
                 break;
+        }
+
+        var errorData = _errorManager.GetErrorDataForChangeReason(changeReason, _blast);
+        if (errorData != null)
+        {
+            LockBlast(errorData);
         }
 
         return false;
@@ -81,14 +91,13 @@ public class ChangeBlastLayout : MonoBehaviour
 
     void UnlockBlast()
     {
-        _cantLayout.SetActive(false);
-
+        _lockLayout.gameObject.SetActive(false);
     }
 
-    void LockBlast(string reason)
+    void LockBlast(ErrorData error)
     {
-        _cantLayout.SetActive(true);
-
-        _cantTxt.text = reason;
+        _lockLayout.LockTxt.text = error.Title.GetLocalizedString();
+        _button.onClick.AddListener(() => _errorManager.ShowError(error.ErrorType));
+        _lockLayout.gameObject.SetActive(true);
     }
 }

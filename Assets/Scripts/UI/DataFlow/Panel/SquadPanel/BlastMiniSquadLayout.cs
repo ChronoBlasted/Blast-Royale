@@ -10,6 +10,7 @@ public class BlastMiniSquadLayout : MonoBehaviour
     [SerializeField] Image _bg, _blastIco;
     [SerializeField] TMP_Text _blastName;
     [SerializeField] SliderBar _hpSlider, _manaSlider;
+    [SerializeField] LockLayout _lockLayout;
 
     [SerializeField] Sprite _aliveBG, _deadBG, _activeBG;
 
@@ -40,9 +41,14 @@ public class BlastMiniSquadLayout : MonoBehaviour
 
     void UpdateBG()
     {
+        _lockLayout.gameObject.SetActive(false);
+
         if (_currentBlast.Hp <= 0)
         {
             _bg.sprite = _deadBG;
+
+            _lockLayout.LockTxt.text = ErrorManager.Instance.GetErrorDataWithID(ErrorType.IS_FAINTED).Desc.GetLocalizedString();
+            _lockLayout.gameObject.SetActive(true);
         }
         else
         {
@@ -57,6 +63,8 @@ public class BlastMiniSquadLayout : MonoBehaviour
 
     public void HandleOnClick()
     {
-        WildBattleManager.Instance.PlayerChangeBlast(_blastIndex);
+        if (_currentBlast == WildBattleManager.Instance.PlayerBlast) ErrorManager.Instance.ShowError(ErrorType.ALREADY_IN_BATTLE);
+        else if (_currentBlast.Hp <= 0) ErrorManager.Instance.ShowError(ErrorType.IS_FAINTED);
+        else WildBattleManager.Instance.PlayerChangeBlast(_blastIndex);
     }
 }

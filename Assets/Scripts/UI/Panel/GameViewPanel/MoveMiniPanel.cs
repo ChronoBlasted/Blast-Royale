@@ -39,12 +39,7 @@ public class MoveMiniPanel : Panel
         for (int i = 0; i < moveInBatleLayouts.Count; i++)
         {
             moveInBatleLayouts[i].gameObject.SetActive(i < _blast.activeMoveset.Count);
-            if (i < _blast.activeMoveset.Count) moveInBatleLayouts[i].Init(_dataUtils.GetMoveById(_blast.activeMoveset[i]), _blast);
+            if (i < _blast.activeMoveset.Count) moveInBatleLayouts[i].Init(_dataUtils.GetMoveById(_blast.activeMoveset[i]), _blast, i);
         }
-    }
-
-    public void HandleOnUseAttack(int indexAttack)
-    {
-        WildBattleManager.Instance.PlayerAttack(indexAttack);
     }
 }

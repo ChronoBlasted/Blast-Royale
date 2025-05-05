@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.45
+  m_fontSize: 20.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -144,6 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 737670543656811813}
   - component: {fileID: 2806131664751188741}
+  - component: {fileID: 759516496556354319}
   m_Layer: 0
   m_Name: LockLayout
   m_TagString: Untagged
@@ -192,6 +193,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &759516496556354319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338964007932094417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747eb47edda6635438f58590905043b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LockTxt: {fileID: 7742631943130477471}
 --- !u!1 &8430005339111843956
 GameObject:
   m_ObjectHideFlags: 0

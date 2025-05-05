@@ -54,14 +54,15 @@ public class MoveSelectorPopup : Popup
             Destroy(t.gameObject);
         }
 
-        int index = 0;
+        int index = -1;
         foreach (var (move, isUnlocked) in availableMoves)
         {
+            index++;
+
             if (move == moveToReplace) continue;
 
             var currentMove = Instantiate(_moveLayoutPrefab, _scrollMoveAvaible);
             currentMove.Init(move, null, index);
-            index++;
 
             if (isUnlocked)
             {
@@ -71,7 +72,7 @@ public class MoveSelectorPopup : Popup
             else
             {
                 int requiredLevel = blastData.movepool.First(m => m.move_id == move.id).levelMin;
-                currentMove.Lock(true, $"Unlock at level {requiredLevel}");
+                currentMove.Lock(ErrorType.NOT_UNLOCKED_MOVE, true, $"Unlock at level {requiredLevel}");
             }
         }
 

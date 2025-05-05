@@ -8,7 +8,6 @@ using UnityEngine.Events;
 public class ChangeBlastPopup : Popup
 {
     [SerializeField] List<ChangeBlastLayout> changeBlastLayouts;
-    [SerializeField] List<CustomButton> customButtons;
 
     [SerializeField] CustomButton closeButton;
     [SerializeField] TMP_Text _title;
@@ -49,23 +48,23 @@ public class ChangeBlastPopup : Popup
                 break;
             case CHANGE_REASON.KO:
             case CHANGE_REASON.SWAP:
-                _title.text = "Swap Blast With"; // TODO Translate
+                _title.text = "Swap Blast With";
                 break;
         }
 
 
-        for (int i = 0; i < customButtons.Count; i++)
+        for (int i = 0; i < changeBlastLayouts.Count; i++)
         {
             int buttonIndex = i;
-            customButtons[i].onClick.RemoveAllListeners();
+            changeBlastLayouts[i].Button.onClick.RemoveAllListeners();
 
             if (changeBlastLayouts[i].IsUnlocked(changeReason))
             {
                 foreach (UnityAction<int> action in actions)
                 {
-                    customButtons[i].onClick.AddListener(() => action.Invoke(buttonIndex));
+                    changeBlastLayouts[i].Button.onClick.AddListener(() => action.Invoke(buttonIndex));
                 }
-                customButtons[i].onClick.AddListener(ClosePopup);
+                changeBlastLayouts[i].Button.onClick.AddListener(ClosePopup);
             }
         }
     }
@@ -74,8 +73,8 @@ public class ChangeBlastPopup : Popup
     {
         UIManager.Instance.BlackShadeView.CloseButton.onClick.RemoveAllListeners();
 
-        if (canClose) UIManager.Instance.BlackShadeView.HideCloseButton();
-        else UIManager.Instance.BlackShadeView.ShowCloseButton();
+        if (canClose) UIManager.Instance.BlackShadeView.ShowCloseButton();
+        else UIManager.Instance.BlackShadeView.HideCloseButton();
 
         if (canClose)
         {

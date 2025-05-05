@@ -18,6 +18,7 @@ public class MoveLayout : MonoBehaviour
     Blast _blast;
     Move _move;
     int _indexMove;
+    bool _canUseMove = true;
 
     public TMP_Text MoveDescTxt { get => _moveDescTxt; }
 
@@ -28,14 +29,6 @@ public class MoveLayout : MonoBehaviour
         _indexMove = index;
 
         _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(_move.id).Name.GetLocalizedString();
-
-        //var moveEffect = _move.effect;
-
-        //if (moveEffect != MoveEffect.None)
-        //{
-        //    string Can = _move.attackType == AttackType.Special ? "" : "Can ";
-        //    _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
-        //}
 
         SetAttackCostData();
 
@@ -86,7 +79,7 @@ public class MoveLayout : MonoBehaviour
 
     public void UpdateUI()
     {
-        bool canUseMove = false;
+        _canUseMove = false;
 
         switch (_move.attackType)
         {
@@ -106,22 +99,33 @@ public class MoveLayout : MonoBehaviour
         {
             case AttackType.Normal:
             case AttackType.Status:
-                canUseMove = _move.cost <= _blast.Mana;
-                _moveCostTxt.color = canUseMove ? Color.white : Color.red;
+                _canUseMove = _move.cost <= _blast.Mana;
+                _moveCostTxt.color = _canUseMove ? Color.white : Color.red;
 
-                if (canUseMove) Unlock();
-                else Lock();
+                if (_canUseMove) Unlock();
+                else Lock(ErrorType.NOT_ENOUGH_MANA);
                 break;
             case AttackType.Special:
-                canUseMove = GetAmountPlatformByType() >= _move.cost;
-                _movePlatformCostTxt.color = canUseMove ? Color.white : Color.red;
+                _canUseMove = GetAmountPlatformByType() >= _move.cost;
+                _movePlatformCostTxt.color = _canUseMove ? Color.white : Color.red;
 
-                if (canUseMove) Unlock();
-                else Lock();
+                if (_canUseMove) Unlock();
+                else Lock(ErrorType.NOT_ENOUGH_PLATFORM_CHARGE);
                 break;
         }
     }
 
+    public void HandleOnClick()
+    {
+        if (_canUseMove) WildBattleManager.Instance.PlayerAttack(_indexMove);
+        else
+        {
+            if (_move.attackType == AttackType.Normal || _move.attackType == AttackType.Status)
+                ErrorManager.Instance.ShowError(ErrorType.NOT_ENOUGH_MANA);
+            else if (_move.attackType == AttackType.Special)
+                ErrorManager.Instance.ShowError(ErrorType.NOT_ENOUGH_PLATFORM_CHARGE);
+        }
+    }
 
     public void UpdateOnClick(UnityAction action)
     {
@@ -131,14 +135,14 @@ public class MoveLayout : MonoBehaviour
         _button.onClick.AddListener(action);
     }
 
-    public void Lock(bool hardLock = false, string lockReason = "")
+    public void Lock(ErrorType errorType, bool hardLock = false, string lockReason = "")
     {
-
         if (hardLock)
         {
             _contentCG.alpha = 1f;
             _lockLayout.SetActive(true);
             _lockTxt.text = lockReason;
+
         }
         else
         {
@@ -146,7 +150,9 @@ public class MoveLayout : MonoBehaviour
             _contentCG.alpha = .5f;
         }
 
-        _button.interactable = false;
+
+        _button.onClick.RemoveAllListeners();
+        _button.onClick.AddListener(() => ErrorManager.Instance.ShowError(errorType));
     }
 
     public void Unlock()

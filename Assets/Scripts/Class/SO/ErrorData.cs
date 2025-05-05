@@ -5,6 +5,7 @@ using UnityEngine.Localization;
 
 public class ErrorData : ScriptableObject
 {
-    public ErrorType ErrorID;
-    public LocalizedString ErrorMsg;
+    public ErrorType ErrorType;
+    public LocalizedString Title;
+    public LocalizedString Desc;
 }

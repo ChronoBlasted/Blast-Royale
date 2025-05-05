@@ -204,8 +204,6 @@ public class GameView : View
 
         // TODO Mettre en valeur la recovery de mana
 
-        Debug.Log("REC");
-
         blastHUD.UpdateManaBar(blast.Mana);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));

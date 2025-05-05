@@ -102,8 +102,6 @@ public class SquadPanel : Panel
 
     public void UpdateStoredBlast(List<Blast> decks)
     {
-        Debug.Log("Destroy");
-
         foreach (Transform child in _storedBlastTransform.transform)
         {
             Destroy(child.gameObject);
