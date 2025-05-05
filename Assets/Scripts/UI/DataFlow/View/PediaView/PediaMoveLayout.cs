@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class PediaMoveLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _idTxt, _nameTxt, _descTxt, _manaCostTxt, _powerTxt;
-    [SerializeField] Image _borderImg, _moveIco;
+    [SerializeField] MoveLayout _moveLayout;
 
     Move _data;
 
@@ -15,14 +14,7 @@ public class PediaMoveLayout : MonoBehaviour
     {
         _data = move;
 
-        _idTxt.text = "ID." + _data.id;
-        _nameTxt.text = NakamaData.Instance.GetMoveDataRef(_data.id).Name.GetLocalizedString();
-        _descTxt.text = NakamaData.Instance.GetMoveDataRef(_data.id).Desc.GetLocalizedString();
-
-        _manaCostTxt.text = _data.cost.ToString();
-        _powerTxt.text = _data.power.ToString();
-
-        _borderImg.color = ResourceObjectHolder.Instance.GetTypeDataByType(_data.type).Color;
-        _moveIco.sprite = ResourceObjectHolder.Instance.GetTypeDataByType(move.type).Sprite;
+        _moveLayout.Init(move, null);
+        _moveLayout.MoveDescTxt.text = NakamaData.Instance.GetMoveDataRef(move.id).Desc.GetLocalizedString();
     }
 }

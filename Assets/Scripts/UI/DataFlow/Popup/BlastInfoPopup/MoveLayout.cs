@@ -19,6 +19,8 @@ public class MoveLayout : MonoBehaviour
     Move _move;
     int _indexMove;
 
+    public TMP_Text MoveDescTxt { get => _moveDescTxt; }
+
     public void Init(Move move, Blast blast, int index = -1)
     {
         _blast = blast;
@@ -27,14 +29,13 @@ public class MoveLayout : MonoBehaviour
 
         _moveNameTxt.text = NakamaData.Instance.GetMoveDataRef(_move.id).Name.GetLocalizedString();
 
-        var moveEffect = _move.effect;
+        //var moveEffect = _move.effect;
 
-        if (moveEffect != MoveEffect.None)
-        {
-            string Can = _move.attackType == AttackType.Special ? "" : "Can ";
-            _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
-        }
-        //_moveDescTxt.gameObject.SetActive(moveEffect != MoveEffect.None);
+        //if (moveEffect != MoveEffect.None)
+        //{
+        //    string Can = _move.attackType == AttackType.Special ? "" : "Can ";
+        //    _moveDescTxt.text = Can + ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Name.GetLocalizedString();
+        //}
 
         SetAttackCostData();
 

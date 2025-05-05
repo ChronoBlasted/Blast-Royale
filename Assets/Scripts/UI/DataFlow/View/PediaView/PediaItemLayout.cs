@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class PediaItemLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _idTxt, _nameTxt, _behaviourTxt, _descTxt;
-    [SerializeField] Image _borderImg, _itemImg;
+    [SerializeField] TMP_Text _nameTxt, _behaviourTxt, _descTxt;
+    [SerializeField] Image _itemBG, _itemImg;
 
     ItemData _data;
     public void Init(ItemData item)
     {
         _data = item;
 
-        _idTxt.text = "ID." + _data.id;
         _nameTxt.text = NakamaData.Instance.GetItemDataRef(_data.id).Name.GetLocalizedString();
         _behaviourTxt.text = _data.behaviour.ToString();
 
@@ -35,7 +34,7 @@ public class PediaItemLayout : MonoBehaviour
         }
 
         _itemImg.sprite = NakamaData.Instance.GetItemDataRef(_data.id).Sprite;
-        _borderImg.color = ColorManager.Instance.GetItemColor(_data.behaviour);
+        _itemBG.color = ColorManager.Instance.GetItemColor(_data.behaviour);
     }
 }
 

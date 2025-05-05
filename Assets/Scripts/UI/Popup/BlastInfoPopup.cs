@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BlastInfoPopup : Popup
 {
     [SerializeField] TMP_Text _blastNameTxt, _blastDescTxt, _blastLevel, _blastExp, _blastHp, _blastMana, _blastAttack, _blastDefense, _blastSpeed, _blastType;
-    [SerializeField] Image _blastImg, _borderImg, _blastTypeImg;
+    [SerializeField] Image _blastImg, _bgBlast, _blastTypeImg;
     [SerializeField] GameObject _prestigeEvolveLayout, _moveLayout;
     [SerializeField] CustomButton _prestigeButton, _evolveButton;
     [SerializeField] List<MoveLayout> movesLayout;
@@ -86,7 +86,7 @@ public class BlastInfoPopup : Popup
         _blastType.text = type.ToString();
         var typeData = ResourceObjectHolder.Instance.GetTypeDataByType(type);
         _blastTypeImg.sprite = typeData.Sprite;
-        _borderImg.color = typeData.Color;
+        _bgBlast.color = typeData.Color;
     }
 
     private void SetMovesUI(List<int> moveset)
