@@ -160,6 +160,8 @@ public class MoveLayout : MonoBehaviour
         _contentCG.DOFade(1f, .5f);
 
         _button.interactable = true;
+
+        _button.onClick.RemoveAllListeners();
     }
 
     int GetAmountPlatformByType() => UIManager.Instance.GameView.PlayerHUD.BlastInWorld.PlatformLayout.GetAmountOfType(_move.type);

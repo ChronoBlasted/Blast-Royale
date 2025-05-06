@@ -92,8 +92,7 @@ const rpcSwapBlastMove: nkruntime.RpcFunction =
 
         const userCards = loadUserBlast(nk, logger, ctx.userId);
 
-        let selectedBlast: Blast | undefined = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast)
-            || userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
+        let selectedBlast: Blast | undefined = userCards.deckBlasts.find(blast => blast.uuid === request.uuidBlast) || userCards.storedBlasts.find(blast => blast.uuid === request.uuidBlast);
 
         if (!selectedBlast) {
             throw Error("Blast not found.");
