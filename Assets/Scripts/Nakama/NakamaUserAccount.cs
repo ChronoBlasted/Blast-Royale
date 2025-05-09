@@ -12,6 +12,8 @@ public class NakamaUserAccount : MonoBehaviour
 
     IApiAccount _lastAccount;
 
+    string _username;
+
     BlastCollection _lastBlastCollection;
     ItemCollection _lastItemCollection;
 
@@ -22,6 +24,7 @@ public class NakamaUserAccount : MonoBehaviour
     public BlastCollection LastBlastCollection { get => _lastBlastCollection; }
     public ItemCollection LastItemCollection { get => _lastItemCollection; }
     public IApiAccount LastAccount { get => _lastAccount; }
+    public string Username { get => _username; }
 
     public async Task Init(IClient client, ISession session)
     {
@@ -39,11 +42,11 @@ public class NakamaUserAccount : MonoBehaviour
         _lastAccount = await _client.GetAccountAsync(_session);
         _lastData = JsonParser.FromJson<Metadata>(_lastAccount.User.Metadata);
 
-        var username = _lastAccount.User.Username;
+        _username = _lastAccount.User.Username;
 
-        await GetPlayerMetadata(username);
+        await GetPlayerMetadata(_username);
 
-        UpdateUsernameFront(username);
+        UpdateUsernameFront(_username);
     }
 
     public async Task GetPlayerMetadata(string username = null)
@@ -58,9 +61,11 @@ public class NakamaUserAccount : MonoBehaviour
 
     public async Task UpdateUsername(string newUsername)
     {
+        _username = newUsername;
+
         await _client.UpdateAccountAsync(
             _session,
-            newUsername,
+            _username,
             null,
             null,
             null,
@@ -70,13 +75,15 @@ public class NakamaUserAccount : MonoBehaviour
 
         HaveUpdateDisplayName();
 
-        UpdateUsernameFront(newUsername);
+        UpdateUsernameFront(_username);
     }
 
-    private static void UpdateUsernameFront(string newUsername)
+    private void UpdateUsernameFront(string newUsername)
     {
-        UIManager.Instance.FriendView.UpdateUsername(newUsername);
-        UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(newUsername);
+        _username = newUsername;
+
+        UIManager.Instance.FriendView.UpdateUsername(_username);
+        UIManager.Instance.MenuView.FightPanel.ProfileLayout.UpdateUsername(_username);
     }
 
     public async Task UpdateAvatarUrl(string newAvatarUrl)

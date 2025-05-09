@@ -113,7 +113,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     }
 
 
-    public static (Blast, Blast) ApplyStatusEffectAtEndOfTurn(Blast blast, Blast otherBlast)
+    public static void ApplyStatusEffectAtEndOfTurn(Blast blast, Blast otherBlast)
     {
         switch (blast.status)
         {
@@ -131,9 +131,8 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             default:
                 break;
         }
-
-        return (blast, otherBlast);
     }
+
     public static Blast ApplyEffectToBlast(Blast blast, Move move)
     {
         var isStatusMove = move.attackType == AttackType.Status;
@@ -422,5 +421,18 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             throw new ArgumentOutOfRangeException(nameof(index), "Index must be within the valid range.");
 
         return values[index];
+    }
+
+    public PlayerBattleInfo GetBlastOwner(Blast blast, List<PlayerBattleInfo> players)
+    {
+        foreach (var player in players)
+        {
+            if (player.Blasts.Contains(blast))
+            {
+                return player;
+            }
+        }
+
+        return null;
     }
 }

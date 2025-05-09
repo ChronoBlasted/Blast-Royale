@@ -313,7 +313,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             default:
                         }
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
                         break;
                     // region Player Change
                     case OpCodes.PLAYER_CHANGE_BLAST:
@@ -331,7 +331,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                         state.p1_index = msgChangeBlast;
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
                         break;
                     // region Player Wait
                     case OpCodes.PLAYER_WAIT:
@@ -339,7 +339,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                         state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, true);
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher));
+                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
                         break;
                 }
 
@@ -373,6 +373,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 logger.debug('______________ END LOOP BATTLE ______________');
                 logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
                 logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
+                logger.debug('Wild blast turn type : %h', state.TurnStateData.wb_turn_type);
 
             });
             break;
@@ -585,7 +586,8 @@ function executePlayerAttack(
 
 function executeWildBlastAttack(
     state: WildBattleData,
-    dispatcher: nkruntime.MatchDispatcher
+    dispatcher: nkruntime.MatchDispatcher,
+    logger: nkruntime.Logger
 ): { state: WildBattleData } {
 
     const moveIndex = state.TurnStateData.wb_move_index;
@@ -648,6 +650,8 @@ function executeWildBlastAttack(
         }
     };
 
+    logger.debug('Wild blast attack with move');
+
     switch (move.attackType) {
         case AttackType.Special: {
             const platformCount = getAmountOfPlatformTypeByType(state.wild_blast_platform, move.type);
@@ -666,8 +670,11 @@ function executeWildBlastAttack(
             handlePlatformBonus();
             break;
     }
+    logger.debug('Wild blast 2');
+
 
     applyEffectIfNeeded();
+    logger.debug('Wild 3');
 
     if (move.target === Target.Opponent) {
         const damage = applyBlastAttack(
@@ -678,6 +685,7 @@ function executeWildBlastAttack(
         );
         state.TurnStateData.wb_move_damage = damage;
     }
+    logger.debug('Wild 4');
 
     state.TurnStateData.wb_turn_type = TurnType.ATTACK;
 
@@ -686,7 +694,7 @@ function executeWildBlastAttack(
 
 
 function handleAttackTurn(isPlayerFaster: boolean, state: WildBattleData, move: Move, dispatcher: nkruntime.MatchDispatcher, nk: nkruntime.Nakama, logger: nkruntime.Logger): { state: WildBattleData } {
-    ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher));
+    ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher,logger));
 
     ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
 

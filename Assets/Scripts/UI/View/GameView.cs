@@ -237,10 +237,10 @@ public class GameView : View
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
-    public async Task AllPlayerBlastFainted()
+    public async Task AllPlayerBlastFainted(PlayerBattleInfo playerWithNoBlast)
     {
         _dialogLayout.Show();
-        await _dialogLayout.UpdateTextAsync("All your blast are fainted !");
+        await _dialogLayout.UpdateTextAsync(playerWithNoBlast.Username +" Blasts are all fainted !");
         _dialogLayout.Hide();
     }
 
