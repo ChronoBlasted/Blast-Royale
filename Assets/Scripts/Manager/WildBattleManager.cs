@@ -27,6 +27,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     List<Item> _playerItems = new List<Item>();
     PlayerBattleInfo _playerMeInfo;
     PlayerBattleInfo _playerWildInfo;
+    Blast _nextWildBlast;
 
     Meteo _meteo;
 
@@ -65,27 +66,23 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         foreach (var item in _userAccount.LastItemCollection.deckItems)
             _playerItems.Add(new Item(item.data_id, item.amount));
 
-
         _playerMeInfo = new PlayerBattleInfo(_userAccount.Username, BlastOwner.Me, _playerSquads[0], _playerSquads, _playerItems);
 
-        var _wildBlast = new Blast("", startData.id, startData.exp, startData.iv, startData.activeMoveset);
-
-        _playerWildInfo = new PlayerBattleInfo("", BlastOwner.Opponent, _wildBlast, new List<Blast> { _wildBlast }, null);
+        SetNewWildBlast(startData.newBlastData);
+        ShowWildBlast();
 
         _gameView.SetMeteo(startData.meteo);
         _meteo = startData.meteo;
 
         _gameView.PlayerHUD.Init(_playerMeInfo.ActiveBlast);
-        _gameView.OpponentHUD.Init(_wildBlast);
 
         _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
         _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
 
         _ = _gameView.PlayerHUD.ComeBackBlast(true);
-        _ = _gameView.OpponentHUD.ComeBackBlast(true);
+
 
         _ = _gameView.PlayerHUD.ThrowBlast();
-        _ = _gameView.OpponentHUD.ThrowBlast();
 
         _gameView.AttackPanel.UpdateAttack(_playerMeInfo.ActiveBlast);
         _gameView.BagPanel.UpdateItem(_playerItems);
@@ -98,6 +95,23 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         GameStateManager.Instance.UpdateStateToGame();
         _serverBattle.PlayerReady();
+    }
+
+    public void SetNewWildBlast(NewBlastData newBlastData)
+    {
+        var _wildBlast = new Blast("", newBlastData.id, newBlastData.exp, newBlastData.iv, newBlastData.activeMoveset);
+
+        _nextWildBlast = _wildBlast;
+    }
+
+    public void ShowWildBlast()
+    {
+        _playerWildInfo = new PlayerBattleInfo("", BlastOwner.Wild, _nextWildBlast, new List<Blast> { _nextWildBlast }, null);
+
+        _gameView.OpponentHUD.Init(_nextWildBlast);
+
+        _ = _gameView.OpponentHUD.ComeBackBlast(true);
+        _ = _gameView.OpponentHUD.ThrowBlast();
     }
 
     public void StartNewTurn()
@@ -118,7 +132,9 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     public async void PlayTurn(TurnStateData turnState)
     {
         _turnStateData = turnState;
-        UpdateOpponentTurn(turnState);
+
+        UpdateOpponentTurn(_turnStateData);
+
         _gameView.CloseAllPanel();
 
         bool isPlayerFirst = CompareActionPriorities(_playerAction.TurnType, _wbAction.TurnType);
@@ -136,31 +152,33 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (isPlayerFirst)
         {
-            // PLAYER FIRST
             var gameLogicContextPlayer = new GameLogicContext(
                 attacker: _playerMeInfo.ActiveBlast,
                 defender: _playerWildInfo.ActiveBlast,
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _playerAction.MoveIndex,
-                moveDamage: turnState.p_move_damage,
-                moveEffect: turnState.p_move_effect,
+                moveDamage: _turnStateData.p_move_damage,
+                moveEffect: _turnStateData.p_move_effect,
                 itemIndex: _playerAction.ItemIndex,
                 selectedBlastIndex: _playerAction.SelectedBlastIndex,
-                isCatched: turnState.catched
+                isCatched: _turnStateData.catched
             );
 
             var playerHandler = TurnHandlerFactory.CreateHandler(_playerAction.TurnType, gameLogicContextPlayer, _gameView, _dataUtils);
             battleStop = await playerHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
 
-            // WILD SECOND – contexte mis à jour
             var gameLogicContextWild = new GameLogicContext(
                 attacker: _playerWildInfo.ActiveBlast,
                 defender: _playerMeInfo.ActiveBlast,
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
-                moveIndex: turnState.wb_move_index,
-                moveDamage: turnState.wb_move_damage,
-                moveEffect: turnState.wb_move_effect,
+                moveIndex: _turnStateData.wb_move_index,
+                moveDamage: _turnStateData.wb_move_damage,
+                moveEffect: _turnStateData.wb_move_effect,
                 itemIndex: _wbAction.ItemIndex,
                 selectedBlastIndex: _wbAction.SelectedBlastIndex,
                 isCatched: false
@@ -168,18 +186,21 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             var wildHandler = TurnHandlerFactory.CreateHandler(_wbAction.TurnType, gameLogicContextWild, _gameView, _dataUtils);
             battleStop = await wildHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
         }
         else
         {
-            // WILD FIRST
             var gameLogicContextWild = new GameLogicContext(
                 attacker: _playerWildInfo.ActiveBlast,
                 defender: _playerMeInfo.ActiveBlast,
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
-                moveIndex: turnState.wb_move_index,
-                moveDamage: turnState.wb_move_damage,
-                moveEffect: turnState.wb_move_effect,
+                moveIndex: _turnStateData.wb_move_index,
+                moveDamage: _turnStateData.wb_move_damage,
+                moveEffect: _turnStateData.wb_move_effect,
                 itemIndex: _wbAction.ItemIndex,
                 selectedBlastIndex: _wbAction.SelectedBlastIndex,
                 isCatched: false
@@ -187,27 +208,33 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             var wildHandler = TurnHandlerFactory.CreateHandler(_wbAction.TurnType, gameLogicContextWild, _gameView, _dataUtils);
             battleStop = await wildHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
 
-            // PLAYER SECOND – contexte mis à jour
             var gameLogicContextPlayer = new GameLogicContext(
                 attacker: _playerMeInfo.ActiveBlast,
                 defender: _playerWildInfo.ActiveBlast,
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _playerAction.MoveIndex,
-                moveDamage: turnState.p_move_damage,
-                moveEffect: turnState.p_move_effect,
+                moveDamage: _turnStateData.p_move_damage,
+                moveEffect: _turnStateData.p_move_effect,
                 itemIndex: _playerAction.ItemIndex,
                 selectedBlastIndex: _playerAction.SelectedBlastIndex,
-                isCatched: turnState.catched
+                isCatched: _turnStateData.catched
             );
 
             var playerHandler = TurnHandlerFactory.CreateHandler(_playerAction.TurnType, gameLogicContextPlayer, _gameView, _dataUtils);
             battleStop = await playerHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
         }
 
-        // STATUS effects
         if (_playerMeInfo.ActiveBlast.status != Status.None)
         {
             var statusHandler = TurnHandlerFactory.CreateHandler(TurnType.STATUS,
@@ -225,7 +252,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 _gameView, _dataUtils
             );
             battleStop = await statusHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
         }
 
         if (_playerWildInfo.ActiveBlast.status != Status.None)
@@ -245,10 +276,25 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 _gameView, _dataUtils
             );
             battleStop = await statusHandler.HandleTurn();
-            if (battleStop) return;
+            if (battleStop)
+            {
+                StopTurnHandler();
+                return;
+            }
         }
 
+        StopTurnHandler();
+    }
+
+    public void StopTurnHandler()
+    {
         EndTurn();
+
+        if (NakamaLogic.IsBlastAlive(_playerWildInfo.ActiveBlast) == false)
+        {
+            ShowWildBlast();
+        }
+
         NakamaManager.Instance.NakamaWildBattle.PlayerReady();
     }
 
@@ -288,6 +334,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     private void UpdateOpponentTurn(TurnStateData turnState)
     {
         _wbAction.TurnType = turnState.wb_turn_type;
+
         if (_wbAction.TurnType == TurnType.ATTACK)
         {
             _wbAction.MoveIndex = turnState.wb_move_index;
@@ -394,9 +441,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         await Task.Delay(TimeSpan.FromMilliseconds(500));
         _serverBattle.PlayerReady();
     }
-
-
-
 
     #endregion
 

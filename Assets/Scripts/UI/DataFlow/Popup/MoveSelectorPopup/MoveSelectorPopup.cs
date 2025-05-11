@@ -66,8 +66,8 @@ public class MoveSelectorPopup : Popup
 
             if (isUnlocked)
             {
-                currentMove.UpdateOnClick(HandleChangeMove);
                 currentMove.Unlock();
+                currentMove.UpdateOnClick(HandleChangeMove);
             }
             else
             {

@@ -38,7 +38,7 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         return blast.Hp > 0;
     }
 
-    public static bool IsAllBlastDead(List<Blast> allPlayerBlasts)
+    public static bool IsAllBlastFainted(List<Blast> allPlayerBlasts)
     {
         return allPlayerBlasts.All(blast => blast.Hp == 0);
     }

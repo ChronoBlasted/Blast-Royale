@@ -244,6 +244,13 @@ public class GameView : View
         _dialogLayout.Hide();
     }
 
+    public async Task WildBlastFainted(PlayerBattleInfo playerWithNoBlast)
+    {
+        _dialogLayout.Show();
+        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(playerWithNoBlast.ActiveBlast.data_id).Name.GetLocalizedString() + " has fainted !");
+        _dialogLayout.Hide();
+    }
+
     public async Task BlastFainted(bool isPlayer, Blast blast)
     {
         HUDLayout waiterHUD;
@@ -271,8 +278,6 @@ public class GameView : View
     {
         PlayerHUD.Init(newBlast);
         AttackPanel.UpdateAttack(newBlast);
-
-        await _dialogLayout.UpdateTextAsync(_dataUtils.GetBlastDataRef(newBlast.data_id).Name.GetLocalizedString() + " go !");
 
         await _playerHUD.ThrowBlast();
     }

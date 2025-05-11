@@ -18,6 +18,8 @@ public class SliderBar : MonoBehaviour
 
     public void Init(float value, float maxValue)
     {
+        KillTweens();
+
         slider.maxValue = maxValue;
         slider.value = value;
 
@@ -35,6 +37,8 @@ public class SliderBar : MonoBehaviour
 
     public void SetValue(float newValue)
     {
+        KillTweens();
+
         slider.value = newValue;
         delayedSlider.value = newValue;
         recoverSlider.value = newValue;
@@ -42,12 +46,34 @@ public class SliderBar : MonoBehaviour
 
     public void SetMaxValue(float newValue)
     {
+        KillTweens();
+
         slider.maxValue = newValue;
         delayedSlider.maxValue = newValue;
         recoverSlider.maxValue = newValue;
     }
 
     public void SetValueSmooth(float newValue, float duration = 0.2f, float delay = 0f, Ease ease = Ease.OutCirc)
+    {
+        KillTweens();
+
+        if (newValue > slider.value)
+        {
+            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
+
+            _fillTween = slider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
+            _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
+        }
+        else
+        {
+            _fillTween = slider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
+            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
+
+            _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
+        }
+    }
+
+    private void KillTweens()
     {
         if (_fillTween != null)
         {
@@ -65,21 +91,6 @@ public class SliderBar : MonoBehaviour
         {
             _fillRecoverTween.Kill();
             _fillRecoverTween = null;
-        }
-
-        if (newValue > slider.value)
-        {
-            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
-
-            _fillTween = slider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
-            _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
-        }
-        else
-        {
-            _fillTween = slider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
-            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
-
-            _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
         }
     }
 

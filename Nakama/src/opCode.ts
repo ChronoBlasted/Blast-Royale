@@ -12,6 +12,8 @@ enum OpCodes {
     MATCH_ROUND = 60,
     PLAYER_MUST_CHANGE_BLAST = 61,
 
+    NEW_BLAST = 90,
+
     MATCH_END = 100,
 
     ERROR_SERV = 404,

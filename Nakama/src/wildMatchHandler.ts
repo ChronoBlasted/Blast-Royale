@@ -41,6 +41,7 @@ interface WildBattleData {
     wild_blast: BlastEntity | null;
     wild_blast_platform: Type[];
 
+    blast_defeated: number;
 
     meteo: Meteo
 
@@ -48,12 +49,16 @@ interface WildBattleData {
 }
 
 interface StartStateData {
+    newBlastData: NewBlastData;
+    meteo: Meteo;
+}
+
+interface NewBlastData {
     id: number;
     exp: number;
     iv: number;
     status: Status;
     activeMoveset: number[];
-    meteo: Meteo;
 }
 
 interface TurnStateData {
@@ -90,6 +95,8 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
         wild_blast: null,
         wild_blast_platform: [],
+
+        blast_defeated: 0,
 
         meteo: Meteo.None,
 
@@ -164,7 +171,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
     switch (state.battle_state) {
         case BattleState.START:
 
-            logger.debug('1 ______________ START BATTLE ______________');
+            logger.debug('______________ START BATTLE ______________');
 
             const keys = Object.keys(state.presences);
             const player1_presence = state.presences[keys[0]]!;
@@ -178,18 +185,22 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-
             var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
+
             state.wild_blast = ConvertBlastToBlastEntity(newBlast);
+
+            const newWildBlast: NewBlastData = {
+                id: state.wild_blast.data_id,
+                exp: state.wild_blast.exp,
+                iv: state.wild_blast.iv,
+                activeMoveset: state.wild_blast.activeMoveset,
+                status: Status.None
+            }
 
             state.meteo = getRandomMeteo();
 
             const StartData: StartStateData = {
-                id: state.wild_blast.data_id,
-                exp: state.wild_blast.exp,
-                iv: state.wild_blast.iv,
-                status: Status.None,
-                activeMoveset: state.wild_blast.activeMoveset,
+                newBlastData: newWildBlast,
                 meteo: state.meteo,
             }
 
@@ -199,7 +210,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             dispatcher.broadcastMessage(OpCodes.MATCH_START, JSON.stringify(StartData));
 
-            logger.debug('1 ______________ END START BATTLE ______________');
+            logger.debug('______________ END START BATTLE ______________');
 
             break;
         case BattleState.WAITING:
@@ -228,7 +239,17 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             messages.forEach(function (message) {
 
-                // faire que si c'est un autre OP code que ceux d'en dessous faire un errorfunc
+                const validOpCodes = [
+                    OpCodes.PLAYER_ATTACK,
+                    OpCodes.PLAYER_USE_ITEM,
+                    OpCodes.PLAYER_CHANGE_BLAST,
+                    OpCodes.PLAYER_WAIT
+                ];
+
+                if (!validOpCodes.includes(message.opCode)) {
+                    ({ state } = ErrorFunc(state, "OP CODE NOT VALID", dispatcher, BattleState.READY));
+                    return;
+                }
 
                 logger.debug('______________ LOOP BATTLE ______________');
 
@@ -257,7 +278,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         let move = getMoveById(state.p1_blasts[state.p1_index]!.activeMoveset![attackIndex]);
 
                         if (move == null) {
-                            ({ state } = ErrorFunc(state, "Player 1 move null", dispatcher));
+                            ({ state } = ErrorFunc(state, "Player 1 move null", dispatcher, BattleState.READY));
                             return;
                         }
 
@@ -271,12 +292,12 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         let item = state.player1_items[msgItem.index_item];
 
                         if (item == null) {
-                            ({ state } = ErrorFunc(state, "Item to use is null", dispatcher));
+                            ({ state } = ErrorFunc(state, "Item to use is null", dispatcher, BattleState.READY));
                             return;
                         }
 
                         if (item.amount <= 0) {
-                            ({ state } = ErrorFunc(state, "U don't have enough item", dispatcher));
+                            ({ state } = ErrorFunc(state, "U don't have enough item", dispatcher, BattleState.READY));
                             return;
                         }
 
@@ -313,25 +334,25 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             default:
                         }
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
+                        ({ state } = executeWildBlastAttack(state, dispatcher, logger));
                         break;
                     // region Player Change
                     case OpCodes.PLAYER_CHANGE_BLAST:
                         var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.p1_blasts.length - 1);
 
                         if (state.p1_index == msgChangeBlast) {
-                            ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                            ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher, BattleState.READY);
                             return;
                         }
 
                         if (!isBlastAlive(state.p1_blasts[msgChangeBlast])) {
-                            ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast in Ready", dispatcher));
+                            ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast in Ready", dispatcher, BattleState.READY));
                             return;
                         }
 
                         state.p1_index = msgChangeBlast;
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
+                        ({ state } = executeWildBlastAttack(state, dispatcher, logger));
                         break;
                     // region Player Wait
                     case OpCodes.PLAYER_WAIT:
@@ -339,7 +360,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                         state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, true);
 
-                        ({ state } = executeWildBlastAttack(state, dispatcher,logger));
+                        ({ state } = executeWildBlastAttack(state, dispatcher, logger));
                         break;
                 }
 
@@ -351,13 +372,20 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
 
                 if (state.battle_state == BattleState.END) {
+                    if (isBlastAlive(state.wild_blast!)) state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
+                    if (isBlastAlive(state.p1_blasts[state.p1_index]!)) state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, false);
+
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+
                     return;
                 }
                 else if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
                     state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+
+                    EndLoopDebug(logger, state);
+
                     return;
                 }
                 else {
@@ -370,16 +398,22 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
                 }
 
-                logger.debug('______________ END LOOP BATTLE ______________');
-                logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
-                logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
-                logger.debug('Wild blast turn type : %h', state.TurnStateData.wb_turn_type);
+                EndLoopDebug(logger, state);
+
 
             });
             break;
         case BattleState.WAITFORPLAYERSWAP:
-
             messages.forEach(function (message) {
+
+                const validOpCodes = [
+                    OpCodes.PLAYER_CHANGE_BLAST,
+                ];
+
+                if (!validOpCodes.includes(message.opCode)) {
+                    ({ state } = ErrorFunc(state, "OP CODE NOT VALID", dispatcher, BattleState.WAITFORPLAYERSWAP));
+                    return;
+                }
 
                 logger.debug('______________ PLAYER SWAP BLAST ______________');
 
@@ -392,12 +426,12 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     var msgChangeBlast = clamp(JSON.parse(nk.binaryToString(message.data)), 0, state.p1_blasts.length - 1);
 
                     if (state.p1_index == msgChangeBlast) {
-                        ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher);
+                        ErrorFunc(state, "Cannot change actual blast with actual blast", dispatcher, BattleState.WAITFORPLAYERSWAP);
                         return;
                     }
 
                     if (!isBlastAlive(state.p1_blasts[msgChangeBlast])) {
-                        ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast", dispatcher));
+                        ({ state } = ErrorFunc(state, "Cannot change actual blast with dead blast", dispatcher, BattleState.WAITFORPLAYERSWAP));
                         return;
                     }
 
@@ -413,16 +447,49 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             break;
         case BattleState.END:
 
-            updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200)
+            const playerBlast = state.p1_blasts[state.p1_index]!;
+            const wildBlast = state.wild_blast!;
 
-            if (state.TurnStateData.catched) incrementMetadataStat(nk, state.player1_id, "blast_catched", 1);
-            else incrementMetadataStat(nk, state.player1_id, "blast_defeated", 1);
+            const wildAlive = isBlastAlive(wildBlast);
+            const allPlayerDead = isAllBlastDead(state.p1_blasts);
 
-            writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, 1);
+            if (wildAlive == false) {
+                state.blast_defeated++;
+
+                addExpOnBlastInGame(nk, logger, state.player1_id, playerBlast, wildBlast);
+
+                if (state.TurnStateData.catched) incrementMetadataStat(nk, state.player1_id, "blast_catched", 1);
+                else incrementMetadataStat(nk, state.player1_id, "blast_defeated", 1);
+
+                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200)
+
+                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, 1);
+
+                var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
+
+                state.wild_blast = ConvertBlastToBlastEntity(newBlast);
+
+                const newWildBlast: NewBlastData = {
+                    id: state.wild_blast.data_id,
+                    exp: state.wild_blast.exp,
+                    iv: state.wild_blast.iv,
+                    activeMoveset: state.wild_blast.activeMoveset,
+                    status: Status.None
+                }
+
+                dispatcher.broadcastMessage(OpCodes.NEW_BLAST, JSON.stringify(newWildBlast));
+
+                EndLoopDebug(logger, state);
+
+                state.battle_state = BattleState.WAITING;
+            }
+            if (allPlayerDead) {
+                dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
+            }
 
             logger.debug('______________ END BATTLE ______________');
 
-            return null;
+            break;
     }
 
 
@@ -458,8 +525,15 @@ const matchTerminate = function (ctx: nkruntime.Context, logger: nkruntime.Logge
 }
 
 
-function ErrorFunc(state: WildBattleData, error: string, dispatcher: nkruntime.MatchDispatcher) {
-    state.battle_state = BattleState.READY;
+function EndLoopDebug(logger: nkruntime.Logger, state: WildBattleData) {
+    logger.debug('______________ END LOOP BATTLE ______________');
+    logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
+    logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
+    logger.debug('Wild blast turn type : %h', state.TurnStateData.wb_turn_type);
+}
+
+function ErrorFunc(state: WildBattleData, error: string, dispatcher: nkruntime.MatchDispatcher, currentBattleState: BattleState) {
+    state.battle_state = currentBattleState;
     state.player1_state = PlayerState.READY;
 
     dispatcher.broadcastMessage(OpCodes.ERROR_SERV, JSON.stringify(error));
@@ -560,7 +634,7 @@ function executePlayerAttack(
         case AttackType.Special: {
             const platformCount = getAmountOfPlatformTypeByType(state.player1_platform, move.type);
             if (platformCount < move.cost) {
-                ({ state } = ErrorFunc(state, "Player not enough platform type", dispatcher));
+                ({ state } = ErrorFunc(state, "Player not enough platform type", dispatcher, BattleState.READY));
                 return { state };
             }
             state.player1_platform = removePlatformTypeByType(state.player1_platform, move.type, move.cost);
@@ -650,13 +724,11 @@ function executeWildBlastAttack(
         }
     };
 
-    logger.debug('Wild blast attack with move');
-
     switch (move.attackType) {
         case AttackType.Special: {
             const platformCount = getAmountOfPlatformTypeByType(state.wild_blast_platform, move.type);
             if (platformCount < move.cost) {
-                ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher));
+                ({ state } = ErrorFunc(state, "Wild blast not enough platform type", dispatcher, BattleState.READY));
                 return { state };
             }
 
@@ -670,11 +742,8 @@ function executeWildBlastAttack(
             handlePlatformBonus();
             break;
     }
-    logger.debug('Wild blast 2');
-
 
     applyEffectIfNeeded();
-    logger.debug('Wild 3');
 
     if (move.target === Target.Opponent) {
         const damage = applyBlastAttack(
@@ -685,7 +754,6 @@ function executeWildBlastAttack(
         );
         state.TurnStateData.wb_move_damage = damage;
     }
-    logger.debug('Wild 4');
 
     state.TurnStateData.wb_turn_type = TurnType.ATTACK;
 
@@ -694,7 +762,7 @@ function executeWildBlastAttack(
 
 
 function handleAttackTurn(isPlayerFaster: boolean, state: WildBattleData, move: Move, dispatcher: nkruntime.MatchDispatcher, nk: nkruntime.Nakama, logger: nkruntime.Logger): { state: WildBattleData } {
-    ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher,logger));
+    ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher, logger));
 
     ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
 
@@ -738,11 +806,8 @@ function checkIfMatchContinue(nk: nkruntime.Nakama, logger: nkruntime.Logger, st
     const allPlayerDead = isAllBlastDead(state.p1_blasts);
 
     if (!wildAlive) {
-        dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(true));
-        addExpOnBlastInGame(nk, logger, state.player1_id, playerBlast, wildBlast);
         state.battle_state = BattleState.END;
     } else if (allPlayerDead) {
-        dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
         state.battle_state = BattleState.END;
     } else if (!playerAlive) {
         state.battle_state = BattleState.WAITFORPLAYERSWAP;

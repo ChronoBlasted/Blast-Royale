@@ -17,6 +17,8 @@ public class EndView : View
     {
         base.OpenView(_instant);
 
+        Debug.Log("OPEN END");
+
         _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
         _ = NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
     }

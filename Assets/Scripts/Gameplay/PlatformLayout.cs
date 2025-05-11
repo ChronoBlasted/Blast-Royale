@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PlatformLayout : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer _circle1, _circle2, _circle3, _circle4;
+    [SerializeField] SpriteRenderer _circle1, _circle2, _circle3, _circle4, _circle5;
     [SerializeField] SpriteRenderer _outlineCircle1, _outlineCircle2, _outlineCircle3;
 
     List<SpriteRenderer> _circles;
@@ -16,8 +16,8 @@ public class PlatformLayout : MonoBehaviour
 
     List<Type> _platformType = new List<Type>();
 
-    readonly float[] _scalesX = { 2f, 3f, 4, 6 };
-    readonly float[] _scalesY = { 1f, 1.5f, 2f, 3f };
+    readonly float[] _scalesX = { 2f, 3f, 4f, 6f, 8f };
+    readonly float[] _scalesY = { 1f, 1.5f, 2f, 3f, 4f };
 
     readonly float[] _scalesOutlineX = { 1f, 1.5f, 2f };
     readonly float[] _scalesOutlineY = { 0.5f, .75f, 1f };
@@ -25,7 +25,7 @@ public class PlatformLayout : MonoBehaviour
 
     public void Init()
     {
-        _circles = new List<SpriteRenderer> { _circle1, _circle2, _circle3, _circle4 };
+        _circles = new List<SpriteRenderer> { _circle1, _circle2, _circle3, _circle4, _circle5 };
         _outlineCircles = new List<SpriteRenderer> { _outlineCircle1, _outlineCircle2, _outlineCircle3 };
 
         foreach (var circle in _circles)
@@ -44,11 +44,6 @@ public class PlatformLayout : MonoBehaviour
 
     public void AddEnergy(Type type)
     {
-        if (_platformType.Count == 4)
-        {
-            _platformType.RemoveAt(_platformType.Count - 1);
-        }
-
         _platformType.Insert(0, type);
         UpdateVisuals();
     }
@@ -119,6 +114,17 @@ public class PlatformLayout : MonoBehaviour
                     _circles.RemoveAt(i);
                     _circles.Insert(0, circle);
 
+                    _platformType.RemoveAt(i);
+                }
+
+                if (i == 4)
+                {
+                    circle.DOFade(0f, _fadeDuration).SetDelay(0.5f);
+
+                    _circles.RemoveAt(i);
+                    _circles.Insert(0, circle);
+
+                    _platformType.RemoveAt(i);
                 }
 
                 circle.transform.SetSiblingIndex(_circles.Count - 1 - i);

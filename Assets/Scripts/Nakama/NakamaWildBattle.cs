@@ -102,6 +102,10 @@ public class NakamaWildBattle : MonoBehaviour
             case NakamaOpCode.ERROR_SERV:
                 WildBattleManager.Instance.StartNewTurn();
                 break;
+            case NakamaOpCode.NEW_BLAST:
+                var newBlast = JsonUtility.FromJson<NewBlastData>(messageJson);
+                WildBattleManager.Instance.SetNewWildBlast(newBlast);
+                break;
 
 
             case NakamaOpCode.DEBUG:
@@ -202,12 +206,18 @@ public class NakamaWildBattle : MonoBehaviour
 [Serializable]
 public class StartStateData
 {
+    public NewBlastData newBlastData;
+    public Meteo meteo;
+}
+
+[Serializable]
+public class NewBlastData
+{
     public int id;
     public int exp;
     public int iv;
     public Status status;
     public List<int> activeMoveset;
-    public Meteo meteo;
 }
 
 [Serializable]

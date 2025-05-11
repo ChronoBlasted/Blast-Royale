@@ -35,32 +35,54 @@ public class GameLogicContext
 
         bool isBlastAlive = NakamaLogic.IsBlastAlive(Defender);
 
+        if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts))
+        {
+            if (CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
+            {
+                await UIManager.Instance.GameView.AllPlayerBlastFainted(CurrentPlayerDefender);
+            }
+            else
+            {
+                await UIManager.Instance.GameView.WildBlastFainted(CurrentPlayerDefender);
+            }
+        }
+
+
         if (!isBlastAlive)
         {
             switch (CurrentPlayerDefender.OwnerType)
             {
                 case BlastOwner.Opponent:
-                    await UIManager.Instance.GameView.BlastFainted(false, Defender);
-
-                    break;
-                case BlastOwner.Me:
-                    await UIManager.Instance.GameView.BlastFainted(true, Defender);
-
                     UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender);
                     UIManager.Instance.LevelExpPopup.OpenPopup();
 
                     _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
                     _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
 
-                    UIManager.Instance.LevelExpPopup.UpdateClose(GameStateManager.Instance.UpdateStateToEnd);
+                    await UIManager.Instance.GameView.BlastFainted(false, Defender);
+                    break;
+                case BlastOwner.Me:
+                    await UIManager.Instance.GameView.BlastFainted(true, Defender);
+                    break;
+                case BlastOwner.Wild:
+                    await UIManager.Instance.GameView.BlastFainted(false, Defender);
+
+                    //UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender); TODO FAIRE PLUS JOLIE ET ERGO
+                    //UIManager.Instance.LevelExpPopup.OpenPopup();
+
+                    //_ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
+                    //_ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+
                     break;
             }
         }
 
-        if (NakamaLogic.IsAllBlastDead(CurrentPlayerDefender.Blasts))
+        if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts))
         {
-            await UIManager.Instance.GameView.AllPlayerBlastFainted(CurrentPlayerDefender);
-            GameStateManager.Instance.UpdateStateToEnd();
+            if (CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
+            {
+                GameStateManager.Instance.UpdateStateToEnd();
+            }
         }
         else
         {

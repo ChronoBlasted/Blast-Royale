@@ -4,4 +4,5 @@ public enum BlastOwner
     Me,
     Ally,
     Opponent,
+    Wild
 }
