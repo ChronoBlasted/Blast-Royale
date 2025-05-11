@@ -101,6 +101,8 @@ public class NakamaWildBattle : MonoBehaviour
 
             case NakamaOpCode.ERROR_SERV:
                 WildBattleManager.Instance.StartNewTurn();
+
+                ErrorManager.Instance.ShowError(ErrorType.SERVER_ERROR);
                 break;
             case NakamaOpCode.NEW_BLAST:
                 var newBlast = JsonUtility.FromJson<NewBlastData>(messageJson);

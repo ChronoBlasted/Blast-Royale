@@ -26,9 +26,10 @@ public class RewardPopup : Popup
     {
         gameObject.SetActive(true);
 
+        _canvasGroup.blocksRaycasts = true;
+
         _canvasGroup.DOFade(1, .2f).OnComplete(() =>
         {
-            _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
     }

@@ -33,6 +33,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public RewardPopup RewardPopup { get; protected set; }
     [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
+    [field: SerializeField] public TypeInfoPopup TypeInfoPopup { get; protected set; }
 
     View _currentView;
 
@@ -70,6 +71,7 @@ public class UIManager : MonoSingleton<UIManager>
         RewardPopup.Init();
         LevelExpPopup.Init();
         ConfirmPopup.Init();
+        TypeInfoPopup.Init();
 
         BlackShadeView.HideBlackShade();
     }

@@ -17,4 +17,6 @@ public enum ErrorType
     IS_FULL_MANA,
     HAS_NO_STATUS,
     IS_FAINTED,
+
+    SERVER_ERROR
 }

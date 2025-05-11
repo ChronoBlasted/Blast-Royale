@@ -28,9 +28,10 @@ public abstract class Panel : MonoBehaviour
             _fadeTweener = null;
         }
 
+        _canvasGroup.blocksRaycasts = true;
+
         _fadeTweener = _canvasGroup.DOFade(1, 0f).OnComplete(() =>
         {
-            _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
     }

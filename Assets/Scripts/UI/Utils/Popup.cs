@@ -23,9 +23,10 @@ public class Popup : MonoBehaviour
         transform.localScale = Vector3.zero;
         transform.DOScale(1, .2f).SetEase(Ease.OutBack);
 
+        _canvasGroup.blocksRaycasts = true;
+
         _canvasGroup.DOFade(1, .2f).OnComplete(() =>
         {
-            _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
     }

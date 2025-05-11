@@ -24,9 +24,10 @@ public abstract class View : MonoBehaviour
 
         if (_instant) timeToOpen = 0;
 
+        _canvasGroup.blocksRaycasts = true;
+
         _canvasGroup.DOFade(1, timeToOpen).OnComplete(() =>
         {
-            _canvasGroup.blocksRaycasts = true;
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
     }

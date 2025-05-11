@@ -356,7 +356,6 @@ const Goblin: BlastData = { // Goblin
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 35,
@@ -413,7 +412,6 @@ const Masks: BlastData = { // Masks
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 50,
@@ -432,7 +430,6 @@ const Luckun: BlastData = { // Luckun
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 30,
@@ -470,7 +467,6 @@ const SadHam: BlastData = { // SadHam
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 40,
@@ -508,7 +504,6 @@ const Bearos: BlastData = { // Bearos
     movepool: [
         { move_id: Slam.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 50,
@@ -527,7 +522,6 @@ const Treex: BlastData = { // Treex
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 30,
@@ -546,7 +540,6 @@ const Moutmout: BlastData = { // Moutmout
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 35,
@@ -584,7 +577,6 @@ const Bleaub: BlastData = { // Bleaub
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 45,
@@ -603,7 +595,6 @@ const Shroom: BlastData = { // Shroom
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 50,
@@ -678,7 +669,6 @@ const Mystical: BlastData = { // Mystical
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 45,
@@ -697,7 +687,6 @@ const Clover: BlastData = { // Clover
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 50,
@@ -735,7 +724,6 @@ const Wormie: BlastData = { // Wormie
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 35,
@@ -754,7 +742,6 @@ const Skel: BlastData = { // Skel
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 40,
@@ -811,7 +798,6 @@ const Forty: BlastData = { // Forty
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 50,
@@ -830,7 +816,6 @@ const Bud: BlastData = { // Bud
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
         { move_id: Growl.id, levelMin: 5 },
-        { move_id: ElectroBall.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 30,
@@ -849,7 +834,6 @@ const Hiboo: BlastData = { // Hiboo
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 35,
@@ -887,7 +871,6 @@ const Dracoblast: BlastData = { // Dracoblast
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 45,
@@ -906,7 +889,6 @@ const Cerberus: BlastData = { // Cerberus
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
         { move_id: Harden.id, levelMin: 5 },
-        { move_id: ThunderShock.id, levelMin: 10 },
     ],
     nextEvolution: null,
     catchRate: 45,

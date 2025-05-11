@@ -401,5 +401,10 @@ public class GameView : View
         await _dialogLayout.UpdateTextAsync(textToShow);
         _dialogLayout.Hide();
     }
+
+    public void HandleOnInfoTypeClick()
+    {
+        UIManager.Instance.TypeInfoPopup.OpenPopup();
+    }
     #endregion
 }

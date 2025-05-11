@@ -207,7 +207,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-            var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
+            var newBlast = getRandomBlastInPlayerArea(Math.floor(state.index_progression / 10), nk);
 
             state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
@@ -488,7 +488,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     state.blast_defeated++;
                 }
 
-                var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
+                var newBlast = getRandomBlastInPlayerArea(Math.floor(state.index_progression / 10), nk);
 
                 state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 

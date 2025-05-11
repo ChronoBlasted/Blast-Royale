@@ -17,42 +17,42 @@ const theDarkCaves: Area = {
     id: 1,
     trophyRequired: 300,
     blastIds: [Balt.id, Stagpan.id, Botte.id, Booh.id, Ghoosto.id],
-    blastLevels: [4, 10]
+    blastLevels: [4, 8]
 }
 
 const theMiniHell: Area = {
     id: 2,
     trophyRequired: 600,
-    blastIds: [Goblin.id, MiniDevil.id, DevilDare.id,Masks.id,Luckun.id,MiniHam.id,SadHam.id],
-    blastLevels: [8, 15]
+    blastIds: [Goblin.id, MiniDevil.id, DevilDare.id, Masks.id, Luckun.id, MiniHam.id, SadHam.id],
+    blastLevels: [7, 11]
 }
 
 const theWildForest: Area = {
     id: 3,
     trophyRequired: 1000,
-    blastIds: [Bearos.id, Treex.id, Moutmout.id,Piggy.id,Bleaub.id,Shroom.id],
-    blastLevels: [13, 20]
+    blastIds: [Bearos.id, Treex.id, Moutmout.id, Piggy.id, Bleaub.id, Shroom.id],
+    blastLevels: [10, 14]
 }
 
 const theWideOcean: Area = {
     id: 4,
     trophyRequired: 1300,
-    blastIds: [Lantern.id, Droplet.id, Fireball.id,Mystical.id,Wormie.id,Smoky.id],
-    blastLevels: [17, 25]
+    blastIds: [Lantern.id, Droplet.id, Fireball.id, Mystical.id, Wormie.id, Smoky.id],
+    blastLevels: [13, 17]
 }
 
 const theGloryCastle: Area = {
     id: 5,
     trophyRequired: 1600,
-    blastIds: [Clover.id, Scorlov.id, Skel.id,Frederic.id,Bud.id],
-    blastLevels: [22, 30]
+    blastIds: [Clover.id, Scorlov.id, Skel.id, Frederic.id, Bud.id],
+    blastLevels: [16, 20]
 }
 
 const theElusiveMount: Area = {
     id: 6,
     trophyRequired: 2000,
-    blastIds: [Forty.id, Hiboo.id, Eggy.id,Dracoblast.id,Cerberus.id],
-    blastLevels: [27, 40]
+    blastIds: [Forty.id, Hiboo.id, Eggy.id, Dracoblast.id, Cerberus.id],
+    blastLevels: [19, 30]
 }
 
 const allArea: Area[] = [
@@ -70,24 +70,22 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
         return JSON.stringify(allArea);
     }
 
-// function getRandomBlastInPlayerArea(userId: string, logger: nkruntime.Logger, nk: nkruntime.Nakama): Blast {
+function getRandomBlastInPlayerArea(newAreaId: number, nk: nkruntime.Nakama): Blast {
 
-//     let metadata = nk.accountGetId(userId).user.metadata;
+    let areaId = clamp(newAreaId, 0, allArea.length)
 
-//     let randomBlastId = getRandomBlastIdInPlayerAreaIdInArea(metadata.area);
-//     let blastData = getBlastDataById(randomBlastId);
-//     let randomLevel = getRandomLevelInArea(metadata.area);
+    let randomBlastId = getRandomBlastIdWithAreaId(areaId);
+    let blastData = getBlastDataById(randomBlastId);
+    let randomLevel = getRandomLevelInArea(areaId);
 
-//     let randomIv = getRandomNumber(MinIV, MaxIV);
+    let randomIv = getRandomNumber(MinIV, MaxIV);
 
-//     let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
+    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
 
-//     logger.debug('user %s successfully get a random blast', userId);
+    return newBlast;
+}
 
-//     return newBlast;
-// }
-
-function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama,logger: nkruntime.Logger): Blast {
+function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama, logger: nkruntime.Logger): Blast {
 
     const account = nk.accountGetId(userId);
     const metadata = account.user.metadata as PlayerMetadata;
@@ -106,12 +104,12 @@ function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakam
 
 function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, level: number): Blast {
     return {
-    uuid: nk.uuidv4(),
-    data_id: randomBlastId,
-    exp: calculateExperienceFromLevel(level),
-    iv: randomIv,
-    activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level)),
-};
+        uuid: nk.uuidv4(),
+        data_id: randomBlastId,
+        exp: calculateExperienceFromLevel(level),
+        iv: randomIv,
+        activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level)),
+    };
 }
 
 function getRandomBlastIdWithAreaId(id: number): number {
