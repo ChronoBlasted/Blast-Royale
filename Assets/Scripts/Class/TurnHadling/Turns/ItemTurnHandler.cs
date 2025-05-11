@@ -39,7 +39,7 @@ public class ItemTurnHandler : TurnActionHandler
 
         if (context.IsCatched)
         {
-            UIManager.Instance.GameView.DoEndMatch("You caught the wild " + nakamaData.GetBlastDataRef(context.Defender.data_id).Name.GetLocalizedString());
+            await UIManager.Instance.GameView.DoShowMessage("You caught the wild " + nakamaData.GetBlastDataRef(context.Defender.data_id).Name.GetLocalizedString());
             return true;
         }
 

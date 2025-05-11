@@ -41,7 +41,9 @@ interface WildBattleData {
     wild_blast: BlastEntity | null;
     wild_blast_platform: Type[];
 
+    index_progression: number;
     blast_defeated: number;
+    blast_catched: number;
 
     meteo: Meteo
 
@@ -96,7 +98,9 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         wild_blast: null,
         wild_blast_platform: [],
 
+        index_progression: 0,
         blast_defeated: 0,
+        blast_catched: 0,
 
         meteo: Meteo.None,
 
@@ -145,6 +149,24 @@ const matchJoin = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, dispatcher: nkruntime.MatchDispatcher, tick: number, state: WildBattleData, presences: nkruntime.Presence[]): { state: WildBattleData } | null {
     for (let presence of presences) {
         logger.info("Player: %s left match: %s.", presence.userId, ctx.matchId);
+
+        if (state.player1_id == presence.userId) {
+
+            if (state.blast_catched > 0) {
+                incrementMetadataStat(nk, state.player1_id, "blast_catched", state.blast_catched);
+            }
+
+            if (state.blast_defeated > 0) {
+
+                incrementMetadataStat(nk, state.player1_id, "blast_defeated", state.blast_defeated);
+                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, state.blast_defeated);
+            }
+
+            if (state.index_progression > 0) {
+                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200 * state.index_progression)
+            }
+        }
+
         state.presences[presence.userId] = null;
     }
 
@@ -453,17 +475,18 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             const wildAlive = isBlastAlive(wildBlast);
             const allPlayerDead = isAllBlastDead(state.p1_blasts);
 
-            if (wildAlive == false) {
-                state.blast_defeated++;
+            if (wildAlive == false || state.TurnStateData.catched) {
+
+                state.index_progression++;
 
                 addExpOnBlastInGame(nk, logger, state.player1_id, playerBlast, wildBlast);
 
-                if (state.TurnStateData.catched) incrementMetadataStat(nk, state.player1_id, "blast_catched", 1);
-                else incrementMetadataStat(nk, state.player1_id, "blast_defeated", 1);
-
-                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200)
-
-                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, 1);
+                if (state.TurnStateData.catched) {
+                    state.blast_catched++;
+                }
+                else {
+                    state.blast_defeated++;
+                }
 
                 var newBlast = getRandomBlastEntityInAllPlayerArea(state.player1_id, nk, logger);
 

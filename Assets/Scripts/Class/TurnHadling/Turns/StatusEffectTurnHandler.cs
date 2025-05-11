@@ -7,9 +7,11 @@ public class StatusEffectTurnHandler : TurnActionHandler
 
     public override async Task<bool> HandleTurn()
     {
+        PlayerBattleInfo currentPlayer = NakamaLogic.Instance.GetBlastOwner(context.Attacker, context.Players);
+
         NakamaLogic.ApplyStatusEffectAtEndOfTurn(context.Attacker, context.Defender);
 
-        await gameView.ApplyStatusEndTurn(true, context.Attacker, context.Defender);
+        await gameView.ApplyStatusEndTurn(currentPlayer.OwnerType == BlastOwner.Me, context.Attacker, context.Defender);
 
         if (await context.CheckIfAlive() == false) return true;
 

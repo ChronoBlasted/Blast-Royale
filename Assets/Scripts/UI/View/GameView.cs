@@ -16,6 +16,7 @@ public class GameView : View
 
     [SerializeField] HUDLayout _playerHUD, _opponentHUD;
     [SerializeField] DialogLayout _dialogLayout;
+    [SerializeField] ProgressionLayout _progressionLayout;
 
     public HUDLayout PlayerHUD { get => _playerHUD; }
     public HUDLayout OpponentHUD { get => _opponentHUD; }
@@ -112,12 +113,12 @@ public class GameView : View
     {
         _bottomNavBar.Hide(instant);
 
-        _runBtnCG.DOFade(0, .2f);
+        _runBtnCG.DOFade(0, instant ? 0 : .2f);
         _runBtnCG.interactable = false;
         _runBtnCG.blocksRaycasts = false;
 
 
-        _waitBtnCG.DOFade(0, .2f);
+        _waitBtnCG.DOFade(0, instant ? 0 : .2f);
         _waitBtnCG.interactable = false;
         _waitBtnCG.blocksRaycasts = false;
     }
@@ -188,6 +189,11 @@ public class GameView : View
         EnvironmentManager.Instance.SetMeteo(meteo);
     }
 
+    public void SetProgression(int indexProgression)
+    {
+        _progressionLayout.Init(indexProgression);
+    }
+
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
     {
         _playerHUD.UpdateManaBar(playerBlast.Mana);
@@ -237,20 +243,6 @@ public class GameView : View
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
-    public async Task AllPlayerBlastFainted(PlayerBattleInfo playerWithNoBlast)
-    {
-        _dialogLayout.Show();
-        await _dialogLayout.UpdateTextAsync(playerWithNoBlast.Username +" Blasts are all fainted !");
-        _dialogLayout.Hide();
-    }
-
-    public async Task WildBlastFainted(PlayerBattleInfo playerWithNoBlast)
-    {
-        _dialogLayout.Show();
-        await _dialogLayout.UpdateTextAsync(NakamaData.Instance.GetBlastDataRef(playerWithNoBlast.ActiveBlast.data_id).Name.GetLocalizedString() + " has fainted !");
-        _dialogLayout.Hide();
-    }
-
     public async Task BlastFainted(bool isPlayer, Blast blast)
     {
         HUDLayout waiterHUD;
@@ -293,23 +285,17 @@ public class GameView : View
         switch (itemData.behaviour)
         {
             case ItemBehaviour.HEAL:
-                _dialogLayout.Show();
-
-                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
+                await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateHpBar(selectedBlast.Hp);
                 break;
             case ItemBehaviour.MANA:
-                _dialogLayout.Show();
-
-                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
+                await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
             case ItemBehaviour.STATUS:
-                _dialogLayout.Show();
-
-                await _dialogLayout.UpdateTextAsync("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
+                await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.SetStatus(selectedBlast.status);
                 break;
@@ -409,14 +395,11 @@ public class GameView : View
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
-    public async void DoEndMatch(string textToShow)
+    public async Task DoShowMessage(string textToShow)
     {
+        _dialogLayout.Show();
         await _dialogLayout.UpdateTextAsync(textToShow);
-
-        await Task.Delay(TimeSpan.FromMilliseconds(1000));
-
-        GameStateManager.Instance.UpdateStateToEnd();
-
+        _dialogLayout.Hide();
     }
     #endregion
 }

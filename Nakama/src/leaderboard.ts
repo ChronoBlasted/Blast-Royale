@@ -56,8 +56,6 @@ function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
 
     try {
         nk.leaderboardsGetId([leaderboardId]);
-        logger.error("Leaderboard exist !");
-
     } catch (error: any) {
         logger.error("Leaderboard dont exist error: %s", JSON.stringify(error));
     }
@@ -66,7 +64,6 @@ function writeRecordLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, 
 
     try {
         nk.leaderboardRecordWrite(leaderboardId, userId, username, score, 0, undefined, incrementType);
-        logger.debug("Successfully wrote to leaderboard.");
     } catch (error: any) {
         logger.error("Leaderboard write error: %s", JSON.stringify(error));
     }

@@ -26,6 +26,8 @@ public class BlastInWorld : MonoBehaviour
         transform.localScale = Vector3.one;
         BlastRender.transform.localScale = Vector3.one;
 
+        PlatformLayout.ResetPlatform();
+
         _chronoTweenHelper.TweenAction?.Invoke();
 
         if (_currentTrap != null) Destroy(_currentTrap);

@@ -23,6 +23,10 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     NakamaData _dataUtils;
 
     // Data
+    int _indexProgression;
+    int _blastDefeated;
+    int _blastCatched;
+
     List<Blast> _playerSquads = new List<Blast>();
     List<Item> _playerItems = new List<Item>();
     PlayerBattleInfo _playerMeInfo;
@@ -68,20 +72,24 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         _playerMeInfo = new PlayerBattleInfo(_userAccount.Username, BlastOwner.Me, _playerSquads[0], _playerSquads, _playerItems);
 
+        _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
+        _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
+
         SetNewWildBlast(startData.newBlastData);
         ShowWildBlast();
 
         _gameView.SetMeteo(startData.meteo);
         _meteo = startData.meteo;
 
+        _indexProgression = 1;
+        _blastDefeated = 0;
+        _blastCatched = 0;
+
+        _gameView.SetProgression(_indexProgression);
+
         _gameView.PlayerHUD.Init(_playerMeInfo.ActiveBlast);
 
-        _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
-        _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
-
         _ = _gameView.PlayerHUD.ComeBackBlast(true);
-
-
         _ = _gameView.PlayerHUD.ThrowBlast();
 
         _gameView.AttackPanel.UpdateAttack(_playerMeInfo.ActiveBlast);
@@ -290,12 +298,22 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     {
         EndTurn();
 
-        if (NakamaLogic.IsBlastAlive(_playerWildInfo.ActiveBlast) == false)
+        if (NakamaLogic.IsBlastAlive(_playerWildInfo.ActiveBlast) == false || _turnStateData.catched)
         {
+            _indexProgression++;
+
+            if (_turnStateData.catched) _blastCatched++;
+            else _blastDefeated++;
+
+            _gameView.SetProgression(_indexProgression);
+
             ShowWildBlast();
         }
 
-        NakamaManager.Instance.NakamaWildBattle.PlayerReady();
+        if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
+        {
+            NakamaManager.Instance.NakamaWildBattle.PlayerReady();
+        }
     }
 
 

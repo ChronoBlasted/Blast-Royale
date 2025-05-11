@@ -39,11 +39,11 @@ public class GameLogicContext
         {
             if (CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
             {
-                await UIManager.Instance.GameView.AllPlayerBlastFainted(CurrentPlayerDefender);
+                await UIManager.Instance.GameView.DoShowMessage(CurrentPlayerDefender.Username + " Blasts are all fainted !");
             }
             else
             {
-                await UIManager.Instance.GameView.WildBlastFainted(CurrentPlayerDefender);
+                await UIManager.Instance.GameView.DoShowMessage(NakamaData.Instance.GetBlastDataRef(CurrentPlayerDefender.ActiveBlast.data_id).Name.GetLocalizedString() + " has fainted !");
             }
         }
 
