@@ -35,19 +35,6 @@ public class GameLogicContext
 
         bool isBlastAlive = NakamaLogic.IsBlastAlive(Defender);
 
-        if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts))
-        {
-            if (CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
-            {
-                await UIManager.Instance.GameView.DoShowMessage(CurrentPlayerDefender.Username + " Blasts are all fainted !");
-            }
-            else
-            {
-                await UIManager.Instance.GameView.DoShowMessage(NakamaData.Instance.GetBlastDataRef(CurrentPlayerDefender.ActiveBlast.data_id).Name.GetLocalizedString() + " has fainted !");
-            }
-        }
-
-
         if (!isBlastAlive)
         {
             switch (CurrentPlayerDefender.OwnerType)

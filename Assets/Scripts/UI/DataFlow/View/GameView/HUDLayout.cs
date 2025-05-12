@@ -19,6 +19,7 @@ public class HUDLayout : MonoBehaviour
 
     [SerializeField] ModifierManager _modifierManager;
     [SerializeField] StatusLayout _statusLayout;
+    [SerializeField] Color _expColor;
 
     Blast _blast;
 
@@ -29,6 +30,7 @@ public class HUDLayout : MonoBehaviour
     public RectTransform BlastTransformInUI { get => _blastTransformInUI; }
     public BlastInWorld BlastInWorld { get => _blastInWorld; }
     public AttackLayout AttackLayout { get => _attackLayout; }
+    public Blast Blast { get => _blast; }
 
     public void Init(Blast blast)
     {
@@ -83,7 +85,7 @@ public class HUDLayout : MonoBehaviour
             DoTakeDamageAnim(defender, damage, effective);
         });
 
-        await Task.Delay(1000);
+        await Task.Delay(500);
     }
 
     public void DoTakeDamageAnim(Blast defender, int damage, float effective)
@@ -101,7 +103,7 @@ public class HUDLayout : MonoBehaviour
 
         StartCoroutine(HitCoroutine(damage, .1f, effective > 1));
 
-        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .5f);
+        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .1f);
     }
 
     private IEnumerator HitCoroutineFX(float delay)
@@ -119,20 +121,47 @@ public class HUDLayout : MonoBehaviour
 
         var currentFloatingText = PoolManager.Instance[ResourceType.FloatingText].Get();
         currentFloatingText.transform.position = _lastOpponentHUD.BlastTransformInUI.position;
-        currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), Color.white, isEffective);
+        currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), Color.white, TextStyle.H1, isEffective);
     }
 
 
-    public async Task DoFaintedAnim()
+    public void DoFaintedAnim()
     {
         _blastInWorld.BlastRender.DOFade(0, .5f);
 
-        _blastInWorld.BlastRender.transform.DOLocalMove(new Vector2(0, -2), 0.5f);
+        Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastFainted).Prefab, _blastInWorld.transform.position, Quaternion.identity);
+
+        _blastInWorld.BlastRender.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack);
 
         transform.DOScale(0f, .5f);
         _cg.DOFade(0f, .5f);
+    }
 
-        await Task.Delay(TimeSpan.FromMilliseconds(500));
+    public void DoSpawnExpBall(HUDLayout opponentHUD, int amountExp)
+    {
+        _lastOpponentHUD = opponentHUD;
+
+        StartCoroutine(EnvironmentManager.Instance.DOTravelWorldCor(TravelEffect.EXPLODE, Vector3.one, ResourceType.BlastExp, _blastInWorld.transform, opponentHUD.BlastInWorld.transform, DoScaleExpBall, 0.5f, amountExp));
+    }
+
+    public void DoScaleExpBall(bool isStart)
+    {
+        if (isStart)
+        {
+        }
+        else
+        {
+            BlastData currentData = NakamaData.Instance.GetBlastDataById(_blast.data_id);
+            float amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(currentData.expYield, _blast.Level, _lastOpponentHUD.Blast.Level) / NakamaLogic.GetAmountExpBall(NakamaData.Instance.GetBlastDataById(_lastOpponentHUD.Blast.data_id)));
+
+            DOTween.Kill(_lastOpponentHUD.BlastInWorld.BlastRender.transform, true);
+
+            _lastOpponentHUD.BlastInWorld.BlastRender.transform.DOPunchScale(new Vector3(.1f, .1f, .1f), .2f);
+
+            var currentFloatingText = PoolManager.Instance[ResourceType.FloatingText].Get();
+            currentFloatingText.transform.position = _lastOpponentHUD.BlastInWorld.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, 0);
+            currentFloatingText.GetComponent<FloatingText>().Init("+" + amountExp + "exp", _expColor, TextStyle.H3);
+        }
     }
 
     public async Task ComeBackBlast(bool isIntant = false)
@@ -161,6 +190,9 @@ public class HUDLayout : MonoBehaviour
         _blastInWorld.BlastRender.DOFade(1f, duration);
 
         transform.DOScale(1f, duration);
+
+        _blastInWorld.BlastRender.transform.localScale = Vector3.zero;
+        _blastInWorld.BlastRender.transform.DOScale(Vector3.one, duration);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }

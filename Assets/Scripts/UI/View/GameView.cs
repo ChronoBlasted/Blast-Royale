@@ -194,6 +194,11 @@ public class GameView : View
         _progressionLayout.Init(indexProgression);
     }
 
+    public void AddProgress()
+    {
+        _progressionLayout.SlideNext();
+    }
+
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
     {
         _playerHUD.UpdateManaBar(playerBlast.Mana);
@@ -239,19 +244,29 @@ public class GameView : View
         otherHUD.UpdateManaBar(otherBlast.Mana);
         otherHUD.UpdateHpBar(otherBlast.Hp);
 
-
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
     public async Task BlastFainted(bool isPlayer, Blast blast)
     {
-        HUDLayout waiterHUD;
+        HUDLayout faintedHUD;
+        HUDLayout attackerHUD;
 
-        // TODO Amplifie KO
+        faintedHUD = isPlayer ? _playerHUD : _opponentHUD;
+        attackerHUD = isPlayer ? _opponentHUD : _playerHUD;
 
-        waiterHUD = isPlayer ? _playerHUD : _opponentHUD;
+        DoZoomEffect(faintedHUD, "", 5);
 
-        await waiterHUD.DoFaintedAnim();
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+        faintedHUD.DoSpawnExpBall(attackerHUD, NakamaLogic.GetAmountExpBall(NakamaData.Instance.GetBlastDataById(blast.data_id)));
+        faintedHUD.DoFaintedAnim();
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+        ResetZoomEffect(faintedHUD);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
     public async Task BlastSwap(Blast currentBlast, Blast newCurrentBlast)
@@ -323,25 +338,16 @@ public class GameView : View
         float effective = NakamaLogic.GetTypeMultiplier(move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
 
-        HideHUD();
-
-        attackerHUD.AttackLayout.Show(moveDataRef.Name.GetLocalizedString(), move.type);
-        CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
-        CameraManager.Instance.SetCameraZoom(6);
         float shakeIntensity = .5f;
         if (damage > 50) shakeIntensity = 1f;
         else if (damage > 100) shakeIntensity = 2f;
         else if (damage > 200) shakeIntensity = 4f;
-        CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
-        EnvironmentManager.Instance.SetDarkBackground(true);
+
+        DoZoomEffect(attackerHUD, moveDataRef.Name.GetLocalizedString(), -5f, move.type, shakeIntensity);
 
         await Task.Delay(TimeSpan.FromMilliseconds(1000));
 
-        attackerHUD.AttackLayout.Hide();
-        CameraManager.Instance.Reset();
-        EnvironmentManager.Instance.SetDarkBackground(false);
-
-        ShowHUD();
+        ResetZoomEffect(attackerHUD);
 
         switch (move.target)
         {
@@ -385,7 +391,7 @@ public class GameView : View
             var isStatusMove = move.attackType == AttackType.Status;
             defenderHUD.AddModifier(moveEffect, isStatusMove ? move.power : 1);
 
-            Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.BlastRender.transform);
+            Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.transform);
 
             defenderHUD.BlastInWorld.DoTakeDamageRender();
 
@@ -393,6 +399,30 @@ public class GameView : View
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
+    }
+
+    private void ResetZoomEffect(HUDLayout attackerHUD)
+    {
+        attackerHUD.AttackLayout.Hide();
+        CameraManager.Instance.Reset();
+        EnvironmentManager.Instance.SetDarkBackground(false);
+
+        ShowHUD();
+    }
+
+    private void DoZoomEffect(HUDLayout attackerHUD, string text, float tilt = 5f, Type type = Type.Normal, float shakeIntensity = 0f)
+    {
+        HideHUD();
+
+        if (text != "")
+        {
+            attackerHUD.AttackLayout.transform.rotation = Quaternion.Euler(0, 0, tilt);
+            attackerHUD.AttackLayout.Show(text, type);
+        }
+        CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
+        CameraManager.Instance.SetCameraZoom(6);
+        CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
+        EnvironmentManager.Instance.SetDarkBackground(true);
     }
 
     public async Task DoShowMessage(string textToShow)

@@ -9,13 +9,12 @@ public class FloatingText : MonoBehaviour
     public TMP_Text Text;
     Sequence _tween;
 
-    public void Init(string text, Color color, bool isCrit = false)
+    public void Init(string text, Color color, TextStyle textStyle = TextStyle.Normal, bool isCrit = false)
     {
         Text.alpha = 1;
         Text.transform.localScale = Vector3.one;
-        Text.text = text;
+        Text.text = "<style=" + textStyle.ToString() + "> " + text + "</style>";
         Text.color = color;
-
 
         Vector3 punchScale = isCrit ? new Vector3(1.5f, 1.5f, 1.5f) : new Vector3(1.2f, 1.2f, 1.2f);
 

@@ -7,7 +7,6 @@ using UnityEngine;
 public class BlastInWorld : MonoBehaviour
 {
     [SerializeField] bool _isPlayer;
-    [SerializeField] ChronoTweenHelper _chronoTweenHelper;
     public SpriteRenderer BlastRender;
     public PlatformLayout PlatformLayout;
     Material _flashMaterial;
@@ -27,8 +26,6 @@ public class BlastInWorld : MonoBehaviour
         BlastRender.transform.localScale = Vector3.one;
 
         PlatformLayout.ResetPlatform();
-
-        _chronoTweenHelper.TweenAction?.Invoke();
 
         if (_currentTrap != null) Destroy(_currentTrap);
 
@@ -147,8 +144,6 @@ public class BlastInWorld : MonoBehaviour
             _currentTrap.transform.DOMoveY(-64, .5f).SetEase(Ease.OutSine);
 
             Instantiate(ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CatchFailure).Prefab, _currentTrap.transform.position, Quaternion.identity);
-
-            _chronoTweenHelper.TweenAction?.Invoke();
 
             Destroy(_currentTrap, .5f);
 

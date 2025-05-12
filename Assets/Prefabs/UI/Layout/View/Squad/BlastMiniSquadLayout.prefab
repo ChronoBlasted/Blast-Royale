@@ -282,9 +282,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3220978175370244449}
     m_Modifications:
+    - target: {fileID: 1827621488982571989, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6531696928567048073, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_Name
       value: BlastContainerLayout
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.g
+      value: 0.4784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_Color.r
+      value: 0.015686275
+      objectReference: {fileID: 0}
+    - target: {fileID: 7208792529644721226, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8500324537202406822, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
       propertyPath: m_Pivot.x
@@ -379,6 +403,17 @@ RectTransform:
 --- !u!114 &6626758206046105110 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7873895318244371227, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
+  m_PrefabInstance: {fileID: 3941577015124641037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7619211215038705606 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6849881927539010251, guid: 7e4b20575d6080c40bce95b2462c6e3d, type: 3}
   m_PrefabInstance: {fileID: 3941577015124641037}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -739,6 +774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blastIndex: 0
   _bg: {fileID: 1354807046337864807}
+  _bgGlow: {fileID: 7619211215038705606}
   _blastIco: {fileID: 6626758206046105110}
   _blastName: {fileID: 4427094474823370493}
   _hpSlider: {fileID: 6832973965131577021}
@@ -747,6 +783,8 @@ MonoBehaviour:
   _aliveBG: {fileID: 21300000, guid: ec7aaa982f3834c6ea4bea852e7f47a3, type: 3}
   _deadBG: {fileID: 21300000, guid: 43d850e9432604fbe9fc16c8c0fa806a, type: 3}
   _activeBG: {fileID: 21300000, guid: dba1778089a2a435a8497d66016e7437, type: 3}
+  _onGlow: {r: 0.9882353, g: 1, b: 0.4117647, a: 1}
+  _offGlow: {r: 0.015686275, g: 0.4784314, b: 0.7960785, a: 1}
 --- !u!225 &2214101085751608381
 CanvasGroup:
   m_ObjectHideFlags: 0

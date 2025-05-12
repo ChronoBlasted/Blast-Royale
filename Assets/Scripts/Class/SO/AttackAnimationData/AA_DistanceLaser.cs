@@ -18,6 +18,7 @@ public class AA_DistanceLaser : AAData
         fx.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
 
         await Task.Delay(500);
+
         onHitCallback?.Invoke();
     }
 }

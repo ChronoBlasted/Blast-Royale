@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class BlastInfoPopup : Popup
 {
-    [SerializeField] TMP_Text _blastNameTxt, _blastDescTxt, _blastLevel, _blastExp, _blastHp, _blastMana, _blastAttack, _blastDefense, _blastSpeed, _blastType;
+    [SerializeField] TMP_Text _blastNameTxt, _blastDescTxt, _blastLevel, _blastExp, _blastHp, _blastMana, _blastAttack, _blastDefense, _blastSpeed, _blastIv, _blastType;
     [SerializeField] Image _blastImg, _bgBlast, _blastTypeImg;
     [SerializeField] GameObject _prestigeEvolveLayout, _moveLayout;
     [SerializeField] CustomButton _prestigeButton, _evolveButton;
@@ -40,7 +40,7 @@ public class BlastInfoPopup : Popup
         _currentBlastData = _nakamaData.GetBlastDataById(blast.data_id);
 
         SetBlastUI(_currentBlastData, blast.Level, blast.GetRatioExp(), blast.GetRatioExpNextLevel());
-        SetStatsUI(blast.MaxHp, blast.MaxMana, blast.Attack, blast.Defense, blast.Speed);
+        SetStatsUI(blast.MaxHp, blast.MaxMana, blast.Attack, blast.Defense, blast.Speed, blast.iv);
         SetTypeUI(_currentBlastData.type);
         SetMovesUI(blast.activeMoveset);
 
@@ -53,7 +53,7 @@ public class BlastInfoPopup : Popup
         _currentBlastData = blastData;
 
         SetBlastUI(_currentBlastData);
-        SetStatsUI(blastData.hp, blastData.mana, blastData.attack, blastData.defense, blastData.speed);
+        SetStatsUI(blastData.hp, blastData.mana, blastData.attack, blastData.defense, blastData.speed, -1);
         SetTypeUI(blastData.type);
 
         _moveLayout.SetActive(false);
@@ -72,13 +72,15 @@ public class BlastInfoPopup : Popup
         _blastImg.sprite = refData.Sprite;
     }
 
-    private void SetStatsUI(int hp, int mana, float attack, float defense, float speed)
+    private void SetStatsUI(int hp, int mana, float attack, float defense, float speed, int Iv)
     {
         _blastHp.text = hp.ToString();
         _blastMana.text = mana.ToString();
         _blastAttack.text = attack.ToString();
         _blastDefense.text = defense.ToString();
         _blastSpeed.text = speed.ToString();
+        if (Iv > 0) _blastIv.text = "IV:" + Iv;
+        else _blastIv.text = "";
     }
 
     private void SetTypeUI(Type type)

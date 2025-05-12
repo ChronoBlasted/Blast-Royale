@@ -3,9 +3,11 @@ using System;
 public enum ResourceType
 {
     None = 0,
+    BaseImg = 1,
 
     ______UI______ = 400,
 
+    //UI Resources
     Coin = 401,
     Gem = 402,
     Trophy = 403,
@@ -13,15 +15,15 @@ public enum ResourceType
     Unlock = 405,
     FloatingText = 406,
     BlastDefeated = 407,
-
     Blast = 408,
     Item = 409,
     BlastPedia = 410,
     ItemPedia = 411,
+    ErrorMsg = 412,
     MovePedia = 413,
 
-    ErrorMsg = 412,
 
+    // Stats
     Health = 420,
     Mana = 421,
     Attack = 422,
@@ -29,27 +31,27 @@ public enum ResourceType
     Speed = 424,
     Type = 425,
 
+    // Meteo
     Sun = 440,
     Rain = 441,
     Leaves = 442,
 
+    // Status
     Burn = 460,
     Seeded = 461,
     Wet = 462,
 
+    // Move Effects
     ManaExplosion = 463,
     HpExplosion = 464,
-
     ManaRestore = 465,
     HpRestore = 466,
-
     AttackBoost = 467,
     DefenseBoost = 468,
     SpeedBoost = 469,
     AttackReduce = 470,
     DefenseReduce = 471,
     SpeedReduce = 472,
-
     Cleanse = 473,
 
     Wait = 490,
@@ -57,27 +59,11 @@ public enum ResourceType
     AttackDamage = 500,
     AttackStatus = 501,
 
-    PlatformCost = 510,
-
+    // Battle resource
     CatchSuccess = 520,
     CatchFailure = 521,
-}
-
-public enum UIType
-{
-    Coin = ResourceType.Coin,
-    Gem = ResourceType.Gem,
-    Trophy = ResourceType.Trophy,
-    Lock = ResourceType.Lock,
-    Unlock = ResourceType.Unlock,
-    FloatingText = ResourceType.FloatingText,
-    BlastDefeated = ResourceType.BlastDefeated,
-    Blast = ResourceType.Blast,
-    Item = ResourceType.Item,
-    BlastPedia = ResourceType.BlastPedia,
-    ItemPedia = ResourceType.ItemPedia,
-    ErrorMsg = ResourceType.ErrorMsg,
-    MovePedia = ResourceType.MovePedia
+    BlastFainted = 522,
+    BlastExp = 523,
 }
 
 public enum StatType

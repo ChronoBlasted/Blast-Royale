@@ -305,7 +305,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             if (_turnStateData.catched) _blastCatched++;
             else _blastDefeated++;
 
-            _gameView.SetProgression(_indexProgression);
+            _gameView.AddProgress();
 
             ShowWildBlast();
         }

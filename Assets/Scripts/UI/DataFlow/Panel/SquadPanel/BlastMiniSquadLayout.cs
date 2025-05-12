@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class BlastMiniSquadLayout : MonoBehaviour
 {
     [SerializeField] int _blastIndex;
-    [SerializeField] Image _bg, _blastIco;
+    [SerializeField] Image _bg, _bgGlow, _blastIco;
     [SerializeField] TMP_Text _blastName;
     [SerializeField] SliderBar _hpSlider, _manaSlider;
     [SerializeField] LockLayout _lockLayout;
 
     [SerializeField] Sprite _aliveBG, _deadBG, _activeBG;
+    [SerializeField] Color _onGlow, _offGlow;
 
     Blast _currentBlast;
 
@@ -58,6 +59,11 @@ public class BlastMiniSquadLayout : MonoBehaviour
         if (_currentBlast == WildBattleManager.Instance.PlayerBlast)
         {
             _bg.sprite = _activeBG;
+            _bgGlow.color = _onGlow;
+        }
+        else
+        {
+            _bgGlow.color = _offGlow;
         }
     }
 

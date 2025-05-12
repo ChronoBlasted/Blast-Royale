@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8599986884909377417}
   - component: {fileID: 6652734401649135949}
-  - component: {fileID: 5921108618508451010}
   m_Layer: 0
   m_Name: Renderer
   m_TagString: Untagged
@@ -85,40 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5921108618508451010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 45350554938789226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39ac6d95f90ca5c47b6693ef2aa33e1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tweenAction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5921108618508451010}
-        m_TargetAssemblyTypeName: ChronoTweenHelper, Utils
-        m_MethodName: DoScale
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _amountFloat: 0
-  _amountVector: {x: 0.1, y: 0.05, z: 0}
-  _duration: 1
-  _ease: 4
-  _loopAmount: -1
-  _loopType: 1
-  _startDelay: 0
 --- !u!1 &1148874445669261684
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +639,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPlayer: 1
-  _chronoTweenHelper: {fileID: 5921108618508451010}
   BlastRender: {fileID: 6652734401649135949}
   PlatformLayout: {fileID: 5441009692615221347}
 --- !u!1 &5813597775480476910

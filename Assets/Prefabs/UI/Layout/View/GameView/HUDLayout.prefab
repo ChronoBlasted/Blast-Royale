@@ -592,7 +592,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 384, y: 192}
+  m_SizeDelta: {x: 384, y: 384}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1480226484965897544
 MonoBehaviour:
@@ -658,10 +658,12 @@ MonoBehaviour:
   _blastLevelTxt: {fileID: 4324723022792292212}
   _hpSlider: {fileID: 4119877489442215221}
   _manaSlider: {fileID: 6452923543159697837}
+  _attackLayout: {fileID: 0}
   _blastTransformInUI: {fileID: 0}
   _blastInWorld: {fileID: 0}
   _modifierManager: {fileID: 2044611163523984925}
   _statusLayout: {fileID: 3563415193288248438}
+  _expColor: {r: 0, g: 0.7882353, b: 0.99215686, a: 1}
 --- !u!225 &2721102228282292423
 CanvasGroup:
   m_ObjectHideFlags: 0

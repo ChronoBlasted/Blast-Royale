@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class BlastLayout : MonoBehaviour
 {
-    [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt;
+    [SerializeField] TMP_Text _blastNameTxt, _blastLevelTxt, _blastIvTxt;
     [SerializeField] Image _blastImg, _bg;
     [SerializeField] HiddenInfoMenu _hiddenInfoMenu;
 
@@ -26,6 +26,7 @@ public class BlastLayout : MonoBehaviour
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(blast.data_id).Name.GetLocalizedString();
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
+        _blastIvTxt.text = "IV:" + _blast.iv;
 
         _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blast.data_id).Sprite;
         _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(blastData.type).Color;

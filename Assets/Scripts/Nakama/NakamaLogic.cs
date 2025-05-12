@@ -413,6 +413,29 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         }
     }
 
+    public static int GetAmountExpBall(BlastData blastData)
+    {
+        switch (blastData.rarity)
+        {
+            case Rarity.COMMON:
+                return 2;
+            case Rarity.UNCOMMON:
+                return 3;
+            case Rarity.RARE:
+                return 5;
+            case Rarity.EPIC:
+                return 7;
+            case Rarity.LEGENDARY:
+                return 10;
+            case Rarity.ULTIMATE:
+                return 10;
+            case Rarity.UNIQUE:
+                return 5;
+            default:
+                return 0;
+        }
+    }
+
     public static TEnum GetEnumFromIndex<TEnum>(int index) where TEnum : Enum
     {
         TEnum[] values = (TEnum[])Enum.GetValues(typeof(TEnum));
