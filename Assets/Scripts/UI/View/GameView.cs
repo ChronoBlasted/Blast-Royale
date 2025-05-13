@@ -136,7 +136,6 @@ public class GameView : View
         _waitBtnCG.blocksRaycasts = true;
     }
 
-
     public void HideHUD()
     {
         _playerHUD.Hide();
@@ -258,6 +257,8 @@ public class GameView : View
         DoZoomEffect(faintedHUD, "", 5);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+        CameraManager.Instance.DoShakeCamera(1f, .125f);
 
         faintedHUD.DoSpawnExpBall(attackerHUD, NakamaLogic.GetAmountExpBall(NakamaData.Instance.GetBlastDataById(blast.data_id)));
         faintedHUD.DoFaintedAnim();
@@ -421,8 +422,9 @@ public class GameView : View
         }
         CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
         CameraManager.Instance.SetCameraZoom(6);
-        CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
         EnvironmentManager.Instance.SetDarkBackground(true);
+
+        if (shakeIntensity > 0) CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);
     }
 
     public async Task DoShowMessage(string textToShow)
@@ -432,9 +434,5 @@ public class GameView : View
         _dialogLayout.Hide();
     }
 
-    public void HandleOnInfoTypeClick()
-    {
-        UIManager.Instance.TypeInfoPopup.OpenPopup();
-    }
     #endregion
 }

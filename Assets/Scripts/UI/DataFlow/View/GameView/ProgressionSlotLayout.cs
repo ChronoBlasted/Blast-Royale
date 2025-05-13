@@ -12,18 +12,36 @@ public class ProgressionSlotLayout : MonoBehaviour
     [SerializeField] Color _normalColor, _activeColor;
     [SerializeField] Color _normalGradient, _activeGradient;
 
+    [SerializeField] bool _isPermanent;
+
     public void Init(int indexProgression)
     {
         _progressionTxt.text = indexProgression.ToString();
-        _bg.color = _normalColor;
-        _gradient.color = _normalGradient;
-        transform.localScale = Vector3.one * .8f;
+
+        if (_isPermanent == false)
+        {
+            SetInactive(true, 0f);
+        }
     }
 
     public void SetActive()
     {
         _bg.DOColor(_activeColor, 0.2f);
         _gradient.DOColor(_activeGradient, 0.2f);
+
         transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+    }
+
+    public void SetInactive(bool isInstant = false, float delay = .7f)
+    {
+        _bg.DOColor(_normalColor, isInstant ? 0f : 0.2f).SetDelay(delay);
+        _gradient.DOColor(_normalGradient, isInstant ? 0f : 0.2f).SetDelay(delay);
+
+        transform.DOScale(Vector3.one * .8f, isInstant ? 0f : 0.2f).SetDelay(delay);
+    }
+
+    public void Punch()
+    {
+        transform.DOPunchScale(Vector3.one * .2f, 0.2f);
     }
 }

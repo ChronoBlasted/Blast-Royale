@@ -176,7 +176,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await playerHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
 
@@ -196,7 +196,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await wildHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
         }
@@ -218,7 +218,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await wildHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
 
@@ -238,7 +238,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await playerHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
         }
@@ -262,7 +262,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await statusHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
         }
@@ -286,15 +286,15 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             battleStop = await statusHandler.HandleTurn();
             if (battleStop)
             {
-                StopTurnHandler();
+                await StopTurnHandler();
                 return;
             }
         }
 
-        StopTurnHandler();
+        await StopTurnHandler();
     }
 
-    public void StopTurnHandler()
+    public async Task StopTurnHandler()
     {
         EndTurn();
 
@@ -305,7 +305,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             if (_turnStateData.catched) _blastCatched++;
             else _blastDefeated++;
 
+            await Task.Delay(500);
+
             _gameView.AddProgress();
+
+            await Task.Delay(2000);
 
             ShowWildBlast();
         }

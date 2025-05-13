@@ -1,25 +1,33 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Collections;
 
 public class ProgressionLayout : MonoBehaviour
 {
+    [SerializeField] ProgressionSlotLayout _permanentSlot;
     [SerializeField] List<ProgressionSlotLayout> slots;           // Logique
     [SerializeField] List<RectTransform> slotRects;               // UI
     [SerializeField] RectTransform slotsContainer;
+    [SerializeField] CanvasGroup _cg;
 
-    [SerializeField] float moveDistance = 160f;
-    [SerializeField] float duration = 0.2f;
+    [SerializeField] float duration = 1f;
 
     int _index;
 
     public void Init(int currentIndexProgression)
     {
-        _index = currentIndexProgression;
+        _index = currentIndexProgression - 1;
+
+        _permanentSlot.Init(_index + 1);
+        _permanentSlot.Punch();
 
         for (int i = 0; i < slots.Count; i++)
         {
-            slots[i].Init(_index + i);
+            _index++;
+
+            slots[i].Init(_index);
+
             if (i == 0)
             {
                 slots[i].SetActive();
@@ -29,7 +37,14 @@ public class ProgressionLayout : MonoBehaviour
 
     public void SlideNext()
     {
+        Show();
+
         _index++;
+
+        _permanentSlot.Init(_index - 3);
+        _permanentSlot.Punch();
+
+        slots[0].SetInactive();
 
         float totalMove = 0f;
 
@@ -65,5 +80,26 @@ public class ProgressionLayout : MonoBehaviour
 
                 slots[0].SetActive();
             });
+    }
+
+    public void Show()
+    {
+        transform.localScale = Vector3.zero;
+
+        transform.DOScale(Vector3.one, .2f).SetEase(Ease.OutBack);
+        _cg.DOFade(1f, .2f);
+
+        StartCoroutine(HideCor());
+    }
+
+    public void Hide()
+    {
+        _cg.DOFade(0f, .2f);
+    }
+
+    IEnumerator HideCor()
+    {
+        yield return new WaitForSeconds(duration + 1f);
+        Hide();
     }
 }

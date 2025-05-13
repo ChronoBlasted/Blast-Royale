@@ -124,7 +124,6 @@ public class HUDLayout : MonoBehaviour
         currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), Color.white, TextStyle.H1, isEffective);
     }
 
-
     public void DoFaintedAnim()
     {
         _blastInWorld.BlastRender.DOFade(0, .5f);
@@ -152,15 +151,10 @@ public class HUDLayout : MonoBehaviour
         else
         {
             BlastData currentData = NakamaData.Instance.GetBlastDataById(_blast.data_id);
-            float amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(currentData.expYield, _blast.Level, _lastOpponentHUD.Blast.Level) / NakamaLogic.GetAmountExpBall(NakamaData.Instance.GetBlastDataById(_lastOpponentHUD.Blast.data_id)));
 
             DOTween.Kill(_lastOpponentHUD.BlastInWorld.BlastRender.transform, true);
 
             _lastOpponentHUD.BlastInWorld.BlastRender.transform.DOPunchScale(new Vector3(.1f, .1f, .1f), .2f);
-
-            var currentFloatingText = PoolManager.Instance[ResourceType.FloatingText].Get();
-            currentFloatingText.transform.position = _lastOpponentHUD.BlastInWorld.transform.position + new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, 0);
-            currentFloatingText.GetComponent<FloatingText>().Init("+" + amountExp + "exp", _expColor, TextStyle.H3);
         }
     }
 
