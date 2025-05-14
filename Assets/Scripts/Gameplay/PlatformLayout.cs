@@ -26,7 +26,7 @@ public class PlatformLayout : MonoBehaviour
     public void Init()
     {
         _activeCircles.Clear();
-        _availableCircles = new List<SpriteRenderer> { _circle1, _circle2, _circle3 };
+        _availableCircles = new List<SpriteRenderer> { _circle1, _circle2, _circle3, _circle4 };
         _outlineCircles = new List<SpriteRenderer> { _outlineCircle1, _outlineCircle2, _outlineCircle3 };
 
         _platformType.Clear();
@@ -52,40 +52,29 @@ public class PlatformLayout : MonoBehaviour
             float tintFactor = Mathf.Clamp01(3 * 0.2f);
             Color fadedColor = Color.Lerp(baseColor, Color.black, tintFactor);
 
-            _circle4.color = fadedColor;
-            _circle4.transform.localScale = new Vector3(6f, 3f, 1f);
-            _circle4.sortingOrder = 4;
-            _circle4.DOFade(0f, _fadeDuration).SetDelay(0.2f);
-            _circle4.transform.DOScale(Vector3.zero, 0.2f).SetDelay(0.2f);
+            SpriteRenderer currentCircle = _activeCircles[2];
 
-            // Remove from active
+            currentCircle.sortingOrder = 0;
+
+            currentCircle.DOColor(fadedColor, _fadeDuration);
+            currentCircle.transform.DOScale(new Vector3(6f, 3f, 1f), _fadeDuration).OnComplete(() =>
+            {
+                currentCircle.transform.DOShakePosition(_fadeDuration, new Vector3(.3f, 0, 0), 50);
+            });
+
+            currentCircle.DOFade(0f, _fadeDuration / 2f).SetDelay(_fadeDuration + (_fadeDuration / 2f));
+            currentCircle.DOColor(Color.white, 0f).SetDelay(_fadeDuration * 2);
+            currentCircle.transform.DOScale(Vector3.zero, 0f).SetDelay(_fadeDuration * 2);
+
             _platformType.RemoveAt(2);
-            _availableCircles.Add(_activeCircles[2]);
+            _availableCircles.Add(currentCircle);
             _activeCircles.RemoveAt(2);
         }
 
-        // Add new type
         var newCircle = _availableCircles[0];
         _availableCircles.RemoveAt(0);
         _activeCircles.Insert(0, newCircle);
         _platformType.Insert(0, type);
-
-        UpdateVisuals();
-    }
-
-    public void RemoveEnergy()
-    {
-        if (_platformType.Count == 0) return;
-
-        int lastIndex = _platformType.Count - 1;
-
-        var circle = _activeCircles[lastIndex];
-        circle.transform.DOScale(0f, 0.2f).SetEase(Ease.InBack);
-        circle.DOFade(0f, 0.2f);
-
-        _platformType.RemoveAt(lastIndex);
-        _availableCircles.Add(circle);
-        _activeCircles.RemoveAt(lastIndex);
 
         UpdateVisuals();
     }
@@ -99,8 +88,8 @@ public class PlatformLayout : MonoBehaviour
             if (_platformType[i] == type)
             {
                 var circle = _activeCircles[i];
-                circle.transform.DOScale(0f, 0.2f).SetEase(Ease.InBack);
-                circle.DOFade(0f, 0.2f);
+                circle.transform.DOScale(0f, _fadeDuration).SetEase(Ease.OutQuad);
+                circle.DOFade(0f, _fadeDuration);
 
                 _platformType.RemoveAt(i);
                 _availableCircles.Add(circle);
@@ -124,12 +113,12 @@ public class PlatformLayout : MonoBehaviour
             float tintFactor = Mathf.Clamp01(i * 0.2f);
             Color color = Color.Lerp(baseColor, Color.black, tintFactor);
 
-            circle.DOColor(color, 0.2f);
+            circle.DOColor(color, _fadeDuration);
             circle.sortingOrder = 4 - i;
 
             var scale = new Vector3(_scalesX[i], _scalesY[i], 1f);
-            circle.transform.DOScale(scale, 0.2f).SetEase(i == 0 ? Ease.OutBack : Ease.Linear);
-            circle.DOFade(1f, 0.2f);
+            circle.transform.DOScale(scale, _fadeDuration).SetEase(Ease.OutSine);
+            circle.DOFade(1f, _fadeDuration);
         }
     }
 
