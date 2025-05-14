@@ -432,5 +432,9 @@ public class GameView : View
         _dialogLayout.Hide();
     }
 
+    public void HandleOnProgressionClick()
+    {
+        _progressionLayout.Show();
+    }
     #endregion
 }

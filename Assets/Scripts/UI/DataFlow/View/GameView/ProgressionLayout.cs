@@ -14,6 +14,8 @@ public class ProgressionLayout : MonoBehaviour
     [SerializeField] float duration = 1f;
 
     int _index;
+    bool _isOpen;
+    Coroutine _hideCor;
 
     public void Init(int currentIndexProgression)
     {
@@ -84,17 +86,35 @@ public class ProgressionLayout : MonoBehaviour
 
     public void Show()
     {
-        transform.localScale = Vector3.zero;
+        DOTween.Kill(transform, true);
+        DOTween.Kill(_cg, true);
 
-        transform.DOScale(Vector3.one, .2f).SetEase(Ease.OutBack);
-        _cg.DOFade(1f, .2f);
+        if (_isOpen == false)
+        {
+            transform.localScale = Vector3.zero;
+            transform.DOScale(Vector3.one, .2f).SetEase(Ease.OutBack);
+            _cg.DOFade(1f, .2f);
 
-        StartCoroutine(HideCor());
+            _isOpen = true;
+
+        }
+        if (_hideCor != null)
+        {
+            StopCoroutine(_hideCor);
+            _hideCor = null;
+        }
+
+        _hideCor = StartCoroutine(HideCor());
     }
 
     public void Hide()
     {
+        DOTween.Kill(_cg, true);
+
         _cg.DOFade(0f, .2f);
+
+        _isOpen = false;
+
     }
 
     IEnumerator HideCor()
