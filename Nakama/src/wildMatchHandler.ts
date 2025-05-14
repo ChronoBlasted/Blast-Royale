@@ -800,10 +800,10 @@ function performAttackSequence(state: WildBattleData, playerMove: Move, dispatch
         const wildMoveId = state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index];
         const wildMove = getMoveById(wildMoveId);
 
-        if (playerMove.priority !== wildMove.priority) {
-            firstIsPlayer = playerMove.priority > wildMove.priority;
-        } else {
+        if (playerMove.priority == wildMove.priority) {
             firstIsPlayer = getFasterBlast(state.p1_blasts[state.p1_index]!, state.wild_blast!);
+        } else {
+            firstIsPlayer = playerMove.priority > wildMove.priority;
         }
 
     } else {

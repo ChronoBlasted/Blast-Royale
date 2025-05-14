@@ -41,9 +41,6 @@ public class ProgressionLayout : MonoBehaviour
 
         _index++;
 
-        _permanentSlot.Init(_index - 3);
-        _permanentSlot.Punch();
-
         slots[0].SetInactive();
 
         float totalMove = 0f;
@@ -56,6 +53,9 @@ public class ProgressionLayout : MonoBehaviour
         slotsContainer.DOAnchorPosX(slotsContainer.anchoredPosition.x - totalMove, duration).SetEase(Ease.InOutQuad)
             .OnComplete(() =>
             {
+                _permanentSlot.Init(_index - 3);
+                _permanentSlot.Punch();
+
                 for (int i = 0; i < 2; i++)
                 {
                     if (i == 0)

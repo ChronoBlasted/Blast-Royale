@@ -177,15 +177,13 @@ public class GameView : View
 
     public void SetMeteo(Meteo startDataMeteo)
     {
-        var meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startDataMeteo);
+        var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)startDataMeteo);
 
-        var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
-
-        _currentMeteo = meteo;
+        _currentMeteo = startDataMeteo;
 
         DialogLayout.SetMeteo(meteoData.Name.GetLocalizedString());
 
-        EnvironmentManager.Instance.SetMeteo(meteo);
+        EnvironmentManager.Instance.SetMeteo(startDataMeteo);
     }
 
     public void SetProgression(int indexProgression)

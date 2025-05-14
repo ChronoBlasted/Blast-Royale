@@ -78,8 +78,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         SetNewWildBlast(startData.newBlastData);
         ShowWildBlast();
 
-        _gameView.SetMeteo(startData.meteo);
-        _meteo = startData.meteo;
+        _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
+        _gameView.SetMeteo(_meteo);
 
         _indexProgression = 1;
         _blastDefeated = 0;

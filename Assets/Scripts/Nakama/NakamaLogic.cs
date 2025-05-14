@@ -17,14 +17,14 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         int attackerLevel,
         float attackerAttack,
         float defenderDefense,
-        Type attackerType,
+        Type moveType,
         Type defenderType,
         int movePower,
         Meteo meteo
     )
     {
-        float weatherModifier = CalculateWeatherModifier(meteo, attackerType);
-        float typeMultiplier = GetTypeMultiplier(attackerType, defenderType);
+        float weatherModifier = CalculateWeatherModifier(meteo, moveType);
+        float typeMultiplier = GetTypeMultiplier(moveType, defenderType);
 
         float baseDamage = ((2f * attackerLevel / 5f + 2f) * movePower * typeMultiplier * ((float)attackerAttack / defenderDefense)) / 50f;
 
