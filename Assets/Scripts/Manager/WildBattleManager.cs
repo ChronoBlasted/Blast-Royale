@@ -92,6 +92,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _ = _gameView.PlayerHUD.ComeBackBlast(true);
         _ = _gameView.PlayerHUD.ThrowBlast();
 
+        _gameView.ExpProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(_playerMeInfo.ActiveBlast.data_id).Sprite);
+
         _gameView.AttackPanel.UpdateAttack(_playerMeInfo.ActiveBlast);
         _gameView.BagPanel.UpdateItem(_playerItems);
         _gameView.SquadPanel.UpdateBlasts(_playerSquads);
@@ -296,8 +298,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
     public async Task StopTurnHandler()
     {
-        EndTurn();
-
         if (NakamaLogic.IsBlastAlive(_playerWildInfo.ActiveBlast) == false || _turnStateData.catched)
         {
             _indexProgression++;
@@ -313,6 +313,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             ShowWildBlast();
         }
+
+        EndTurn();
 
         if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
         {

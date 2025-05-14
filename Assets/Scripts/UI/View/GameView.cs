@@ -17,6 +17,7 @@ public class GameView : View
     [SerializeField] HUDLayout _playerHUD, _opponentHUD;
     [SerializeField] DialogLayout _dialogLayout;
     [SerializeField] ProgressionLayout _progressionLayout;
+    [SerializeField] ExpProgressionLayout _expProgressionLayout;
 
     public HUDLayout PlayerHUD { get => _playerHUD; }
     public HUDLayout OpponentHUD { get => _opponentHUD; }
@@ -25,6 +26,7 @@ public class GameView : View
     public MoveMiniPanel AttackPanel { get => _attackPanel; }
     public BagMiniPanel BagPanel { get => _bagPanel; }
     public SquadMiniPanel SquadPanel { get => _squadPanel; }
+    public ExpProgressionLayout ExpProgressionLayout { get => _expProgressionLayout; }
 
     Panel _currentPanel;
 
@@ -33,6 +35,7 @@ public class GameView : View
 
     Meteo _currentMeteo;
 
+    #region Setup
     public override void Init()
     {
         base.Init();
@@ -173,6 +176,7 @@ public class GameView : View
         ChangePanel(_attackPanel);
     }
 
+    #endregion
     #region WildBlastBattle
 
     public void SetMeteo(Meteo startDataMeteo)
@@ -194,6 +198,16 @@ public class GameView : View
     public void AddProgress()
     {
         _progressionLayout.SlideNext();
+    }
+
+    public void SetExpProgression(Sprite newSprite, int amountExp)
+    {
+        _expProgressionLayout.Init(newSprite, amountExp);
+    }
+
+    public void ShowExpProgression()
+    {
+        _expProgressionLayout.Show();
     }
 
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
@@ -258,14 +272,21 @@ public class GameView : View
 
         CameraManager.Instance.DoShakeCamera(1f, .125f);
 
-        faintedHUD.DoSpawnExpBall(attackerHUD, NakamaLogic.GetAmountExpBall(NakamaData.Instance.GetBlastDataById(blast.data_id)));
+        faintedHUD.DoSpawnExpBall(attackerHUD, NakamaLogic.GetAmountExpBall(_dataUtils.GetBlastDataById(blast.data_id)));
         faintedHUD.DoFaintedAnim();
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
 
+        ShowExpProgression();
+
         ResetZoomEffect(faintedHUD);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+        int amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(_dataUtils.GetBlastDataById(faintedHUD.Blast.data_id).expYield, faintedHUD.Blast.Level, faintedHUD.Blast.Level));
+        SetExpProgression(_dataUtils.GetBlastDataRef(attackerHUD.Blast.data_id).Sprite, amountExp);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(1500));
     }
 
     public async Task BlastSwap(Blast currentBlast, Blast newCurrentBlast)
@@ -285,15 +306,17 @@ public class GameView : View
         PlayerHUD.Init(newBlast);
         AttackPanel.UpdateAttack(newBlast);
 
+        _expProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(newBlast.data_id).Sprite);
+
         await _playerHUD.ThrowBlast();
     }
 
 
     public async Task BlastUseItem(Item item, Blast selectedBlast = null, Blast wildBlast = null, bool isCaptured = false)
     {
-        ItemData itemData = NakamaData.Instance.GetItemDataById(item.data_id);
-        ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(item.data_id);
-        BlastDataRef blastDataRef = NakamaData.Instance.GetBlastDataRef(selectedBlast.data_id);
+        ItemData itemData = _dataUtils.GetItemDataById(item.data_id);
+        ItemDataRef itemDataRef = _dataUtils.GetItemDataRef(item.data_id);
+        BlastDataRef blastDataRef = _dataUtils.GetBlastDataRef(selectedBlast.data_id);
 
 
         switch (itemData.behaviour)
@@ -333,8 +356,8 @@ public class GameView : View
     {
         HUDLayout attackerHUD = null;
         HUDLayout defenderHUD = null;
-        MoveDataRef moveDataRef = NakamaData.Instance.GetMoveDataRef(move.id);
-        float effective = NakamaLogic.GetTypeMultiplier(move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type);
+        MoveDataRef moveDataRef = _dataUtils.GetMoveDataRef(move.id);
+        float effective = NakamaLogic.GetTypeMultiplier(move.type, _dataUtils.GetBlastDataById(defender.data_id).type);
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
 
         float shakeIntensity = .5f;

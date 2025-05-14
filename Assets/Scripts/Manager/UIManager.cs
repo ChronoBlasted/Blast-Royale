@@ -1,6 +1,8 @@
 using BaseTemplate.Behaviours;
 using DG.Tweening;
 using System.Collections;
+using TMPro;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.Settings;
@@ -296,13 +298,28 @@ public class UIManager : MonoSingleton<UIManager>
         scrollRect.normalizedPosition = new Vector2(scrollRect.normalizedPosition.x, step * indexToScroll);
     }
 
+    public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", float duration = 1f, Ease ease = Ease.OutSine)
+    {
+        if (destinationInt == baseInt + 1)
+        {
+            textToUpdate.text = prefix + GetFormattedInt(destinationInt);
+
+            return;
+        }
+
+        DOVirtual.Int(baseInt, destinationInt, duration, x =>
+        {
+            textToUpdate.text = prefix + GetFormattedInt(x);
+        }).SetEase(ease);
+    }
+
     public static string GetTradByKey(string key)
     {
         var stringResult = LocalizationSettings.StringDatabase.GetLocalizedString("TranslationStringTable", key);
         return stringResult;
     }
 
-    public static string GetFormattedInt(float amount)
+    public static string GetFormattedInt(int amount)
     {
         return amount.ToString("#,0");
     }

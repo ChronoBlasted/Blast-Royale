@@ -63,7 +63,6 @@ public class PlatformLayout : MonoBehaviour
             });
 
             currentCircle.DOFade(0f, _fadeDuration / 2f).SetDelay(_fadeDuration + (_fadeDuration / 2f));
-            currentCircle.DOColor(Color.white, 0f).SetDelay(_fadeDuration * 2);
             currentCircle.transform.DOScale(Vector3.zero, 0f).SetDelay(_fadeDuration * 2);
 
             _platformType.RemoveAt(2);
@@ -88,6 +87,7 @@ public class PlatformLayout : MonoBehaviour
             if (_platformType[i] == type)
             {
                 var circle = _activeCircles[i];
+
                 circle.transform.DOScale(0f, _fadeDuration).SetEase(Ease.OutQuad);
                 circle.DOFade(0f, _fadeDuration);
 
@@ -109,15 +109,21 @@ public class PlatformLayout : MonoBehaviour
             var circle = _activeCircles[i];
             var type = _platformType[i];
 
+            if (i == 0)
+            {
+                ResetCircle(circle);
+                circle.color = Color.white;
+            }
             Color baseColor = ResourceObjectHolder.Instance.GetTypeDataByType(type).Color;
             float tintFactor = Mathf.Clamp01(i * 0.2f);
             Color color = Color.Lerp(baseColor, Color.black, tintFactor);
+
 
             circle.DOColor(color, _fadeDuration);
             circle.sortingOrder = 4 - i;
 
             var scale = new Vector3(_scalesX[i], _scalesY[i], 1f);
-            circle.transform.DOScale(scale, _fadeDuration).SetEase(Ease.OutSine);
+            circle.transform.DOScale(scale, _fadeDuration).SetEase(i == 0 ? Ease.OutBack : Ease.OutSine);
             circle.DOFade(1f, _fadeDuration);
         }
     }
@@ -170,5 +176,13 @@ public class PlatformLayout : MonoBehaviour
 
             _outlineCircles[i].transform.DOScale(new Vector3(_scalesOutlineX[i], _scalesOutlineY[i], 1f), 0.3f).SetEase(Ease.OutBack);
         }
+    }
+
+    public void ResetCircle(SpriteRenderer circle)
+    {
+        circle.DOKill(true);
+        circle.transform.DOKill(true);
+
+        circle.transform.localScale = Vector3.zero;
     }
 }

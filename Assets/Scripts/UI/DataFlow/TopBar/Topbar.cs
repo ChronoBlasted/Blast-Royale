@@ -11,23 +11,33 @@ public class Topbar : MonoBehaviour
 
     Sequence _showHideTopbarTween;
 
+    int _lastTrophy;
+    int _lastCoin;
+    int _lastGem;
+
     public void Init()
     {
+        _trophyTxt.text = _lastTrophy.ToString();
+        _coinTxt.text = _lastCoin.ToString();
+        _gemTxt.text = _lastGem.ToString();
     }
 
     public void UpdateTrophy(int amount)
     {
-        _trophyTxt.text = UIManager.GetFormattedInt(amount);
+        UIManager.Instance.DoSmoothTextInt(_trophyTxt, _lastTrophy, amount);
+        _lastTrophy = amount;
     }
 
     public void UpdateCoin(int amount)
     {
-        _coinTxt.text = UIManager.GetFormattedInt(amount);
+        UIManager.Instance.DoSmoothTextInt(_coinTxt, _lastCoin, amount);
+        _lastCoin = amount;
     }
 
     public void UpdateGem(int amount)
     {
-        _gemTxt.text = UIManager.GetFormattedInt(amount);
+        UIManager.Instance.DoSmoothTextInt(_gemTxt, _lastGem, amount);
+        _lastGem = amount;
     }
 
     public void ShowTopBar()

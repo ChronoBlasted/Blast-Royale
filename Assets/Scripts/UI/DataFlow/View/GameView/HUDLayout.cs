@@ -155,6 +155,10 @@ public class HUDLayout : MonoBehaviour
             DOTween.Kill(_lastOpponentHUD.BlastInWorld.BlastRender.transform, true);
 
             _lastOpponentHUD.BlastInWorld.BlastRender.transform.DOPunchScale(new Vector3(.1f, .1f, .1f), .2f);
+
+            DOTween.Kill(UIManager.Instance.GameView.ExpProgressionLayout.Amount.transform, true);
+
+            UIManager.Instance.GameView.ExpProgressionLayout.Amount.transform.DOPunchScale(new Vector3(.3f, .3f, .3f), .2f);
         }
     }
 
