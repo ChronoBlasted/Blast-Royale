@@ -187,15 +187,22 @@ public class NakamaStore : MonoBehaviour
 public class StoreOffer
 {
     public int offer_id;
-    public int coinsAmount;
-    public int gemsAmount;
-    public Blast blast;
-    public Item item;
+    public Offer offer;
 
     public int price;
     public Currency currency;
 
     public bool isAlreadyBuyed;
+}
+
+[Serializable]
+public class Offer
+{
+    public OfferType type;
+    public int coinsAmount;
+    public int gemsAmount;
+    public Blast blast;
+    public Item item;
 }
 
 public class CanClaimDailyShop

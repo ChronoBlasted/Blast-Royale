@@ -29,7 +29,7 @@ function getLastDailyShopObject(context: nkruntime.Context, logger: nkruntime.Lo
 
     var dailyShop: any = {
         lastClaimUnix: 0,
-        lastDailyShop: generateRandomDailyShop(nk, context.userId,logger),
+        lastDailyShop: generateRandomDailyShop(nk, context.userId, logger),
     }
 
     objects.forEach(function (object) {
@@ -71,7 +71,7 @@ function rpcGetDailyShopOffer(context: nkruntime.Context, logger: nkruntime.Logg
 
     if (canUserClaimDailyShop(dailyShop)) {
 
-        var newShop: StoreOffer[] = generateRandomDailyShop(nk, context.userId,logger);
+        var newShop: StoreOffer[] = generateRandomDailyShop(nk, context.userId, logger);
 
         dailyShop.lastClaimUnix = msecToSec(Date.now());
         dailyShop.lastDailyShop = newShop;
@@ -139,12 +139,12 @@ function rpcBuyDailyShopOffer(context: nkruntime.Context, logger: nkruntime.Logg
         throw error;
     }
 
-    if (dailyShop.lastDailyShop[indexOffer].blast != null) {
-        addBlast(nk, logger, context.userId, dailyShop.lastDailyShop[indexOffer].blast!)
+    if (dailyShop.lastDailyShop[indexOffer].offer.blast != null) {
+        addBlast(nk, logger, context.userId, dailyShop.lastDailyShop[indexOffer].offer.blast!)
     }
 
-    if (dailyShop.lastDailyShop[indexOffer].item != null) {
-        addItem(nk, logger, context, dailyShop.lastDailyShop[indexOffer].item!)
+    if (dailyShop.lastDailyShop[indexOffer].offer.item != null) {
+        addItem(nk, logger, context.userId, dailyShop.lastDailyShop[indexOffer].offer.item!)
     }
 
     var result = JSON.stringify(dailyShop);
@@ -152,17 +152,17 @@ function rpcBuyDailyShopOffer(context: nkruntime.Context, logger: nkruntime.Logg
     return result;
 }
 
-function generateRandomDailyShop(nk: nkruntime.Nakama, userId: string,logger:nkruntime.Logger): StoreOffer[] {
+function generateRandomDailyShop(nk: nkruntime.Nakama, userId: string, logger: nkruntime.Logger): StoreOffer[] {
 
     var dailyShop: StoreOffer[];
 
     dailyShop = [
-        getRandomStoreOffer(nk, userId,logger),
-        getRandomStoreOffer(nk, userId,logger),
-        getRandomStoreOffer(nk, userId,logger),
-        getRandomStoreOffer(nk, userId,logger),
-        getRandomStoreOffer(nk, userId,logger),
-        getRandomStoreOffer(nk, userId,logger),
+        getRandomStoreOffer(nk, userId, logger),
+        getRandomStoreOffer(nk, userId, logger),
+        getRandomStoreOffer(nk, userId, logger),
+        getRandomStoreOffer(nk, userId, logger),
+        getRandomStoreOffer(nk, userId, logger),
+        getRandomStoreOffer(nk, userId, logger),
     ]
 
     return dailyShop;
@@ -174,32 +174,36 @@ function getRandomOfferType(): OfferType {
     return offerTypeValues[randomIndex] as OfferType;
 }
 
-function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string,logger:nkruntime.Logger): StoreOffer {
+function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string, logger: nkruntime.Logger): StoreOffer {
 
-    let offer: StoreOffer = {
-        offer_id : -1,
-        type: getRandomOfferType(),
-        coinsAmount: 0,
-        gemsAmount: 0,
-        blast: null,
-        item: null,
+    let storeOffer: StoreOffer = {
+        offer_id: -1,
+        offer: {
+            type: OfferType.NONE,
+            coinsAmount: 0,
+            gemsAmount: 0,
+            blast: null,
+            item: null,
+        },
         price: 0,
         currency: Currency.Coins,
         isAlreadyBuyed: false,
     };
 
     if (Math.random() < 0.5) {
-        offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk,logger);
-        offer.price = getBlastPrice(offer.blast);
-        offer.currency = Currency.Coins;
+        storeOffer.offer.type = OfferType.BLAST;
+        storeOffer.offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk, logger);
+        storeOffer.price = getBlastPrice(storeOffer.offer.blast);
+        storeOffer.currency = Currency.Coins;
     } else {
-        offer.item = getRandomItem(5);
-        
-        offer.price = getItemPrice(offer.item);
-        offer.currency = Currency.Coins;
+        storeOffer.offer.type = OfferType.ITEM;
+        storeOffer.offer.item = getRandomItem(5);
+
+        storeOffer.price = getItemPrice(storeOffer.offer.item);
+        storeOffer.currency = Currency.Coins;
     }
 
-    return offer;
+    return storeOffer;
 }
 
 function getBlastPrice(blast: Blast): number {

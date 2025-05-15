@@ -6,62 +6,24 @@ using UnityEngine.UI;
 
 public class ShopLayout : MonoBehaviour
 {
-    [SerializeField] Image _ico, _priceIco;
-    [SerializeField] TMP_Text _nameTxt, _descTxt, _priceAmount;
+    [SerializeField] Image _priceIco;
+    [SerializeField] TMP_Text _priceAmount;
     [SerializeField] GameObject _buyedBlackShade;
+    [SerializeField] OfferLayout _offerLayout;
 
     [SerializeField] CustomButton _buyButton;
 
-    StoreOffer _offer;
+    StoreOffer _storeOffer;
 
     public void Init(StoreOffer storeOffer)
     {
-        _offer = storeOffer;
+        _storeOffer = storeOffer;
 
-        _priceAmount.text = _offer.price.ToString();
+        _priceAmount.text = _storeOffer.price.ToString();
 
-        StoreOfferDataRef storeOfferRef;
+        _offerLayout.Init(storeOffer);
 
-        if (_offer.coinsAmount > 0)
-        {
-            storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(_offer.offer_id);
-
-            _ico.sprite = storeOfferRef.Sprite;
-
-            _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
-            _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.coinsAmount);
-        }
-        if (_offer.gemsAmount > 0)
-        {
-            storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(_offer.offer_id);
-
-            _ico.sprite = storeOfferRef.Sprite;
-
-            _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
-            _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.gemsAmount);
-        }
-        if (_offer.blast != null)
-        {
-            BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(storeOffer.blast.data_id);
-
-            _ico.sprite = blastData.Sprite;
-
-            _nameTxt.text = blastData.Name.GetLocalizedString();
-            _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(storeOffer.blast.exp);
-        }
-        if (_offer.item != null)
-        {
-            ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(storeOffer.item.data_id);
-
-            ItemData itemData = NakamaData.Instance.GetItemDataById(_offer.item.data_id);
-
-            _ico.sprite = itemDataRef.Sprite;
-
-            _nameTxt.text = itemDataRef.Name.GetLocalizedString();
-            _descTxt.text = "x1";
-        }
-
-        switch (_offer.currency)
+        switch (_storeOffer.currency)
         {
             case Currency.Coins:
                 _priceIco.gameObject.SetActive(true);
@@ -83,9 +45,8 @@ public class ShopLayout : MonoBehaviour
 
     private void IsBuyable()
     {
-        if (_offer.isAlreadyBuyed)
+        if (_storeOffer.isAlreadyBuyed)
         {
-            _priceAmount.text = "BUYED";
             _buyedBlackShade.SetActive(true);
         }
         else
@@ -96,7 +57,7 @@ public class ShopLayout : MonoBehaviour
 
     public async void HandleOnBuyBlastTrapOffer(int index)
     {
-        if (_offer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Coins.ToString()])
+        if (_storeOffer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Coins.ToString()])
         {
             ErrorManager.Instance.ShowError(ErrorType.NOT_ENOUGH_COIN);
             return;
@@ -110,7 +71,7 @@ public class ShopLayout : MonoBehaviour
 
     public async void HandleOnBuyCoinOffer(int index)
     {
-        if (_offer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Gems.ToString()])
+        if (_storeOffer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Gems.ToString()])
         {
             ErrorManager.Instance.ShowError(ErrorType.NOT_ENOUGH_GEMS);
             return;
@@ -131,12 +92,12 @@ public class ShopLayout : MonoBehaviour
     }
     public async void HandleOnBuyDailyShopOffer(int index)
     {
-        if (_offer.isAlreadyBuyed)
+        if (_storeOffer.isAlreadyBuyed)
         {
             ErrorManager.Instance.ShowError(ErrorType.SHOP_ALREADY_BUYED);
             return;
         }
-        else if (_offer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Coins.ToString()])
+        else if (_storeOffer.price > NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Coins.ToString()])
         {
             ErrorManager.Instance.ShowError(ErrorType.NOT_ENOUGH_COIN);
             return;
@@ -148,7 +109,7 @@ public class ShopLayout : MonoBehaviour
 
             ShowReward();
 
-            _offer.isAlreadyBuyed = true;
+            _storeOffer.isAlreadyBuyed = true;
 
             IsBuyable();
         }
@@ -163,12 +124,12 @@ public class ShopLayout : MonoBehaviour
     {
         RewardCollection reward = new RewardCollection();
 
-        reward.offer_id = _offer.offer_id;
-        reward.coinsReceived = _offer.coinsAmount;
-        reward.gemsReceived = _offer.gemsAmount;
+        reward.offer_id = _storeOffer.offer_id;
+        reward.coinsReceived = _storeOffer.offer.coinsAmount;
+        reward.gemsReceived = _storeOffer.offer.gemsAmount;
 
-        if (_offer.blast != null) reward.blastReceived = _offer.blast;
-        if (_offer.item != null) reward.itemReceived = _offer.item;
+        if (_storeOffer.offer.blast != null) reward.blastReceived = _storeOffer.offer.blast;
+        if (_storeOffer.offer.item != null) reward.itemReceived = _storeOffer.offer.item;
 
         UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);

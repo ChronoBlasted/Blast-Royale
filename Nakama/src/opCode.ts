@@ -9,9 +9,12 @@ enum OpCodes {
     PLAYER_READY = 50,
     ENEMY_READY = 55,
 
-    MATCH_ROUND = 60,
+    NEW_BATTLE_TURN = 60,
     PLAYER_MUST_CHANGE_BLAST = 61,
-
+    
+    NEW_OFFER_TURN = 80,
+    PLAYER_CHOOSE_OFFER = 81,
+    
     NEW_BLAST = 90,
 
     MATCH_END = 100,

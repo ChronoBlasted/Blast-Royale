@@ -1,22 +1,26 @@
 enum OfferType {
+    NONE,
     COINS,
     GEMS,
     BLAST,
     ITEM,
 }
 
-interface StoreOffer {
-    offer_id: number
+interface Offer {
     type: OfferType
-
     coinsAmount: number
     gemsAmount: number
     blast: Blast | null
     item: Item | null
+}
+
+interface StoreOffer {
+    offer_id: number
+    offer: Offer
 
     price: number
     currency: Currency
-    isAlreadyBuyed:boolean
+    isAlreadyBuyed: boolean
 }
 
 //#region BlastTrap Offer
@@ -28,16 +32,18 @@ const blastTrap: Item = {
 
 const blastTrapOffer: StoreOffer = {
     offer_id: 1,
-    type: OfferType.ITEM,
+    offer: {
+        type: OfferType.ITEM,
+
+        coinsAmount: 0,
+        gemsAmount: 0,
+        blast: null,
+        item: blastTrap,
+    },
+
     currency: Currency.Coins,
-
-    coinsAmount: 0,
-    gemsAmount: 0,
-    blast: null,
-    item: blastTrap,
-
     price: 100,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const superBlastTrap: Item = {
@@ -47,16 +53,17 @@ const superBlastTrap: Item = {
 
 const superBlastTrapOffer: StoreOffer = {
     offer_id: 2,
-    type: OfferType.ITEM,
+    offer: {
+        type: OfferType.ITEM,
+
+        coinsAmount: 0,
+        gemsAmount: 0,
+        blast: null,
+        item: superBlastTrap,
+    },
     currency: Currency.Coins,
-
-    coinsAmount: 0,
-    gemsAmount: 0,
-    blast: null,
-    item: superBlastTrap,
-
     price: 250,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const hyperBlastTrap: Item = {
@@ -66,16 +73,18 @@ const hyperBlastTrap: Item = {
 
 const hyperBlastTrapOffer: StoreOffer = {
     offer_id: 3,
-    type: OfferType.ITEM,
+    offer: {
+        type: OfferType.ITEM,
+
+        coinsAmount: 0,
+        gemsAmount: 0,
+        blast: null,
+        item: hyperBlastTrap,
+    },
+
     currency: Currency.Coins,
-
-    coinsAmount: 0,
-    gemsAmount: 0,
-    blast: null,
-    item: hyperBlastTrap,
-
     price: 500,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const blastTrapOffers: StoreOffer[] = [
@@ -102,7 +111,7 @@ const rpcBuyTrapOffer: nkruntime.RpcFunction =
             throw error;
         }
 
-        addItem(nk, logger, ctx, storeOffer.item!)
+        addItem(nk, logger, ctx.userId, storeOffer.offer.item!)
 
         // return playerWallet and Wallets
     }
@@ -113,44 +122,51 @@ const rpcBuyTrapOffer: nkruntime.RpcFunction =
 
 const coinsOffer1: StoreOffer = {
     offer_id: 4,
-    type: OfferType.ITEM,
+    offer: {
+        type: OfferType.COINS,
+
+        coinsAmount: 20000,
+        gemsAmount: 0,
+        blast: null,
+        item: null,
+    },
+
     currency: Currency.Gems,
-
-    coinsAmount: 20000,
-    gemsAmount: 0,
-    blast: null,
-    item: null,
-
     price: 100,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const coinsOffer2: StoreOffer = {
     offer_id: 5,
-    type: OfferType.ITEM,
+    offer: {
+
+        type: OfferType.COINS,
+
+        coinsAmount: 65000,
+        gemsAmount: 0,
+        blast: null,
+        item: null,
+    },
+
     currency: Currency.Gems,
-
-    coinsAmount: 65000,
-    gemsAmount: 0,
-    blast: null,
-    item: null,
-
     price: 300,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const coinsOffer3: StoreOffer = {
     offer_id: 6,
-    type: OfferType.ITEM,
+    offer: {
+        type: OfferType.COINS,
+
+        coinsAmount: 140000,
+        gemsAmount: 0,
+        blast: null,
+        item: null,
+    },
     currency: Currency.Gems,
 
-    coinsAmount: 140000,
-    gemsAmount: 0,
-    blast: null,
-    item: null,
-
     price: 600,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const coinsOffer: StoreOffer[] = [
@@ -173,7 +189,7 @@ const rpcBuyCoinOffer: nkruntime.RpcFunction =
         try {
             nk.walletUpdate(ctx.userId, { [storeOffer.currency]: -storeOffer.price });
 
-            nk.walletUpdate(ctx.userId, { [Currency.Coins]: storeOffer.coinsAmount });
+            nk.walletUpdate(ctx.userId, { [Currency.Coins]: storeOffer.offer.coinsAmount });
         } catch (error) {
             logger.error('error buying blast trap: %s', error);
             throw error;
@@ -186,86 +202,99 @@ const rpcBuyCoinOffer: nkruntime.RpcFunction =
 
 const gemsOffer1: StoreOffer = {
     offer_id: 7,
-    type: OfferType.GEMS,
+    offer: {
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 100,
+        blast: null,
+        item: null,
+    },
     currency: Currency.Hard,
-
-    coinsAmount: 0,
-    gemsAmount: 100,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer2: StoreOffer = {
     offer_id: 8,
-    type: OfferType.GEMS,
+    offer: {
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 200,
+        blast: null,
+        item: null,
+
+    },
     currency: Currency.Hard,
-
-    coinsAmount: 0,
-    gemsAmount: 200,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer3: StoreOffer = {
     offer_id: 9,
-    type: OfferType.GEMS,
+    offer: {
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 300,
+        blast: null,
+        item: null,
+
+    },
     currency: Currency.Hard,
-
-    coinsAmount: 0,
-    gemsAmount: 300,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer4: StoreOffer = {
     offer_id: 10,
-    type: OfferType.GEMS,
+    offer: {
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 400,
+        blast: null,
+        item: null,
+
+    },
     currency: Currency.Hard,
-
-    coinsAmount: 0,
-    gemsAmount: 400,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer5: StoreOffer = {
     offer_id: 11,
-    type: OfferType.GEMS,
+    offer: {
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 500,
+        blast: null,
+        item: null,
+
+    },
     currency: Currency.Hard,
-
-    coinsAmount: 0,
-    gemsAmount: 500,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer6: StoreOffer = {
     offer_id: 12,
-    type: OfferType.GEMS,
+    offer: {
+
+        type: OfferType.GEMS,
+
+        coinsAmount: 0,
+        gemsAmount: 600,
+        blast: null,
+        item: null,
+
+    },
     currency: Currency.Hard,
 
-    coinsAmount: 0,
-    gemsAmount: 600,
-    blast: null,
-    item: null,
-
     price: 0,
-    isAlreadyBuyed:false,
+    isAlreadyBuyed: false,
 };
 
 const gemsOffer: StoreOffer[] = [
@@ -292,7 +321,7 @@ const rpcBuyGemOffer: nkruntime.RpcFunction =
             // Verif
             // Achat in app
 
-            nk.walletUpdate(ctx.userId, { [Currency.Gems]: storeOffer.gemsAmount });
+            nk.walletUpdate(ctx.userId, { [Currency.Gems]: storeOffer.offer.gemsAmount });
         } catch (error) {
             logger.error('error buying blast trap: %s', error);
             throw error;

@@ -14,9 +14,24 @@ public class ProgressionSlotLayout : MonoBehaviour
 
     [SerializeField] bool _isPermanent;
 
+    [SerializeField] Sprite _battleIco, _chestIco, _bossIco;
+
     public void Init(int indexProgression)
     {
         _progressionTxt.text = indexProgression.ToString();
+
+        if (indexProgression % 5 == 0 && indexProgression % 10 != 0)
+        {
+            _ico.sprite = _chestIco;
+        }
+        else if (indexProgression % 10 == 0)
+        {
+            _ico.sprite = _bossIco;
+        }
+        else
+        {
+            _ico.sprite = _battleIco;
+        }
 
         if (_isPermanent == false)
         {

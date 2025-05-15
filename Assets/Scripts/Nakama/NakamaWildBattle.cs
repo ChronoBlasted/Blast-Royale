@@ -108,10 +108,15 @@ public class NakamaWildBattle : MonoBehaviour
                 var newBlast = JsonUtility.FromJson<NewBlastData>(messageJson);
                 WildBattleManager.Instance.SetNewWildBlast(newBlast);
                 break;
+            case NakamaOpCode.NEW_OFFER_TURN:
+                var newOffers = JsonUtility.FromJson<OfferTurnStateData>(messageJson);
+                var offerList = new List<Offer> { newOffers.offer_one, newOffers.offer_two, newOffers.offer_three };
+                WildBattleManager.Instance.SetNewOffers(offerList);
+                break;
 
 
             case NakamaOpCode.DEBUG:
-                break;
+                break; 
 
 
             default:
@@ -125,8 +130,6 @@ public class NakamaWildBattle : MonoBehaviour
         try
         {
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson(), null);
-
-            Debug.Log("ATTACK OP CODE SENT WITH DATA : " + indexAttack.ToJson());
 
             WildBattleManager.Instance.WaitForOpponent();
         }
@@ -181,7 +184,21 @@ public class NakamaWildBattle : MonoBehaviour
         }
         catch (ApiResponseException e)
         {
-            Debug.LogWarning("Error Player Change Blast: " + e.Message);
+            Debug.LogWarning("Error Player Wait : " + e.Message);
+        }
+    }
+
+    public async Task PlayerChooseOffer(int indexOffer)
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
+
+            WildBattleManager.Instance.WaitForOpponent();
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Choose Offer: " + e.Message);
         }
     }
 
@@ -242,4 +259,12 @@ public class ItemUseJSON
 {
     public int index_item;
     public int index_blast;
+}
+
+[Serializable]
+public class OfferTurnStateData
+{
+    public Offer offer_one;
+    public Offer offer_two;
+    public Offer offer_three;
 }

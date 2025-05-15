@@ -10,6 +10,8 @@ public class EnvironmentManager : MonoSingleton<EnvironmentManager>
     [SerializeField] Transform _meteoTransform;
     [SerializeField] SpriteRenderer _backgroundArea;
 
+    GameObject _currentMeteoFX;
+
     public void Init()
     {
         GameStateManager.Instance.OnGameStateChanged += UpdateGameState;
@@ -17,16 +19,13 @@ public class EnvironmentManager : MonoSingleton<EnvironmentManager>
 
     public void SetMeteo(Meteo meteo)
     {
-        foreach (Transform t in _meteoTransform)
-        {
-            Destroy(t.gameObject);
-        }
+        Destroy(_currentMeteoFX);
 
         if (meteo != Meteo.None)
         {
             var meteoData = ResourceObjectHolder.Instance.GetResourceByType((ResourceType)meteo);
 
-            var currentFX = Instantiate(meteoData.Prefab, _meteoTransform);
+            _currentMeteoFX = Instantiate(meteoData.Prefab, _meteoTransform);
         }
     }
 

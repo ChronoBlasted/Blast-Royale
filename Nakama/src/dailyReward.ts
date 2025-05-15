@@ -146,7 +146,7 @@ function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logge
         }
 
         if (reward.itemReceived != null) {
-            addItem(nk, logger, context, reward.itemReceived);
+            addItem(nk, logger, context.userId, reward.itemReceived);
         }
 
         dailyReward.lastClaimUnix = msecToSec(Date.now());

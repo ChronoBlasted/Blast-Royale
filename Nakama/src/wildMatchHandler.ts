@@ -6,6 +6,7 @@ enum BattleState {
     READY,
     START,
     WAITFORPLAYERSWAP,
+    WAITFORPLAYERCHOOSEOFFER,
     END,
 }
 
@@ -47,7 +48,8 @@ interface WildBattleData {
 
     meteo: Meteo
 
-    TurnStateData: TurnStateData;
+    turnStateData: TurnStateData;
+    offerTurnStateData: OfferTurnStateData;
 }
 
 interface StartStateData {
@@ -61,6 +63,12 @@ interface NewBlastData {
     iv: number;
     status: Status;
     activeMoveset: number[];
+}
+
+interface OfferTurnStateData {
+    offer_one: Offer;
+    offer_two: Offer;
+    offer_three: Offer;
 }
 
 interface TurnStateData {
@@ -98,13 +106,13 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         wild_blast: null,
         wild_blast_platform: [],
 
-        index_progression: 0,
+        index_progression: 1,
         blast_defeated: 0,
         blast_catched: 0,
 
         meteo: Meteo.None,
 
-        TurnStateData: {
+        turnStateData: {
             p_move_damage: 0,
             p_move_effect: MoveEffect.None,
 
@@ -115,6 +123,30 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             catched: false
         },
+
+        offerTurnStateData: {
+            offer_one: {
+                type: OfferType.NONE,
+                coinsAmount: 0,
+                gemsAmount: 0,
+                blast: null,
+                item: null,
+            },
+            offer_two: {
+                type: OfferType.NONE,
+                coinsAmount: 0,
+                gemsAmount: 0,
+                blast: null,
+                item: null,
+            },
+            offer_three: {
+                type: OfferType.NONE,
+                coinsAmount: 0,
+                gemsAmount: 0,
+                blast: null,
+                item: null,
+            }
+        }
     };
 
     return {
@@ -162,8 +194,8 @@ const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, n
                 writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, state.blast_defeated);
             }
 
-            if (state.index_progression > 0) {
-                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200 * state.index_progression)
+            if (state.index_progression > 1) {
+                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200 * (state.index_progression - 1))
             }
         }
 
@@ -207,7 +239,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-            var newBlast = getRandomBlastInPlayerArea(Math.floor(state.index_progression / 10), nk);
+            var newBlast = getRandomBlastWithAreaId(Math.floor(state.index_progression / 10.0), nk);
 
             state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
@@ -279,7 +311,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 state.player1_state = PlayerState.BUSY;
 
-                state.TurnStateData = {
+                state.turnStateData = {
                     p_move_damage: 0,
                     p_move_effect: MoveEffect.None,
 
@@ -351,7 +383,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                                 }
 
-                                state.TurnStateData.catched = wildBlastCaptured;
+                                state.turnStateData.catched = wildBlastCaptured;
                                 break;
                             default:
                         }
@@ -391,20 +423,20 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 ({ blast: state.p1_blasts[state.p1_index]!, otherBlast: state.wild_blast! } = applyStatusEffectAtEndOfTurn(state.p1_blasts[state.p1_index]!, state.wild_blast!));
                 ({ blast: state.wild_blast!, otherBlast: state.p1_blasts[state.p1_index]! } = applyStatusEffectAtEndOfTurn(state.wild_blast!, state.p1_blasts[state.p1_index]!));
 
-                ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
+                state = checkIfMatchContinue(state);
 
                 if (state.battle_state == BattleState.END) {
                     if (isBlastAlive(state.wild_blast!)) state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
                     if (isBlastAlive(state.p1_blasts[state.p1_index]!)) state.p1_blasts[state.p1_index]!.mana = calculateManaRecovery(state.p1_blasts[state.p1_index]!.maxMana, state.p1_blasts[state.p1_index]!.mana, false);
 
-                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    dispatcher.broadcastMessage(OpCodes.NEW_BATTLE_TURN, JSON.stringify(state.turnStateData));
 
                     return;
                 }
                 else if (state.battle_state == BattleState.WAITFORPLAYERSWAP) {
                     state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
-                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    dispatcher.broadcastMessage(OpCodes.NEW_BATTLE_TURN, JSON.stringify(state.turnStateData));
 
                     EndLoopDebug(logger, state);
 
@@ -417,7 +449,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     state.wild_blast!.mana = calculateManaRecovery(state.wild_blast!.maxMana, state.wild_blast!.mana, false);
 
                     //Send matchTurn
-                    dispatcher.broadcastMessage(OpCodes.MATCH_ROUND, JSON.stringify(state.TurnStateData));
+                    dispatcher.broadcastMessage(OpCodes.NEW_BATTLE_TURN, JSON.stringify(state.turnStateData));
                 }
 
                 EndLoopDebug(logger, state);
@@ -425,7 +457,9 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             });
             break;
+        // region WAITFORPLAYERSWAP
         case BattleState.WAITFORPLAYERSWAP:
+
             messages.forEach(function (message) {
 
                 const validOpCodes = [
@@ -467,7 +501,91 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
             });
             break;
+        //region CHOOSE OFFER
+        case BattleState.WAITFORPLAYERCHOOSEOFFER:
+            messages.forEach(function (message) {
+
+                const validOpCodes = [
+                    OpCodes.PLAYER_CHOOSE_OFFER,
+                ];
+
+                if (!validOpCodes.includes(message.opCode)) {
+                    ({ state } = ErrorFunc(state, "OP CODE NOT VALID", dispatcher, BattleState.WAITFORPLAYERSWAP));
+                    return;
+                }
+
+                logger.debug('______________ PLAYER CHOOSE OFFER ______________');
+
+                message.data == null ? logger.debug('Receive Op code : %d', message.opCode) : logger.debug('Receive Op code : %d, with data : %e', message.opCode, JSON.parse(nk.binaryToString(message.data)));
+
+                if (message.opCode == OpCodes.PLAYER_CHOOSE_OFFER) {
+                    state.index_progression++;
+
+                    state.player1_state = PlayerState.BUSY;
+
+                    var indexChooseOffer = clamp(JSON.parse(nk.binaryToString(message.data)), 0, 2);
+
+                    let currentOffer: Offer = {
+                        type: OfferType.NONE,
+                        coinsAmount: 0,
+                        gemsAmount: 0,
+                        blast: null,
+                        item: null,
+                    };
+
+                    switch (indexChooseOffer) {
+                        case 0:
+                            currentOffer = state.offerTurnStateData.offer_one;
+                            break;
+                        case 1:
+                            currentOffer = state.offerTurnStateData.offer_two;
+                            break;
+                        case 2:
+                            currentOffer = state.offerTurnStateData.offer_three;
+                            break;
+                    }
+
+                    switch (currentOffer.type) {
+                        case OfferType.BLAST:
+                            addBlast(nk, logger, state.player1_id, currentOffer.blast!);
+                            break;
+                        case OfferType.ITEM:
+                            addItem(nk, logger, state.player1_id, currentOffer.item!);
+                            break;
+                        case OfferType.COINS:
+                            updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, currentOffer.coinsAmount);
+                            break;
+                        case OfferType.GEMS:
+                            updateWalletWithCurrency(nk, state.player1_id, Currency.Gems, currentOffer.coinsAmount);
+                            break;
+                        case OfferType.NONE:
+                            break;
+                    }
+
+                    var newBlast = getRandomBlastWithAreaId(Math.floor(state.index_progression / 10.0), nk);
+
+                    state.wild_blast = ConvertBlastToBlastEntity(newBlast);
+
+                    const newWildBlast: NewBlastData = {
+                        id: state.wild_blast.data_id,
+                        exp: state.wild_blast.exp,
+                        iv: state.wild_blast.iv,
+                        activeMoveset: state.wild_blast.activeMoveset,
+                        status: Status.None
+                    }
+
+                    dispatcher.broadcastMessage(OpCodes.NEW_BLAST, JSON.stringify(newWildBlast));
+                }
+
+                state.battle_state = BattleState.WAITING;
+
+                logger.debug('______________ END PLAYER CHOOSE OFFER ______________');
+                logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
+            });
+            break;
+        // region END BATTLE
         case BattleState.END:
+
 
             const playerBlast = state.p1_blasts[state.p1_index]!;
             const wildBlast = state.wild_blast!;
@@ -475,36 +593,59 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             const wildAlive = isBlastAlive(wildBlast);
             const allPlayerDead = isAllBlastDead(state.p1_blasts);
 
-            if (wildAlive == false || state.TurnStateData.catched) {
+            if (wildAlive == false || state.turnStateData.catched) {
 
                 state.index_progression++;
 
                 addExpOnBlastInGame(nk, logger, state.player1_id, playerBlast, wildBlast);
 
-                if (state.TurnStateData.catched) {
+                if (state.turnStateData.catched) {
                     state.blast_catched++;
                 }
                 else {
                     state.blast_defeated++;
                 }
 
-                var newBlast = getRandomBlastInPlayerArea(Math.floor(state.index_progression / 10), nk);
+                if (state.index_progression % 5 == 0 && state.index_progression % 10 != 0) {
+                    let items: OfferTurnStateData = {
+                        offer_one: getRandomOffer(nk, state, logger, state.player1_id),
+                        offer_two: getRandomOffer(nk, state, logger, state.player1_id),
+                        offer_three: getRandomOffer(nk, state, logger, state.player1_id),
+                    }
 
-                state.wild_blast = ConvertBlastToBlastEntity(newBlast);
+                    state.offerTurnStateData = items;
 
-                const newWildBlast: NewBlastData = {
-                    id: state.wild_blast.data_id,
-                    exp: state.wild_blast.exp,
-                    iv: state.wild_blast.iv,
-                    activeMoveset: state.wild_blast.activeMoveset,
-                    status: Status.None
+                    dispatcher.broadcastMessage(OpCodes.NEW_OFFER_TURN, JSON.stringify(items));
+
+                    state.battle_state = BattleState.WAITFORPLAYERCHOOSEOFFER;
+
+                } else {
+                    var newBlast = getRandomBlastWithAreaId(Math.floor(state.index_progression / 10.0), nk);
+
+                    logger.debug('STATE PROGRESSSSIOPN:', state.index_progression);
+
+                    if (state.index_progression % 10 == 0) {
+                        newBlast.exp = calculateExperienceFromLevel(state.index_progression / 2);
+                        newBlast.iv = MaxIV;
+                    };
+
+                    state.wild_blast = ConvertBlastToBlastEntity(newBlast);
+
+                    const newWildBlast: NewBlastData = {
+                        id: state.wild_blast.data_id,
+                        exp: state.wild_blast.exp,
+                        iv: state.wild_blast.iv,
+                        activeMoveset: state.wild_blast.activeMoveset,
+                        status: Status.None
+                    }
+
+                    dispatcher.broadcastMessage(OpCodes.NEW_BLAST, JSON.stringify(newWildBlast));
+
+                    state.battle_state = BattleState.WAITING;
                 }
-
-                dispatcher.broadcastMessage(OpCodes.NEW_BLAST, JSON.stringify(newWildBlast));
 
                 EndLoopDebug(logger, state);
 
-                state.battle_state = BattleState.WAITING;
             }
             if (allPlayerDead) {
                 dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
@@ -552,7 +693,7 @@ function EndLoopDebug(logger: nkruntime.Logger, state: WildBattleData) {
     logger.debug('______________ END LOOP BATTLE ______________');
     logger.debug('Wild blast HP : %h, Mana : %m', state.wild_blast?.hp, state.wild_blast?.mana);
     logger.debug('Player blast HP : %h, Mana : %m', state.p1_blasts[state.p1_index]?.hp, state.p1_blasts[state.p1_index]?.mana);
-    logger.debug('Wild blast turn type : %h', state.TurnStateData.wb_turn_type);
+    logger.debug('Wild blast turn type : %h', state.turnStateData.wb_turn_type);
 }
 
 function ErrorFunc(state: WildBattleData, error: string, dispatcher: nkruntime.MatchDispatcher, currentBattleState: BattleState) {
@@ -575,7 +716,6 @@ function connectedPlayers(s: WildBattleData): number {
 }
 
 //#region  Attack Logic
-
 function applyBlastAttack(attacker: BlastEntity, defender: BlastEntity, move: Move, meteo: Meteo): number {
     let damage = calculateDamage(
         calculateLevelFromExperience(attacker.exp),
@@ -620,11 +760,11 @@ function executePlayerAttack(
         if (move.attackType === AttackType.Special) {
             const updated = applyEffect(getTargetBlast(), move);
             setTargetBlast(updated);
-            state.TurnStateData.p_move_effect = move.effect;
+            state.turnStateData.p_move_effect = move.effect;
         } else {
             const result = calculateEffectWithProbability(getTargetBlast(), move);
             setTargetBlast(result.blast);
-            state.TurnStateData.p_move_effect = result.moveEffect;
+            state.turnStateData.p_move_effect = result.moveEffect;
         }
     };
 
@@ -675,7 +815,7 @@ function executePlayerAttack(
             state.meteo
         );
 
-        state.TurnStateData.p_move_damage = damage;
+        state.turnStateData.p_move_damage = damage;
     }
 
     return { state };
@@ -687,7 +827,7 @@ function executeWildBlastAttack(
     logger: nkruntime.Logger
 ): { state: WildBattleData } {
 
-    const moveIndex = state.TurnStateData.wb_move_index;
+    const moveIndex = state.turnStateData.wb_move_index;
 
     if (moveIndex === -1) {
         state.wild_blast!.mana = calculateManaRecovery(
@@ -695,7 +835,7 @@ function executeWildBlastAttack(
             state.wild_blast!.mana,
             true
         );
-        state.TurnStateData.wb_turn_type = TurnType.WAIT;
+        state.turnStateData.wb_turn_type = TurnType.WAIT;
         return { state };
     }
 
@@ -732,11 +872,11 @@ function executeWildBlastAttack(
         if (move.attackType === AttackType.Special) {
             const updated = applyEffect(getTargetBlast(), move);
             setTargetBlast(updated);
-            state.TurnStateData.wb_move_effect = move.effect;
+            state.turnStateData.wb_move_effect = move.effect;
         } else {
             const result = calculateEffectWithProbability(getTargetBlast(), move);
             setTargetBlast(result.blast);
-            state.TurnStateData.wb_move_effect = result.moveEffect;
+            state.turnStateData.wb_move_effect = result.moveEffect;
         }
     };
 
@@ -775,10 +915,10 @@ function executeWildBlastAttack(
             move,
             state.meteo
         );
-        state.TurnStateData.wb_move_damage = damage;
+        state.turnStateData.wb_move_damage = damage;
     }
 
-    state.TurnStateData.wb_turn_type = TurnType.ATTACK;
+    state.turnStateData.wb_turn_type = TurnType.ATTACK;
 
     return { state };
 }
@@ -787,7 +927,7 @@ function executeWildBlastAttack(
 function handleAttackTurn(isPlayerFaster: boolean, state: WildBattleData, move: Move, dispatcher: nkruntime.MatchDispatcher, nk: nkruntime.Nakama, logger: nkruntime.Logger): { state: WildBattleData } {
     ({ state } = isPlayerFaster ? executePlayerAttack(state, move, dispatcher) : executeWildBlastAttack(state, dispatcher, logger));
 
-    ({ state } = checkIfMatchContinue(nk, logger, state, dispatcher));
+    state = checkIfMatchContinue(state);
 
     return { state };
 }
@@ -796,8 +936,8 @@ function performAttackSequence(state: WildBattleData, playerMove: Move, dispatch
 
     let firstIsPlayer: boolean;
 
-    if (state.TurnStateData.wb_move_index >= 0) {
-        const wildMoveId = state.wild_blast!.activeMoveset![state.TurnStateData.wb_move_index];
+    if (state.turnStateData.wb_move_index >= 0) {
+        const wildMoveId = state.wild_blast!.activeMoveset![state.turnStateData.wb_move_index];
         const wildMove = getMoveById(wildMoveId);
 
         if (playerMove.priority == wildMove.priority) {
@@ -819,7 +959,7 @@ function performAttackSequence(state: WildBattleData, playerMove: Move, dispatch
     return state;
 }
 
-function checkIfMatchContinue(nk: nkruntime.Nakama, logger: nkruntime.Logger, state: WildBattleData, dispatcher: nkruntime.MatchDispatcher): { state: WildBattleData } {
+function checkIfMatchContinue(state: WildBattleData): WildBattleData {
 
     const playerBlast = state.p1_blasts[state.p1_index]!;
     const wildBlast = state.wild_blast!;
@@ -836,8 +976,41 @@ function checkIfMatchContinue(nk: nkruntime.Nakama, logger: nkruntime.Logger, st
         state.battle_state = BattleState.WAITFORPLAYERSWAP;
     }
 
-    return { state };
+    return state;
 }
 
 
 //#endregion
+
+// region Offer Turn Logic
+function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkruntime.Logger, userId: string): Offer {
+    let offer: Offer = {
+        type: OfferType.ITEM,
+        coinsAmount: 0,
+        gemsAmount: 0,
+        blast: null,
+        item: null,
+    };
+
+    const random = Math.floor(Math.random() * 4);
+    switch (random) {
+        case 0:
+            offer.type = OfferType.BLAST;
+            offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk, logger);
+            break;
+        case 1:
+            offer.type = OfferType.ITEM;
+            offer.item = getRandomItem(5);
+            break;
+        case 2:
+            offer.type = OfferType.COINS;
+            offer.coinsAmount = Math.floor(Math.random() * 1000) + 1;
+            break;
+        case 3:
+            offer.type = OfferType.GEMS;
+            offer.gemsAmount = Math.floor(Math.random() * 10) + 1;
+            break;
+    }
+
+    return offer;
+}   

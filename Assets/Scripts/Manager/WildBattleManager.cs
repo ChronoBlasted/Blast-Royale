@@ -311,15 +311,22 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             await Task.Delay(2000);
 
-            ShowWildBlast();
+            if (_indexProgression % 5 == 0 && _indexProgression % 10 != 0)
+            {
+                ShowOffers();
+            }
+            else
+            {
+                ShowWildBlast();
+
+                if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
+                {
+                    NakamaManager.Instance.NakamaWildBattle.PlayerReady();
+                }
+            }
         }
 
         EndTurn();
-
-        if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
-        {
-            NakamaManager.Instance.NakamaWildBattle.PlayerReady();
-        }
     }
 
 
@@ -345,6 +352,16 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             default:
                 return 0;
         }
+    }
+
+    public void SetNewOffers(List<Offer> newOffers)
+    {
+        UIManager.Instance.WildBattleOfferPopup.Init(newOffers);
+    }
+
+    public void ShowOffers()
+    {
+        UIManager.Instance.WildBattleOfferPopup.OpenPopup(true, false);
     }
 
     public void EndTurn()
@@ -404,6 +421,27 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             SetPlayerActionSwap(indexSelectedBlast);
             _serverBattle.PlayerChangeBlast(indexSelectedBlast);
+        }
+        catch (ApiResponseException e) { Debug.LogError(e); }
+    }
+
+    public async void PlayerChooseOffer(int indexOffer)
+    {
+        try
+        {
+            await _serverBattle.PlayerChooseOffer(indexOffer);
+
+            _indexProgression++;
+
+            await Task.Delay(500);
+
+            _gameView.AddProgress();
+
+            await Task.Delay(2000);
+
+            ShowWildBlast();
+
+            NakamaManager.Instance.NakamaWildBattle.PlayerReady();
         }
         catch (ApiResponseException e) { Debug.LogError(e); }
     }

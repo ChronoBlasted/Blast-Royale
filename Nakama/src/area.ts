@@ -10,35 +10,35 @@ const thePlains: Area = {
     id: 0,
     trophyRequired: 0,
     blastIds: [Kitchi.id, Kenchi.id, Mousy.id, Clawball.id],
-    blastLevels: [2, 5]
+    blastLevels: [1, 3]
 }
 
 const theDarkCaves: Area = {
     id: 1,
     trophyRequired: 300,
     blastIds: [Balt.id, Stagpan.id, Botte.id, Booh.id, Ghoosto.id],
-    blastLevels: [4, 8]
+    blastLevels: [2, 6]
 }
 
 const theMiniHell: Area = {
     id: 2,
     trophyRequired: 600,
     blastIds: [Goblin.id, MiniDevil.id, DevilDare.id, Masks.id, Luckun.id, MiniHam.id, SadHam.id],
-    blastLevels: [7, 11]
+    blastLevels: [5, 9]
 }
 
 const theWildForest: Area = {
     id: 3,
     trophyRequired: 1000,
     blastIds: [Bearos.id, Treex.id, Moutmout.id, Piggy.id, Bleaub.id, Shroom.id],
-    blastLevels: [10, 14]
+    blastLevels: [8, 12]
 }
 
 const theWideOcean: Area = {
     id: 4,
     trophyRequired: 1300,
     blastIds: [Lantern.id, Droplet.id, Fireball.id, Mystical.id, Wormie.id, Smoky.id],
-    blastLevels: [13, 17]
+    blastLevels: [12, 15]
 }
 
 const theGloryCastle: Area = {
@@ -70,7 +70,7 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
         return JSON.stringify(allArea);
     }
 
-function getRandomBlastInPlayerArea(newAreaId: number, nk: nkruntime.Nakama): Blast {
+function getRandomBlastWithAreaId(newAreaId: number, nk: nkruntime.Nakama): Blast {
 
     let areaId = clamp(newAreaId, 0, allArea.length)
 

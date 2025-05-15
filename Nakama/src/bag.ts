@@ -84,12 +84,12 @@ const rpcLoadUserItems: nkruntime.RpcFunction =
         return JSON.stringify(loadUserItems(nk, logger, ctx.userId));
     }
 
-function addItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context, newItemToAdd: Item): ItemCollection {
+function addItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string, newItemToAdd: Item): ItemCollection {
 
     let userItems: ItemCollection;
 
     try {
-        userItems = loadUserItems(nk, logger, ctx.userId);
+        userItems = loadUserItems(nk, logger, userId);
     } catch (error) {
         logger.error('error loading user cards: %s', error);
         throw Error('Internal server error');
@@ -124,7 +124,7 @@ function addItem(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.
     }
 
     try {
-        storeUserItems(nk, logger, ctx.userId, userItems);
+        storeUserItems(nk, logger, userId, userItems);
     } catch (error) {
         logger.error('error buying card: %s', error);
         throw error;
