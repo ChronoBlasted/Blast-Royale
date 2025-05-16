@@ -6,6 +6,8 @@ interface Blast {
     data_id: number;
     exp: number;
     iv: number;
+    boss: boolean;
+    shiny: boolean;
     activeMoveset: number[];
 }
 
@@ -39,8 +41,10 @@ class BlastEntity {
     data_id: number;
     exp: number;
     iv: number;
+    boss: boolean;
+    shiny: boolean;
 
-    maxHp:number;
+    maxHp: number;
     hp: number;
     maxMana: number;
     mana: number;
@@ -54,14 +58,17 @@ class BlastEntity {
     defense: number;
     speed: number;
 
-    constructor(uuid: string, data_id: number, exp: number, iv: number, moveset: number[]) {
+    constructor(uuid: string, data_id: number, exp: number, iv: number, boss: boolean, shiny: boolean, moveset: number[]) {
         this.uuid = uuid;
         this.data_id = data_id;
         this.exp = exp;
         this.iv = iv;
-        this.status = Status.None;
+        this.boss = boss;
+        this.shiny = shiny;
         this.activeMoveset = moveset;
         this.modifiers = [];
+
+        this.status = Status.None;
 
         this.level = calculateLevelFromExperience(this.exp);
 
@@ -72,7 +79,7 @@ class BlastEntity {
 
         this.attack = calculateBlastStat(getBlastDataById(this.data_id).attack, this.iv, this.level);
         this.defense = calculateBlastStat(getBlastDataById(this.data_id).defense, this.iv, this.level);
-        this.speed =calculateBlastStat(getBlastDataById(this.data_id).speed, this.iv, this.level);
+        this.speed = calculateBlastStat(getBlastDataById(this.data_id).speed, this.iv, this.level);
     }
 }
 

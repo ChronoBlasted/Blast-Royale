@@ -235,6 +235,8 @@ public class NewBlastData
     public int id;
     public int exp;
     public int iv;
+    public bool boss;
+    public bool shiny;
     public Status status;
     public List<int> activeMoveset;
 }

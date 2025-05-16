@@ -70,7 +70,7 @@ const rpcLoadAllArea: nkruntime.RpcFunction =
         return JSON.stringify(allArea);
     }
 
-function getRandomBlastWithAreaId(newAreaId: number, nk: nkruntime.Nakama): Blast {
+function getRandomBlastWithAreaId(newAreaId: number, nk: nkruntime.Nakama, isBoss: boolean): Blast {
 
     let areaId = clamp(newAreaId, 0, allArea.length)
 
@@ -80,12 +80,12 @@ function getRandomBlastWithAreaId(newAreaId: number, nk: nkruntime.Nakama): Blas
 
     let randomIv = getRandomNumber(MinIV, MaxIV);
 
-    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel)
+    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, blastData, randomLevel, isBoss);
 
     return newBlast;
 }
 
-function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama, logger: nkruntime.Logger): Blast {
+function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama, isBoss: boolean): Blast {
 
     const account = nk.accountGetId(userId);
     const metadata = account.user.metadata as PlayerMetadata;
@@ -96,18 +96,20 @@ function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakam
 
     let randomIv = getRandomNumber(MinIV, MaxIV);
 
-    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, randomData, randomlevel)
+    let newBlast: Blast = getNewBlast(nk, randomBlastId, randomIv, randomData, randomlevel, isBoss);
 
     return newBlast;
 }
 
 
-function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, level: number): Blast {
+function getNewBlast(nk: nkruntime.Nakama, randomBlastId: number, randomIv: number, randomData: BlastData, level: number, isBoss: boolean): Blast {
     return {
         uuid: nk.uuidv4(),
         data_id: randomBlastId,
         exp: calculateExperienceFromLevel(level),
         iv: randomIv,
+        boss: isBoss,
+        shiny: isShiny(),
         activeMoveset: getRandomActiveMoveset(randomData, calculateExperienceFromLevel(level)),
     };
 }

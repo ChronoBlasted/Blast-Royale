@@ -35,6 +35,8 @@ const DefaultDeckBlast: Blast[] = [
             data_id: Lizzy.id,
             exp,
             iv,
+            boss: false,
+            shiny: isShiny(),
             activeMoveset: getRandomActiveMoveset(Lizzy, exp),
         };
         return blast;
@@ -47,6 +49,8 @@ const DefaultDeckBlast: Blast[] = [
             data_id: Punchball.id,
             exp,
             iv,
+            boss: false,
+            shiny: isShiny(),
             activeMoveset: getRandomActiveMoveset(Punchball, exp),
         };
         return blast;
@@ -59,6 +63,8 @@ const DefaultDeckBlast: Blast[] = [
             data_id: Jellys.id,
             exp,
             iv,
+            boss: false,
+            shiny: isShiny(),
             activeMoveset: getRandomActiveMoveset(Jellys, exp),
         };
         return blast;
@@ -199,6 +205,8 @@ const rpcEvolveBlast: nkruntime.RpcFunction =
             data_id: 0,
             exp: 0,
             iv: 0,
+            boss: false,
+            shiny: false,
             activeMoveset: [],
         };
 

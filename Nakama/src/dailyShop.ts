@@ -192,7 +192,7 @@ function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string, logger: nkrun
 
     if (Math.random() < 0.5) {
         storeOffer.offer.type = OfferType.BLAST;
-        storeOffer.offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk, logger);
+        storeOffer.offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk, false);
         storeOffer.price = getBlastPrice(storeOffer.offer.blast);
         storeOffer.currency = Currency.Coins;
     } else {

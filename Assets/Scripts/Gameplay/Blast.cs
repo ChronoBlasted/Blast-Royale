@@ -9,6 +9,8 @@ public class Blast
     public int data_id;
     public int exp;
     public int iv;
+    public bool boss;
+    public bool shiny;
 
     int hp;
     int mana;
@@ -26,7 +28,7 @@ public class Blast
     public float Speed => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, iv, Level) * GetModifierMultiplier(StatType.Speed);
     public int Level { get => NakamaLogic.CalculateLevelFromExperience(exp); }
 
-    public Blast(string uuid, int data, int exp, int iv, List<int> moveset)
+    public Blast(string uuid, int data, int exp, int iv, List<int> moveset, bool boss, bool shiny)
     {
         this.uuid = uuid;
         data_id = data;
@@ -36,7 +38,8 @@ public class Blast
         mana = CalculateBlastMana(NakamaData.Instance.GetBlastDataById(data).mana, iv, Level);
         status = Status.None;
         activeMoveset = moveset;
-
+        this.boss = boss;
+        this.shiny = shiny;
     }
 
     int CalculateBlastStat(int baseStat, int iv, int level)
@@ -59,8 +62,6 @@ public class Blast
         float result = (((2 * baseMana + iv) * halfLevel) / 100) + halfLevel + 10;
         return Mathf.FloorToInt(result);
     }
-
-
 
     public int GetRatioExp()
     {

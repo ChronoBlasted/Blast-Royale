@@ -65,7 +65,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _playerItems.Clear();
 
         foreach (var blast in _userAccount.LastBlastCollection.deckBlasts)
-            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset));
+            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset,blast.boss,blast.shiny));
 
         foreach (var item in _userAccount.LastItemCollection.deckItems)
             _playerItems.Add(new Item(item.data_id, item.amount));
@@ -109,7 +109,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
     public void SetNewWildBlast(NewBlastData newBlastData)
     {
-        var _wildBlast = new Blast("", newBlastData.id, newBlastData.exp, newBlastData.iv, newBlastData.activeMoveset);
+        var _wildBlast = new Blast("", newBlastData.id, newBlastData.exp, newBlastData.iv, newBlastData.activeMoveset, newBlastData.boss, newBlastData.shiny);
 
         _nextWildBlast = _wildBlast;
     }

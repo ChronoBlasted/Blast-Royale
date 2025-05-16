@@ -47,10 +47,11 @@ function getRandomActiveMoveset(blastData: BlastData, exp: number): number[] {
 }
 
 function ConvertBlastToBlastEntity(blast: Blast): BlastEntity {
-    const blastEntity: BlastEntity = new BlastEntity(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset);
+    const blastEntity: BlastEntity = new BlastEntity(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.boss, blast.shiny, blast.activeMoveset);
 
     return blastEntity as BlastEntity;
 }
+
 
 
 //#region Battle
@@ -489,8 +490,9 @@ function getRandomUsableMove(allMoves: Move[], currentMana: number, currentPlatf
     return allMoves.indexOf(usableMoves[randomIndex]);
 }
 
-
-
+function isShiny(probability: number = 1 / 4096): boolean {
+  return Math.random() < probability;
+}
 
 //#endregion
 

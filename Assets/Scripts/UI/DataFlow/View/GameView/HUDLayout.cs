@@ -44,7 +44,11 @@ public class HUDLayout : MonoBehaviour
         _hpSlider.Init(_blast.Hp, _blast.MaxHp);
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);
 
-        Sprite blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
+        Sprite blastSprite;
+
+        if (blast.shiny) blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).ShinySprite;
+        else if (blast.boss) blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).BossSprite;
+        else blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
 
         SetStatus(_blast.status);
 
