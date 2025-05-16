@@ -490,7 +490,7 @@ function getRandomUsableMove(allMoves: Move[], currentMana: number, currentPlatf
     return allMoves.indexOf(usableMoves[randomIndex]);
 }
 
-function isShiny(probability: number = 1 / 4096): boolean {
+function isShiny(probability: number = 1 / 1024): boolean {
   return Math.random() < probability;
 }
 

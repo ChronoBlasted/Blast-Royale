@@ -36,6 +36,20 @@ public class NakamaData : MonoSingleton<NakamaData>
         return _allBlastData.Find(x => x.DataID == id);
     }
 
+    public Sprite GetSpriteWithBlast(Blast blast)
+    {
+        Sprite sprite;
+
+        BlastDataRef dataRef = GetBlastDataRef(blast.data_id);
+
+
+        if (blast.shiny) sprite = dataRef.ShinySprite;
+        else if (blast.boss) sprite = dataRef.BossSprite;
+        else sprite = dataRef.Sprite;
+
+        return sprite;
+    }
+
     public ItemDataRef GetItemDataRef(int id)
     {
         return _allItemData.Find(x => x.DataID == id);

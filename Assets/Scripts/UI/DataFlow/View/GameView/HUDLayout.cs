@@ -44,18 +44,12 @@ public class HUDLayout : MonoBehaviour
         _hpSlider.Init(_blast.Hp, _blast.MaxHp);
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);
 
-        Sprite blastSprite;
-
-        if (blast.shiny) blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).ShinySprite;
-        else if (blast.boss) blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).BossSprite;
-        else blastSprite = NakamaData.Instance.GetBlastDataRef(data.id).Sprite;
-
         SetStatus(_blast.status);
 
         _modifierManager.Init();
         ApplyAllModifiers(_blast);
 
-        _blastInWorld.Init(blastSprite);
+        _blastInWorld.Init(NakamaData.Instance.GetSpriteWithBlast(_blast));
     }
 
     public void UpdateHpBar(int newHp, float duration = .2f, float delay = 0f)

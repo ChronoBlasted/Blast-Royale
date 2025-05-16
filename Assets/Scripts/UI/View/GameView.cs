@@ -349,6 +349,9 @@ public class GameView : View
                 }
         }
 
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+
         _dialogLayout.Hide();
     }
 

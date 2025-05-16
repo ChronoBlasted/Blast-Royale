@@ -24,7 +24,7 @@ public class OfferLayout : MonoBehaviour
 
                 BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(_currentOffer.blast.data_id);
 
-                _ico.sprite = blastData.Sprite;
+                _ico.sprite = NakamaData.Instance.GetSpriteWithBlast(_currentOffer.blast);
 
                 _nameTxt.text = blastData.Name.GetLocalizedString();
                 _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(_currentOffer.blast.exp);

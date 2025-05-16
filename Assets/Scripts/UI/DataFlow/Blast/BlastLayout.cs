@@ -1,4 +1,5 @@
 using System.Collections;
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,7 +29,12 @@ public class BlastLayout : MonoBehaviour
         _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(_blast.exp);
         _blastIvTxt.text = "IV:" + _blast.iv;
 
-        _blastImg.sprite = NakamaData.Instance.GetBlastDataRef(blast.data_id).Sprite;
+        var dataRef = NakamaData.Instance.GetBlastDataRef(blast.data_id);
+
+        if (_blast.shiny) _blastImg.sprite = dataRef.ShinySprite;
+        else if (_blast.boss) _blastImg.sprite = dataRef.BossSprite;
+        else _blastImg.sprite = dataRef.Sprite;
+
         _bg.color = ResourceObjectHolder.Instance.GetTypeDataByType(blastData.type).Color;
     }
 
@@ -50,7 +56,7 @@ public class BlastLayout : MonoBehaviour
         UIManager.Instance.MenuView.SquadPanel.SwitchToSoloBlast(_blast);
     }
 
-     void DisableSwap()
+    void DisableSwap()
     {
         UIManager.Instance.MenuView.SquadPanel.IsSwapMode = false;
         UIManager.Instance.MenuView.SquadPanel.CurrentIndexStored = -1;

@@ -597,7 +597,6 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             const wildBlast = state.wild_blast!;
 
             const wildAlive = isBlastAlive(wildBlast);
-            const allPlayerDead = isAllBlastDead(state.p1_blasts);
 
             if (wildAlive == false || state.turnStateData.catched) {
 
@@ -655,9 +654,6 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 EndLoopDebug(logger, state);
 
-            }
-            if (allPlayerDead) {
-                dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
             }
 
             logger.debug('______________ END BATTLE ______________');

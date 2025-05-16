@@ -37,12 +37,6 @@ public class ItemTurnHandler : TurnActionHandler
 
         await Task.Delay(500);
 
-        if (context.IsCatched)
-        {
-            await UIManager.Instance.GameView.DoShowMessage("You caught the wild " + nakamaData.GetBlastDataRef(context.Defender.data_id).Name.GetLocalizedString());
-            return true;
-        }
-
-        return false;
+        return context.IsCatched;
     }
 }

@@ -69,7 +69,7 @@ public class BlastInfoPopup : Popup
         _blastLevel.text = level >= 0 ? $"Lvl.{level}" : "";
         _blastExp.text = (exp >= 0 && nextExp >= 0) ? $" EXP : {exp} / {nextExp}" : "";
 
-        _blastImg.sprite = refData.Sprite;
+        _blastImg.sprite = NakamaData.Instance.GetSpriteWithBlast(_currentBlast);
     }
 
     private void SetStatsUI(int hp, int mana, float attack, float defense, float speed, int Iv)

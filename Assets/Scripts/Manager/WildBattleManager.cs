@@ -26,12 +26,17 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     int _indexProgression;
     int _blastDefeated;
     int _blastCatched;
+    int _bossEncounter;
+    int _shinyEncounter;
+    int _coinGenerated;
+    int _gemGenerated;
 
     List<Blast> _playerSquads = new List<Blast>();
     List<Item> _playerItems = new List<Item>();
     PlayerBattleInfo _playerMeInfo;
     PlayerBattleInfo _playerWildInfo;
     Blast _nextWildBlast;
+    List<Offer> _currentOffers;
 
     Meteo _meteo;
 
@@ -39,6 +44,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     TurnStateData _turnStateData;
     TurnAction _playerAction, _wbAction;
 
+    public List<Offer> WildBattleReward;
     public List<Blast> PlayerSquads => _playerSquads;
     public List<Item> PlayerItems => _playerItems;
     public Blast WildBlast => _playerWildInfo.ActiveBlast;
@@ -47,6 +53,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     public TurnAction PlayerAction { get => _playerAction; }
     public TurnAction WbAction { get => _wbAction; }
     public Blast PlayerBlast { get => _playerMeInfo.ActiveBlast; }
+    public int BlastDefeated { get => _blastDefeated; }
+    public int BlastCatched { get => _blastCatched; }
+    public int ShinyEncounter { get => _shinyEncounter; }
+    public int BossEncounter { get => _bossEncounter; }
+    public int IndexProgression { get => _indexProgression; }
 
     public void Init()
     {
@@ -65,7 +76,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _playerItems.Clear();
 
         foreach (var blast in _userAccount.LastBlastCollection.deckBlasts)
-            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset,blast.boss,blast.shiny));
+            _playerSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset, blast.boss, blast.shiny));
 
         foreach (var item in _userAccount.LastItemCollection.deckItems)
             _playerItems.Add(new Item(item.data_id, item.amount));
@@ -83,7 +94,13 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         _indexProgression = 1;
         _blastDefeated = 0;
+        _bossEncounter = 0;
+        _shinyEncounter = 0;
         _blastCatched = 0;
+        _coinGenerated = 0;
+        _gemGenerated = 0;
+
+        WildBattleReward.Clear();
 
         _gameView.SetProgression(_indexProgression);
 
@@ -302,8 +319,27 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             _indexProgression++;
 
-            if (_turnStateData.catched) _blastCatched++;
-            else _blastDefeated++;
+            if (_turnStateData.catched)
+            {
+                Offer newBlast = new Offer
+                {
+                    type = OfferType.BLAST,
+                    blast = _playerWildInfo.ActiveBlast,
+                };
+
+                WildBattleReward.Add(newBlast);
+
+                _blastCatched++;
+            }
+            else
+            {
+                _blastDefeated++;
+
+                if (_playerWildInfo.ActiveBlast.boss) _bossEncounter++;
+                if (_playerWildInfo.ActiveBlast.shiny) _shinyEncounter++;
+            }
+
+            _coinGenerated += 200;
 
             await Task.Delay(500);
 
@@ -324,6 +360,10 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                     NakamaManager.Instance.NakamaWildBattle.PlayerReady();
                 }
             }
+        }
+        else if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast) == false)
+        {
+            PlayerLeave();
         }
 
         EndTurn();
@@ -356,6 +396,8 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
     public void SetNewOffers(List<Offer> newOffers)
     {
+        _currentOffers = newOffers;
+
         UIManager.Instance.WildBattleOfferPopup.Init(newOffers);
     }
 
@@ -431,6 +473,24 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             await _serverBattle.PlayerChooseOffer(indexOffer);
 
+            switch (_currentOffers[indexOffer].type)
+            {
+                case OfferType.COIN:
+                    _coinGenerated += _currentOffers[indexOffer].coinsAmount;
+                    break;
+                case OfferType.GEM:
+                    _gemGenerated += _currentOffers[indexOffer].gemsAmount;
+                    break;
+                case OfferType.BLAST:
+                case OfferType.ITEM:
+                    WildBattleReward.Add(_currentOffers[indexOffer]);
+                    break;
+                default:
+                    break;
+            }
+
+            _coinGenerated += 200;
+
             _indexProgression++;
 
             await Task.Delay(500);
@@ -454,6 +514,27 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             await _serverBattle.PlayerWait();
         }
         catch (ApiResponseException e) { Debug.LogError(e); }
+    }
+
+    public void PlayerLeave()
+    {
+        _serverBattle.LeaveMatch();
+
+        Offer coinReward = new Offer();
+
+        coinReward.type = OfferType.COIN;
+        coinReward.coinsAmount = _coinGenerated;
+
+        WildBattleReward.Add(coinReward);
+
+        Offer gemReward = new Offer();
+
+        gemReward.type = OfferType.GEM;
+        gemReward.gemsAmount = _gemGenerated;
+
+        WildBattleReward.Add(gemReward);
+
+        UIManager.Instance.ChangeView(UIManager.Instance.EndView);
     }
 
     private void SetPlayerActionAttack(int moveIndex)
