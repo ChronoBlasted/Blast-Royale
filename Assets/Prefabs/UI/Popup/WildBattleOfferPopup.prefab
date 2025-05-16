@@ -25,12 +25,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144522128589939441}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4332023435298914367}
+  m_Father: {fileID: 4222284655890586236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -159,7 +159,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7578759446252658329}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -167,7 +167,7 @@ RectTransform:
   - {fileID: 5047713196178814653}
   - {fileID: 3708621128038917481}
   - {fileID: 4800284855297498699}
-  m_Father: {fileID: 4332023435298914367}
+  m_Father: {fileID: 4222284655890586236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -349,6 +349,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: WildBattleOfferPopup
       objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -462,10 +486,10 @@ PrefabInstance:
     - {fileID: 4069817716570306350, guid: 6b677807674d05c438664e6209f434eb, type: 3}
     - {fileID: 4132091382611440742, guid: 6b677807674d05c438664e6209f434eb, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1078896664422042481}
-    - targetCorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4728204488017297163}
     m_AddedComponents:
@@ -500,9 +524,9 @@ CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 73851629902220499, guid: 6b677807674d05c438664e6209f434eb, type: 3}
   m_PrefabInstance: {fileID: 1283016208496664236}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &4332023435298914367 stripped
+--- !u!224 &4222284655890586236 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3122861476985160912, guid: 6b677807674d05c438664e6209f434eb, type: 3}
   m_PrefabInstance: {fileID: 1283016208496664236}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8241974959504190560

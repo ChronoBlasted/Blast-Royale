@@ -520,19 +520,25 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     {
         _serverBattle.LeaveMatch();
 
-        Offer coinReward = new Offer();
+        if (_coinGenerated > 0)
+        {
+            Offer coinReward = new Offer();
 
-        coinReward.type = OfferType.COIN;
-        coinReward.coinsAmount = _coinGenerated;
+            coinReward.type = OfferType.COIN;
+            coinReward.coinsAmount = _coinGenerated;
 
-        WildBattleReward.Add(coinReward);
+            WildBattleReward.Add(coinReward);
+        }
 
-        Offer gemReward = new Offer();
+        if (_gemGenerated > 0)
+        {
+            Offer gemReward = new Offer();
 
-        gemReward.type = OfferType.GEM;
-        gemReward.gemsAmount = _gemGenerated;
+            gemReward.type = OfferType.GEM;
+            gemReward.gemsAmount = _gemGenerated;
 
-        WildBattleReward.Add(gemReward);
+            WildBattleReward.Add(gemReward);
+        }
 
         UIManager.Instance.ChangeView(UIManager.Instance.EndView);
     }
