@@ -70,7 +70,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         GameStateManager.Instance.OnGameStateChanged += HandleStateChange;
     }
 
-    public void StartBattle(StartStateData startData)
+    public async void StartBattle(StartStateData startData)
     {
         _playerSquads.Clear();
         _playerItems.Clear();
@@ -83,14 +83,11 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         _playerMeInfo = new PlayerBattleInfo(_userAccount.Username, BlastOwner.Me, _playerSquads[0], _playerSquads, _playerItems);
 
+        SetNewWildBlast(startData.newBlastData);
+        _playerWildInfo = new PlayerBattleInfo("", BlastOwner.Wild, _nextWildBlast, new List<Blast> { _nextWildBlast }, null);
+
         _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
         _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
-
-        SetNewWildBlast(startData.newBlastData);
-        ShowWildBlast();
-
-        _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
-        _gameView.SetMeteo(_meteo);
 
         _indexProgression = 1;
         _blastDefeated = 0;
@@ -100,27 +97,32 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _coinGenerated = 0;
         _gemGenerated = 0;
 
+        _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
+        _gameView.SetMeteo(_meteo);
+
         WildBattleReward.Clear();
 
         _gameView.SetProgression(_indexProgression);
-
-        _gameView.PlayerHUD.Init(_playerMeInfo.ActiveBlast);
-
-        _ = _gameView.PlayerHUD.ComeBackBlast(true);
-        _ = _gameView.PlayerHUD.ThrowBlast();
-
         _gameView.ExpProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(_playerMeInfo.ActiveBlast.data_id).Sprite);
-
-        _gameView.AttackPanel.UpdateAttack(_playerMeInfo.ActiveBlast);
-        _gameView.BagPanel.UpdateItem(_playerItems);
-        _gameView.SquadPanel.UpdateBlasts(_playerSquads);
-
-        UIManager.Instance.ChangeBlastPopup.UpdateData(_playerSquads);
 
         _gameView.DialogLayout.UpdateText("");
         _gameView.DialogLayout.Hide();
 
+        _gameView.PlayerHUD.Init(_playerMeInfo.ActiveBlast);
+
+        _gameView.AttackPanel.UpdateAttack(_playerMeInfo.ActiveBlast);
+        _gameView.BagPanel.UpdateItem(_playerItems);
+        _gameView.SquadPanel.UpdateBlasts(_playerSquads);
+        UIManager.Instance.ChangeBlastPopup.UpdateData(_playerSquads);
+
+        _ = _gameView.PlayerHUD.ComeBackBlast(true);
+        _ = _gameView.OpponentHUD.ComeBackBlast(true);
+
         GameStateManager.Instance.UpdateStateToGame();
+
+        await ShowWildBlast();
+        await _gameView.PlayerHUD.ThrowBlast();
+
         _serverBattle.PlayerReady();
     }
 
@@ -131,14 +133,14 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _nextWildBlast = _wildBlast;
     }
 
-    public void ShowWildBlast()
+    public async Task ShowWildBlast()
     {
         _playerWildInfo = new PlayerBattleInfo("", BlastOwner.Wild, _nextWildBlast, new List<Blast> { _nextWildBlast }, null);
 
         _gameView.OpponentHUD.Init(_nextWildBlast);
 
         _ = _gameView.OpponentHUD.ComeBackBlast(true);
-        _ = _gameView.OpponentHUD.ThrowBlast();
+        await _gameView.OpponentHUD.ThrowBlast();
     }
 
     public void StartNewTurn()
@@ -353,20 +355,20 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             }
             else
             {
-                ShowWildBlast();
-
-                if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
-                {
-                    NakamaManager.Instance.NakamaWildBattle.PlayerReady();
-                }
+                await ShowWildBlast();
             }
         }
-        else if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast) == false)
+        else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts))
         {
             PlayerLeave();
         }
 
         EndTurn();
+
+        if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
+        {
+            NakamaManager.Instance.NakamaWildBattle.PlayerReady();
+        }
     }
 
 
@@ -499,7 +501,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             await Task.Delay(2000);
 
-            ShowWildBlast();
+            await ShowWildBlast();
 
             NakamaManager.Instance.NakamaWildBattle.PlayerReady();
         }
@@ -527,7 +529,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             coinReward.type = OfferType.COIN;
             coinReward.coinsAmount = _coinGenerated;
 
-            WildBattleReward.Add(coinReward);
+            WildBattleReward.Insert(0, coinReward);
         }
 
         if (_gemGenerated > 0)
@@ -537,7 +539,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
             gemReward.type = OfferType.GEM;
             gemReward.gemsAmount = _gemGenerated;
 
-            WildBattleReward.Add(gemReward);
+            WildBattleReward.Insert(0, gemReward);
         }
 
         UIManager.Instance.ChangeView(UIManager.Instance.EndView);

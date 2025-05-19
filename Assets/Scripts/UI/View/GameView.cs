@@ -426,10 +426,10 @@ public class GameView : View
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
-    private void ResetZoomEffect(HUDLayout attackerHUD)
+    public void ResetZoomEffect(HUDLayout attackerHUD)
     {
         attackerHUD.AttackLayout.Hide();
-        CameraManager.Instance.Reset();
+        CameraManager.Instance.ResetCamera();
         EnvironmentManager.Instance.SetDarkBackground(false);
 
         ShowHUD();
@@ -445,7 +445,7 @@ public class GameView : View
             attackerHUD.AttackLayout.Show(text, type);
         }
         CameraManager.Instance.SetCameraPosition(new Vector3(attackerHUD.BlastInWorld.transform.position.x, attackerHUD.BlastInWorld.transform.position.y / 2, attackerHUD.BlastInWorld.transform.position.z / 2));
-        CameraManager.Instance.SetCameraZoom(6);
+        CameraManager.Instance.SmoothCameraZoom(6);
         EnvironmentManager.Instance.SetDarkBackground(true);
 
         if (shakeIntensity > 0) CameraManager.Instance.DoShakeCamera(shakeIntensity, .125f, 1f);

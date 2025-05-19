@@ -20,6 +20,8 @@ public class HUDLayout : MonoBehaviour
     [SerializeField] ModifierManager _modifierManager;
     [SerializeField] StatusLayout _statusLayout;
     [SerializeField] Color _expColor;
+    [SerializeField] ParticleSystem _onEndExpBall;
+    [SerializeField] ParticleSystem _onBossSpawn, _onShinySpawn;
 
     Blast _blast;
 
@@ -138,7 +140,7 @@ public class HUDLayout : MonoBehaviour
     {
         _lastOpponentHUD = opponentHUD;
 
-        StartCoroutine(EnvironmentManager.Instance.DOTravelWorldCor(TravelEffect.EXPLODE, Vector3.one, ResourceType.BlastExp, _blastInWorld.transform, opponentHUD.BlastInWorld.transform, DoScaleExpBall, 0.5f, amountExp));
+        StartCoroutine(EnvironmentManager.Instance.DOTravelWorldCor(TravelEffect.EXPLODE, Vector3.one, ResourceType.BlastExp, _blastInWorld.transform, _lastOpponentHUD.BlastInWorld.transform, DoScaleExpBall, 0.5f, amountExp));
     }
 
     public void DoScaleExpBall(bool isStart)
@@ -157,6 +159,8 @@ public class HUDLayout : MonoBehaviour
             DOTween.Kill(UIManager.Instance.GameView.ExpProgressionLayout.Amount.transform, true);
 
             UIManager.Instance.GameView.ExpProgressionLayout.Amount.transform.DOPunchScale(new Vector3(.3f, .3f, .3f), .2f);
+
+            Instantiate(_onEndExpBall.gameObject, _lastOpponentHUD.BlastInWorld.transform);
         }
     }
 
@@ -191,6 +195,23 @@ public class HUDLayout : MonoBehaviour
         _blastInWorld.BlastRender.transform.DOScale(Vector3.one, duration);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
+
+        if (_blast.shiny || _blast.boss)
+        {
+            if (_blast.shiny)
+            {
+                EnvironmentManager.Instance.SetDarkBackground(true);
+                Instantiate(_onShinySpawn, BlastInWorld.transform);
+            }
+            else
+            {
+                Instantiate(_onBossSpawn, BlastInWorld.transform);
+            }
+
+            await Task.Delay(500);
+
+            if (_blast.shiny) EnvironmentManager.Instance.SetDarkBackground(false);
+        }
     }
 
     public void SetStatus(Status newStatus)

@@ -39,6 +39,30 @@ public class ProgressionSlotLayout : MonoBehaviour
         }
     }
 
+    public void InitSmooth(int indexProgression)
+    {
+
+        UIManager.Instance.DoSmoothTextInt(_progressionTxt, 0, indexProgression);
+
+        if (indexProgression % 5 == 0 && indexProgression % 10 != 0)
+        {
+            _ico.sprite = _chestIco;
+        }
+        else if (indexProgression % 10 == 0)
+        {
+            _ico.sprite = _bossIco;
+        }
+        else
+        {
+            _ico.sprite = _battleIco;
+        }
+
+        if (_isPermanent == false)
+        {
+            SetInactive(true, 0f);
+        }
+    }
+
     public void SetActive()
     {
         _bg.DOColor(_activeColor, 0.2f);

@@ -22,31 +22,36 @@ public class CameraManager : MonoSingleton<CameraManager>
         _startSize = (int)_mainCamera.m_Lens.OrthographicSize;
     }
 
-    public void SetCameraPosition(Vector3 position)
+    public void SetCameraPosition(Vector3 position, float duration = .5f)
     {
         position.z = _startPos.z;
-        _mainCamera.transform.DOMove(position, .5f);
+        _mainCamera.transform.DOMove(position, duration);
     }
 
     public void SetCameraZoom(float zoom)
     {
+        _mainCamera.m_Lens.OrthographicSize = zoom;
+    }
+
+    public void SmoothCameraZoom(float zoom, float duration = .5f, Ease ease = Ease.OutSine)
+    {
         float currentZoom = _mainCamera.m_Lens.OrthographicSize;
-        DOVirtual.Float(currentZoom, zoom, 0.5f, value =>
+        DOVirtual.Float(currentZoom, zoom, duration, value =>
         {
             _mainCamera.m_Lens.OrthographicSize = value;
-        });
+        }).SetEase(ease);
     }
 
     public void AddCameraZoom(float zoomToAdd)
     {
         float targetZoom = _mainCamera.m_Lens.OrthographicSize + zoomToAdd;
-        SetCameraZoom(targetZoom);
+        SmoothCameraZoom(targetZoom);
     }
 
-    public void Reset()
+    public void ResetCamera(float duration = .5f)
     {
         SetCameraPosition(_startPos);
-        SetCameraZoom(_startSize);
+        SmoothCameraZoom(_startSize, duration);
     }
 
     public void DoShakeCamera(float intensity = 4, float duration = .125f, float durationBeforeFade = 0f)

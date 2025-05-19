@@ -9,6 +9,8 @@ public class EndView : View
     [SerializeField] ProgressionSlotLayout _progressionSlotLayout;
     [SerializeField] Transform _rewardContentTransform;
     [SerializeField] RewardEndGameLayout _rewardEndGameLayout;
+    [SerializeField] ChronoTweenSequence _chronoTweenSequence;
+    [SerializeField] ChronoTweenObject _claimBtn, _claimX2Btn;
 
     public override void Init()
     {
@@ -20,22 +22,30 @@ public class EndView : View
         _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
         _ = NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
 
-        _progressionSlotLayout.Init(WildBattleManager.Instance.IndexProgression);
+        _progressionSlotLayout.InitSmooth(WildBattleManager.Instance.IndexProgression);
 
-        _amountRegularBlastTxt.text = "<sprite name=\"RegularBlast\">" + WildBattleManager.Instance.BlastDefeated;
-        _amountBossDefeatedTxt.text = "<sprite name=\"BossBlast\">" + WildBattleManager.Instance.BossEncounter;
-        _amountShinyDefeatedTxt.text = "<sprite name=\"Luck\">" + WildBattleManager.Instance.ShinyEncounter;
+        UIManager.Instance.DoSmoothTextInt(_amountRegularBlastTxt, 0, WildBattleManager.Instance.BlastDefeated, "<sprite name=\"RegularBlast\">");
+        UIManager.Instance.DoSmoothTextInt(_amountBossDefeatedTxt, 0, WildBattleManager.Instance.BossEncounter, "<sprite name=\"BossBlast\">");
+        UIManager.Instance.DoSmoothTextInt(_amountShinyDefeatedTxt, 0, WildBattleManager.Instance.ShinyEncounter, "<sprite name=\"Luck\">");
 
         foreach (Transform transform in _rewardContentTransform)
         {
             Destroy(transform.gameObject);
         }
 
+        _chronoTweenSequence.ObjectsToTween.Clear();
+
         foreach (Offer offer in WildBattleManager.Instance.WildBattleReward)
         {
             var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
             currentRerward.Init(offer);
+            _chronoTweenSequence.ObjectsToTween.Add(currentRerward.GetComponent<ChronoTweenObject>());
         }
+
+        _chronoTweenSequence.ObjectsToTween.Add(_claimBtn);
+        _chronoTweenSequence.ObjectsToTween.Add(_claimX2Btn);
+
+        _chronoTweenSequence.Init();
 
         base.OpenView(_instant);
     }

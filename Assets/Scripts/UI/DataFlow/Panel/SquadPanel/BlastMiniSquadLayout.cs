@@ -23,7 +23,7 @@ public class BlastMiniSquadLayout : MonoBehaviour
 
         BlastDataRef dataRef = NakamaData.Instance.GetBlastDataRef(blast.data_id);
         _blastName.text = dataRef.Name.GetLocalizedString();
-        _blastIco.sprite = dataRef.Sprite;
+        _blastIco.sprite = NakamaData.Instance.GetSpriteWithBlast(_currentBlast);
 
         UpdateUI();
     }

@@ -9,12 +9,11 @@ public class OfferLayout : MonoBehaviour
     [SerializeField] Image _ico;
     [SerializeField] TMP_Text _nameTxt, _descTxt;
 
-    int _index;
     Offer _currentOffer;
-    public void Init(Offer offer, int index = -1)
+
+    public void Init(Offer offer)
     {
         _currentOffer = offer;
-        _index = index;
 
         ResourceData resourceData;
 
@@ -84,16 +83,6 @@ public class OfferLayout : MonoBehaviour
                 _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
                 _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.offer.gemsAmount);
                 break;
-        }
-    }
-
-    public void HandleOnClick()
-    {
-        if (_index >= 0)
-        {
-            WildBattleManager.Instance.PlayerChooseOffer(_index);
-
-            UIManager.Instance.WildBattleOfferPopup.ClosePopup();
         }
     }
 }

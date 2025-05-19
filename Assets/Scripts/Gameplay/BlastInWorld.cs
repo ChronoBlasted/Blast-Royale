@@ -97,7 +97,7 @@ public class BlastInWorld : MonoBehaviour
         }).AsyncWaitForCompletion();
 
         CameraManager.Instance.SetCameraPosition(_currentTrap.transform.position);
-        CameraManager.Instance.SetCameraZoom(6);
+        CameraManager.Instance.SmoothCameraZoom(6);
 
         UIManager.Instance.GameView.HideHUD();
 
@@ -154,6 +154,6 @@ public class BlastInWorld : MonoBehaviour
 
         EnvironmentManager.Instance.SetDarkBackground(false);
 
-        CameraManager.Instance.Reset();
+        CameraManager.Instance.ResetCamera();
     }
 }

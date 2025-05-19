@@ -4,6 +4,7 @@ using UnityEngine;
 public class Popup : MonoBehaviour
 {
     [SerializeField] protected CanvasGroup _canvasGroup;
+    [SerializeField] protected ChronoTweenSequence _tweenSequence;
 
     public virtual void Init()
     {
@@ -29,6 +30,8 @@ public class Popup : MonoBehaviour
         {
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
+
+        if (_tweenSequence != null) _tweenSequence.Init();
     }
 
     public virtual void OpenPopup() => OpenPopup(true);
@@ -39,7 +42,7 @@ public class Popup : MonoBehaviour
 
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
-        _canvasGroup.DOFade(0, 0f)
+        _canvasGroup.DOFade(0, .1f)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);

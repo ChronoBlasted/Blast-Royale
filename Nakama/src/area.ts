@@ -15,42 +15,42 @@ const thePlains: Area = {
 
 const theDarkCaves: Area = {
     id: 1,
-    trophyRequired: 300,
+    trophyRequired: 10,
     blastIds: [Balt.id, Stagpan.id, Botte.id, Booh.id, Ghoosto.id],
     blastLevels: [2, 6]
 }
 
 const theMiniHell: Area = {
     id: 2,
-    trophyRequired: 600,
+    trophyRequired: 20,
     blastIds: [Goblin.id, MiniDevil.id, DevilDare.id, Masks.id, Luckun.id, MiniHam.id, SadHam.id],
     blastLevels: [5, 9]
 }
 
 const theWildForest: Area = {
     id: 3,
-    trophyRequired: 1000,
+    trophyRequired: 30,
     blastIds: [Bearos.id, Treex.id, Moutmout.id, Piggy.id, Bleaub.id, Shroom.id],
     blastLevels: [8, 12]
 }
 
 const theWideOcean: Area = {
     id: 4,
-    trophyRequired: 1300,
+    trophyRequired: 40,
     blastIds: [Lantern.id, Droplet.id, Fireball.id, Mystical.id, Wormie.id, Smoky.id],
     blastLevels: [12, 15]
 }
 
 const theGloryCastle: Area = {
     id: 5,
-    trophyRequired: 1600,
+    trophyRequired: 50,
     blastIds: [Clover.id, Scorlov.id, Skel.id, Frederic.id, Bud.id],
     blastLevels: [16, 20]
 }
 
 const theElusiveMount: Area = {
     id: 6,
-    trophyRequired: 2000,
+    trophyRequired: 60,
     blastIds: [Forty.id, Hiboo.id, Eggy.id, Dracoblast.id, Cerberus.id],
     blastLevels: [19, 30]
 }
