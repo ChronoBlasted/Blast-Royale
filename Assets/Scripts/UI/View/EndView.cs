@@ -47,12 +47,16 @@ public class EndView : View
 
         _chronoTweenSequence.Init();
 
+        CameraManager.Instance.SmoothCameraZoom(10, 2f);
+
         base.OpenView(_instant);
     }
 
     public override void CloseView()
     {
         base.CloseView();
+
+        CameraManager.Instance.SetCameraZoom(7);
     }
 
     public void UpdateEndGame(bool isWin)

@@ -1,15 +1,10 @@
 using BaseTemplate.Behaviours;
 using Nakama;
-using Nakama.TinyJson;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 public class WildBattleManager : MonoSingleton<WildBattleManager>
 {
@@ -120,7 +115,16 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         GameStateManager.Instance.UpdateStateToGame();
 
+        UIManager.Instance.GameView.ShowSpawnBlast();
+
+        await FrameWaiter.WaitForEndOfFrameAsync();
+
+        CameraManager.Instance.SetCameraZoom(10);
+
+        CameraManager.Instance.ResetCamera(1f);
+
         await ShowWildBlast();
+
         await _gameView.PlayerHUD.ThrowBlast();
 
         _serverBattle.PlayerReady();
@@ -365,7 +369,9 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         EndTurn();
 
-        if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
+        bool isOfferStep = _indexProgression % 5 == 0 && _indexProgression % 10 != 0;
+
+        if (!isOfferStep)
         {
             NakamaManager.Instance.NakamaWildBattle.PlayerReady();
         }

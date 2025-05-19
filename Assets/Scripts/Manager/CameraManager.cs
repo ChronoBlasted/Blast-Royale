@@ -14,6 +14,9 @@ public class CameraManager : MonoSingleton<CameraManager>
     Vector3 _startPos;
     int _startSize;
 
+    Tweener ZoomTween { get; set; }
+    Tweener PosTween { get; set; }
+
     public Vector3 StartPos { get => _startPos; }
 
     public void Init()
@@ -24,19 +27,24 @@ public class CameraManager : MonoSingleton<CameraManager>
 
     public void SetCameraPosition(Vector3 position, float duration = .5f)
     {
+        PosTween.Kill(true);
+
         position.z = _startPos.z;
-        _mainCamera.transform.DOMove(position, duration);
+        PosTween = _mainCamera.transform.DOMove(position, duration);
     }
 
     public void SetCameraZoom(float zoom)
     {
+        ZoomTween.Kill(true);
         _mainCamera.m_Lens.OrthographicSize = zoom;
     }
 
     public void SmoothCameraZoom(float zoom, float duration = .5f, Ease ease = Ease.OutSine)
     {
+        ZoomTween.Kill(true);
+
         float currentZoom = _mainCamera.m_Lens.OrthographicSize;
-        DOVirtual.Float(currentZoom, zoom, duration, value =>
+        ZoomTween = DOVirtual.Float(currentZoom, zoom, duration, value =>
         {
             _mainCamera.m_Lens.OrthographicSize = value;
         }).SetEase(ease);
@@ -44,6 +52,7 @@ public class CameraManager : MonoSingleton<CameraManager>
 
     public void AddCameraZoom(float zoomToAdd)
     {
+        ZoomTween.Kill(true);
         float targetZoom = _mainCamera.m_Lens.OrthographicSize + zoomToAdd;
         SmoothCameraZoom(targetZoom);
     }

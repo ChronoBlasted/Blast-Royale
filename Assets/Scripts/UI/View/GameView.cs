@@ -62,7 +62,10 @@ public class GameView : View
         ShowHUD();
 
         DialogLayout.Hide();
+    }
 
+    public void ShowSpawnBlast()
+    {
         StartCoroutine(PlayerHUD.BlastInWorld.SetPos());
         StartCoroutine(OpponentHUD.BlastInWorld.SetPos());
     }
