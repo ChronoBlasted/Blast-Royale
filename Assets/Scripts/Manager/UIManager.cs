@@ -2,9 +2,7 @@ using BaseTemplate.Behaviours;
 using DG.Tweening;
 using System.Collections;
 using TMPro;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
@@ -293,11 +291,18 @@ public class UIManager : MonoSingleton<UIManager>
         scrollRect.normalizedPosition = new Vector2(scrollRect.normalizedPosition.x, 1);
     }
 
-    public static void ScrollToItem(ScrollRect scrollRect, Transform content, int indexToScroll)
+    public static void ScrollToItemY(ScrollRect scrollRect, Transform content, int indexToScroll)
     {
         float step = 1f / (content.childCount - 1);
 
         scrollRect.normalizedPosition = new Vector2(scrollRect.normalizedPosition.x, step * indexToScroll);
+    }
+
+    public static void ScrollToItemX(ScrollRect scrollRect, Transform content, int indexToScroll)
+    {
+        float step = 1f / (content.childCount - 1);
+
+        scrollRect.normalizedPosition = new Vector2(step * indexToScroll, scrollRect.normalizedPosition.y);
     }
 
     public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", float duration = 1f, Ease ease = Ease.OutSine)

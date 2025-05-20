@@ -101,6 +101,30 @@ function incrementMetadataStat(nk: nkruntime.Nakama, userId: string, statKey: ke
     nk.accountUpdateId(userId, "", null, null, null, null, null, metadata);
 }
 
+function setMetadataStat(
+    nk: nkruntime.Nakama,
+    userId: string,
+    statKey: keyof PlayerMetadata,
+    value: number
+) {
+    const account = nk.accountGetId(userId);
+    const metadata = account.user.metadata as PlayerMetadata;
+
+    (metadata[statKey] as number)  = value;
+
+    nk.accountUpdateId(userId, "", null, null, null, null, null, metadata);
+}
+
+function getMetadataStat(
+    nk: nkruntime.Nakama,
+    userId: string,
+    statKey: keyof PlayerMetadata
+): number {
+    const account = nk.accountGetId(userId);
+    const metadata = account.user.metadata as PlayerMetadata;
+    return metadata[statKey] as number;
+}
+
 // endregion Metadata
 
 

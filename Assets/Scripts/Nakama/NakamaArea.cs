@@ -30,13 +30,23 @@ public class NakamaArea : MonoBehaviour
             NakamaData.Instance.AreaCollection = allAreaList;
 
             UIManager.Instance.AllAreaView.UpdateAllArea(allAreaList);
-            UIManager.Instance.MenuView.FightPanel.AreaLayoutFightPanel.UpdateArea();
         }
         catch (ApiResponseException ex)
         {
             Debug.LogFormat("Error: {0}", ex.Message);
         }
+    }
 
+    public async Task SelectArea(int areaID)
+    {
+        try
+        {
+            var response = await _client.RpcAsync(_session, "selectArea", areaID.ToString());
+        }
+        catch (ApiResponseException ex)
+        {
+            Debug.LogFormat("Error: {0}", ex.Message);
+        }
     }
 }
 

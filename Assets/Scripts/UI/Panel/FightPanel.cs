@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FightPanel : Panel
 {
@@ -8,6 +9,7 @@ public class FightPanel : Panel
 
     [SerializeField] SquadLayout _squadLayout;
     [SerializeField] AreaLayoutFightPanel _areaLayoutFightPanel;
+
     public ProfileLayout ProfileLayout { get => _profileLayout; }
     public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
 
@@ -42,4 +44,6 @@ public class FightPanel : Panel
     {
         Debug.Log("Coming soon");
     }
+
+
 }

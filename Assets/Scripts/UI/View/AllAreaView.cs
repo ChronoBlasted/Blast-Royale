@@ -1,15 +1,24 @@
-using System.Collections;
+using Nakama;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AllAreaView : View
 {
-    [SerializeField] AreaLayout _areaLayoutPrefab;
-    [SerializeField] Transform _areaContent;
     [SerializeField] ScrollRect _scrollRect;
+    [SerializeField] Transform _areaContent;
+    [SerializeField] AreaLayout _areaLayoutPrefab;
+    [SerializeField] SnapToItem _snapToItem;
 
-    List<AreaData> _allArea = new List<AreaData>();
+    [SerializeField] Image _visualIndicatorIndexImg;
+    [SerializeField] Transform _visualIndicatorTransform;
+    [SerializeField] Sprite _visualIndicatorSelectedSprite, _visualIndicatorUnselectSprite;
+
+    List<AreaLayout> _allAreaLayout = new List<AreaLayout>();
+    List<Image> _visualIndicators = new List<Image>();
+
+    int _lastAreaIndex = 0;
+    int _lastVisualIndicatorIndex = 0;
 
     public override void Init()
     {
@@ -35,24 +44,75 @@ public class AllAreaView : View
 
     public void UpdateAllArea(List<AreaData> allArea)
     {
-        _allArea.Clear();
+        _allAreaLayout.Clear();
+        _visualIndicators.Clear();
 
-        foreach (AreaData areaData in allArea)
+        foreach (Transform t in _areaContent)
+        {
+            Destroy(t.gameObject);
+        }
+
+        foreach (Transform t in _visualIndicatorTransform)
+        {
+            Destroy(t.gameObject);
+        }
+
+        for (int i = 0; i < allArea.Count; i++)
         {
             AreaLayout currentAreaLayout = Instantiate(_areaLayoutPrefab, _areaContent);
-            currentAreaLayout.Init(areaData);
+            currentAreaLayout.Init(allArea[i]);
 
-            _allArea.Add(areaData);
+            _allAreaLayout.Add(currentAreaLayout);
+
+            _visualIndicators.Add(Instantiate(_visualIndicatorIndexImg, _visualIndicatorTransform));
         }
     }
 
     public void UpdateScrollRect()
     {
-        for (int i = 0; i < _allArea.Count; i++)
+        UIManager.ScrollToItemX(_scrollRect, _areaContent, _lastAreaIndex);
+    }
+
+    public void UpdateVisualIndicator()
+    {
+        _visualIndicators[_lastVisualIndicatorIndex].sprite = _visualIndicatorUnselectSprite;
+
+        _lastVisualIndicatorIndex = _snapToItem.CurrentIndex;
+
+        _visualIndicators[_lastVisualIndicatorIndex].sprite = _visualIndicatorSelectedSprite;
+    }
+
+    public async void HandleOnSelectArea(int index)
+    {
+        try
         {
-            if (NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Trophies.ToString()] >= _allArea[i].trophyRequired)
+            await NakamaManager.Instance.NakamaArea.SelectArea(_allAreaLayout[index].Data.id);
+
+            SelectArea(index);
+        }
+        catch (ApiResponseException e) { Debug.LogError(e); }
+    }
+
+    private void SelectArea(int index)
+    {
+        _allAreaLayout[_lastAreaIndex].Unselect();
+
+        _lastAreaIndex = index;
+
+        _allAreaLayout[_lastAreaIndex].Select();
+
+        AreaDataRef dataRef = NakamaData.Instance.GetAreaDataRef(_allAreaLayout[_lastAreaIndex].Data.id);
+
+        UIManager.Instance.MenuView.FightPanel.AreaLayoutFightPanel.UpdateArea(dataRef.Sprite);
+    }
+
+    public void SetArea(int areaID)
+    {
+        for (int i = 0; i < _allAreaLayout.Count; i++)
+        {
+            if (_allAreaLayout[i].Data.id == areaID)
             {
-                UIManager.ScrollToItem(_scrollRect, _areaContent, i);
+                SelectArea(i);
                 return;
             }
         }

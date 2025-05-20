@@ -55,6 +55,7 @@ public class NakamaUserAccount : MonoBehaviour
         _lastData = JsonParser.FromJson<Metadata>(_lastAccount.User.Metadata);
 
         UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
+        UIManager.Instance.AllAreaView.SetArea(_lastData.area);
     }
 
     #region ApiAccountUpdate

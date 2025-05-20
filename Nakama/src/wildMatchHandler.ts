@@ -241,7 +241,9 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
             var allPlayer1Items = getDeckItem(nk, logger, state.player1_id);
             state.player1_items = allPlayer1Items;
 
-            var newBlast = getRandomBlastWithAreaId(Math.floor(state.index_progression / 10.0), nk, false);
+            logger.debug('______________ CREAT NEW BLAST ______________');
+            var newBlast = GetNewWildBlast(state, nk, logger);
+            logger.debug('______________ FIND NEW BLAST ______________');
 
             state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
@@ -566,7 +568,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             break;
                     }
 
-                    var newBlast = getRandomBlastWithAreaId(Math.floor(state.index_progression / 10.0), nk, false);
+                    var newBlast = GetNewWildBlast(state, nk, logger);
 
                     state.wild_blast = ConvertBlastToBlastEntity(newBlast);
 
@@ -592,7 +594,6 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
         // region END BATTLE
         case BattleState.END:
 
-
             const playerBlast = state.p1_blasts[state.p1_index]!;
             const wildBlast = state.wild_blast!;
 
@@ -613,9 +614,9 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 if (state.index_progression % 5 == 0 && state.index_progression % 10 != 0) {
                     let items: OfferTurnStateData = {
-                        offer_one: getRandomOffer(nk, state, logger, state.player1_id),
-                        offer_two: getRandomOffer(nk, state, logger, state.player1_id),
-                        offer_three: getRandomOffer(nk, state, logger, state.player1_id),
+                        offer_one: getRandomOffer(nk, state, logger),
+                        offer_two: getRandomOffer(nk, state, logger),
+                        offer_three: getRandomOffer(nk, state, logger),
                     }
 
                     state.offerTurnStateData = items;
@@ -626,9 +627,8 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 } else {
 
-                    logger.debug('INDEXXXXXXXXXXXXXXXXXXXXXXXXX: %d', state.index_progression);
+                    var newBlast = GetNewWildBlast(state, nk, logger);
 
-                    var newBlast = getRandomBlastWithAreaId(Math.floor((state.index_progression - 1) / 10.0), nk, state.index_progression % 10 == 0);
 
                     if (state.index_progression % 10 == 0) {
                         newBlast.exp = calculateExperienceFromLevel(state.index_progression / 2);
@@ -693,6 +693,10 @@ const matchTerminate = function (ctx: nkruntime.Context, logger: nkruntime.Logge
     };
 }
 
+
+function GetNewWildBlast(state: WildBattleData, nk: nkruntime.Nakama, logger: nkruntime.Logger): Blast {
+    return getRandomBlastWithAreaId(state.player1_id, nk, Math.floor(state.index_progression / 5), state.index_progression % 10 == 0, logger);
+}
 
 function EndLoopDebug(logger: nkruntime.Logger, state: WildBattleData) {
     logger.debug('______________ END LOOP BATTLE ______________');
@@ -988,7 +992,7 @@ function checkIfMatchContinue(state: WildBattleData): WildBattleData {
 //#endregion
 
 // region Offer Turn Logic
-function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkruntime.Logger, userId: string): Offer {
+function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkruntime.Logger): Offer {
     let offer: Offer = {
         type: OfferType.ITEM,
         coinsAmount: 0,
@@ -1001,7 +1005,8 @@ function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkr
     switch (random) {
         case 0:
             offer.type = OfferType.BLAST;
-            offer.blast = getRandomBlastEntityInAllPlayerArea(userId, nk, false);
+            var newBlast = GetNewWildBlast(state, nk, logger);
+            offer.blast = newBlast;
             break;
         case 1:
             offer.type = OfferType.ITEM;

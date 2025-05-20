@@ -42,7 +42,6 @@ public class NakamaData : MonoSingleton<NakamaData>
 
         BlastDataRef dataRef = GetBlastDataRef(blast.data_id);
 
-
         if (blast.shiny) sprite = dataRef.ShinySprite;
         else if (blast.boss) sprite = dataRef.BossSprite;
         else sprite = dataRef.Sprite;
