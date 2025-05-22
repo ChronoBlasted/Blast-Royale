@@ -107,12 +107,10 @@ function getRandomBlastWithAreaId(userId: string, nk: nkruntime.Nakama, extraLev
 
 function getRandomBlastEntityInAllPlayerArea(userId: string, nk: nkruntime.Nakama, isBoss: boolean): Blast {
 
-    const account = nk.accountGetId(userId);
-    const metadata = account.user.metadata as PlayerMetadata;
 
     let randomBlastId = getRandomBlastIdInPlayerAreaWithTrophy(getCurrencyInWallet(nk, userId, Currency.Trophies));
     let randomData = getBlastDataById(randomBlastId);
-    let randomlevel = getRandomLevelInArea(metadata.area);
+    let randomlevel = getRandomLevelInArea(getMetadataStat(nk, userId, "area")); // TODO Do get max area the player reaches
 
 
 

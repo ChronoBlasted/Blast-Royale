@@ -99,6 +99,7 @@ public class LeaderboardView : View
         {
             Destroy(child.gameObject);
         }
+
         foreach (var player in trophyLeaderboard.Records)
         {
             var currentTrophyLayout = Instantiate(_leaderboardRowLayout, _blastDefeatedTranform);

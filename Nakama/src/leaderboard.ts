@@ -1,35 +1,42 @@
 const LeaderboardTrophyId = "leaderboard_trophy";
-const LeaderboardBlastDefeatedId = "leaderboard_blast_defeated";
+const LeaderboardTotalBlastDefeatedId = "leaderboard_blast_defeated";
+const LeaderboardBlastDefeatedAreaId = "leaderboard_blast_defeated_area_";
+const LeaderboardBestStageAreaId = "leaderboard_best_stage_area_";
 
-function createTrophyLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
 
-    let id = LeaderboardTrophyId;
-    let authoritative = true;
-    let sort = nkruntime.SortOrder.DESCENDING;
-    let operator = nkruntime.Operator.BEST;
-    let reset = "0 0 1 */2 *";
 
-    try {
-        nk.leaderboardCreate(id, authoritative, sort, operator, reset, undefined);
-    } catch (error) {
-        // Handle error
+function createAreaLeaderboards(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
+    for (const area of allArea) {
+
+        // Leaderboard pour les meilleurs stages dans la zone
+        const bestStageLeaderboardId = `${LeaderboardBestStageAreaId}${area.id}`;
+        createLeaderboard(nk, logger, bestStageLeaderboardId, nkruntime.Operator.BEST);
+
+        // Leaderboard pour les blasts vaincus dans la zone
+        const blastDefeatedLeaderboardId = `${LeaderboardBlastDefeatedAreaId}${area.id}`;
+        createLeaderboard(nk, logger, blastDefeatedLeaderboardId, nkruntime.Operator.INCREMENTAL);
     }
 }
 
-function createBlastDefeatedLeaderboard(nk: nkruntime.Nakama, logger: nkruntime.Logger, ctx: nkruntime.Context) {
 
-    let id = LeaderboardBlastDefeatedId;
-    let authoritative = true;
-    let sort = nkruntime.SortOrder.DESCENDING;
-    let operator = nkruntime.Operator.INCREMENTAL;
-    let reset = '0 0 1 */2 *';
+function createLeaderboard(
+    nk: nkruntime.Nakama,
+    logger: nkruntime.Logger,
+    id: string,
+    operator: nkruntime.Operator
+): void {
+    const authoritative = true;
+    const sort = nkruntime.SortOrder.DESCENDING;
+    const reset = '0 0 1 * *';
 
     try {
         nk.leaderboardCreate(id, authoritative, sort, operator, reset, undefined);
+        logger.info(`Leaderboard '${id}' created successfully.`);
     } catch (error) {
-        // Handle error
+        logger.error(`Failed to create leaderboard '${id}': ${error}`);
     }
 }
+
 
 let leaderboardReset: nkruntime.LeaderboardResetFunction = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, leaderboard: nkruntime.Leaderboard, reset: number) {
 

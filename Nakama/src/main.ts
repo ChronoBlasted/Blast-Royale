@@ -1,7 +1,8 @@
 let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, initializer: nkruntime.Initializer) {
 
-    createTrophyLeaderboard(nk, logger, ctx);
-    createBlastDefeatedLeaderboard(nk, logger, ctx);
+    createLeaderboard(nk, logger, LeaderboardTrophyId, nkruntime.Operator.BEST);
+    createLeaderboard(nk, logger, LeaderboardTotalBlastDefeatedId, nkruntime.Operator.INCREMENTAL);
+    createAreaLeaderboards(nk, logger, ctx);
 
     // Set up hooks.
     initializer.registerAfterAuthenticateDevice(afterAuthenticate);
@@ -37,7 +38,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('canClaimDailyShop', rpcCanClaimDailyShop);
     initializer.registerRpc('claimDailyShop', rpcGetDailyShopOffer);
     initializer.registerRpc('buyDailyShopOffer', rpcBuyDailyShopOffer);
-    
+
     // Area
     initializer.registerRpc('selectArea', rpcSelectArea);
 
@@ -46,7 +47,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadItemPedia', rpcLoadItemPedia);
     initializer.registerRpc('loadMovePedia', rpcLoadMovePedia);
     initializer.registerRpc('loadAllArea', rpcLoadAllArea);
-    
+
     // Wild Battle
     initializer.registerRpc('findWildBattle', rpcFindOrCreateWildBattle);
     initializer.registerRpc('updateNicknameStatus', rpcUpdateNicknameStatus);
@@ -80,7 +81,7 @@ enum Status {
 
 enum MoveEffect {
     None = 0,
-    
+
     Burn = 460,
     Seeded = 461,
     Wet = 462,

@@ -193,11 +193,14 @@ const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, n
             if (state.blast_defeated > 0) {
 
                 incrementMetadataStat(nk, state.player1_id, "blast_defeated", state.blast_defeated);
-                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedId, state.blast_defeated);
+                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardTotalBlastDefeatedId, state.blast_defeated);
+                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedAreaId + getMetadataStat(nk, state.player1_id, "area"), state.blast_defeated);
             }
 
             if (state.index_progression > 1) {
                 updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200 * (state.index_progression - 1))
+
+                writeRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBestStageAreaId + getMetadataStat(nk, state.player1_id, "area"), state.index_progression - 1);
             }
         }
 
