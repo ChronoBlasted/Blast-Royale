@@ -72,6 +72,7 @@ public class DailyRewardLayout : MonoBehaviour
     public void Unlock()
     {
         _alreadyCollected.SetActive(true);
+        _focusLayout.SetActive(false);
     }
 
     public void Collectable(bool canClaimReward)
@@ -85,6 +86,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void SetIsNextReward()
     {
+        _focusLayout.SetActive(true);
         _nextReward.SetActive(true);
     }
 

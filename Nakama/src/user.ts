@@ -89,6 +89,25 @@ function rpcUpdateNicknameStatus(ctx: nkruntime.Context, logger: nkruntime.Logge
     metadata.updated_nickname = true;
 
     nk.accountUpdateId(ctx.userId, null, null, null, null, null, null, metadata);
+
+    try {
+        const leaderboardsList = nk.leaderboardList(100);
+        if (leaderboardsList.leaderboards && Array.isArray(leaderboardsList.leaderboards)) {
+            for (const lb of leaderboardsList.leaderboards) {
+                nk.leaderboardRecordWrite(
+                    lb.id,
+                    ctx.userId,
+                    account.user.username,
+                    0, // score
+                    0, // subscore
+                    undefined,
+                    nkruntime.OverrideOperator.SET
+                );
+            }
+        }
+    } catch (e) {
+        logger.error("Failed to write initial leaderboard scores: %s", e);
+    }
 }
 
 function incrementMetadataStat(nk: nkruntime.Nakama, userId: string, statKey: keyof PlayerMetadata, increment: number) {
@@ -110,7 +129,7 @@ function setMetadataStat(
     const account = nk.accountGetId(userId);
     const metadata = account.user.metadata as PlayerMetadata;
 
-    (metadata[statKey] as number)  = value;
+    (metadata[statKey] as number) = value;
 
     nk.accountUpdateId(userId, "", null, null, null, null, null, metadata);
 }
