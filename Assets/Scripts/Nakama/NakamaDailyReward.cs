@@ -18,8 +18,8 @@ public class NakamaDailyReward : MonoBehaviour
         _client = client;
         _session = session;
 
-        await CanClaimDailyReward();
         await LoadAllDailyReward();
+        await CanClaimDailyReward();
     }
 
     private async Task<bool> CanClaimDailyReward()
@@ -50,8 +50,6 @@ public class NakamaDailyReward : MonoBehaviour
         try
         {
             var claimRewardResponse = await _client.RpcAsync(_session, "claimDailyReward");
-
-            var canClaimRewardDict = claimRewardResponse.Payload.FromJson<RewardCollection>();
 
             // TODO Add reward popup
 

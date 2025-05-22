@@ -46,18 +46,20 @@ public class DailyRewardView : View
     {
         for (int i = 0; i < _allDailyRewardLayout.Count; i++)
         {
-            _allDailyRewardLayout[i].Init(rewardCollections[i]);
+            _allDailyRewardLayout[i].Init(rewardCollections[i], i);
         }
     }
 
     public void SetActiveReward(int currentDay, bool canClaimDailyReward)
     {
-        int multiplicateur = currentDay / 7;
-
         for (int i = 0; i < _allDailyRewardLayout.Count; i++)
         {
-            if (multiplicateur + i < currentDay) _allDailyRewardLayout[i].Unlock();
-            else if (multiplicateur + i == currentDay) _allDailyRewardLayout[i].Collectable(canClaimDailyReward);
+            if (i < currentDay) _allDailyRewardLayout[i].Unlock();
+            else if (i == currentDay)
+            {
+                _allDailyRewardLayout[i].Collectable(canClaimDailyReward);
+                if (i < _allDailyRewardLayout.Count - 1 && canClaimDailyReward == false) _allDailyRewardLayout[i].SetIsNextReward();
+            }
             else _allDailyRewardLayout[i].Lock();
         }
     }

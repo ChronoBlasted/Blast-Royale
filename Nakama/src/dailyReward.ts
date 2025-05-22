@@ -182,102 +182,58 @@ function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logge
 }
 
 function getDayReward(totalDay: number): Reward {
-    var reward: Reward = {
-        coinsReceived: 0,
-        gemsReceived: 0,
-        blastReceived: null,
-        itemReceived: null,
-    };
-
-    switch (totalDay % 7) {
-        case 0:
-            reward = Reward0
-            break;
-        case 1:
-            reward = Reward1
-            break;
-        case 2:
-            reward = Reward2
-            break;
-        case 3:
-            reward = Reward3
-            break;
-        case 4:
-            reward = Reward4
-            break;
-        case 5:
-            reward = Reward5
-            break;
-        case 6:
-            reward = Reward6
-            break;
-    }
-
-    return reward;
+    return allReward[totalDay % allReward.length];
 }
+
 
 // Data
 
-const Reward0: Reward = {
-    coinsReceived: 500,
-    gemsReceived: 0,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward1: Reward = {
-    coinsReceived: 0,
-    gemsReceived: 10,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward2: Reward = {
-    coinsReceived: 1000,
-    gemsReceived: 0,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward3: Reward = {
-    coinsReceived: 0,
-    gemsReceived: 15,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward4: Reward = {
-    coinsReceived: 2000,
-    gemsReceived: 0,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward5: Reward = {
-    coinsReceived: 0,
-    gemsReceived: 30,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-const Reward6: Reward = {
-    coinsReceived: 5000,
-    gemsReceived: 0,
-    blastReceived: null,
-    itemReceived: null,
-};
-
-
 const allReward: Reward[] = [
-    Reward0,
-    Reward1,
-    Reward2,
-    Reward3,
-    Reward4,
-    Reward5,
-    Reward6,
-]
-
+    { coinsReceived: 500, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 10, blastReceived: null, itemReceived: null },
+    { coinsReceived: 1000, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 15, blastReceived: null, itemReceived: null },
+    { coinsReceived: 2000, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 30, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 0, blastReceived: null, itemReceived: { data_id: 7, amount: 5 } },
+    { coinsReceived: 0, gemsReceived: 50, blastReceived: null, itemReceived: null },
+    { coinsReceived: 750, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 12, blastReceived: null, itemReceived: null },
+    { coinsReceived: 1200, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 18, blastReceived: null, itemReceived: null },
+    { coinsReceived: 2500, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 0, blastReceived: { 
+        uuid: generateUUID(), 
+        data_id: Clawball.id,
+        exp: calculateExperienceFromLevel(10), 
+        iv: getRandomIV(), 
+        boss: false, 
+        shiny: true, 
+        activeMoveset: getRandomActiveMoveset(Clawball, calculateExperienceFromLevel(10)) 
+    }, itemReceived: null },
+    { coinsReceived: 6000, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 60, blastReceived: null, itemReceived: null },
+    { coinsReceived: 900, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 14, blastReceived: null, itemReceived: null },
+    { coinsReceived: 1400, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 20, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 0, blastReceived: null, itemReceived: { data_id: 8, amount: 10 } },
+    { coinsReceived: 0, gemsReceived: 40, blastReceived: null, itemReceived: null },
+    { coinsReceived: 7000, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 70, blastReceived: null, itemReceived: null },
+    { coinsReceived: 1000, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 16, blastReceived: null, itemReceived: null },
+    { coinsReceived: 1600, gemsReceived: 0, blastReceived: null, itemReceived: null },
+    { coinsReceived: 0, gemsReceived: 0, blastReceived: { 
+        uuid: generateUUID(), 
+        data_id: Cerberus.id,
+        exp: calculateExperienceFromLevel(25), 
+        iv: getRandomIV(), 
+        boss: false, 
+        shiny: true, 
+        activeMoveset: getRandomActiveMoveset(Cerberus, calculateExperienceFromLevel(25)) 
+    }, itemReceived: null },
+];
 
 const rpcLoadAllDailyReward: nkruntime.RpcFunction =
     function (): string {

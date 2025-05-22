@@ -9,11 +9,18 @@ using UnityEngine.UI;
 public class DailyRewardLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _dayTxt, _rewardAmount;
-    [SerializeField] Image _rewardImg, _stateImg,_alreadyCollectBG;
+    [SerializeField] Image _rewardImg, _bg;
+    [SerializeField] GameObject _alreadyCollected, _nextReward, _focusLayout;
     [SerializeField] CustomButton _rewardButton;
 
-    public void Init(RewardCollection reward)
+    [SerializeField] Color _regularColor, _specialColor;
+
+    int _index;
+
+    public void Init(RewardCollection reward, int index)
     {
+        _index = index;
+
         if (reward.coinsReceived > 0)
         {
             _rewardAmount.text = reward.coinsReceived.ToString();
@@ -26,8 +33,35 @@ public class DailyRewardLayout : MonoBehaviour
         }
         else if (reward.blastReceived != null)
         {
+            _rewardAmount.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(reward.blastReceived.exp);
 
+            var dataRef = NakamaData.Instance.GetBlastDataRef(reward.blastReceived.data_id);
+
+            if (reward.blastReceived.shiny) _rewardImg.sprite = dataRef.ShinySprite;
+            else if (reward.blastReceived.boss) _rewardImg.sprite = dataRef.BossSprite;
+            else _rewardImg.sprite = dataRef.Sprite;
         }
+        else if (reward.itemReceived != null)
+        {
+            _rewardAmount.text = reward.itemReceived.amount.ToString();
+
+            var dataRef = NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id);
+
+            _rewardImg.sprite = dataRef.Sprite;
+        }
+
+        if ((_index + 1) % 7 == 0)
+        {
+            _bg.color = _specialColor;
+        }
+        else
+        {
+            _bg.color = _regularColor;
+        }
+
+        _nextReward.SetActive(false);
+        _alreadyCollected.SetActive(false);
+        _focusLayout.SetActive(false);
     }
 
     public void UpdateDay(int day)
@@ -37,24 +71,27 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void Unlock()
     {
-        _stateImg.enabled = false;
-        _alreadyCollectBG.enabled = true;
+        _alreadyCollected.SetActive(true);
     }
 
     public void Collectable(bool canClaimReward)
     {
         if (canClaimReward)
         {
-            _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Unlock).Sprite;
-            _rewardButton.interactable = true;
+            _focusLayout.SetActive(true);
         }
         else Lock();
     }
 
+    public void SetIsNextReward()
+    {
+        _nextReward.SetActive(true);
+    }
+
     public void Lock()
     {
-        _stateImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Lock).Sprite;
-        _alreadyCollectBG.enabled = false;
+        _alreadyCollected.SetActive(false);
+        _focusLayout.SetActive(false);
     }
 
     public async void HandleOnCollectDailyReward()
