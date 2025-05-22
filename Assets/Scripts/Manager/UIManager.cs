@@ -36,7 +36,8 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public OpeningView OpeningView { get; protected set; }
     [field: SerializeField] public PediaView PediaView { get; protected set; }
     [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
-    [field: SerializeField] public LeaderboardView LeaderboardView { get; protected set; }
+    [field: SerializeField] public AreaLeaderboardView AreaLeaderboardView { get; protected set; }
+    [field: SerializeField] public RegularLeaderboardView RegularLeaderboardView { get; protected set; }
     [field: SerializeField] public FriendView FriendView { get; protected set; }
     [field: SerializeField] public SettingView SettingView { get; protected set; }
     [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
@@ -75,7 +76,7 @@ public class UIManager : MonoSingleton<UIManager>
         OpeningView.Init();
         SettingView.Init();
         OpeningView.Init();
-        LeaderboardView.Init();
+        RegularLeaderboardView.Init();
         DailyRewardView.Init();
         PediaView.Init();
         FriendView.Init();

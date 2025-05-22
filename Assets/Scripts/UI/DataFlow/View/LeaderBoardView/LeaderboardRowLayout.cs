@@ -23,8 +23,11 @@ public class LeaderboardRowLayout : MonoBehaviour
                 _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Trophy).Sprite;
                 break;
             case LeaderboardType.BlastDefeated:
-
                 _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BlastDefeated).Sprite;
+                break;
+
+            case LeaderboardType.BestStage:
+                _currencyIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.BestStage).Sprite;
                 break;
         }
     }

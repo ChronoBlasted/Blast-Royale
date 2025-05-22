@@ -57,7 +57,7 @@ public class SettingLayout : MonoBehaviour
     }
     public void HandleOpenLeaderboard()
     {
-        UIManager.Instance.ChangeView(UIManager.Instance.LeaderboardView);
+        UIManager.Instance.ChangeView(UIManager.Instance.RegularLeaderboardView);
     }
     public void HandleOpenSetting()
     {

@@ -21,7 +21,7 @@ public enum ResourceType
     ItemPedia = 411,
     ErrorMsg = 412,
     MovePedia = 413,
-
+    BestStage = 414,
 
     // Stats
     Health = 420,

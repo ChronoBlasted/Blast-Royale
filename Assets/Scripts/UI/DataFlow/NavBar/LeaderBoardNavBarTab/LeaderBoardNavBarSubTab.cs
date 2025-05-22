@@ -15,9 +15,9 @@ public class LeaderboardSubTab : NavBarTab
     {
         base.HandleOnPress();
 
-        UIManager.Instance.LeaderboardView.LeaderBoardFilter = _type;
+        UIManager.Instance.RegularLeaderboardView.LeaderBoardFilter = _type;
 
-        UIManager.Instance.LeaderboardView.UpdateActiveLeaderboard();
+        UIManager.Instance.RegularLeaderboardView.UpdateActiveLeaderboard();
 
         _bg.sprite = ColorManager.Instance.ActiveSprite;
     }

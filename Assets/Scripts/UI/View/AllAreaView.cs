@@ -117,4 +117,12 @@ public class AllAreaView : View
             }
         }
     }
+
+
+    public void HandleOnOpenAreaLeaderboard()
+    {
+        UIManager.Instance.AreaLeaderboardView.CurrentIndex = _snapToItem.CurrentIndex;
+
+        UIManager.Instance.ChangeView(UIManager.Instance.AreaLeaderboardView);
+    }
 }
