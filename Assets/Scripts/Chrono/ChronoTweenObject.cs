@@ -20,9 +20,14 @@ public class ChronoTweenObject : MonoBehaviour
                 break;
 
             case TweenBehavior.Scale:
+                DOTween.Kill(transform);
+
                 transform.localScale = Vector3.zero;
                 break;
             case TweenBehavior.ScaleFlash:
+                DOTween.Kill(transform);
+                DOTween.Kill(_whiteCover);
+
                 transform.localScale = Vector3.zero;
 
                 _whiteCover.DOFade(1, 0);

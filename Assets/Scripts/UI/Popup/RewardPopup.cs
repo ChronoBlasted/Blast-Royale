@@ -32,6 +32,8 @@ public class RewardPopup : Popup
         {
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
+
+        if (_tweenSequence != null) _tweenSequence.Init();
     }
 
     public override void ClosePopup()

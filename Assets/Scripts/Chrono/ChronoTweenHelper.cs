@@ -31,7 +31,7 @@ public class ChronoTweenHelper : MonoBehaviour
 
     public UnityEvent TweenAction { get => _tweenAction; }
 
-    void Start()
+    void Awake()
     {
         _startPos = transform.position;
         _startLocalPos = transform.localPosition;
