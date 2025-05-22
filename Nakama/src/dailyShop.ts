@@ -197,9 +197,9 @@ function getRandomStoreOffer(nk: nkruntime.Nakama, userId: string, logger: nkrun
         storeOffer.currency = Currency.Coins;
     } else {
         storeOffer.offer.type = OfferType.ITEM;
-        storeOffer.offer.item = getRandomItem(5);
+        storeOffer.offer.item = getRandomItem(1 + Math.floor(Math.random() * 10));
 
-        storeOffer.price = getItemPrice(storeOffer.offer.item);
+        storeOffer.price = getItemPrice(storeOffer.offer.item) * storeOffer.offer.item.amount;
         storeOffer.currency = Currency.Coins;
     }
 
