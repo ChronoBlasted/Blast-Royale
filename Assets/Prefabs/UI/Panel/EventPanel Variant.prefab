@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8470330385605950789}
   - component: {fileID: 3622336853598250144}
   - component: {fileID: 4025963787495902288}
+  - component: {fileID: 2076761644001174470}
   m_Layer: 5
   m_Name: Ico
   m_TagString: Untagged
@@ -96,6 +97,40 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2076761644001174470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595255776180308804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ac6d95f90ca5c47b6693ef2aa33e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tweenAction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2076761644001174470}
+        m_TargetAssemblyTypeName: ChronoTweenHelper, Assembly-CSharp
+        m_MethodName: DoLocalMoveY
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _amountFloat: 16
+  _amountVector: {x: 0, y: 0, z: 0}
+  _duration: 2
+  _ease: 4
+  _loopAmount: -1
+  _loopType: 1
+  _startDelay: 0
 --- !u!1 &4931892876976337724
 GameObject:
   m_ObjectHideFlags: 0

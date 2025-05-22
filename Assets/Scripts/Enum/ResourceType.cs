@@ -64,6 +64,14 @@ public enum ResourceType
     CatchFailure = 521,
     BlastFainted = 522,
     BlastExp = 523,
+
+    // Shop
+    CoinThree = 600,
+    CoinLots = 601,
+    CoinMega = 602,
+    GemThree = 603,
+    GemLots = 604,
+    GemMega = 605,
 }
 
 public enum StatType

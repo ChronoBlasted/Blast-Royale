@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class AreaLayout : MonoBehaviour
 {
-    [SerializeField] Image _areaImg, _selectedBtnBG;
+    [SerializeField] Image _areaImg, _selectedAreaImg, _selectedBtnBG;
     [SerializeField] TMP_Text _areaTitleTxt, _levelRangeTxt, _trophyRequiredTxt, _selectedBtnTxt;
     [SerializeField] AreaSingleBlastLayout _singleBlastPrefab;
     [SerializeField] Transform _singleBlastTransform;
@@ -36,12 +36,16 @@ public class AreaLayout : MonoBehaviour
     {
         _selectedBtnBG.enabled = false;
         _selectedBtnTxt.text = "Selected";
+
+        _selectedAreaImg.enabled = true;
     }
 
     public void Unselect()
     {
         _selectedBtnBG.enabled = true;
         _selectedBtnTxt.text = "Select";
+
+        _selectedAreaImg.enabled = false;
     }
 
     public void HandleOnSelectClick()

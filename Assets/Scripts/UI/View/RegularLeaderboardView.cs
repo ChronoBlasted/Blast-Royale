@@ -1,4 +1,6 @@
 using Nakama;
+using System;
+using TMPro;
 using UnityEngine;
 
 public enum LeaderboardType { Trophy, BlastDefeated, BestStage }
@@ -7,6 +9,7 @@ public enum LeaderboardFilter { Top, Me, Friend }
 public class RegularLeaderboardView : View
 {
     [SerializeField] Transform _contentTransform;
+    [SerializeField] TMP_Text _resetTimerTxt;
 
     [SerializeField] LeaderboardRowLayout _leaderboardRowLayout;
 
@@ -24,6 +27,7 @@ public class RegularLeaderboardView : View
     IApiLeaderboardRecordList _blastDefeatedFriendsLeaderboard;
     IApiLeaderboardRecordList _blastDefeatedAroundMeLeaderboard;
 
+    TimeSpan timeRemaining;
 
     public LeaderboardFilter LeaderBoardFilter { get => _leaderBoardFilter; set => _leaderBoardFilter = value; }
     public LeaderboardType LeaderboardType { get => _leaderboardType; set => _leaderboardType = value; }
@@ -39,6 +43,8 @@ public class RegularLeaderboardView : View
 
         _leaderboardNavbar.Init();
         _leaderboardSubNavbar.Init();
+
+        UpdateResetTime();
     }
 
     public override void CloseView()
@@ -50,6 +56,16 @@ public class RegularLeaderboardView : View
     {
         UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
     }
+
+    void UpdateResetTime()
+    {
+        DateTime now = DateTime.Now;
+        DateTime nextMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1);
+        timeRemaining = nextMonth - now;
+
+        _resetTimerTxt.text = $"Reset in {timeRemaining.Days} days";
+    }
+
 
     #region LoadLeaderboard
 

@@ -1,4 +1,6 @@
+using DG.Tweening;
 using Nakama;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,15 +12,18 @@ public class AllAreaView : View
     [SerializeField] AreaLayout _areaLayoutPrefab;
     [SerializeField] SnapToItem _snapToItem;
 
-    [SerializeField] Image _visualIndicatorIndexImg;
+    [SerializeField] ScrollStepIndicator _scrollStepIndicator;
     [SerializeField] Transform _visualIndicatorTransform;
-    [SerializeField] Sprite _visualIndicatorSelectedSprite, _visualIndicatorUnselectSprite;
+    [SerializeField] CanvasGroup _arrowCG;
 
     List<AreaLayout> _allAreaLayout = new List<AreaLayout>();
-    List<Image> _visualIndicators = new List<Image>();
+    List<ScrollStepIndicator> _visualIndicators = new List<ScrollStepIndicator>();
 
     int _lastAreaIndex = 0;
     int _lastVisualIndicatorIndex = 0;
+    ScrollStepIndicator _selectedStepIndicator;
+
+    Coroutine _arrowCor;
 
     public override void Init()
     {
@@ -30,6 +35,7 @@ public class AllAreaView : View
         base.OpenView(_instant);
 
         UpdateScrollRect();
+        UpdateVisualIndicator();
     }
 
     public override void CloseView()
@@ -64,7 +70,7 @@ public class AllAreaView : View
 
             _allAreaLayout.Add(currentAreaLayout);
 
-            _visualIndicators.Add(Instantiate(_visualIndicatorIndexImg, _visualIndicatorTransform));
+            _visualIndicators.Add(Instantiate(_scrollStepIndicator, _visualIndicatorTransform));
         }
     }
 
@@ -75,11 +81,28 @@ public class AllAreaView : View
 
     public void UpdateVisualIndicator()
     {
-        _visualIndicators[_lastVisualIndicatorIndex].sprite = _visualIndicatorUnselectSprite;
+        _arrowCG.alpha = 0;
+
+        _visualIndicators[_lastVisualIndicatorIndex].SetUnActive();
 
         _lastVisualIndicatorIndex = _snapToItem.CurrentIndex;
 
-        _visualIndicators[_lastVisualIndicatorIndex].sprite = _visualIndicatorSelectedSprite;
+        _visualIndicators[_lastVisualIndicatorIndex].SetActive();
+
+        if (_arrowCor != null)
+        {
+            StopCoroutine(_arrowCor);
+            _arrowCor = null;
+        }
+
+        _arrowCor = StartCoroutine(ShowArrow());
+    }
+
+    IEnumerator ShowArrow()
+    {
+        yield return new WaitForSeconds(.5f);
+
+        _arrowCG.DOFade(1, .5f);
     }
 
     public async void HandleOnSelectArea(int index)
@@ -96,10 +119,13 @@ public class AllAreaView : View
     private void SelectArea(int index)
     {
         _allAreaLayout[_lastAreaIndex].Unselect();
+        if (_selectedStepIndicator != null) _selectedStepIndicator.SetUnSelected();
 
         _lastAreaIndex = index;
+        _selectedStepIndicator = _visualIndicators[_lastAreaIndex];
 
         _allAreaLayout[_lastAreaIndex].Select();
+        _selectedStepIndicator.SetSelected();
 
         AreaDataRef dataRef = NakamaData.Instance.GetAreaDataRef(_allAreaLayout[_lastAreaIndex].Data.id);
 

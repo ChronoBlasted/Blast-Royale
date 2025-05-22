@@ -9,11 +9,14 @@ using UnityEngine.UI;
 public class DailyRewardLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _dayTxt, _rewardAmount;
-    [SerializeField] Image _rewardImg, _bg;
+    [SerializeField] Image _rewardImg, _bg, _glow;
     [SerializeField] GameObject _alreadyCollected, _nextReward, _focusLayout;
     [SerializeField] CustomButton _rewardButton;
+    [SerializeField] ParticleSystem _specialRewardFX;
 
-    [SerializeField] Color _regularColor, _specialColor;
+    [SerializeField] Color _regularColorBG, _specialColorBG;
+    [SerializeField] Color _regularColorTxt, _specialColorTxt;
+    [SerializeField] Color _regularColorGlow, _specialColorGlow;
 
     int _index;
 
@@ -24,12 +27,44 @@ public class DailyRewardLayout : MonoBehaviour
         if (reward.coinsReceived > 0)
         {
             _rewardAmount.text = reward.coinsReceived.ToString();
-            _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
+
+            if (reward.coinsReceived <= 1000)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
+            }
+            else if (reward.coinsReceived <= 3000)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinThree).Sprite;
+            }
+            else if (reward.coinsReceived <= 5000)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinLots).Sprite;
+            }
+            else
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinMega).Sprite;
+            }
         }
         else if (reward.gemsReceived > 0)
         {
             _rewardAmount.text = reward.gemsReceived.ToString();
-            _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
+
+            if (reward.gemsReceived <= 5)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
+            }
+            else if (reward.gemsReceived <= 10)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemThree).Sprite;
+            }
+            else if (reward.gemsReceived <= 20)
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemLots).Sprite;
+            }
+            else
+            {
+                _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemMega).Sprite;
+            }
         }
         else if (reward.blastReceived != null)
         {
@@ -52,11 +87,19 @@ public class DailyRewardLayout : MonoBehaviour
 
         if ((_index + 1) % 7 == 0)
         {
-            _bg.color = _specialColor;
+            _bg.color = _specialColorBG;
+            _dayTxt.color = _specialColorTxt;
+            _glow.color = _specialColorGlow;
+
+            _specialRewardFX.gameObject.SetActive(true);
         }
         else
         {
-            _bg.color = _regularColor;
+            _bg.color = _regularColorBG;
+            _dayTxt.color = _regularColorTxt;
+            _glow.color = _regularColorGlow;
+
+            _specialRewardFX.gameObject.SetActive(false);
         }
 
         _nextReward.SetActive(false);

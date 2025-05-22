@@ -1,4 +1,5 @@
 using Nakama;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,7 +10,7 @@ public class AreaLeaderboardView : View
     [SerializeField] Transform _contentTransform;
     [SerializeField] LeaderboardRowLayout _leaderboardRowLayout;
     [SerializeField] NavBar _leaderboardNavbar;
-    [SerializeField] TMP_Text _areaName;
+    [SerializeField] TMP_Text _areaName, _resetTimerTxt;
 
     LeaderboardType _leaderboardType = LeaderboardType.Trophy;
 
@@ -17,6 +18,8 @@ public class AreaLeaderboardView : View
     List<IApiLeaderboardRecordList> _allBlastDefeatedLeaderboards;
 
     int _currentIndex = 0;
+    TimeSpan timeRemaining;
+
     public LeaderboardType LeaderboardType { get => _leaderboardType; set => _leaderboardType = value; }
     public int CurrentIndex { get => _currentIndex; set => _currentIndex = value; }
 
@@ -31,6 +34,8 @@ public class AreaLeaderboardView : View
         base.OpenView(_instant);
 
         _leaderboardNavbar.Init();
+
+        UpdateResetTime();
     }
 
     public override void CloseView()
@@ -41,6 +46,15 @@ public class AreaLeaderboardView : View
     public void Close()
     {
         UIManager.Instance.ChangeView(UIManager.Instance.AllAreaView);
+    }
+
+    void UpdateResetTime()
+    {
+        DateTime now = DateTime.Now;
+        DateTime nextMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1);
+        timeRemaining = nextMonth - now;
+
+        _resetTimerTxt.text = $"Reset in {timeRemaining.Days} days";
     }
 
     public void UpdateLeaderboard(IApiLeaderboardRecordList leaderboardData)

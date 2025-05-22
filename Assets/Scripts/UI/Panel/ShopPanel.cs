@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +13,10 @@ public class ShopPanel : Panel
     [SerializeField] List<ShopLayout> _coinShopLayouts;
     [SerializeField] List<ShopLayout> _gemShopLayouts;
     [SerializeField] List<ShopLayout> _dailyShopLayouts;
+
+    [SerializeField] TMP_Text _resetTimerDailyShopTxt;
+    DateTime _nextDailyReset;
+    TimeSpan _timeRemainingDailyShop;
 
     public override void Init()
     {
@@ -24,12 +30,32 @@ public class ShopPanel : Panel
         UIManager.ResetScroll(_scroll);
 
         UIManager.Instance.MenuView.TopBar.ShowTopBar();
+
+        DateTime now = DateTime.Now;
+        _nextDailyReset = now.Date.AddDays(1);
+
+        UpdateResetTime();
     }
 
     public override void ClosePanel()
     {
         base.ClosePanel();
     }
+
+    void UpdateResetTime()
+    {
+        DateTime now = DateTime.Now;
+        _timeRemainingDailyShop = _nextDailyReset - now;
+
+        if (_timeRemainingDailyShop.TotalSeconds < 0)
+        {
+            _nextDailyReset = now.Date.AddDays(1);
+            _timeRemainingDailyShop = _nextDailyReset - now;
+        }
+
+        _resetTimerDailyShopTxt.text = $"Reset in {_timeRemainingDailyShop.Hours} hours";
+    }
+
 
     public void UpdateBlastTrapOffer(List<StoreOffer> allStoreOffer)
     {

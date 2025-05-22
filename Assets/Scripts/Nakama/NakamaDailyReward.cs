@@ -30,7 +30,6 @@ public class NakamaDailyReward : MonoBehaviour
 
             _canClaimDailyReward = canClaimRewardResponse.Payload.FromJson<CanClaimDailyReward>();
 
-            UIManager.Instance.DailyRewardView.UpdateTotalDay(_canClaimDailyReward.totalDayConnected);
             UIManager.Instance.DailyRewardView.SetActiveReward(_canClaimDailyReward.totalDayConnected, _canClaimDailyReward.canClaimDailyReward);
 
             return _canClaimDailyReward.canClaimDailyReward;

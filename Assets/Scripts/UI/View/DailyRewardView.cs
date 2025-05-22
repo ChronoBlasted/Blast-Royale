@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class DailyRewardView : View
 {
-    [SerializeField] TMP_Text _totalDayTxt;
     [SerializeField] List<DailyRewardLayout> _allDailyRewardLayout;
 
     public override void Init()
@@ -28,18 +27,6 @@ public class DailyRewardView : View
     public void Close()
     {
         UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
-    }
-
-    public void UpdateTotalDay(int day)
-    {
-        _totalDayTxt.text = "TOTAL DAY : " + day;
-
-        int multiplicateur = day / 7;
-
-        for (int i = 0; i < _allDailyRewardLayout.Count; i++)
-        {
-            _allDailyRewardLayout[i].UpdateDay(multiplicateur + i + 1);
-        }
     }
 
     public void UpdateDailyRewards(List<RewardCollection> rewardCollections)
