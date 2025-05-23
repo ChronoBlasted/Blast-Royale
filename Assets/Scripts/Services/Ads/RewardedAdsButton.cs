@@ -23,18 +23,16 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
 #if UNITY_IOS
     _adUnitId = _iOSAdUnitId;
 #elif UNITY_ANDROID
-    _adUnitId = _androidAdUnitId;
+        _adUnitId = _androidAdUnitId;
 #elif UNITY_EDITOR
         _adUnitId = _androidAdUnitId;
 #endif
 
         _showAdButton.gameObject.SetActive(false);
         _isLoaded = false;
-
-        LoadAd();
     }
 
-    void LoadAd()
+    public void LoadAd()
     {
         if (_isLoaded == false)
         {
@@ -69,8 +67,6 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
         {
             _isLoaded = false;
             _onAdsCompleted?.Invoke();
-
-            LoadAd();
         }
     }
 

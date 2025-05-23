@@ -13,6 +13,7 @@ public class ShopPanel : Panel
     [SerializeField] List<ShopLayout> _coinShopLayouts;
     [SerializeField] List<ShopLayout> _gemShopLayouts;
     [SerializeField] List<ShopLayout> _dailyShopLayouts;
+    [SerializeField] RewardedAdsButton _refreshDailyShop;
 
     [SerializeField] TMP_Text _resetTimerDailyShopTxt;
     DateTime _nextDailyReset;
@@ -21,6 +22,8 @@ public class ShopPanel : Panel
     public override void Init()
     {
         base.Init();
+
+        _refreshDailyShop.Init();
     }
 
     public override void OpenPanel()
@@ -35,6 +38,8 @@ public class ShopPanel : Panel
         _nextDailyReset = now.Date.AddDays(1);
 
         UpdateResetTime();
+
+        _refreshDailyShop.LoadAd();
     }
 
     public override void ClosePanel()
@@ -53,7 +58,14 @@ public class ShopPanel : Panel
             _timeRemainingDailyShop = _nextDailyReset - now;
         }
 
-        _resetTimerDailyShopTxt.text = $"Reset in {_timeRemainingDailyShop.Hours} hours";
+        if (_timeRemainingDailyShop.Hours > 0)
+        {
+            _resetTimerDailyShopTxt.text = $"Reset in {_timeRemainingDailyShop.Hours} hours";
+        }
+        else
+        {
+            _resetTimerDailyShopTxt.text = $"Reset in {_timeRemainingDailyShop.Minutes} min";
+        }
     }
 
 
@@ -87,5 +99,10 @@ public class ShopPanel : Panel
         {
             _dailyShopLayouts[i].Init(allStoreOffer[i]);
         }
+    }
+
+    public void HandleRefreshDailyShop()
+    {
+        //NakamaManager.Instance.NakamaStore.RefreshDailyShop();
     }
 }

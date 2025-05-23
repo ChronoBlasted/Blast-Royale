@@ -27,6 +27,7 @@ public class FightPanel : Panel
 
         UIManager.Instance.MenuView.TopBar.ShowTopBar();
 
+        _wildBattleBonusAds.LoadAd();
     }
 
     public override void ClosePanel()
