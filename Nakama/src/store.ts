@@ -206,7 +206,7 @@ const gemsOffer1: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 100,
+        gemsAmount: 160,
         blast: null,
         item: null,
     },
@@ -221,7 +221,7 @@ const gemsOffer2: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 200,
+        gemsAmount: 500,
         blast: null,
         item: null,
 
@@ -237,7 +237,7 @@ const gemsOffer3: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 300,
+        gemsAmount: 1200,
         blast: null,
         item: null,
 
@@ -253,7 +253,7 @@ const gemsOffer4: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 400,
+        gemsAmount: 2500,
         blast: null,
         item: null,
 
@@ -269,7 +269,7 @@ const gemsOffer5: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 500,
+        gemsAmount: 6500,
         blast: null,
         item: null,
 
@@ -286,7 +286,7 @@ const gemsOffer6: StoreOffer = {
         type: OfferType.GEMS,
 
         coinsAmount: 0,
-        gemsAmount: 600,
+        gemsAmount: 14000,
         blast: null,
         item: null,
 

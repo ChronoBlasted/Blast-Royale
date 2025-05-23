@@ -39,6 +39,11 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('claimDailyShop', rpcGetDailyShopOffer);
     initializer.registerRpc('buyDailyShopOffer', rpcBuyDailyShopOffer);
 
+    // Ads  
+    initializer.registerRpc('watchWildBattleAds', rpcWatchWildBattleAds);
+    initializer.registerRpc('watchEndWildBattleAds', rpcWatchEndWildBattleAds);
+    initializer.registerRpc('watchRefreshShopAds', rpcWatchRefreshShopAds);
+
     // Area
     initializer.registerRpc('selectArea', rpcSelectArea);
 

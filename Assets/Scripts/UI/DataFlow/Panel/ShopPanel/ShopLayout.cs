@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class ShopLayout : MonoBehaviour
 {
-    [SerializeField] Image _priceIco;
     [SerializeField] TMP_Text _priceAmount;
     [SerializeField] GameObject _buyedBlackShade;
     [SerializeField] OfferLayout _offerLayout;
-
+    [SerializeField] bool _isIAP;
+    [SerializeField] IAPPriceDisplay _iapPriceDisplay;
     [SerializeField] CustomButton _buyButton;
 
     StoreOffer _storeOffer;
@@ -19,25 +19,27 @@ public class ShopLayout : MonoBehaviour
     {
         _storeOffer = storeOffer;
 
-        _priceAmount.text = _storeOffer.price.ToString();
-
         _offerLayout.Init(storeOffer);
 
-        switch (_storeOffer.currency)
+        if (_isIAP) _iapPriceDisplay.Init();
+        else
         {
-            case Currency.Coins:
-                _priceIco.gameObject.SetActive(true);
+            switch (_storeOffer.currency)
+            {
+                case Currency.Coins:
 
-                _priceIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
-                break;
-            case Currency.Gems:
-                _priceIco.gameObject.SetActive(true);
+                    _priceAmount.text = "<sprite name=\"Coin\">";
+                    break;
+                case Currency.Gems:
 
-                _priceIco.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
-                break;
-            default:
-                _priceIco.gameObject.SetActive(false);
-                break;
+                    _priceAmount.text = "<sprite name=\"Gem\">";
+                    break;
+                default:
+                    _priceAmount.text = "";
+                    break;
+            }
+
+            _priceAmount.text += _storeOffer.price.ToString();
         }
 
         IsBuyable();

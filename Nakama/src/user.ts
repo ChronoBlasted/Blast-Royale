@@ -10,6 +10,7 @@ interface PlayerMetadata {
     loose: number;
     blast_catched: number;
     blast_defeated: number;
+    wildBattleButtonAds: boolean;
 }
 
 const DefaultMetadata: PlayerMetadata = {
@@ -20,6 +21,7 @@ const DefaultMetadata: PlayerMetadata = {
     loose: 0,
     blast_catched: 0,
     blast_defeated: 0,
+    wildBattleButtonAds: false,
 };
 
 function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, data: nkruntime.Session) {
@@ -76,8 +78,15 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
 
 
 function rpcDeleteAccount(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama) {
+    if (!ctx.userId) {
+        throw new Error("Authentication required.");
+    }
+
     nk.accountDeleteId(ctx.userId);
-}
+
+    return JSON.stringify({ success: true, message: "Account deleted." });
+};
+
 
 // region Metadata
 
@@ -124,12 +133,12 @@ function setMetadataStat(
     nk: nkruntime.Nakama,
     userId: string,
     statKey: keyof PlayerMetadata,
-    value: number
+    value: number | boolean
 ) {
     const account = nk.accountGetId(userId);
     const metadata = account.user.metadata as PlayerMetadata;
 
-    (metadata[statKey] as number) = value;
+    (metadata as any)[statKey] = value;
 
     nk.accountUpdateId(userId, "", null, null, null, null, null, metadata);
 }
@@ -182,3 +191,4 @@ function generateFriendCode(nk: nkruntime.Nakama): string {
 
     return friendCode;
 }
+

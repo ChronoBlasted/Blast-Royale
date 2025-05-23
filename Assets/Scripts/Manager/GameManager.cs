@@ -9,6 +9,8 @@ public class GameManager : MonoSingleton<GameManager>
 {
     void Awake()
     {
+        AdsManager.Instance.Init();
+
         UIManager.Instance.Init();
 
         TimeManager.Instance.Init();

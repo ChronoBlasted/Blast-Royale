@@ -2412,7 +2412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1928772835228618490, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6883819640130539722, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
       propertyPath: m_Pivot.x
@@ -2499,6 +2499,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
+--- !u!114 &79020180320528818 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1817458378675829465, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
+  m_PrefabInstance: {fileID: 1738482551410922347}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816a4a35e968656449bfa29605010277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5163493344764396449 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6883819640130539722, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
@@ -3239,6 +3250,7 @@ MonoBehaviour:
   _profileLayout: {fileID: 8264244916385527048}
   _squadLayout: {fileID: 7735326203295089207}
   _areaLayoutFightPanel: {fileID: 8723330345261686247}
+  _wildBattleBonusAds: {fileID: 79020180320528818}
 --- !u!1001 &4665346167550308028
 PrefabInstance:
   m_ObjectHideFlags: 0
