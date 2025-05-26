@@ -181,6 +181,22 @@ public class NakamaStore : MonoBehaviour
             Debug.LogFormat("Error: {0}", ex.Message);
         }
     }
+
+
+
+    public async Task RefreshDailyShop()
+    {
+        try
+        {
+            var response = await _client.RpcAsync(_session, "watchRefreshShopAds");
+
+            // TODO refresh sho with response
+        }
+        catch (ApiResponseException ex)
+        {
+            Debug.LogFormat("Error: {0}", ex.Message);
+        }
+    }
 }
 
 [Serializable]

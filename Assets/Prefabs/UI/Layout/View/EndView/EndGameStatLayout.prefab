@@ -353,6 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8205911482823465495}
   - component: {fileID: 7908824112816332746}
+  - component: {fileID: 6672318858690486770}
   m_Layer: 0
   m_Name: EndGameStatLayout
   m_TagString: Untagged
@@ -402,3 +403,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &6672318858690486770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6669691746452728511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 680a7f1f20bc98c47890857813474d93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayBeforeNext: 0.05
+  _tweenBehavior: 2
+  _whiteCover: {fileID: 0}
+  _duration: 0.2
+  _ease: 3

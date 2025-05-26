@@ -11,12 +11,19 @@ public class FightPanel : Panel
     [SerializeField] AreaLayoutFightPanel _areaLayoutFightPanel;
     [SerializeField] RewardedAdsButton _wildBattleBonusAds;
 
+
     public ProfileLayout ProfileLayout { get => _profileLayout; }
     public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
 
     public override void Init()
     {
         base.Init();
+
+        NakamaManager.Instance.NakamaWildBattle.OnWildBattleEnd.AddListener(() =>
+        {
+            _wildBattleBonusAds.SetAdsOff();
+            _wildBattleBonusAds.RefreshAd();
+        });
 
         _wildBattleBonusAds.Init();
     }
@@ -26,8 +33,6 @@ public class FightPanel : Panel
         base.OpenPanel();
 
         UIManager.Instance.MenuView.TopBar.ShowTopBar();
-
-        _wildBattleBonusAds.LoadAd();
     }
 
     public override void ClosePanel()
@@ -50,5 +55,11 @@ public class FightPanel : Panel
         Debug.Log("Coming soon");
     }
 
+    public void HandleOnBonusRewardsAds()
+    {
+        _wildBattleBonusAds.SetAdsOn();
+
+        NakamaManager.Instance.NakamaWildBattle.HandleOnBonusRewardsAds();
+    }
 
 }

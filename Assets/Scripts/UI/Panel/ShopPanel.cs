@@ -38,8 +38,6 @@ public class ShopPanel : Panel
         _nextDailyReset = now.Date.AddDays(1);
 
         UpdateResetTime();
-
-        _refreshDailyShop.LoadAd();
     }
 
     public override void ClosePanel()
@@ -103,6 +101,6 @@ public class ShopPanel : Panel
 
     public void HandleRefreshDailyShop()
     {
-        //NakamaManager.Instance.NakamaStore.RefreshDailyShop();
+        _ = NakamaManager.Instance.NakamaStore.RefreshDailyShop();
     }
 }

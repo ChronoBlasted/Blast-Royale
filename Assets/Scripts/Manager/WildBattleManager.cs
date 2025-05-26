@@ -25,6 +25,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
     int _shinyEncounter;
     int _coinGenerated;
     int _gemGenerated;
+    public bool BonusAds = false;
 
     List<Blast> _playerSquads = new List<Blast>();
     List<Item> _playerItems = new List<Item>();

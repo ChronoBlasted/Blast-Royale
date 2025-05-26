@@ -175,7 +175,7 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 22
+  AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -259,15 +259,15 @@ PlayerSettings:
   clonedFromGUID: c19f32bac17ee4170b3bf8a6a0333fb9
   templatePackageId: com.unity.template.universal-2d@2.1.2
   templateDefaultScene: Assets/Scenes/SampleScene.unity
-  useCustomMainManifest: 1
+  useCustomMainManifest: 0
   useCustomLauncherManifest: 0
-  useCustomMainGradleTemplate: 0
+  useCustomMainGradleTemplate: 1
   useCustomLauncherGradleManifest: 0
   useCustomBaseGradleTemplate: 0
   useCustomGradlePropertiesTemplate: 1
-  useCustomGradleSettingsTemplate: 0
+  useCustomGradleSettingsTemplate: 1
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 10
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
@@ -779,7 +779,7 @@ PlayerSettings:
     PS5: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     QNX: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     Stadia: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
-    Standalone: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN;LEVELPLAY_DEPENDENCIES_INSTALLED
     VisionOS: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     WebGL: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     Windows Store Apps: DOTWEEN
@@ -788,7 +788,8 @@ PlayerSettings:
     tvOS: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:

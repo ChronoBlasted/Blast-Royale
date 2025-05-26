@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NakamaWildBattle : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class NakamaWildBattle : MonoBehaviour
 
     StartStateData _startStateData;
 
+    public UnityEvent OnWildBattleEnd;
     public PlayerState PlayerState { get => _playerState; }
 
     public void Init(IClient client, ISession session, ISocket socket)
@@ -69,6 +71,8 @@ public class NakamaWildBattle : MonoBehaviour
         await _socket.LeaveMatchAsync(_matchId);
         _socket.ReceivedMatchState -= _matchStateHandler;
         _matchId = null;
+
+        OnWildBattleEnd?.Invoke();
     }
 
     private void OnReceivedMatchState(IMatchState matchState)
@@ -114,7 +118,7 @@ public class NakamaWildBattle : MonoBehaviour
 
 
             case NakamaOpCode.DEBUG:
-                break; 
+                break;
 
 
             default:
@@ -183,6 +187,20 @@ public class NakamaWildBattle : MonoBehaviour
         catch (ApiResponseException e)
         {
             Debug.LogWarning("Error Player Wait : " + e.Message);
+        }
+    }
+
+    public async void HandleOnBonusRewardsAds()
+    {
+        try
+        {
+            var response = await _client.RpcAsync(_session, "watchWildBattleAds");
+
+            WildBattleManager.Instance.BonusAds = true;
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Could not join / find match: " + e.Message);
         }
     }
 

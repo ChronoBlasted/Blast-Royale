@@ -5,86 +5,68 @@ using UnityEngine.Events;
 
 public class RewardedAdsButton : MonoBehaviour
 {
-    //    [SerializeField] Button _showAdButton;
-    //#if UNITY_IOS
-    //    [SerializeField] string _iOSAdUnitId = "Rewarded_iOS";
-    //#endif
+    [SerializeField] UnityEvent _onAdsCompleted;
 
-    //    [SerializeField] string _androidAdUnitId = "Rewarded_Android";
-    //    [SerializeField] UnityEvent _onAdsCompleted;
+    [SerializeField] Image _bg;
+    [SerializeField] Sprite _regularBG, _activeBG;
+    [SerializeField] ParticleSystem _adsReadyParticle;
 
-    //    string _adUnitId = null;
-    //    bool _isLoaded = false;
-
-
+    bool _isAdsActive = false;
 
     public void Init()
     {
-//#if UNITY_IOS
-//    _adUnitId = _iOSAdUnitId;
-//#elif UNITY_ANDROID
-//        _adUnitId = _androidAdUnitId;
-//#elif UNITY_EDITOR
-//        _adUnitId = _androidAdUnitId;
-//#endif
+        transform.gameObject.SetActive(false);
 
-//        _showAdButton.gameObject.SetActive(false);
-//        _isLoaded = false;
+        AdsManager.Instance.OnRewardedAdLoaded.AddListener(LoadedAd);
     }
 
-    public void LoadAd()
+    public void LoadedAd()
     {
-        //if (_isLoaded == false)
-        //{
-        //    Debug.Log("Start loading rewarded ads");
-
-        //    Advertisement.Load(_adUnitId, this);
-        //}
+        if (_isAdsActive == false)
+        {
+            transform.gameObject.SetActive(true);
+        }
     }
 
-    //    public void OnUnityAdsAdLoaded(string adUnitId)
-    //    {
-    //        if (adUnitId.Equals(_adUnitId))
-    //        {
-    //            Debug.Log("Ads loaded");
+    public void RefreshAd()
+    {
+        if (AdsManager.Instance.RewardedAd.CanShowAd())
+        {
+            LoadedAd();
+        }
+    }
 
-    //            _isLoaded = true;
-    //            _showAdButton.gameObject.SetActive(true);
-    //            _showAdButton.onClick.AddListener(ShowAd);
-    //            _showAdButton.interactable = true;
-    //        }
-    //    }
+    public void ShowAd()
+    {
+        AdsManager.Instance.ShowRewardedAd(_onAdsCompleted);
 
-    //    public void ShowAd()
-    //    {
-    //        _showAdButton.interactable = false;
-    //        Advertisement.Show(_adUnitId, this);
-    //    }
+        transform.gameObject.SetActive(false);
+    }
 
-    //    public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
-    //    {
-    //        if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
-    //        {
-    //            _isLoaded = false;
-    //            _onAdsCompleted?.Invoke();
-    //        }
-    //    }
+    private void OnDestroy()
+    {
+        AdsManager.Instance.OnRewardedAdLoaded.RemoveListener(LoadedAd);
+    }
 
-    //    public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
-    //    {
-    //        Debug.Log($"Error loading Ad Unit {adUnitId}: {error.ToString()} - {message}");
-    //    }
+    public void SetAdsOff()
+    {
+        if (_bg != null)
+        {
+            _bg.sprite = _regularBG;
+            _adsReadyParticle.Stop();
 
-    //    public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
-    //    {
-    //        Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
-    //    }
+            _isAdsActive = false;
+        }
+    }
 
-    //    public void OnUnityAdsShowStart(string adUnitId) { }
-    //    public void OnUnityAdsShowClick(string adUnitId) { }
+    public void SetAdsOn()
+    {
+        if (_bg != null)
+        {
+            _bg.sprite = _activeBG;
+            _adsReadyParticle.Play();
 
-    //    void OnDestroy()
-    //    {
-    //        _showAdButton.onClick.RemoveAllListeners();
-    //    }
+            _isAdsActive = true;
+        }
+    }
 }

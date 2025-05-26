@@ -9,8 +9,6 @@ public class GameManager : MonoSingleton<GameManager>
 {
     void Awake()
     {
-        AdsManager.Instance.Init();
-
         UIManager.Instance.Init();
 
         TimeManager.Instance.Init();
@@ -26,6 +24,8 @@ public class GameManager : MonoSingleton<GameManager>
         CameraManager.Instance.Init();
 
         NakamaManager.Instance.Init();
+
+        AdsManager.Instance.Init();
     }
 
     void Update()

@@ -10,7 +10,7 @@ public class EndView : View
     [SerializeField] Transform _rewardContentTransform;
     [SerializeField] RewardEndGameLayout _rewardEndGameLayout;
     [SerializeField] ChronoTweenSequence _chronoTweenSequence;
-    [SerializeField] ChronoTweenObject _claimBtn, _claimX2Btn;
+    [SerializeField] ChronoTweenObject _claimBtn;
 
     public override void Init()
     {
@@ -43,7 +43,6 @@ public class EndView : View
         }
 
         _chronoTweenSequence.ObjectsToTween.Add(_claimBtn);
-        _chronoTweenSequence.ObjectsToTween.Add(_claimX2Btn);
 
         _chronoTweenSequence.Init();
 

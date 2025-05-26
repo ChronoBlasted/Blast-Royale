@@ -161,13 +161,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1817458378675829465}
+        m_TargetAssemblyTypeName: RewardedAdsButton, Assembly-CSharp
+        m_MethodName: ShowAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -200,9 +200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816a4a35e968656449bfa29605010277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _showAdButton: {fileID: 7544295031267263489}
-  _iOSAdUnitId: Rewarded_iOS
-  _androidAdUnitId: Rewarded_Android
   _onAdsCompleted:
     m_PersistentCalls:
       m_Calls:
@@ -218,6 +215,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _bg: {fileID: 0}
+  _regularBG: {fileID: 0}
+  _activeBG: {fileID: 0}
+  _adsReadyParticle: {fileID: 0}
 --- !u!1 &2678392372236849372
 GameObject:
   m_ObjectHideFlags: 0
