@@ -22,7 +22,6 @@ public class FightPanel : Panel
 
         NakamaManager.Instance.NakamaWildBattle.OnWildBattleEnd.AddListener(() =>
         {
-            _wildBattleBonusAds.SetAdsOff();
             _wildBattleBonusAds.RefreshAd();
         });
 

@@ -102,11 +102,6 @@ public class SquadPanel : Panel
 
     public void UpdateStoredBlast(List<Blast> decks)
     {
-        foreach (Transform child in _storedBlastTransform.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
         for (int i = 0; i < decks.Count; i++)
         {
             var currentBlast = Instantiate(_blastLayoutPrefab, _storedBlastTransform);
@@ -122,11 +117,6 @@ public class SquadPanel : Panel
 
     public void UpdateStoredItem(List<Item> items)
     {
-        foreach (Transform child in _storedItemTransform.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
         for (int i = 0; i < items.Count; i++)
         {
             var currentItem = Instantiate(_itemLayoutPrefab, _storedItemTransform);
@@ -143,5 +133,18 @@ public class SquadPanel : Panel
     public void UpdateMiddleTitle(SquadTabType tabType)
     {
         _squadMidLayout.UpdateData(tabType);
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach (Transform child in _storedBlastTransform.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in _storedItemTransform.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

@@ -365,14 +365,14 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         }
         else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts))
         {
-            PlayerLeave();
+            PlayerLeave(false);
         }
 
         EndTurn();
 
         bool isOfferStep = _indexProgression % 5 == 0 && _indexProgression % 10 != 0;
 
-        if (!isOfferStep)
+        if (isOfferStep == false && NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
         {
             NakamaManager.Instance.NakamaWildBattle.PlayerReady();
         }
@@ -525,9 +525,9 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         catch (ApiResponseException e) { Debug.LogError(e); }
     }
 
-    public void PlayerLeave()
+    public void PlayerLeave(bool leaveMatch)
     {
-        _serverBattle.LeaveMatch();
+        if (leaveMatch) _serverBattle.LeaveMatch();
 
         if (_coinGenerated > 0)
         {
@@ -570,7 +570,6 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             WildBattleReward.Insert(0, gemReward);
         }
-
 
         UIManager.Instance.ChangeView(UIManager.Instance.EndView);
     }

@@ -57,7 +57,11 @@ public class NakamaUserAccount : MonoBehaviour
         UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
         UIManager.Instance.AllAreaView.SetArea(_lastData.area);
 
-        if (_lastData.wildBattleButtonAds) UIManager.Instance.MenuView.FightPanel.WildBattleBonusAds.SetAdsOn();
+        if (_lastData.wildBattleButtonAds)
+        {
+            UIManager.Instance.MenuView.FightPanel.WildBattleBonusAds.SetAdsOn();
+            WildBattleManager.Instance.BonusAds = true;
+        }
     }
 
     #region ApiAccountUpdate

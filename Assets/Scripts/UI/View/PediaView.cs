@@ -39,11 +39,6 @@ public class PediaView : View
 
     public void UpdateBlastPedia(List<BlastData> allBlasts)
     {
-        foreach (Transform t in _pediaBlastTransform.transform)
-        {
-            Destroy(t.gameObject);
-        }
-
         foreach (var blast in allBlasts)
         {
             PediaBlastLayout pediaBlastLayout = Instantiate(_pediaBlastLayoutPrefab, _pediaBlastTransform);
@@ -53,11 +48,6 @@ public class PediaView : View
 
     public void UpdateItemPedia(List<ItemData> allItems)
     {
-        foreach (Transform t in _pediaItemTransform.transform)
-        {
-            Destroy(t.gameObject);
-        }
-
         foreach (var item in allItems)
         {
             PediaItemLayout pediaBlastLayout = Instantiate(_pediaItemLayoutPrefab, _pediaItemTransform);
@@ -67,15 +57,28 @@ public class PediaView : View
 
     public void UpdateMovePedia(List<Move> allItems)
     {
-        foreach (Transform t in _moveTransform.transform)
-        {
-            Destroy(t.gameObject);
-        }
-
         foreach (var item in allItems)
         {
             PediaMoveLayout pediaBlastLayout = Instantiate(_moveLayoutPrefab, _moveTransform);
             pediaBlastLayout.Init(item);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach (Transform t in _pediaBlastTransform.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
+        foreach (Transform t in _pediaItemTransform.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
+        foreach (Transform t in _moveTransform.transform)
+        {
+            Destroy(t.gameObject);
         }
     }
 }

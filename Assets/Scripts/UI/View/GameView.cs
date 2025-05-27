@@ -280,16 +280,27 @@ public class GameView : View
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-        ShowExpProgression();
+        if (isPlayer == false)
+        {
+            ShowExpProgression();
+        }
 
         ResetZoomEffect(faintedHUD);
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-        int amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(_dataUtils.GetBlastDataById(faintedHUD.Blast.data_id).expYield, faintedHUD.Blast.Level, faintedHUD.Blast.Level));
-        SetExpProgression(_dataUtils.GetBlastDataRef(attackerHUD.Blast.data_id).Sprite, amountExp);
+        if (isPlayer == false)
+        {
+            int amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(_dataUtils.GetBlastDataById(faintedHUD.Blast.data_id).expYield, faintedHUD.Blast.Level, faintedHUD.Blast.Level));
+            SetExpProgression(_dataUtils.GetBlastDataRef(attackerHUD.Blast.data_id).Sprite, amountExp);
 
-        await Task.Delay(TimeSpan.FromMilliseconds(1500));
+            await Task.Delay(TimeSpan.FromMilliseconds(1500));
+        }
+        else
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(500)); // Exp Ball finish tween
+
+        }
     }
 
     public async Task BlastSwap(Blast currentBlast, Blast newCurrentBlast)

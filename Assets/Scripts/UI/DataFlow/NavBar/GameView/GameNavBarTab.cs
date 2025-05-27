@@ -77,7 +77,8 @@ public class GameNavBarTab : NavBarTab
 
     public void HandleOnLeaveBattle()
     {
-        UIManager.Instance.ConfirmPopup.UpdateData("LEAVE BATTLE ?", "You will leave the battle, continue ?", WildBattleManager.Instance.PlayerLeave);
+        UIManager.Instance.ConfirmPopup.UpdateData("LEAVE BATTLE ?", "You will leave the battle, continue ?", () => WildBattleManager.Instance.PlayerLeave(true));
         UIManager.Instance.ConfirmPopup.OpenPopup();
     }
+
 }

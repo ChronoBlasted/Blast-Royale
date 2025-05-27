@@ -840,7 +840,7 @@ const Hiboo: BlastData = { // Hiboo
     speed: 100,
     movepool: [
         { move_id: QuickAttack.id, levelMin: 0 },
-        { move_id: Harden.id, levelMin: 5 },
+        { move_id: Stomp.id, levelMin: 5 },
     ],
     nextEvolution: null,
     catchRate: 35,
@@ -858,7 +858,6 @@ const Eggy: BlastData = { // Eggy
     speed: 20,
     movepool: [
         { move_id: Punch.id, levelMin: 0 },
-        { move_id: Growl.id, levelMin: 5 },
         { move_id: FirePunch.id, levelMin: 10 },
     ],
     nextEvolution: null,
@@ -877,7 +876,7 @@ const Dracoblast: BlastData = { // Dracoblast
     speed: 100,
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
-        { move_id: Harden.id, levelMin: 5 },
+        { move_id: Ember.id, levelMin: 5 },
     ],
     nextEvolution: null,
     catchRate: 45,
@@ -895,7 +894,7 @@ const Cerberus: BlastData = { // Cerberus
     speed: 100,
     movepool: [
         { move_id: Stomp.id, levelMin: 0 },
-        { move_id: Harden.id, levelMin: 5 },
+        { move_id: Ember.id, levelMin: 5 },
     ],
     nextEvolution: null,
     catchRate: 45,

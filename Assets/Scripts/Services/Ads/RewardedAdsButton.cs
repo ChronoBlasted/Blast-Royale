@@ -2,74 +2,87 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
 using UnityEngine.Events;
+using System.Collections;
 
 public class RewardedAdsButton : MonoBehaviour
 {
-    [SerializeField] UnityEvent _onAdsCompleted;
-
-    [SerializeField] Image _bg;
-    [SerializeField] Sprite _regularBG, _activeBG;
+    [Header("UI Components")]
+    [SerializeField] AdsLayout _adsLayout;
+    [SerializeField] Image _background;
+    [SerializeField] Sprite _regularBG;
+    [SerializeField] Sprite _activeBG;
     [SerializeField] ParticleSystem _adsReadyParticle;
+
+    [Header("Events")]
+    [SerializeField] UnityEvent onAdsCompleted;
 
     bool _isAdsActive = false;
 
     public void Init()
     {
-        transform.gameObject.SetActive(false);
-        if (_adsReadyParticle != null) _adsReadyParticle.Stop();
-
-        AdsManager.Instance.OnRewardedAdLoaded.AddListener(LoadedAd);
+        _adsLayout.gameObject.SetActive(false);
+        AdsManager.Instance.OnRewardedAdLoaded.AddListener(OnAdLoaded);
     }
 
-    public void LoadedAd()
+    private void OnDestroy()
     {
-        if (_isAdsActive == false)
+        AdsManager.Instance.OnRewardedAdLoaded.RemoveListener(OnAdLoaded);
+    }
+
+    private void OnEnable()
+    {
+        if (_isAdsActive)
         {
-            transform.gameObject.SetActive(true);
+            if (_adsReadyParticle != null) StartCoroutine(PlayParticleNextFrame());
+        }
+    }
+
+    private IEnumerator PlayParticleNextFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        _adsReadyParticle.Play();
+    }
+
+    private void OnAdLoaded()
+    {
+        if (!_isAdsActive)
+        {
+            _adsLayout.gameObject.SetActive(true);
         }
     }
 
     public void RefreshAd()
     {
+        SetAdsOff();
+
         if (AdsManager.Instance.RewardedAd.CanShowAd())
         {
-            LoadedAd();
+            OnAdLoaded();
         }
     }
 
     public void ShowAd()
     {
-        AdsManager.Instance.ShowRewardedAd(_onAdsCompleted);
-
-        transform.gameObject.SetActive(false);
-    }
-
-    private void OnDestroy()
-    {
-        AdsManager.Instance.OnRewardedAdLoaded.RemoveListener(LoadedAd);
+        AdsManager.Instance.ShowRewardedAd(onAdsCompleted);
+        _adsLayout.gameObject.SetActive(false);
     }
 
     public void SetAdsOff()
     {
-        if (_bg != null)
-        {
-            _bg.sprite = _regularBG;
-            _adsReadyParticle.Stop();
+        if (_background == null || _adsReadyParticle == null) return;
 
-            _isAdsActive = false;
-        }
+        _background.sprite = _regularBG;
+        _adsReadyParticle.Stop();
+        _isAdsActive = false;
     }
 
     public void SetAdsOn()
     {
-        if (_bg != null)
-        {
-            transform.gameObject.SetActive(false);
+        if (_background == null || _adsReadyParticle == null) return;
 
-            _bg.sprite = _activeBG;
-            _adsReadyParticle.Play();
-
-            _isAdsActive = true;
-        }
+        _adsLayout.gameObject.SetActive(false);
+        _background.sprite = _activeBG;
+        _adsReadyParticle.Play();
+        _isAdsActive = true;
     }
 }

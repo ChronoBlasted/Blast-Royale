@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -19,9 +20,6 @@ public class EndView : View
 
     public override void OpenView(bool _instant = false)
     {
-        _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
-        _ = NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
-
         _progressionSlotLayout.InitSmooth(WildBattleManager.Instance.IndexProgression);
 
         UIManager.Instance.DoSmoothTextInt(_amountRegularBlastTxt, 0, WildBattleManager.Instance.BlastDefeated, "<sprite name=\"RegularBlast\">");
@@ -64,11 +62,6 @@ public class EndView : View
     }
 
     public void HandleOnClaim()
-    {
-        GameStateManager.Instance.UpdateStateToMenu();
-    }
-
-    public void HandleOnClaimAds()
     {
         GameStateManager.Instance.UpdateStateToMenu();
     }

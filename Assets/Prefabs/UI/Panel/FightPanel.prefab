@@ -822,6 +822,7 @@ GameObject:
   - component: {fileID: 7519549264505678632}
   - component: {fileID: 6024583132666509926}
   - component: {fileID: 706573681909561576}
+  - component: {fileID: 1470932340691364356}
   m_Layer: 0
   m_Name: WildBattleButton
   m_TagString: Untagged
@@ -931,6 +932,38 @@ MonoBehaviour:
   _type: 1
   _rt: {fileID: 7519549264505678632}
   _timeOfScale: 0.2
+--- !u!114 &1470932340691364356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2607434225424406413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 816a4a35e968656449bfa29605010277, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _adsLayout: {fileID: 4667107442663590260}
+  _background: {fileID: 49811748885106454}
+  _regularBG: {fileID: 21300000, guid: 0036322b5b88b4794b6e86458a3c81ce, type: 3}
+  _activeBG: {fileID: 21300000, guid: 86e5e89345fe9472d8b3d6560b9debe0, type: 3}
+  _adsReadyParticle: {fileID: 7634744518288883332}
+  onAdsCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1326192923374991190}
+        m_TargetAssemblyTypeName: FightPanel, Assembly-CSharp
+        m_MethodName: HandleOnBonusRewardsAds
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2982056979239443813
 GameObject:
   m_ObjectHideFlags: 0
@@ -2539,20 +2572,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7544295031267263489, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1470932340691364356}
+    - target: {fileID: 7544295031267263489, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowAd
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
---- !u!114 &79020180320528818 stripped
+--- !u!114 &4667107442663590260 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1817458378675829465, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6405440105084590623, guid: 744fb427c8238ce4b8f5929978f6db09, type: 3}
   m_PrefabInstance: {fileID: 1738482551410922347}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816a4a35e968656449bfa29605010277, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ba26ed55bf8ff046a8a9804c2945b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &5163493344764396449 stripped
@@ -3130,12 +3171,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5041738752102924696, guid: b8e77ecd884be8c409021121967b93f0, type: 3}
-      propertyPath: fixedTime
-      value: 0
+      propertyPath: m_OnCullStateChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5041738752102924696, guid: b8e77ecd884be8c409021121967b93f0, type: 3}
-      propertyPath: m_Maskable
-      value: 0
+      propertyPath: m_OnCullStateChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5041738752102924698, guid: b8e77ecd884be8c409021121967b93f0, type: 3}
       propertyPath: m_Name
@@ -3426,7 +3467,7 @@ MonoBehaviour:
   _profileLayout: {fileID: 8264244916385527048}
   _squadLayout: {fileID: 7735326203295089207}
   _areaLayoutFightPanel: {fileID: 8723330345261686247}
-  _wildBattleBonusAds: {fileID: 79020180320528818}
+  _wildBattleBonusAds: {fileID: 1470932340691364356}
 --- !u!1001 &4665346167550308028
 PrefabInstance:
   m_ObjectHideFlags: 0

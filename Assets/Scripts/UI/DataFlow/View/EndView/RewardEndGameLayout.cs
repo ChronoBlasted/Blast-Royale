@@ -11,11 +11,11 @@ public class RewardEndGameLayout : MonoBehaviour
     [SerializeField] GameObject _bonusLayout;
 
     Offer _currentOffer;
-    public void Init(Offer offer, bool isBonus = false)
+    public void Init(Offer offer)
     {
         _currentOffer = offer;
 
-        _bonusLayout.SetActive(isBonus);
+        _bonusLayout.SetActive(offer.isBonus);
 
         ResourceData resourceData;
 

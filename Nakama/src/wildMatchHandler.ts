@@ -187,27 +187,8 @@ const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, n
 
         if (state.player1_id == presence.userId) {
 
-            if (state.blast_catched > 0) {
-                incrementMetadataStat(nk, state.player1_id, "blast_catched", state.blast_catched);
-            }
-
-            if (state.blast_defeated > 0) {
-
-                incrementMetadataStat(nk, state.player1_id, "blast_defeated", state.blast_defeated);
-                writeIncrementalRecordLeaderboard(nk, logger, state.player1_id, LeaderboardTotalBlastDefeatedId, state.blast_defeated);
-                writeIncrementalRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedAreaId + getMetadataStat(nk, state.player1_id, "area"), state.blast_defeated);
-            }
-
-            if (state.index_progression > 1) {
-                let totalCoins = 200 * (state.index_progression - 1);
-
-                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins)
-
-                if (getMetadataStat(nk, state.player1_id, "wildBattleButtonAds")) updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins / 2)
-
-
-                writeBestRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBestStageAreaId + getMetadataStat(nk, state.player1_id, "area"), state.index_progression - 1);
-            }
+            PlayerLeave(nk, state, logger);
+            dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(true));
         }
 
         state.presences[presence.userId] = null;
@@ -312,7 +293,8 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                     OpCodes.PLAYER_ATTACK,
                     OpCodes.PLAYER_USE_ITEM,
                     OpCodes.PLAYER_CHANGE_BLAST,
-                    OpCodes.PLAYER_WAIT
+                    OpCodes.PLAYER_WAIT,
+                    OpCodes.PLAYER_LEAVE,
                 ];
 
                 if (!validOpCodes.includes(message.opCode)) {
@@ -431,6 +413,12 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                         ({ state } = executeWildBlastAttack(state, dispatcher, logger));
                         break;
+
+                    case OpCodes.PLAYER_LEAVE:
+                        PlayerLeave(nk, state, logger);
+                        dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(true));
+
+                        return null;
                 }
 
                 // region End turn Logic
@@ -468,8 +456,6 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 }
 
                 EndLoopDebug(logger, state);
-
-
             });
             break;
         // region WAITFORPLAYERSWAP
@@ -580,7 +566,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                         case OfferType.NONE:
                             break;
                     }
-                    
+
                     var newBlast = GetNewWildBlast(state, nk, logger);
 
                     state.wild_blast = ConvertBlastToBlastEntity(newBlast);
@@ -609,6 +595,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
             const playerBlast = state.p1_blasts[state.p1_index]!;
             const wildBlast = state.wild_blast!;
+            const allPlayerBlastFainted = isAllBlastDead(state.p1_blasts);
 
             const wildAlive = isBlastAlive(wildBlast);
 
@@ -668,6 +655,12 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                 EndLoopDebug(logger, state);
 
             }
+            else if (allPlayerBlastFainted) {
+                dispatcher.broadcastMessage(OpCodes.MATCH_END, JSON.stringify(false));
+                PlayerLeave(nk, state, logger);
+
+                return null;
+            }
 
             logger.debug('______________ END BATTLE ______________');
 
@@ -706,6 +699,35 @@ const matchTerminate = function (ctx: nkruntime.Context, logger: nkruntime.Logge
     };
 }
 
+
+function PlayerLeave(nk: nkruntime.Nakama, state: WildBattleData, logger: nkruntime.Logger) {
+    let bonusAds = getMetadataStat(nk, state.player1_id, "wildBattleButtonAds");
+
+    if (state.blast_catched > 0) {
+        incrementMetadataStat(nk, state.player1_id, "blast_catched", state.blast_catched);
+    }
+
+    if (state.blast_defeated > 0) {
+
+        incrementMetadataStat(nk, state.player1_id, "blast_defeated", state.blast_defeated);
+        writeIncrementalRecordLeaderboard(nk, logger, state.player1_id, LeaderboardTotalBlastDefeatedId, state.blast_defeated);
+        writeIncrementalRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBlastDefeatedAreaId + getMetadataStat(nk, state.player1_id, "area"), state.blast_defeated);
+    }
+
+    if (state.index_progression > 1) {
+        let totalCoins = 200 * (state.index_progression - 1);
+
+        updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins);
+
+        if (bonusAds) updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins / 2);
+
+        writeBestRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBestStageAreaId + getMetadataStat(nk, state.player1_id, "area"), state.index_progression - 1);
+    }
+
+    if (bonusAds) {
+        setMetadataStat(nk, state.player1_id, "wildBattleButtonAds", false);
+    }
+}
 
 function GetNewWildBlast(state: WildBattleData, nk: nkruntime.Nakama, logger: nkruntime.Logger): Blast {
     return getRandomBlastWithAreaId(state.player1_id, nk, Math.floor(state.index_progression / 5), state.index_progression % 10 == 0, logger);

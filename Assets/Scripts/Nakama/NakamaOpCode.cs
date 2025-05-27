@@ -16,6 +16,8 @@ public static class NakamaOpCode
 
 
     public const long PLAYER_READY = 50;
+    public const long PLAYER_LEAVE = 51;
+
     public const long ENEMY_READY = 55;
 
     public const long MATCH_ROUND = 60;

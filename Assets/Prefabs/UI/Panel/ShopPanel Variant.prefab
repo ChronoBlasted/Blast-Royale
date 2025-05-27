@@ -981,6 +981,7 @@ GameObject:
   - component: {fileID: 4387673844074507007}
   - component: {fileID: 370156105995561153}
   - component: {fileID: 8808824856482931534}
+  - component: {fileID: 2092580772836019958}
   m_Layer: 0
   m_Name: RefreshDailyShopBtn
   m_TagString: Untagged
@@ -1115,10 +1116,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  _adsLayout: {fileID: 2092580772836019958}
   _bg: {fileID: 0}
   _regularBG: {fileID: 0}
   _activeBG: {fileID: 0}
   _adsReadyParticle: {fileID: 0}
+--- !u!114 &2092580772836019958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4795071862743792007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba26ed55bf8ff046a8a9804c2945b73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6278434489960087521
 GameObject:
   m_ObjectHideFlags: 0

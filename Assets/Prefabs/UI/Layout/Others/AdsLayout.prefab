@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 6883819640130539722}
   - component: {fileID: 7544295031267263489}
   - component: {fileID: 6405440105084590623}
-  - component: {fileID: 1817458378675829465}
   m_Layer: 0
   m_Name: AdsLayout
   m_TagString: Untagged
@@ -161,7 +160,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1817458378675829465}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RewardedAdsButton, Assembly-CSharp
         m_MethodName: ShowAd
         m_Mode: 1
@@ -188,37 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba26ed55bf8ff046a8a9804c2945b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1817458378675829465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1928772835228618490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816a4a35e968656449bfa29605010277, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _onAdsCompleted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1928772835228618490}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _bg: {fileID: 0}
-  _regularBG: {fileID: 0}
-  _activeBG: {fileID: 0}
-  _adsReadyParticle: {fileID: 0}
 --- !u!1 &2678392372236849372
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ enum OpCodes {
     PLAYER_CHANGE_BLAST = 40,
 
     PLAYER_READY = 50,
+    PLAYER_LEAVE = 51,
     ENEMY_READY = 55,
 
     NEW_BATTLE_TURN = 60,

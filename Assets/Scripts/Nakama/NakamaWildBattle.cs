@@ -66,15 +66,6 @@ public class NakamaWildBattle : MonoBehaviour
         _matchId = null;
     }
 
-    public async void LeaveMatch()
-    {
-        await _socket.LeaveMatchAsync(_matchId);
-        _socket.ReceivedMatchState -= _matchStateHandler;
-        _matchId = null;
-
-        OnWildBattleEnd?.Invoke();
-    }
-
     private void OnReceivedMatchState(IMatchState matchState)
     {
         string messageJson = Encoding.UTF8.GetString(matchState.State);
@@ -98,7 +89,7 @@ public class NakamaWildBattle : MonoBehaviour
                 WildBattleManager.Instance.PlayTurn(_turnState);
                 break;
             case NakamaOpCode.MATCH_END:
-                WildBattleManager.Instance.MatchEnd(messageJson);
+                PlayerLeaveMatch(Boolean.Parse(messageJson));
                 break;
 
             case NakamaOpCode.ERROR_SERV:
@@ -116,7 +107,6 @@ public class NakamaWildBattle : MonoBehaviour
                 WildBattleManager.Instance.SetNewOffers(offerList);
                 break;
 
-
             case NakamaOpCode.DEBUG:
                 break;
 
@@ -126,11 +116,46 @@ public class NakamaWildBattle : MonoBehaviour
         }
     }
 
+    public async void LeaveMatch()
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_LEAVE, "");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Error Player Leave: " + e.Message);
+        }
+    }
+
+    public async void PlayerLeaveMatch(bool isWin)
+    {
+        try
+        {
+            await _socket.LeaveMatchAsync(_matchId);
+            _socket.ReceivedMatchState -= _matchStateHandler;
+            _matchId = null;
+
+
+            await NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
+            await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
+
+            OnWildBattleEnd?.Invoke();
+
+            WildBattleManager.Instance.MatchEnd(isWin.ToString());
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Leave: " + e.Message);
+        }
+    }
+
 
     public async Task PlayerAttack(int indexAttack)
     {
         try
         {
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson(), null);
 
             WildBattleManager.Instance.WaitForOpponent();
@@ -165,6 +190,7 @@ public class NakamaWildBattle : MonoBehaviour
     {
         try
         {
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, indexSelectedBlast.ToJson(), null);
 
             WildBattleManager.Instance.WaitForOpponent();
@@ -180,6 +206,7 @@ public class NakamaWildBattle : MonoBehaviour
     {
         try
         {
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, "");
 
             WildBattleManager.Instance.WaitForOpponent();
@@ -208,6 +235,7 @@ public class NakamaWildBattle : MonoBehaviour
     {
         try
         {
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
 
             WildBattleManager.Instance.WaitForOpponent();
@@ -222,7 +250,9 @@ public class NakamaWildBattle : MonoBehaviour
     {
         try
         {
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_READY, "", null);
+
         }
         catch (ApiResponseException e)
         {

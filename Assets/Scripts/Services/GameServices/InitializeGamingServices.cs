@@ -8,10 +8,6 @@ public class InitializeGamingServices : MonoBehaviour
 {
     const string k_Environment = "production";
 
-    void Awake()
-    {
-        Initialize(OnSuccess, OnError);
-    }
 
     void Initialize(Action onSuccess, Action<string> onError)
     {
@@ -29,6 +25,7 @@ public class InitializeGamingServices : MonoBehaviour
 
     void OnSuccess()
     {
+        Debug.Log("Succes Unity Gaming Services");
     }
 
     void OnError(string message)
@@ -39,6 +36,8 @@ public class InitializeGamingServices : MonoBehaviour
 
     void Start()
     {
+        Initialize(OnSuccess, OnError);
+
         if (UnityServices.State == ServicesInitializationState.Uninitialized)
         {
             var text =
