@@ -531,6 +531,17 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (_coinGenerated > 0)
         {
+            if (BonusAds)
+            {
+                Offer coinBonus = new Offer();
+
+                coinBonus.type = OfferType.COIN;
+                coinBonus.coinsAmount = _coinGenerated / 2;
+                coinBonus.isBonus = true;
+
+                WildBattleReward.Insert(0, coinBonus);
+            }
+
             Offer coinReward = new Offer();
 
             coinReward.type = OfferType.COIN;
@@ -541,6 +552,17 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
         if (_gemGenerated > 0)
         {
+            if (BonusAds)
+            {
+                Offer gemBonus = new Offer();
+
+                gemBonus.type = OfferType.GEM;
+                gemBonus.coinsAmount = _gemGenerated / 2;
+                gemBonus.isBonus = true;
+
+                WildBattleReward.Insert(0, gemBonus);
+            }
+
             Offer gemReward = new Offer();
 
             gemReward.type = OfferType.GEM;
@@ -548,6 +570,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
 
             WildBattleReward.Insert(0, gemReward);
         }
+
 
         UIManager.Instance.ChangeView(UIManager.Instance.EndView);
     }

@@ -190,7 +190,9 @@ public class NakamaStore : MonoBehaviour
         {
             var response = await _client.RpcAsync(_session, "watchRefreshShopAds");
 
-            // TODO refresh sho with response
+            var newDailyShopRequest = response.Payload.FromJson<CanClaimDailyShop>();
+
+            UIManager.Instance.MenuView.ShopPanel.UpdateDailyShopOffer(newDailyShopRequest.lastDailyShop);
         }
         catch (ApiResponseException ex)
         {
@@ -219,6 +221,7 @@ public class Offer
     public int gemsAmount;
     public Blast blast;
     public Item item;
+    public bool isBonus; // Front only
 }
 
 public class CanClaimDailyShop

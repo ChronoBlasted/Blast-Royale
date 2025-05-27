@@ -16,6 +16,7 @@ public class RewardedAdsButton : MonoBehaviour
     public void Init()
     {
         transform.gameObject.SetActive(false);
+        if (_adsReadyParticle != null) _adsReadyParticle.Stop();
 
         AdsManager.Instance.OnRewardedAdLoaded.AddListener(LoadedAd);
     }
@@ -63,6 +64,8 @@ public class RewardedAdsButton : MonoBehaviour
     {
         if (_bg != null)
         {
+            transform.gameObject.SetActive(false);
+
             _bg.sprite = _activeBG;
             _adsReadyParticle.Play();
 

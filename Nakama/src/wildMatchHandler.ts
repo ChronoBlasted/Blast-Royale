@@ -158,7 +158,6 @@ const matchInit = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
     };
 };
 
-// region MatchHandler 
 
 const matchJoinAttempt = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, dispatcher: nkruntime.MatchDispatcher, tick: number, state: WildBattleData, presence: nkruntime.Presence, metadata: { [key: string]: any }): { state: WildBattleData, accept: boolean, rejectMessage?: string | undefined } | null {
     logger.debug('%q attempted to join Lobby match', ctx.userId);
@@ -180,6 +179,8 @@ const matchJoin = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
     };
 }
 
+// region Leave 
+
 const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, dispatcher: nkruntime.MatchDispatcher, tick: number, state: WildBattleData, presences: nkruntime.Presence[]): { state: WildBattleData } | null {
     for (let presence of presences) {
         logger.info("Player: %s left match: %s.", presence.userId, ctx.matchId);
@@ -198,7 +199,12 @@ const matchLeave = function (ctx: nkruntime.Context, logger: nkruntime.Logger, n
             }
 
             if (state.index_progression > 1) {
-                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, 200 * (state.index_progression - 1))
+                let totalCoins = 200 * (state.index_progression - 1);
+
+                updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins)
+
+                if (getMetadataStat(nk, state.player1_id, "wildBattleButtonAds")) updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, totalCoins / 2)
+
 
                 writeBestRecordLeaderboard(nk, logger, state.player1_id, LeaderboardBestStageAreaId + getMetadataStat(nk, state.player1_id, "area"), state.index_progression - 1);
             }
@@ -563,14 +569,18 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                             break;
                         case OfferType.COINS:
                             updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, currentOffer.coinsAmount);
+
+                            if (getMetadataStat(nk, state.player1_id, "wildBattleButtonAds")) updateWalletWithCurrency(nk, state.player1_id, Currency.Coins, currentOffer.coinsAmount / 2)
                             break;
                         case OfferType.GEMS:
-                            updateWalletWithCurrency(nk, state.player1_id, Currency.Gems, currentOffer.coinsAmount);
+                            updateWalletWithCurrency(nk, state.player1_id, Currency.Gems, currentOffer.gemsAmount);
+
+                            if (getMetadataStat(nk, state.player1_id, "wildBattleButtonAds")) updateWalletWithCurrency(nk, state.player1_id, Currency.Gems, currentOffer.gemsAmount / 2)
                             break;
                         case OfferType.NONE:
                             break;
                     }
-
+                    
                     var newBlast = GetNewWildBlast(state, nk, logger);
 
                     state.wild_blast = ConvertBlastToBlastEntity(newBlast);

@@ -56,6 +56,8 @@ public class NakamaUserAccount : MonoBehaviour
 
         UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
         UIManager.Instance.AllAreaView.SetArea(_lastData.area);
+
+        if (_lastData.wildBattleButtonAds) UIManager.Instance.MenuView.FightPanel.WildBattleBonusAds.SetAdsOn();
     }
 
     #region ApiAccountUpdate
@@ -415,4 +417,6 @@ public class Metadata
     public int loose;
     public int blast_captured;
     public int blast_defeated;
+    public bool wildBattleButtonAds;
+
 }

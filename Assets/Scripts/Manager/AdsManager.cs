@@ -24,12 +24,8 @@ public class AdsManager : MonoSingleton<AdsManager>
     {
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
-            Debug.Log("Mobile Ads Initialized");
-
             LoadRewardedAd();
         });
-
-        RewardedAd.CanShowAd();
     }
 
     public void LoadRewardedAd()
@@ -39,8 +35,6 @@ public class AdsManager : MonoSingleton<AdsManager>
             RewardedAd.Destroy();
             RewardedAd = null;
         }
-
-        Debug.Log("Loading the rewarded ad.");
 
         var adRequest = new AdRequest();
 
@@ -53,9 +47,6 @@ public class AdsManager : MonoSingleton<AdsManager>
                                    "with error : " + error);
                     return;
                 }
-
-                Debug.Log("Rewarded ad loaded with response : "
-                          + ad.GetResponseInfo());
 
                 RewardedAd = ad;
 

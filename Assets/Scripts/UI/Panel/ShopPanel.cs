@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,6 +102,11 @@ public class ShopPanel : Panel
 
     public void HandleRefreshDailyShop()
     {
-        _ = NakamaManager.Instance.NakamaStore.RefreshDailyShop();
+        RefreshShop();
+    }
+
+    async void RefreshShop()
+    {
+        await NakamaManager.Instance.NakamaStore.RefreshDailyShop();
     }
 }

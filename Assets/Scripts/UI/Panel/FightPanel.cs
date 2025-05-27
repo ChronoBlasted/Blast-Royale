@@ -14,6 +14,7 @@ public class FightPanel : Panel
 
     public ProfileLayout ProfileLayout { get => _profileLayout; }
     public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
+    public RewardedAdsButton WildBattleBonusAds { get => _wildBattleBonusAds; }
 
     public override void Init()
     {
