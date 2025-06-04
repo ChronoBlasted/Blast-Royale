@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,24 +45,24 @@ public class Blast
 
     int CalculateBlastStat(int baseStat, int iv, int level)
     {
-        float result = (((2 * baseStat + iv) * level) / 100) + 5;
+        float result = ((baseStat + iv) * level) / 100 + 5;
 
         return Mathf.FloorToInt(result);
     }
 
+
     int CalculateBlastHp(int baseHp, int iv, int level)
     {
-        float result = (((2 * baseHp + iv) * level) / 100) + level + 10;
+        float result = ((baseHp + iv) * level) / 100 + level + 10;
         return Mathf.FloorToInt(result);
     }
 
     int CalculateBlastMana(float baseMana, float iv, float level)
     {
-        float halfLevel = level / 2f;
-
-        float result = (((2 * baseMana + iv) * halfLevel) / 100) + halfLevel + 10;
-        return Mathf.FloorToInt(result);
+        float mana = ((baseMana + iv) * level) / 100f + 10f;
+        return Mathf.FloorToInt(mana);
     }
+
 
     public int GetRatioExp()
     {

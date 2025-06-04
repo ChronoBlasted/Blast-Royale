@@ -53,6 +53,7 @@ public enum ResourceType
     DefenseReduce = 471,
     SpeedReduce = 472,
     Cleanse = 473,
+    Combo = 474,
 
     Wait = 490,
 

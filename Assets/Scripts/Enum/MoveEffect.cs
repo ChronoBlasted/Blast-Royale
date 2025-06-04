@@ -24,4 +24,12 @@ public enum MoveEffect
     SpeedReduce = ResourceType.SpeedReduce,
 
     Cleanse = ResourceType.Cleanse,
+    Combo = ResourceType.Combo,
+}
+
+public class MoveEffectData
+{
+    public MoveEffect effect { get; set; }
+    public int effectModifier { get; set; }
+    public Target effectTarget { get; set; }
 }

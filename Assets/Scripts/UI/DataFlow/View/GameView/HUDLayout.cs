@@ -90,20 +90,26 @@ public class HUDLayout : MonoBehaviour
 
     public void DoTakeDamageAnim(Blast defender, int damage, float effective)
     {
-        _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
+        if (defender != Blast)
+        {
+            _lastOpponentHUD.BlastInWorld.DoTakeDamageRender();
 
-        if (effective > 1) TimeManager.Instance.DoLagTime(.2f, .15f);
+            CameraManager.Instance.DoShakeCamera(4 * effective);
 
-        CameraManager.Instance.DoShakeCamera(4 * effective);
+            if (effective > 1) TimeManager.Instance.DoLagTime(.2f, .15f);
+        }
 
         if (_lastMoveDataRef.AttackAnimType == AA_Type.Distance)
         {
             StartCoroutine(HitCoroutineFX(.1f));
         }
 
-        StartCoroutine(HitCoroutine(damage, .1f, effective > 1));
+        if (damage > 0)
+        {
+            StartCoroutine(HitCoroutine(damage, .1f, effective > 1));
 
-        _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .1f);
+            _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .1f);
+        }
     }
 
     private IEnumerator HitCoroutineFX(float delay)

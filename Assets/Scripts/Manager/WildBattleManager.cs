@@ -192,7 +192,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _playerAction.MoveIndex,
                 moveDamage: _turnStateData.p_move_damage,
-                moveEffect: _turnStateData.p_move_effect,
+                moveEffects: _turnStateData.p_move_effects,
                 itemIndex: _playerAction.ItemIndex,
                 selectedBlastIndex: _playerAction.SelectedBlastIndex,
                 isCatched: _turnStateData.catched
@@ -212,7 +212,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _turnStateData.wb_move_index,
                 moveDamage: _turnStateData.wb_move_damage,
-                moveEffect: _turnStateData.wb_move_effect,
+                moveEffects: _turnStateData.wb_move_effects,
                 itemIndex: _wbAction.ItemIndex,
                 selectedBlastIndex: _wbAction.SelectedBlastIndex,
                 isCatched: false
@@ -234,7 +234,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _turnStateData.wb_move_index,
                 moveDamage: _turnStateData.wb_move_damage,
-                moveEffect: _turnStateData.wb_move_effect,
+                moveEffects: _turnStateData.wb_move_effects,
                 itemIndex: _wbAction.ItemIndex,
                 selectedBlastIndex: _wbAction.SelectedBlastIndex,
                 isCatched: false
@@ -254,7 +254,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                 players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                 moveIndex: _playerAction.MoveIndex,
                 moveDamage: _turnStateData.p_move_damage,
-                moveEffect: _turnStateData.p_move_effect,
+                moveEffects: _turnStateData.p_move_effects,
                 itemIndex: _playerAction.ItemIndex,
                 selectedBlastIndex: _playerAction.SelectedBlastIndex,
                 isCatched: _turnStateData.catched
@@ -278,7 +278,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                     players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                     moveIndex: -1,
                     moveDamage: 0,
-                    moveEffect: MoveEffect.None,
+                    moveEffects: null,
                     itemIndex: -1,
                     selectedBlastIndex: -1,
                     isCatched: false
@@ -302,7 +302,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
                     players: new List<PlayerBattleInfo> { _playerMeInfo, _playerWildInfo },
                     moveIndex: -1,
                     moveDamage: 0,
-                    moveEffect: MoveEffect.None,
+                    moveEffects: null,
                     itemIndex: -1,
                     selectedBlastIndex: -1,
                     isCatched: false
@@ -431,7 +431,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         {
             _wbAction.MoveIndex = turnState.wb_move_index;
             _wbAction.MoveDamage = turnState.wb_move_damage;
-            _wbAction.MoveEffect = turnState.wb_move_effect;
+            _wbAction.MoveEffects = turnState.wb_move_effects;
         }
     }
 
@@ -579,7 +579,7 @@ public class WildBattleManager : MonoSingleton<WildBattleManager>
         _playerAction.TurnType = TurnType.ATTACK;
         _playerAction.MoveIndex = moveIndex;
         _playerAction.MoveDamage = 0;
-        _playerAction.MoveEffect = MoveEffect.None;
+        _playerAction.MoveEffects = null;
     }
 
     private void SetPlayerActionItem(int itemIndex, int selectedBlastIndex)
@@ -647,7 +647,7 @@ public struct TurnAction
     public TurnType TurnType;
     public int MoveIndex;
     public int MoveDamage;
-    public MoveEffect MoveEffect;
+    public List<MoveEffectData> MoveEffects;
     public int ItemIndex;
     public int SelectedBlastIndex;
 }

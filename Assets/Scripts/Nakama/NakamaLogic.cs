@@ -17,21 +17,27 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         int attackerLevel,
         float attackerAttack,
         float defenderDefense,
-        Type moveType,
+        Type attackType,
         Type defenderType,
-        int movePower,
+        float movePower,
         Meteo meteo
     )
     {
-        float weatherModifier = CalculateWeatherModifier(meteo, moveType);
-        float typeMultiplier = GetTypeMultiplier(moveType, defenderType);
+        float weatherModifier = CalculateWeatherModifier(meteo, attackType);
 
-        float baseDamage = ((2f * attackerLevel / 5f + 2f) * movePower * typeMultiplier * ((float)attackerAttack / defenderDefense)) / 50f;
+        float typeMultiplier = GetTypeMultiplier(attackType, defenderType);
 
-        float finalDamage = baseDamage * weatherModifier;
+        float baseDamage = (
+            (2f * attackerLevel / 5f + 2f)   
+            * movePower                      
+            * (attackerAttack / defenderDefense) 
+        ) / 50f;                           
 
-        return Mathf.FloorToInt(finalDamage);
+        float damage = baseDamage * typeMultiplier * weatherModifier;
+
+        return Mathf.FloorToInt(damage);
     }
+
 
     public static bool IsBlastAlive(Blast blast)
     {
@@ -133,11 +139,11 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         }
     }
 
-    public static Blast ApplyEffectToBlast(Blast blast, Move move)
+    public static Blast ApplyEffectToBlast(Blast blast, Move move, MoveEffectData moveEffectData)
     {
         var isStatusMove = move.attackType == AttackType.Status;
 
-        switch (move.effect)
+        switch (moveEffectData.effect)
         {
             case MoveEffect.Burn:
                 blast.status = Status.Burn;
@@ -171,27 +177,27 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
                 break;
 
             case MoveEffect.AttackBoost:
-                blast.ApplyModifier(MoveEffect.AttackBoost, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.AttackBoost, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.DefenseBoost:
-                blast.ApplyModifier(MoveEffect.DefenseBoost, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.DefenseBoost, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.SpeedBoost:
-                blast.ApplyModifier(MoveEffect.SpeedBoost, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.SpeedBoost, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.AttackReduce:
-                blast.ApplyModifier(MoveEffect.AttackReduce, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.AttackReduce, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.DefenseReduce:
-                blast.ApplyModifier(MoveEffect.DefenseReduce, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.DefenseReduce, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.SpeedReduce:
-                blast.ApplyModifier(MoveEffect.SpeedReduce, isStatusMove ? move.power : 1);
+                blast.ApplyModifier(MoveEffect.SpeedReduce, isStatusMove ? moveEffectData.effectModifier : 1);
                 break;
 
             case MoveEffect.Cleanse:

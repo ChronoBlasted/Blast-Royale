@@ -52,10 +52,11 @@ public class BlastInWorld : MonoBehaviour
         BlastRender.transform.DOMove(position, 0.5f).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
     }
 
-    public void DoSelfRender()
+    public void DoSelfRenderPunchPosition(Vector3 punchPower)
     {
-        BlastRender.transform.DOPunchPosition(new Vector3(0, .25f, 0), .5f, 1, 1);
+        BlastRender.transform.DOPunchPosition(punchPower, .5f, 1, 1);
     }
+
 
     public void DoCastProjectile(Vector3 direction)
     {

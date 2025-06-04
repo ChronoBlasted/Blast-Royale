@@ -86,6 +86,7 @@ public class NakamaWildBattle : MonoBehaviour
 
             case NakamaOpCode.MATCH_ROUND:
                 var _turnState = messageJson.FromJson<TurnStateData>();
+
                 WildBattleManager.Instance.PlayTurn(_turnState);
                 break;
             case NakamaOpCode.MATCH_END:
@@ -291,12 +292,12 @@ public class NewBlastData
 public class TurnStateData
 {
     public int p_move_damage;
-    public MoveEffect p_move_effect;
+    public List<MoveEffectData> p_move_effects;
 
     public TurnType wb_turn_type;
     public int wb_move_index;
     public int wb_move_damage;
-    public MoveEffect wb_move_effect;
+    public List<MoveEffectData> wb_move_effects;
 
     public bool catched;
 }

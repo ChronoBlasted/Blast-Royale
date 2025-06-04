@@ -11,20 +11,20 @@ public class GameLogicContext
 
     public int MoveIndex;
     public int MoveDamage;
-    public MoveEffect MoveEffect;
+    public List<MoveEffectData> MoveEffects;
 
     public int ItemIndex;
     public int SelectedBlastIndex;
     public bool IsCatched;
 
-    public GameLogicContext(Blast attacker, Blast defender, List<PlayerBattleInfo> players, int moveIndex, int moveDamage, MoveEffect moveEffect, int itemIndex, int selectedBlastIndex, bool isCatched)
+    public GameLogicContext(Blast attacker, Blast defender, List<PlayerBattleInfo> players, int moveIndex, int moveDamage, List<MoveEffectData> moveEffects, int itemIndex, int selectedBlastIndex, bool isCatched)
     {
         Attacker = attacker;
         Defender = defender;
         Players = players;
         MoveIndex = moveIndex;
         MoveDamage = moveDamage;
-        MoveEffect = moveEffect;
+        MoveEffects = moveEffects;
         ItemIndex = itemIndex;
         SelectedBlastIndex = selectedBlastIndex;
         IsCatched = isCatched;

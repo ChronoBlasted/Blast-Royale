@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PediaView : View
@@ -18,6 +19,8 @@ public class PediaView : View
     public override void Init()
     {
         base.Init();
+
+        ClearChilds();
     }
 
     public override void OpenView(bool _instant = false)
@@ -55,9 +58,9 @@ public class PediaView : View
         }
     }
 
-    public void UpdateMovePedia(List<Move> allItems)
+    public void UpdateMovePedia(List<Move> allMoves)
     {
-        foreach (var item in allItems)
+        foreach (var item in allMoves)
         {
             PediaMoveLayout pediaBlastLayout = Instantiate(_moveLayoutPrefab, _moveTransform);
             pediaBlastLayout.Init(item);
@@ -65,6 +68,11 @@ public class PediaView : View
     }
 
     private void OnApplicationQuit()
+    {
+        ClearChilds();
+    }
+
+    private void ClearChilds()
     {
         foreach (Transform t in _pediaBlastTransform.transform)
         {

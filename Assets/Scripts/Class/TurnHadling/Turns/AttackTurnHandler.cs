@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEngine;
 
 public class AttackTurnHandler : TurnActionHandler
 {
@@ -22,7 +23,13 @@ public class AttackTurnHandler : TurnActionHandler
 
         target.Hp -= context.MoveDamage;
 
-        if (context.MoveEffect != MoveEffect.None) target = NakamaLogic.ApplyEffectToBlast(target, move);
+        if (context.MoveEffects != null && context.MoveEffects.Count > 0)
+        {
+            foreach (var effect in context.MoveEffects)
+            {
+                target = NakamaLogic.ApplyEffectToBlast(target, move, effect);
+            }
+        }
 
         if (move.attackType != AttackType.None)
         {
@@ -30,6 +37,6 @@ public class AttackTurnHandler : TurnActionHandler
                 context.Attacker.Mana -= move.cost;
         }
 
-        await gameView.BlastAttack(CurrentPlayerAttacker.OwnerType == BlastOwner.Me, context.Attacker, target, move, context.MoveDamage, context.MoveEffect);
+        await gameView.BlastAttack(CurrentPlayerAttacker.OwnerType == BlastOwner.Me, context.Attacker, target, move, context.MoveDamage, context.MoveEffects);
     }
 }

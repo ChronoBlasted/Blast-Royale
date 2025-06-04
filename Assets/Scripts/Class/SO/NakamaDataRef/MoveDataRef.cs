@@ -7,4 +7,5 @@ public class MoveDataRef : NakamaDataRef
     public ParticleSystem ParticleSystem;
     public AAData AA_Data;
     public AA_Type AttackAnimType;
+
 }

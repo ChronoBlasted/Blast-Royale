@@ -2,15 +2,15 @@ const healManaPerRound = 20;
 const healManaPerWait = 50;
 
 function calculateBlastStat(baseStat: number, iv: number, level: number): number {
-    return Math.floor(((2 * baseStat + iv) * level) / 100 + 5);
+    return Math.floor(((baseStat + iv) * level) / 100) + 5;
 }
 
 function calculateBlastHp(baseHp: number, iv: number, level: number): number {
-    return Math.floor(((2 * baseHp + iv) * level) / 100 + level + 10);
+    return Math.floor(((baseHp + iv) * level) / 100) + level + 10;
 }
 
 function calculateBlastMana(baseMana: number, iv: number, level: number): number {
-    return Math.floor(((2 * baseMana + iv) * (level / 2)) / 100 + (level / 2) + 10);
+    return Math.floor(((baseMana + iv) * level) / 100) + 10;
 }
 
 function calculateLevelFromExperience(experience: number): number {
@@ -52,10 +52,7 @@ function ConvertBlastToBlastEntity(blast: Blast): BlastEntity {
     return blastEntity as BlastEntity;
 }
 
-
-
 //#region Battle
-
 
 function addPlatformType(p_platform: Type[], newType: Type): Type[] {
     if (p_platform.length < 3) {
@@ -95,11 +92,15 @@ function calculateDamage(
     meteo: Meteo,
 ): number {
     const weatherModifier = calculateWeatherModifier(meteo, attackType);
+    const typeMultiplier = getTypeMultiplier(attackType, defenderType);
 
-    const damage: number = ((2 * attackerLevel / 5 + 2) * movePower * getTypeMultiplier(attackType, defenderType) * (attackerAttack / defenderDefense) / 50) * weatherModifier;
+    const baseDamage = ((2 * attackerLevel / 5 + 2) * movePower * (attackerAttack / defenderDefense)) / 50;
+
+    const damage = baseDamage * typeMultiplier * weatherModifier;
 
     return Math.floor(damage);
 }
+
 
 function getTypeMultiplier(moveType: Type, defenderType: Type): number {
     switch (moveType) {
@@ -232,7 +233,7 @@ function calculateWeatherModifier(weather: Meteo, moveType: Type): number {
     return modifier;
 }
 
-function calculateEffectWithProbability(blast: BlastEntity, move: Move): { blast: BlastEntity, moveEffect: MoveEffect } {
+function calculateEffectWithProbability(blast: BlastEntity, move: Move,effectData: MoveEffectData): { blast: BlastEntity, moveEffect: MoveEffectData } {
     const statusEffectProbabilities: { [key in MoveEffect]?: number } = {
         [MoveEffect.Burn]: 0.1,
         [MoveEffect.Seeded]: 0.1,
@@ -250,21 +251,20 @@ function calculateEffectWithProbability(blast: BlastEntity, move: Move): { blast
         [MoveEffect.Cleanse]: 0.5,
     };
 
-    // Ajuste la probabilité en fonction de l'entrée "probability"
-    const effectProbability = statusEffectProbabilities[move.effect!];
+    const effectProbability = statusEffectProbabilities[effectData.effect!];
     if (Math.random() < effectProbability!) {
-        return { blast: applyEffect(blast, move), moveEffect: move.effect! };
+        return { blast: applyEffect(blast, move,effectData), moveEffect: effectData! };
     }
 
-    return { blast, moveEffect: MoveEffect.None };
+    return { blast, moveEffect: { effect: MoveEffect.None, effectModifier: 0 ,effectTarget: Target.None} };
 }
 
 
-function applyEffect(blast: BlastEntity, move: Move): BlastEntity {
+function applyEffect(blast: BlastEntity, move: Move,effectData: MoveEffectData): BlastEntity {
 
     var isStatusMove = move.attackType === AttackType.Status;
 
-    switch (move.effect) {
+    switch (effectData.effect) {
         case MoveEffect.Burn:
             blast.status = Status.Burn;
             break;
@@ -293,23 +293,23 @@ function applyEffect(blast: BlastEntity, move: Move): BlastEntity {
             break;
 
         case MoveEffect.AttackBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? move.power : 1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? effectData.effectModifier : 1);
             break;
         case MoveEffect.DefenseBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? move.power : 1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? effectData.effectModifier : 1);
 
             break;
         case MoveEffect.SpeedBoost:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? move.power : 1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? effectData.effectModifier : 1);
             break;
         case MoveEffect.AttackReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? -move.power : -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Attack, isStatusMove ? -effectData.effectModifier : -1);
             break;
         case MoveEffect.DefenseReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? -move.power : -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Defense, isStatusMove ? -effectData.effectModifier : -1);
             break;
         case MoveEffect.SpeedReduce:
-            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? -move.power : -1);
+            blast.modifiers = updateModifier(blast.modifiers, Stats.Speed, isStatusMove ? -effectData.effectModifier : -1);
             break;
 
         case MoveEffect.Cleanse:

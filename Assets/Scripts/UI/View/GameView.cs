@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -369,7 +370,7 @@ public class GameView : View
         _dialogLayout.Hide();
     }
 
-    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, MoveEffect moveEffect)
+    public async Task BlastAttack(bool isPlayer, Blast attacker, Blast defender, Move move, int damage, List<MoveEffectData> moveEffects)
     {
         HUDLayout attackerHUD = null;
         HUDLayout defenderHUD = null;
@@ -420,22 +421,26 @@ public class GameView : View
 
         // TODO Mettre FX super efficace / pas super efficace
 
-        if (moveEffect != MoveEffect.None)
+        foreach (var effect in moveEffects)
         {
-            string dialogText;
-            dialogText = NakamaLogic.GetEffectMessage(moveEffect);
+            if (effect.effect != MoveEffect.None)
+            {
+                string dialogText;
+                dialogText = NakamaLogic.GetEffectMessage(effect.effect);
 
-            defenderHUD.SetStatus(defender.status);
+                defenderHUD.SetStatus(defender.status);
 
-            var isStatusMove = move.attackType == AttackType.Status;
-            defenderHUD.AddModifier(moveEffect, isStatusMove ? move.power : 1);
+                var isStatusMove = move.attackType == AttackType.Status;
+                defenderHUD.AddModifier(effect.effect, isStatusMove ? effect.effectModifier : 1);
 
-            Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)moveEffect).Prefab, defenderHUD.BlastInWorld.transform);
+                Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)effect.effect).Prefab, defenderHUD.BlastInWorld.transform);
 
-            defenderHUD.BlastInWorld.DoTakeDamageRender();
+                defenderHUD.BlastInWorld.DoTakeDamageRender();
 
-            await Task.Delay(TimeSpan.FromMilliseconds(500));
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+            }
         }
+
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }

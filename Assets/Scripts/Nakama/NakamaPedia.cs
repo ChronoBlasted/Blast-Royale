@@ -75,7 +75,6 @@ public class NakamaPedia : MonoBehaviour
 
             NakamaData.Instance.MovePedia = _movePedia;
 
-            //Update Squad Panel
             UIManager.Instance.PediaView.UpdateMovePedia(_movePedia);
 
         }

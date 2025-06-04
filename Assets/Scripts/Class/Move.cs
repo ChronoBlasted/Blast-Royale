@@ -10,7 +10,7 @@ public class Move
     public int power;
     public int cost;
     public int priority;
-    public MoveEffect effect;
+    public MoveEffectData effects;
 }
 
 
