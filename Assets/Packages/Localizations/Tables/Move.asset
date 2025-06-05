@@ -22,6 +22,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 3240046474598285313
+      type: {class: KeyCommentColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
+      data:
+        m_Column: B
     - rid: 9175640416847134727
       type: {class: GoogleSheetsExtension, ns: UnityEditor.Localization.Plugins.Google, asm: Unity.Localization.Editor}
       data:
@@ -33,6 +37,7 @@ MonoBehaviour:
         - rid: 9175640416847134733
         - rid: 9175640416847134734
         - rid: 9175640416847134735
+        - rid: 3240046474598285313
         m_RemoveMissingPulledKeys: 1
     - rid: 9175640416847134733
       type: {class: KeyColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
@@ -41,14 +46,14 @@ MonoBehaviour:
     - rid: 9175640416847134734
       type: {class: LocaleColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
       data:
-        m_Column: B
+        m_Column: C
         m_LocaleIdentifier:
           m_Code: en
         m_IncludeComments: 0
     - rid: 9175640416847134735
       type: {class: LocaleColumn, ns: UnityEditor.Localization.Plugins.Google.Columns, asm: Unity.Localization.Editor}
       data:
-        m_Column: C
+        m_Column: D
         m_LocaleIdentifier:
           m_Code: fr
         m_IncludeComments: 0
