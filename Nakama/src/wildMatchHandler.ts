@@ -831,7 +831,7 @@ function executeAttack(ctx: AttackContext): void {
         );
         ctx.setMoveDamage(damage);
     }
-}function executePlayerAttack(
+} function executePlayerAttack(
     state: WildBattleData,
     move: Move,
     dispatcher: nkruntime.MatchDispatcher
@@ -899,7 +899,7 @@ function executeWildBlastAttack(
     dispatcher: nkruntime.MatchDispatcher,
     logger: nkruntime.Logger
 ): { state: WildBattleData } {
-    
+
     const moveIndex = state.turnStateData.wb_move_index;
     if (moveIndex === -1) {
         state.wild_blast!.mana = calculateManaRecovery(
@@ -1022,3 +1022,4 @@ function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkr
 
     return offer;
 }   
+

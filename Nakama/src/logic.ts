@@ -525,3 +525,24 @@ function shuffleArray<T>(array: T[]): T[] {
 function msecToSec(n: number): number {
     return Math.floor(n / 1000);
 }
+
+function isDailyResetDue(lastResetUnix: number): boolean {
+  if (!lastResetUnix) lastResetUnix = 0;
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  return lastResetUnix < msecToSec(now.getTime());
+}
+
+
+function getBlastVersion(blast: Blast) : number {
+
+    if (blast.shiny) {
+        return 3;
+    } else if (blast.boss) {
+        return 2;
+    } else {
+        return 1;
+    }
+}

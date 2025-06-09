@@ -73,6 +73,12 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
         throw error;
     }
 
+    initializeBlastTrackerData(ctx.userId, nk, logger);
+    
+    markMonsterCaptured(ctx.userId, Lizzy.id.toString(), 1, nk, logger);
+    markMonsterCaptured(ctx.userId, Punchball.id.toString(), 1, nk, logger);
+    markMonsterCaptured(ctx.userId, Jellys.id.toString(), 1, nk, logger);
+
     logger.debug('new user id: %s account data initialised', ctx.userId);
 }
 

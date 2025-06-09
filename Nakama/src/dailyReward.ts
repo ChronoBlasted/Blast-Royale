@@ -10,6 +10,12 @@ interface Reward {
     itemReceived: Item | null
 }
 
+interface DailyRewardData {
+    lastClaimUnix: number;
+    totalDay: number;
+    version?: string;
+}
+
 function getLastDailyRewardObject(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): any {
     if (!context.userId) {
         throw Error('No user ID in context');
@@ -33,30 +39,20 @@ function getLastDailyRewardObject(context: nkruntime.Context, logger: nkruntime.
         throw error;
     }
 
-    var dailyReward: any = {
+    var dailyReward: DailyRewardData = {
         lastClaimUnix: 0,
         totalDay: 0,
-    }
+    };
 
     objects.forEach(function (object) {
         if (object.key == DailyRewardCollectionKey) {
-            dailyReward = object.value;
+            dailyReward = object.value as DailyRewardData;
         }
     });
 
     return dailyReward;
 }
 
-function canUserClaimDailyReward(dailyReward: any) {
-    if (!dailyReward.lastClaimUnix) {
-        dailyReward.lastClaimUnix = 0;
-    }
-
-    var d = new Date();
-    d.setHours(0, 0, 0, 0);
-
-    return dailyReward.lastClaimUnix < msecToSec(d.getTime());
-}
 
 function getTotalDayConnected(dailyReward: any): number {
     if (!dailyReward.totalDay) {
@@ -69,7 +65,7 @@ function getTotalDayConnected(dailyReward: any): number {
 function rpcCanClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
     var dailyReward = getLastDailyRewardObject(context, logger, nk, payload);
     var response = {
-        canClaimDailyReward: canUserClaimDailyReward(dailyReward),
+        canClaimDailyReward: isDailyResetDue(dailyReward.lastClaimUnix),
         totalDayConnected: dailyReward.totalDay,
     }
 
@@ -78,6 +74,7 @@ function rpcCanClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Lo
 
     return result;
 }
+
 
 function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
 
@@ -88,9 +85,9 @@ function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logge
         itemReceived: null,
     };
 
-    var dailyReward = getLastDailyRewardObject(context, logger, nk, payload);
+    var dailyReward = getLastDailyRewardObject(context, logger, nk, payload) as DailyRewardData;
 
-    if (canUserClaimDailyReward(dailyReward)) {
+    if (isDailyResetDue(dailyReward.lastClaimUnix)) {
 
         var totalDay = getTotalDayConnected(dailyReward);
         reward = getDayReward(totalDay);
@@ -114,12 +111,12 @@ function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logge
                 userId: context.userId,
             }
 
-                    try {
-            nk.notificationsSend([notification]);
-        } catch (error) {
-            logger.error('notificationsSend error: %q', error);
-            throw error;
-        }
+            try {
+                nk.notificationsSend([notification]);
+            } catch (error) {
+                logger.error('notificationsSend error: %q', error);
+                throw error;
+            }
 
         }
         if (reward.gemsReceived != 0) {
@@ -162,7 +159,6 @@ function rpcClaimDailyReward(context: nkruntime.Context, logger: nkruntime.Logge
         }
 
         if (dailyReward.version) {
-            // Use OCC to prevent concurrent writes.
             write.version = dailyReward.version
         }
 
@@ -195,15 +191,17 @@ const allReward: Reward[] = [
     { coinsReceived: 2000, gemsReceived: 0, blastReceived: null, itemReceived: null },
     { coinsReceived: 0, gemsReceived: 30, blastReceived: null, itemReceived: null },
     { coinsReceived: 5000, gemsReceived: 0, blastReceived: null, itemReceived: null },
-    { coinsReceived: 0, gemsReceived: 0, blastReceived: { 
-        uuid: generateUUID(), 
-        data_id: Clawball.id,
-        exp: calculateExperienceFromLevel(10), 
-        iv: getRandomIV(), 
-        boss: false, 
-        shiny: true, 
-        activeMoveset: getRandomActiveMoveset(Clawball, calculateExperienceFromLevel(10)) 
-    }, itemReceived: null },
+    {
+        coinsReceived: 0, gemsReceived: 0, blastReceived: {
+            uuid: generateUUID(),
+            data_id: Clawball.id,
+            exp: calculateExperienceFromLevel(10),
+            iv: getRandomIV(),
+            boss: false,
+            shiny: true,
+            activeMoveset: getRandomActiveMoveset(Clawball, calculateExperienceFromLevel(10))
+        }, itemReceived: null
+    },
 ];
 
 const rpcLoadAllDailyReward: nkruntime.RpcFunction =

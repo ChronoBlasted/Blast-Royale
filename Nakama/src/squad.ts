@@ -263,6 +263,10 @@ function addBlast(nk: nkruntime.Nakama, logger: nkruntime.Logger, userId: string
         userCards.storedBlasts[userCards.storedBlasts.length] = newBlastToAdd;
     }
 
+    let version = getBlastVersion(newBlastToAdd);
+
+    markMonsterCaptured(userId, newBlastToAdd.data_id.toString(), version, nk, logger);
+
     storeUserBlasts(nk, logger, userId, userCards);
 
     logger.debug("user '%s' succesfully add blast with id '%s'", userId, newBlastToAdd.data_id);

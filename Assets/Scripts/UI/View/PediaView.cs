@@ -16,6 +16,8 @@ public class PediaView : View
 
     [SerializeField] NavBar _pediaNavBar;
 
+    List<PediaBlastLayout> _pediaBlastLayouts = new List<PediaBlastLayout>();
+
     public override void Init()
     {
         base.Init();
@@ -42,10 +44,14 @@ public class PediaView : View
 
     public void UpdateBlastPedia(List<BlastData> allBlasts)
     {
+        _pediaBlastLayouts.Clear();
+
         foreach (var blast in allBlasts)
         {
             PediaBlastLayout pediaBlastLayout = Instantiate(_pediaBlastLayoutPrefab, _pediaBlastTransform);
             pediaBlastLayout.Init(blast);
+
+            _pediaBlastLayouts.Add(pediaBlastLayout);
         }
     }
 

@@ -852,7 +852,6 @@ const Cerberus: BlastData = { // Cerberus
 };
 
 const blastPedia: BlastData[] = [
-    Pantin,
     Lizzy,
     Punchball,
     Jellys,
