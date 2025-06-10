@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class NakamaData : MonoSingleton<NakamaData>
@@ -15,6 +16,7 @@ public class NakamaData : MonoSingleton<NakamaData>
     [SerializeField] List<MoveDataRef> _allMoveData;
     [SerializeField] List<AreaDataRef> _allAreaDataRef;
     [SerializeField] List<StoreOfferDataRef> _allStoreOfferDataRef;
+    [SerializeField] List<QuestDataRef> _allQuestDataRef;
 
     BlastCollection _blastCollection;
     ItemCollection _itemCollection;
@@ -69,6 +71,11 @@ public class NakamaData : MonoSingleton<NakamaData>
     {
         return _allStoreOfferDataRef.Find(x => x.DataID == id);
     }
+    public QuestDataRef GetQuestDataRefByIds(string id)
+    {
+        return _allQuestDataRef.Find(x => x.QuestIds.ToString() == id);
+    }
+
 
     public BlastData GetBlastDataById(int id)
     {
@@ -82,6 +89,8 @@ public class NakamaData : MonoSingleton<NakamaData>
     {
         return _movePedia.Find(x => x.id == id);
     }
+
+
 
 #if UNITY_EDITOR
     [ContextMenu("Load All Ref")]
@@ -110,6 +119,11 @@ public class NakamaData : MonoSingleton<NakamaData>
         _allStoreOfferDataRef = AssetDatabase.FindAssets("t:StoreOfferDataRef")
             .Select(AssetDatabase.GUIDToAssetPath)
             .Select(AssetDatabase.LoadAssetAtPath<StoreOfferDataRef>)
+            .ToList();
+
+        _allQuestDataRef = AssetDatabase.FindAssets("t:QuestDataRef")
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Select(AssetDatabase.LoadAssetAtPath<QuestDataRef>)
             .ToList();
 
         EditorUtility.SetDirty(this);

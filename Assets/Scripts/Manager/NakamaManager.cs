@@ -19,6 +19,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
     [field: SerializeField] public NakamaWildBattle NakamaWildBattle { get; protected set; }
     [field: SerializeField] public NakamaNotifications NakamaNotifications { get; protected set; }
     [field: SerializeField] public NakamaBlastTracker NakamaBlastTracker { get; protected set; }
+    [field: SerializeField] public NakamaQuest NakamaQuest { get; protected set; }
 
     public IClient Client { get; private set; }
     public ISession Session { get; private set; }
@@ -50,6 +51,8 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         await NakamaLeaderboards.Init(Client, Session);
 
         await NakamaStore.Init(Client, Session);
+
+        await NakamaQuest.Init(Client, Session);
 
         NakamaNotifications.Init(Client, Session, Socket);
 

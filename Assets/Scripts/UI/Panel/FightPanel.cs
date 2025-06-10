@@ -62,4 +62,9 @@ public class FightPanel : Panel
         NakamaManager.Instance.NakamaWildBattle.HandleOnBonusRewardsAds();
     }
 
+    public void HandleOnOpenQuest()
+    {
+        UIManager.Instance.QuestPopup.OpenPopup();
+    }
+
 }

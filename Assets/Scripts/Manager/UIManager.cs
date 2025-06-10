@@ -56,6 +56,7 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
     [field: SerializeField] public TypeInfoPopup TypeInfoPopup { get; protected set; }
     [field: SerializeField] public WildBattleOfferPopup WildBattleOfferPopup { get; protected set; }
+    [field: SerializeField] public QuestPopup QuestPopup { get; protected set; }
 
     View _currentView;
 
