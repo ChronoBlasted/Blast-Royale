@@ -53,6 +53,20 @@ public class NakamaQuest : MonoBehaviour
             Debug.LogFormat("Error: {0}", ex.Message);
         }
     }
+
+    public async Task ClaimAdQuest()
+    {
+        try
+        {
+            var response = await _client.RpcAsync(_session, "claimAdQuest");
+
+            // TODO handle ad quest reward
+        }
+        catch (ApiResponseException ex)
+        {
+            Debug.LogFormat("Error: {0}", ex.Message);
+        }
+    }
 }
 
 public class DailyQuestData

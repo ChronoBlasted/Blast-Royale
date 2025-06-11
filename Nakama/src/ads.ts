@@ -6,9 +6,6 @@ function rpcWatchWildBattleAds(context: nkruntime.Context, logger: nkruntime.Log
     setMetadataStat(nk, userId, WildBattleAds, true);
 }
 
-
-
-
 function rpcWatchRefreshShopAds(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
     if (!context.userId) {
         throw Error('No user ID in context');
@@ -38,4 +35,12 @@ function rpcWatchRefreshShopAds(context: nkruntime.Context, logger: nkruntime.Lo
     }
 
     return JSON.stringify(dailyShop);
+}
+
+function rpcWatchQuestAds(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string){
+    if (!context.userId) {
+        throw Error('No user ID in context');
+    }
+
+    incrementQuest(context.userId, QuestIds.WATCH_AD, 1, nk, logger);
 }

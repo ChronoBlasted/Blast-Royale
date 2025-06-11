@@ -7,6 +7,7 @@ public class QuestLayout : MonoBehaviour
     [SerializeField] TMP_Text _questName, _questDesc, _questAmount;
     [SerializeField] Slider _questSlider;
     [SerializeField] Image _questIco, _bg, _checkIco;
+    [SerializeField] GameObject _adsLayout, _sliderLayout;
 
     [SerializeField] Color _activeColor, _finishedColor;
     DailyQuestData data;
@@ -30,5 +31,13 @@ public class QuestLayout : MonoBehaviour
         _questSlider.value = data.progress;
 
         _questIco.sprite = dataRef.QuestIco;
+
+        _adsLayout.SetActive(dataRef.QuestIds == QuestIds.watch_ad);
+        _sliderLayout.SetActive(dataRef.QuestIds != QuestIds.watch_ad);
+    }
+
+    public async void HandleOnWatchAdQuest()
+    {
+        await NakamaManager.Instance.NakamaQuest.ClaimAdQuest();
     }
 }
