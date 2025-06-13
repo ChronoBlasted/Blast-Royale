@@ -24,8 +24,13 @@ public class GameManager : MonoSingleton<GameManager>
         CameraManager.Instance.Init();
 
         NakamaManager.Instance.Init();
+    }
 
+    public void AfterNakamaInit()
+    {
         AdsManager.Instance.Init();
+
+        GameStateManager.Instance.UpdateStateToMenu();
     }
 
     void Update()

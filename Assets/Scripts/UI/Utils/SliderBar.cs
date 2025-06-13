@@ -15,6 +15,7 @@ public class SliderBar : MonoBehaviour
     Tweener _fillDelayedTween;
     Tweener _fillRecoverTween;
 
+    public Slider Slider { get => slider; }
 
     public void Init(float value, float maxValue)
     {
@@ -61,15 +62,15 @@ public class SliderBar : MonoBehaviour
         {
             _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
 
-            _fillTween = slider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
             _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
+            _fillTween = slider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
         }
         else
         {
-            _fillTween = slider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
-            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
-
             _fillDelayedTween = delayedSlider.DOValue(newValue, duration * 2f).SetDelay(delay).SetEase(Ease.Linear);
+
+            _fillRecoverTween = recoverSlider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
+            _fillTween = slider.DOValue(newValue, duration).SetDelay(delay).SetEase(ease);
         }
     }
 

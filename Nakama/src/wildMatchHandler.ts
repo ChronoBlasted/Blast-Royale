@@ -374,10 +374,7 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
                                 if (wildBlastCaptured) {
                                     logger.debug('Wild blast Captured !', wildBlastCaptured);
 
-                                    addBlast(nk, logger, state.player1_id, state.wild_blast!);
-
                                     state.battle_state = BattleState.END;
-
                                 }
 
                                 state.turnStateData.catched = wildBlastCaptured;
@@ -607,9 +604,15 @@ const matchLoop = function (ctx: nkruntime.Context, logger: nkruntime.Logger, nk
 
                 if (state.turnStateData.catched) {
                     state.blast_catched++;
+
+                    incrementQuest(state.player1_id, QuestIds.CATCH_BLAST, 1, nk, logger);
+
+                    addBlast(nk, logger, state.player1_id, state.wild_blast!);
                 }
                 else {
                     state.blast_defeated++;
+
+                    incrementQuest(state.player1_id, QuestIds.DEFEAT_BLAST, 1, nk, logger);
                 }
 
                 if (state.index_progression % 5 == 0 && state.index_progression % 10 != 0) {
@@ -1021,5 +1024,5 @@ function getRandomOffer(nk: nkruntime.Nakama, state: WildBattleData, logger: nkr
     }
 
     return offer;
-}   
+}
 

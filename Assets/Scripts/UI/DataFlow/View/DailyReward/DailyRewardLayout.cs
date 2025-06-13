@@ -26,7 +26,7 @@ public class DailyRewardLayout : MonoBehaviour
 
         if (reward.coinsReceived > 0)
         {
-            _rewardAmount.text = reward.coinsReceived.ToString();
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.coinsReceived);
 
             if (reward.coinsReceived <= 1000)
             {
@@ -47,7 +47,7 @@ public class DailyRewardLayout : MonoBehaviour
         }
         else if (reward.gemsReceived > 0)
         {
-            _rewardAmount.text = reward.gemsReceived.ToString();
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.gemsReceived);
 
             if (reward.gemsReceived <= 5)
             {

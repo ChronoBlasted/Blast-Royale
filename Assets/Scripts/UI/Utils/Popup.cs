@@ -6,6 +6,8 @@ public class Popup : MonoBehaviour
     [SerializeField] protected CanvasGroup _canvasGroup;
     [SerializeField] protected ChronoTweenSequence _tweenSequence;
 
+    bool _triggerBlackShade;
+
     public virtual void Init()
     {
         _canvasGroup.blocksRaycasts = false;
@@ -15,9 +17,11 @@ public class Popup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public virtual void OpenPopup(bool openBlackShade = true, bool openCloseButton = true)
+    public virtual void OpenPopup(bool triggerBlackShade = true, bool openCloseButton = true)
     {
-        if (openBlackShade) UIManager.Instance.BlackShadeView.ShowBlackShade(ClosePopup, openCloseButton);
+        _triggerBlackShade = triggerBlackShade;
+
+        if (_triggerBlackShade) UIManager.Instance.BlackShadeView.ShowBlackShade(ClosePopup, openCloseButton);
 
         gameObject.SetActive(true);
 
@@ -36,9 +40,9 @@ public class Popup : MonoBehaviour
 
     public virtual void OpenPopup() => OpenPopup(true);
 
-    public virtual void ClosePopup(bool shouldCloseBlackShade = true)
+    public virtual void ClosePopup()
     {
-        if (shouldCloseBlackShade) UIManager.Instance.BlackShadeView.HideBlackShade();
+        if (_triggerBlackShade) UIManager.Instance.BlackShadeView.HideBlackShade();
 
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
@@ -49,7 +53,4 @@ public class Popup : MonoBehaviour
             })
             .SetUpdate(UpdateType.Normal, true);
     }
-
-    public virtual void ClosePopup() => ClosePopup(true);
-
 }

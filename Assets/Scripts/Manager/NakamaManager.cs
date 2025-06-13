@@ -58,6 +58,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
         NakamaWildBattle.Init(Client, Session, Socket);
 
-        GameStateManager.Instance.UpdateStateToMenu();
+        GameManager.Instance.AfterNakamaInit();
+
     }
 }

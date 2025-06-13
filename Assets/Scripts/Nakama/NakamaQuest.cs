@@ -18,6 +18,7 @@ public class NakamaQuest : MonoBehaviour
         _session = session;
 
         await LoadDailyQuest();
+        await LoadDailyQuestRewards();
     }
 
     public async Task LoadDailyQuest()
@@ -28,8 +29,23 @@ public class NakamaQuest : MonoBehaviour
 
             _dailyQuests = response.Payload.FromJson<List<DailyQuestData>>();
 
-
             UIManager.Instance.QuestPopup.Init(_dailyQuests);
+        }
+        catch (ApiResponseException ex)
+        {
+            Debug.LogFormat("Error: {0}", ex.Message);
+        }
+    }
+
+    public async Task LoadDailyQuestRewards()
+    {
+        try
+        {
+            var response = await _client.RpcAsync(_session, "loadDailyQuestRewards");
+
+            var questRewardData = response.Payload.FromJson<DailyQuestRewardData>();
+
+            UIManager.Instance.QuestPopup.InitRewards(questRewardData);
         }
         catch (ApiResponseException ex)
         {
@@ -45,8 +61,12 @@ public class NakamaQuest : MonoBehaviour
 
             var reward = response.Payload.FromJson<RewardCollection>();
 
-            UIManager.Instance.RewardPopup.OpenPopup();
+            reward.offer_id = -1;
+
+            UIManager.Instance.RewardPopup.OpenPopup(false);
             UIManager.Instance.RewardPopup.UpdateData(reward);
+
+            await Init(_client, _session); // TODO faire mieux
         }
         catch (ApiResponseException ex)
         {
@@ -60,7 +80,9 @@ public class NakamaQuest : MonoBehaviour
         {
             var response = await _client.RpcAsync(_session, "claimAdQuest");
 
-            // TODO handle ad quest reward
+            await LoadDailyQuest();
+            await LoadDailyQuestRewards();
+
         }
         catch (ApiResponseException ex)
         {
@@ -74,4 +96,10 @@ public class DailyQuestData
     public string id;
     public int goal;
     public int progress;
+}
+
+public class DailyQuestRewardData
+{
+    public List<RewardCollection> rewards;
+    public int rewardCount;
 }

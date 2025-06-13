@@ -22,6 +22,7 @@ public class RewardPopup : Popup
     {
         base.Init();
     }
+
     public override void OpenPopup()
     {
         gameObject.SetActive(true);
@@ -36,9 +37,9 @@ public class RewardPopup : Popup
         if (_tweenSequence != null) _tweenSequence.Init();
     }
 
-    public override void ClosePopup()
+    public override void OpenPopup(bool openBlackShade = true, bool openCloseButton = true)
     {
-        base.ClosePopup();
+        base.OpenPopup(openBlackShade, openCloseButton);
     }
 
     public void UpdateData(RewardCollection reward)

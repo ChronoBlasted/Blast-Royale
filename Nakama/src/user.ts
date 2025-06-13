@@ -25,6 +25,10 @@ const DefaultMetadata: PlayerMetadata = {
 };
 
 function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, data: nkruntime.Session) {
+
+    createDailyQuestStorageIfNeeded(ctx.userId, nk, logger);
+    incrementQuest(ctx.userId, QuestIds.LOGIN, 1, nk, logger);
+
     if (!data.created) {
         logger.info('User with id: %s account data already existing', ctx.userId);
         return
@@ -74,7 +78,7 @@ function afterAuthenticate(ctx: nkruntime.Context, logger: nkruntime.Logger, nk:
     }
 
     initializeBlastTrackerData(ctx.userId, nk, logger);
-    
+
     markMonsterCaptured(ctx.userId, Lizzy.id.toString(), 1, nk, logger);
     markMonsterCaptured(ctx.userId, Punchball.id.toString(), 1, nk, logger);
     markMonsterCaptured(ctx.userId, Jellys.id.toString(), 1, nk, logger);

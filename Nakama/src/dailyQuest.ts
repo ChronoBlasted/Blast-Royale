@@ -50,6 +50,29 @@ function generateDailyQuests(): DailyQuestData {
   };
 }
 
+function createDailyQuestStorageIfNeeded(userId: string, nk: nkruntime.Nakama, logger: nkruntime.Logger): void {
+  const records = nk.storageRead([{
+    collection: DailyQuestCollectionName,
+    key: DailyQuestStorageKey,
+    userId
+  }]);
+
+  if (records.length === 0) {
+    const dailyData = generateDailyQuests();
+    nk.storageWrite([{
+      collection: DailyQuestCollectionName,
+      key: DailyQuestStorageKey,
+      userId,
+      value: dailyData,
+      permissionRead: DailyQuestPermissionRead,
+      permissionWrite: DailyQuestPermissionWrite
+    }]);
+    logger.debug(`createDailyQuestStorageIfNeeded: Created daily quest storage for userId=${userId}`);
+  } else {
+    logger.debug(`createDailyQuestStorageIfNeeded: Storage already exists for userId=${userId}`);
+  }
+}
+
 function rpcGetDailyQuests(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
   const userId = context.userId;
 
@@ -65,11 +88,7 @@ function rpcGetDailyQuests(context: nkruntime.Context, logger: nkruntime.Logger,
 
   let dailyData: DailyQuestData;
 
-  if (records.length > 0) {
-    dailyData = records[0].value as DailyQuestData;
-  } else {
-    dailyData = generateDailyQuests();
-  }
+  dailyData = records[0].value as DailyQuestData;
 
   if (isDailyResetDue(dailyData.lastReset)) {
     dailyData = generateDailyQuests();
@@ -82,6 +101,7 @@ function rpcGetDailyQuests(context: nkruntime.Context, logger: nkruntime.Logger,
       permissionRead: DailyQuestPermissionRead,
       permissionWrite: DailyQuestPermissionWrite
     }]);
+    logger.debug(`rpcGetDailyQuests: Reset daily quest storage for userId=${userId}`);
   }
 
   const result = JSON.stringify(dailyData.quests);
@@ -96,16 +116,24 @@ function incrementQuest(userId: string, questId: string, amount: number, nk: nkr
     userId
   }]);
 
-  if (!records.length) return;
+  if (!records.length) {
+    logger.debug(`incrementQuest: No daily quest record found for userId=${userId}`);
+    return;
+  }
 
   const record = records[0];
   const data = record.value as DailyQuestData;
   const version = record.version;
 
   const quest = data.quests.find((q: DailyQuest) => q.id === questId);
-  if (!quest) return;
+  if (!quest) {
+    logger.debug(`incrementQuest: Quest with id=${questId} not found for userId=${userId}`);
+    return;
+  }
 
+  const oldProgress = quest.progress;
   quest.progress = Math.min(quest.goal, quest.progress + amount);
+  logger.debug(`incrementQuest: Updated quest '${questId}' for userId=${userId} from progress=${oldProgress} to progress=${quest.progress} (goal=${quest.goal})`);
 
   const writeRequest: nkruntime.StorageWriteRequest = {
     collection: DailyQuestCollectionName,
@@ -119,11 +147,13 @@ function incrementQuest(userId: string, questId: string, amount: number, nk: nkr
 
   try {
     nk.storageWrite([writeRequest]);
+    logger.debug(`incrementQuest: Successfully wrote updated quest data for userId=${userId}`);
   } catch (error) {
     logger.error("incrementQuest storageWrite error: %q", error);
     throw error;
   }
 }
+
 function rpcClaimDailyQuestReward(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
 
   const records = nk.storageRead([{ collection: DailyQuestCollectionName, key: DailyQuestStorageKey, userId: context.userId }]);
@@ -166,6 +196,29 @@ function rpcClaimDailyQuestReward(context: nkruntime.Context, logger: nkruntime.
   }
 
   return JSON.stringify(reward);
+}
+
+function rpcGetDailyQuestRewards(context: nkruntime.Context, logger: nkruntime.Logger, nk: nkruntime.Nakama, payload: string): string {
+    const userId = context.userId;
+    if (!userId) throw new Error("User not authenticated.");
+
+    const records = nk.storageRead([{
+        collection: DailyQuestCollectionName,
+        key: DailyQuestStorageKey,
+        userId
+    }]);
+
+    if (!records.length) throw new Error("No daily quest record found for userId=" + userId);
+
+    const data = records[0].value as DailyQuestData;
+
+    const response = {
+        rewards: rewardList,
+        rewardCount: data.rewardCount
+    };
+
+    logger.debug(`rpcGetDailyQuestRewards: userId=${userId} rewardCount=${data.rewardCount}`);
+    return JSON.stringify(response);
 }
 
 

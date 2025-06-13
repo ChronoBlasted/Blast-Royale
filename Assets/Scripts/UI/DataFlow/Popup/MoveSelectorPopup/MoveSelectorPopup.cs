@@ -20,7 +20,7 @@ public class MoveSelectorPopup : Popup
 
     public override void ClosePopup()
     {
-        base.ClosePopup(false);
+        base.ClosePopup();
     }
 
     public override void OpenPopup()

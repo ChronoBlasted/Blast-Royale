@@ -16,20 +16,23 @@ MonoBehaviour:
     m_Code: fr
   m_SharedData: {fileID: 11400000, guid: 790bdc4a3459d3f4db01b98f034ee891, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 3240046663566098443
   m_TableData:
   - m_Id: 7532691456
     m_Localized: Se connecter
     m_Metadata:
       m_Items: []
   - m_Id: 78575812608
-    m_Localized: Bat des Blast
+    m_Localized: Bat {0:un Blast|des Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098443
   - m_Id: 252568125440
-    m_Localized: Capture des Blast
+    m_Localized: Capture {0:un Blast|des Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098443
   - m_Id: 543963201536
     m_Localized: Regarde une pub
     m_Metadata:
@@ -39,17 +42,28 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 241008623616
-    m_Localized: Bat x Blast
+    m_Localized: Bat {0:1 Blast|{} Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098443
   - m_Id: 292950884352
-    m_Localized: Capture x Blast
+    m_Localized: Capture {0:1 Blast|{} Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098443
   - m_Id: 579694477312
     m_Localized: Regarde une pub pour soutenir le jeu
     m_Metadata:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3240046663566098443
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 241008623616
+        - id: 292950884352
+        - id: 78575812608
+        - id: 252568125440

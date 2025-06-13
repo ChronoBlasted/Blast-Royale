@@ -50,6 +50,7 @@ let InitModule: nkruntime.InitModule = function (ctx: nkruntime.Context, logger:
     initializer.registerRpc('loadDailyQuest', rpcGetDailyQuests);
     initializer.registerRpc('claimDailyQuest', rpcClaimDailyQuestReward);
     initializer.registerRpc('claimAdQuest', rpcWatchQuestAds);
+    initializer.registerRpc('loadDailyQuestRewards', rpcGetDailyQuestRewards);
 
     // Blast Tracker 
     initializer.registerRpc('loadBlastTracker', rpcGetAllBlastTrackerData);

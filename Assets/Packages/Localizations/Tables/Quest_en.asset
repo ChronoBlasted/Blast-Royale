@@ -16,20 +16,23 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 790bdc4a3459d3f4db01b98f034ee891, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 3240046663566098442
   m_TableData:
   - m_Id: 7532691456
     m_Localized: Login
     m_Metadata:
       m_Items: []
   - m_Id: 78575812608
-    m_Localized: Defeat Blast
+    m_Localized: Defeat {0:Blast|Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098442
   - m_Id: 252568125440
-    m_Localized: Catch Blast
+    m_Localized: Catch {0:Blast|Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098442
   - m_Id: 543963201536
     m_Localized: Watch Ad
     m_Metadata:
@@ -39,17 +42,28 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 241008623616
-    m_Localized: Defeat x Blast
+    m_Localized: Defeat {0:1 Blast|{} Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098442
   - m_Id: 292950884352
-    m_Localized: Catch x Blast
+    m_Localized: Catch {0:1 Blast|{} Blasts}
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 3240046663566098442
   - m_Id: 579694477312
     m_Localized: Watch an Ad to support the game
     m_Metadata:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3240046663566098442
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 241008623616
+        - id: 292950884352
+        - id: 78575812608
+        - id: 252568125440

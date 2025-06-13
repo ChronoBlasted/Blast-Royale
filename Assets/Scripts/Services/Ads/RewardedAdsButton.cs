@@ -85,4 +85,11 @@ public class RewardedAdsButton : MonoBehaviour
         _adsReadyParticle.Play();
         _isAdsActive = true;
     }
+
+    public void Disable()
+    {
+        AdsManager.Instance.OnRewardedAdLoaded.RemoveListener(OnAdLoaded);
+
+        _adsLayout.gameObject.SetActive(false);
+    }
 }
