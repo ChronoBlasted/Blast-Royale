@@ -1,4 +1,5 @@
 using Chrono.UI;
+using GoogleMobileAds.Api;
 using Nakama;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,10 +20,11 @@ public class DailyRewardLayout : MonoBehaviour
     [SerializeField] Color _regularColorGlow, _specialColorGlow;
 
     int _index;
-
+    RewardCollection _reward;
     public void Init(RewardCollection reward, int index)
     {
         _index = index;
+        _reward = reward;
 
         if (reward.coinsReceived > 0)
         {
@@ -105,6 +107,10 @@ public class DailyRewardLayout : MonoBehaviour
         _nextReward.SetActive(false);
         _alreadyCollected.SetActive(false);
         _focusLayout.SetActive(false);
+
+        _rewardButton.interactable = false;
+
+        UpdateDay(_index + 1);
     }
 
     public void UpdateDay(int day)
@@ -122,6 +128,8 @@ public class DailyRewardLayout : MonoBehaviour
     {
         if (canClaimReward)
         {
+            _rewardButton.interactable = true;
+
             _focusLayout.SetActive(true);
         }
         else Lock();
@@ -146,6 +154,11 @@ public class DailyRewardLayout : MonoBehaviour
         try
         {
             await NakamaManager.Instance.NakamaDailyReward.ClaimDailyReward();
+
+            _reward.offer_id = -1;
+
+            UIManager.Instance.RewardPopup.OpenPopup();
+            UIManager.Instance.RewardPopup.UpdateData(_reward);
         }
         catch (ApiResponseException ex)
         {

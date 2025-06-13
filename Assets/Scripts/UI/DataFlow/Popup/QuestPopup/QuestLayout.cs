@@ -23,11 +23,8 @@ public class QuestLayout : MonoBehaviour
         QuestDataRef dataRef = NakamaData.Instance.GetQuestDataRefByIds(data.id);
 
 
-        Debug.Log(data.progress);
-        _questName.text = dataRef.QuestName.GetLocalizedString(data.goal - data.progress);
-        _questDesc.text = dataRef.QuestDesc.GetLocalizedString(data.goal - data.progress);
-
         _questComplete = data.progress >= data.goal;
+
         _checkIco.enabled = _questComplete;
 
         _bg.color = _questComplete ? _finishedColor : _activeColor;
@@ -38,6 +35,9 @@ public class QuestLayout : MonoBehaviour
         _questSlider.value = data.progress;
 
         _questIco.sprite = dataRef.QuestIco;
+
+        _questName.text = dataRef.QuestName.GetLocalizedString(data.goal);
+        _questDesc.text = dataRef.QuestDesc.GetLocalizedString(data.goal);
 
         if (_questComplete)
         {
@@ -54,6 +54,9 @@ public class QuestLayout : MonoBehaviour
         {
             _sliderLayout.SetActive(true);
             _adsLayout.gameObject.SetActive(false);
+
+            _questName.text = dataRef.QuestName.GetLocalizedString(data.goal - data.progress);
+            _questDesc.text = dataRef.QuestDesc.GetLocalizedString(data.goal - data.progress);
         }
     }
 

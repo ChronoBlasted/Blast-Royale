@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class QuestPopup : Popup
@@ -7,6 +9,10 @@ public class QuestPopup : Popup
     [SerializeField] List<QuestLayout> _questLayouts;
     [SerializeField] List<QuestRewardLayout> _questRewardsLayouts;
     [SerializeField] SliderBar _progressBar;
+
+    [SerializeField] TMP_Text _resetTimerTxt;
+    DateTime _nextDailyReset;
+    TimeSpan _timeRemaining;
 
     int amountQuestCompleted;
 
@@ -36,6 +42,11 @@ public class QuestPopup : Popup
         base.OpenPopup();
 
         _progressBar.SetValueSmooth(amountQuestCompleted);
+
+        DateTime now = DateTime.Now;
+        _nextDailyReset = now.Date.AddDays(1);
+
+        UpdateResetTime();
     }
 
     public void InitRewards(DailyQuestRewardData dailyQuestRewards)
@@ -50,5 +61,24 @@ public class QuestPopup : Popup
         await NakamaManager.Instance.NakamaQuest.ClaimQuestReward();
     }
 
+    void UpdateResetTime()
+    {
+        DateTime now = DateTime.Now;
+        _timeRemaining = _nextDailyReset - now;
 
+        if (_timeRemaining.TotalSeconds < 0)
+        {
+            _nextDailyReset = now.Date.AddDays(1);
+            _timeRemaining = _nextDailyReset - now;
+        }
+
+        if (_timeRemaining.Hours > 0)
+        {
+            _resetTimerTxt.text = $"Reset in {_timeRemaining.Hours} hours";
+        }
+        else
+        {
+            _resetTimerTxt.text = $"Reset in {_timeRemaining.Minutes} min";
+        }
+    }
 }
