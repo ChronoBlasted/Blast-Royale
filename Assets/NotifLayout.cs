@@ -12,9 +12,9 @@ public class NotifLayout : MonoBehaviour
 
     Tween _tween;
 
-    public void Init(int amountIndex)
+    public void Activate(int amountIndex)
     {
-        if (amountIndex == -1)
+        if (amountIndex <= 0)
         {
             _notifText.text = "";
         }
@@ -30,7 +30,7 @@ public class NotifLayout : MonoBehaviour
         _tween = transform.DOScale(Vector3.one * 1.2f, 1f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
 
-    public void Remove()
+    public void Deactivate()
     {
         _tween.Kill();
 

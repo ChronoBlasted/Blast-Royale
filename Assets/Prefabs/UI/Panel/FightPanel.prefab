@@ -1293,9 +1293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e489dd251832717429368782df2caec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NotifPediaParent: {fileID: 1403573285912756264}
-  NotifDailyRewardParent: {fileID: 5050918062784089856}
-  NotifFriendParent: {fileID: 2865626456765843691}
   _settingMenu: {fileID: 1663103808997312042}
 --- !u!1 &3276350611895731740
 GameObject:
@@ -2701,9 +2698,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9388f838abcc94b8573486bba38d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nestedParentLayout: {fileID: 0}
+  _flagTracked: 62
   _notifLayout: {fileID: 2123503771027652364}
-  _childs: []
 --- !u!224 &4493979875408600810 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3178251998238436053, guid: 71c6bed45a7d19c4aadce648a8452a32, type: 3}
@@ -3261,6 +3257,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
+      propertyPath: _flagTracked
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
       propertyPath: _nestedParentLayout
       value: 
       objectReference: {fileID: 8104863977839861865}
@@ -3274,17 +3274,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3076402427262448989, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
   m_PrefabInstance: {fileID: 2310267852964354570}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5050918062784089856 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
-  m_PrefabInstance: {fileID: 2310267852964354570}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9388f838abcc94b8573486bba38d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2516763250033857219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4072,17 +4061,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
---- !u!114 &2865626456765843691 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
-  m_PrefabInstance: {fileID: 4743151861162647009}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9388f838abcc94b8573486bba38d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &7737919499285145788 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3076402427262448989, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
@@ -4610,9 +4588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9388f838abcc94b8573486bba38d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nestedParentLayout: {fileID: 0}
+  _flagTracked: 1
   _notifLayout: {fileID: 6473290426715517685}
-  _childs: []
 --- !u!224 &8858684747340403475 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3178251998238436053, guid: 71c6bed45a7d19c4aadce648a8452a32, type: 3}
@@ -4957,6 +4934,10 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
+      propertyPath: _flagTracked
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
       propertyPath: _nestedParentLayout
       value: 
       objectReference: {fileID: 8104863977839861865}
@@ -4965,17 +4946,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
---- !u!114 &1403573285912756264 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7356576564838421770, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}
-  m_PrefabInstance: {fileID: 8461614022627071266}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9388f838abcc94b8573486bba38d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &6907434044066504831 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3076402427262448989, guid: e2e0650e65435dd42aa48765d30c2c9b, type: 3}

@@ -578,6 +578,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6093083360903907086, guid: 71c6bed45a7d19c4aadce648a8452a32, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -619,5 +623,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6603e36b92e1fbb428e2c57f66295e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _notifParent: {fileID: 0}
+  _notifType: 1
   _notifLayout: {fileID: 4687800299346267344}

@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 9
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d2429f9286dcd414681033edc82cfdf8, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 93187270c8320e840a780a20572880fa, type: 2}
@@ -144,7 +144,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3178251998238436053}
   - component: {fileID: 1098468007825935155}
-  - component: {fileID: 6093083360903907086}
   m_Layer: 0
   m_Name: NotifLayout
   m_TagString: Untagged
@@ -187,29 +186,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _notifImage: {fileID: 3381057122976101148}
   _notifText: {fileID: 300462027775293005}
---- !u!223 &6093083360903907086
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2833506668682110743}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 1
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 11
-  m_TargetDisplay: 0
 --- !u!1 &7568770695428572850
 GameObject:
   m_ObjectHideFlags: 0

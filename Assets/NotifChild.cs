@@ -5,25 +5,20 @@ using UnityEngine;
 
 public class NotifChild : MonoBehaviour
 {
-    [SerializeField] NotifParent _notifParent;
+    [SerializeField] NotifFlags _notifType;
     [SerializeField] NotifLayout _notifLayout;
 
-    public void SetParent(NotifParent parent)
+    public void Register()
     {
-        _notifParent = parent;
+        NotificationManager.Instance.Register(_notifLayout, _notifType);
+
+        _notifLayout.Activate(0);
     }
 
-    public void Init()
+    public void Unregister()
     {
-        _notifParent.AddChild(this);
+        _notifLayout.Deactivate();
 
-        _notifLayout.Init(-1);
-    }
-
-    public void Remove()
-    {
-        _notifLayout.Remove();
-
-        _notifParent.RemoveChild(this);
+        NotificationManager.Instance.Unregister(_notifLayout, _notifType);
     }
 }

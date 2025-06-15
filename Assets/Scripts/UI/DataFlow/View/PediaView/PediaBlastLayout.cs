@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -41,11 +42,9 @@ public class PediaBlastLayout : MonoBehaviour
 
         _typeIcoImg.sprite = typeData.Sprite;
 
-        _notifChildData1.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
-        _notifChildData2.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
-        _notifChildData3.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
-
         _navBar.Init();
+
+        UpdateNotifLayout();
     }
 
     public void SetVersion(BlastType blastType)
@@ -70,32 +69,35 @@ public class PediaBlastLayout : MonoBehaviour
 
         BlastVersionData data = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions[_blastTypeString];
 
-        UpdateNotifLayout();
         IsAlreadyCatch(data.catched);
         CanClaimReward(data.rewardClaimed == false && data.catched);
     }
 
     void UpdateNotifLayout()
     {
-        bool data1 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["1"].catched;
-        bool data2 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["2"].catched;
-        bool data3 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["3"].catched;
+        var blastTracker = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions;
 
-        if (data1) _notifChildData1.Init();
-        else _notifChildData1.Remove();
+        bool data1 = blastTracker["1"].catched && blastTracker["1"].rewardClaimed == false;
+        bool data2 = blastTracker["2"].catched && blastTracker["2"].rewardClaimed == false;
+        bool data3 = blastTracker["3"].catched && blastTracker["3"].rewardClaimed == false;
 
-        if (data2) _notifChildData2.Init();
-        else _notifChildData2.Remove();
+        if (data1) _notifChildData1.Register();
+        else _notifChildData1.Unregister();
 
-        if (data3) _notifChildData3.Init();
-        else _notifChildData3.Remove();
+        if (data2) _notifChildData2.Register();
+        else _notifChildData2.Unregister();
+
+        if (data3) _notifChildData3.Register();
+        else _notifChildData3.Unregister();
     }
 
     void IsDiscovered()
     {
-        bool data1 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["1"].catched;
-        bool data2 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["2"].catched;
-        bool data3 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["3"].catched;
+        var blastTracker = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions;
+
+        bool data1 = blastTracker["1"].catched;
+        bool data2 = blastTracker["2"].catched;
+        bool data3 = blastTracker["3"].catched;
 
 
         if (data1 || data2 || data3)

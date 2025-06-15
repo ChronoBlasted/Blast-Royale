@@ -4,43 +4,40 @@ using UnityEngine;
 
 public class NotifParent : MonoBehaviour
 {
-    [SerializeField] NotifParent _nestedParentLayout;
+    [SerializeField] NotifFlags _flagTracked;
     [SerializeField] NotifLayout _notifLayout;
 
-    public List<NotifChild> _childs = new List<NotifChild>();
-
-    public void AddChild(NotifChild child)
+    private void Awake()
     {
-        if (!_childs.Contains(child))
-        {
-            _childs.Add(child);
-        }
-
-        if (_childs.Count > 0)
-        {
-            _notifLayout.Init(_childs.Count);
-        }
-
-        if (_nestedParentLayout != null) _nestedParentLayout.AddChild(child);
-
+        NotificationManager.Instance.OnNotifUpdate += OnNotifUpdate;
+        OnNotifUpdate(_flagTracked);
     }
 
-    public void RemoveChild(NotifChild child)
+    void OnNotifUpdate(NotifFlags category)
     {
-        if (_childs.Contains(child))
+        if (_flagTracked.HasFlag(category))
         {
-            _childs.Remove(child);
-        }
+            var amount = 0;
 
-        if (_childs.Count == 0)
-        {
-            _notifLayout.Remove();
-        }
-        else
-        {
-            _notifLayout.Init(_childs.Count);
-        }
+            foreach (NotifFlags flag in System.Enum.GetValues(typeof(NotifFlags)))
+            {
+                if (flag == NotifFlags.None)
+                    continue;
 
-        if (_nestedParentLayout != null) _nestedParentLayout.RemoveChild(child);
+                if ((_flagTracked & flag) == flag)
+                {
+                    amount += NotificationManager.Instance.GetAmountOfNotifByFlags(flag);
+                }
+            }
+
+            if (amount <= 0)
+            {
+                _notifLayout.Deactivate();
+            }
+            else
+            {
+                _notifLayout.Activate(amount);
+            }
+        }
     }
 }

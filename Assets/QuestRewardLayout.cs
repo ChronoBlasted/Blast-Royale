@@ -68,30 +68,30 @@ public class QuestRewardLayout : MonoBehaviour
         {
             _check.enabled = true;
             _ico.DOFade(0.5f, 0f);
+            _ico.transform.localScale = Vector3.one;
             _rewardButton.interactable = false;
-            transform.localScale = Vector3.one;
 
-            _notifChild.Remove();
+            _notifChild.Unregister();
         }
         else if (canBeClaim)
         {
             _check.enabled = false;
             _ico.DOFade(1f, 0f);
             _rewardButton.interactable = true;
-            _tweenScale = transform.DOScale(Vector3.one * 1.2f, 1f)
+            _tweenScale = _ico.transform.DOScale(Vector3.one * 1.2f, 1f)
                 .SetEase(Ease.InOutSine)
                 .SetLoops(-1, LoopType.Yoyo);
 
-            _notifChild.Init();
+            _notifChild.Register();
         }
         else
         {
             _check.enabled = false;
             _ico.DOFade(1f, 0f);
             _rewardButton.interactable = false;
-            transform.localScale = Vector3.one;
+            _ico.transform.localScale = Vector3.one;
 
-            _notifChild.Remove();
+            _notifChild.Unregister();
         }
     }
 }

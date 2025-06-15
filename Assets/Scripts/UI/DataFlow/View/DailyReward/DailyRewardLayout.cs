@@ -111,7 +111,7 @@ public class DailyRewardLayout : MonoBehaviour
 
         _rewardButton.interactable = false;
 
-        _notifChild.Remove();
+        _notifChild.Unregister();
 
         UpdateDay(_index + 1);
     }
@@ -133,7 +133,7 @@ public class DailyRewardLayout : MonoBehaviour
         {
             _rewardButton.interactable = true;
 
-            _notifChild.Init();
+            _notifChild.Register();
 
             _focusLayout.SetActive(true);
         }
