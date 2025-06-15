@@ -14,6 +14,7 @@ public class DailyRewardLayout : MonoBehaviour
     [SerializeField] GameObject _alreadyCollected, _nextReward, _focusLayout;
     [SerializeField] CustomButton _rewardButton;
     [SerializeField] ParticleSystem _specialRewardFX;
+    [SerializeField] NotifChild _notifChild;
 
     [SerializeField] Color _regularColorBG, _specialColorBG;
     [SerializeField] Color _regularColorTxt, _specialColorTxt;
@@ -110,6 +111,8 @@ public class DailyRewardLayout : MonoBehaviour
 
         _rewardButton.interactable = false;
 
+        _notifChild.Remove();
+
         UpdateDay(_index + 1);
     }
 
@@ -130,6 +133,8 @@ public class DailyRewardLayout : MonoBehaviour
         {
             _rewardButton.interactable = true;
 
+            _notifChild.Init();
+
             _focusLayout.SetActive(true);
         }
         else Lock();
@@ -145,6 +150,7 @@ public class DailyRewardLayout : MonoBehaviour
     {
         _alreadyCollected.SetActive(false);
         _focusLayout.SetActive(false);
+
     }
 
     public async void HandleOnCollectDailyReward()

@@ -12,6 +12,7 @@ public class PediaBlastLayout : MonoBehaviour
     [SerializeField] Button _rewardButton;
     [SerializeField] NavBar _navBar;
     [SerializeField] Sprite _unknownSpr;
+    [SerializeField] NotifChild _notifChildData1, _notifChildData2, _notifChildData3;
 
     BlastData _data;
     BlastType _currentBlastType;
@@ -40,6 +41,10 @@ public class PediaBlastLayout : MonoBehaviour
 
         _typeIcoImg.sprite = typeData.Sprite;
 
+        _notifChildData1.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
+        _notifChildData2.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
+        _notifChildData3.SetParent(UIManager.Instance.MenuView.FightPanel.SettingLayout.NotifPediaParent);
+
         _navBar.Init();
     }
 
@@ -65,8 +70,25 @@ public class PediaBlastLayout : MonoBehaviour
 
         BlastVersionData data = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions[_blastTypeString];
 
+        UpdateNotifLayout();
         IsAlreadyCatch(data.catched);
-        IsRewardClaimed(data.rewardClaimed == false && data.catched);
+        CanClaimReward(data.rewardClaimed == false && data.catched);
+    }
+
+    void UpdateNotifLayout()
+    {
+        bool data1 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["1"].catched;
+        bool data2 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["2"].catched;
+        bool data3 = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions["3"].catched;
+
+        if (data1) _notifChildData1.Init();
+        else _notifChildData1.Remove();
+
+        if (data2) _notifChildData2.Init();
+        else _notifChildData2.Remove();
+
+        if (data3) _notifChildData3.Init();
+        else _notifChildData3.Remove();
     }
 
     void IsDiscovered()
@@ -124,7 +146,7 @@ public class PediaBlastLayout : MonoBehaviour
         IsDiscovered();
     }
 
-    void IsRewardClaimed(bool canBeClaimed)
+    void CanClaimReward(bool canBeClaimed)
     {
         _rewardLayout.SetActive(canBeClaimed);
 
@@ -154,7 +176,9 @@ public class PediaBlastLayout : MonoBehaviour
 
         NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions[_blastTypeString].rewardClaimed = true;
 
-        IsRewardClaimed(false);
+        CanClaimReward(false);
+
+        UpdateNotifLayout();
     }
 
     private void ShowReward()

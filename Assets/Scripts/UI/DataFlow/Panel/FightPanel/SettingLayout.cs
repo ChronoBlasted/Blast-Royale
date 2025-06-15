@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class SettingLayout : MonoBehaviour
 {
+    public NotifParent NotifPediaParent;
+    public NotifParent NotifDailyRewardParent;
+    public NotifParent NotifFriendParent;
+
     [SerializeField] CanvasGroup _settingMenu;
 
     Tweener _settingFadeTweener;

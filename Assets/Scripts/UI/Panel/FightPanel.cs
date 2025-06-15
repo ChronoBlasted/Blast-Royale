@@ -7,6 +7,7 @@ public class FightPanel : Panel
 {
     [SerializeField] ProfileLayout _profileLayout;
 
+    [SerializeField] SettingLayout _settingLayout;
     [SerializeField] SquadLayout _squadLayout;
     [SerializeField] AreaLayoutFightPanel _areaLayoutFightPanel;
     [SerializeField] RewardedAdsButton _wildBattleBonusAds;
@@ -15,6 +16,7 @@ public class FightPanel : Panel
     public ProfileLayout ProfileLayout { get => _profileLayout; }
     public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
     public RewardedAdsButton WildBattleBonusAds { get => _wildBattleBonusAds; }
+    public SettingLayout SettingLayout { get => _settingLayout; }
 
     public override void Init()
     {

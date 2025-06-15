@@ -10,6 +10,7 @@ public class QuestRewardLayout : MonoBehaviour
     [SerializeField] Image _ico, _check;
     [SerializeField] TMP_Text _rewardAmount;
     [SerializeField] Button _rewardButton;
+    [SerializeField] NotifChild _notifChild;
 
     Tween _tweenScale;
     public void Init(RewardCollection reward, bool canBeClaim, bool isCollected)
@@ -59,6 +60,7 @@ public class QuestRewardLayout : MonoBehaviour
 
         _rewardButton.interactable = !isCollected && canBeClaim;
 
+
         if (_tweenScale != null && _tweenScale.IsActive())
             _tweenScale.Kill(true);
 
@@ -68,6 +70,8 @@ public class QuestRewardLayout : MonoBehaviour
             _ico.DOFade(0.5f, 0f);
             _rewardButton.interactable = false;
             transform.localScale = Vector3.one;
+
+            _notifChild.Remove();
         }
         else if (canBeClaim)
         {
@@ -77,6 +81,8 @@ public class QuestRewardLayout : MonoBehaviour
             _tweenScale = transform.DOScale(Vector3.one * 1.2f, 1f)
                 .SetEase(Ease.InOutSine)
                 .SetLoops(-1, LoopType.Yoyo);
+
+            _notifChild.Init();
         }
         else
         {
@@ -84,6 +90,8 @@ public class QuestRewardLayout : MonoBehaviour
             _ico.DOFade(1f, 0f);
             _rewardButton.interactable = false;
             transform.localScale = Vector3.one;
+
+            _notifChild.Remove();
         }
     }
 }
