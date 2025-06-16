@@ -61,8 +61,20 @@ public class EndView : View
         _title.text = isWin ? "GOOD GAME" : "YOU LOOSE";
     }
 
-    public void HandleOnClaim()
+    public async void HandleOnClaim()
     {
+        await NakamaManager.Instance.NakamaUserAccount.GetWalletData();
+
+        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
+        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+
+        await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards();
+
+        await NakamaManager.Instance.NakamaBlastTracker.LoadBlastTracker();
+
+        await NakamaManager.Instance.NakamaQuest.LoadDailyQuest();
+        await NakamaManager.Instance.NakamaQuest.LoadDailyQuestRewards();
+
         GameStateManager.Instance.UpdateStateToMenu();
     }
 }

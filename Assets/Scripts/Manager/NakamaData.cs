@@ -21,6 +21,7 @@ public class NakamaData : MonoSingleton<NakamaData>
     BlastCollection _blastCollection;
     ItemCollection _itemCollection;
     List<AreaData> _areaCollection;
+    Dictionary<string, BlastTrackerEntry> _blastTracker = new Dictionary<string, BlastTrackerEntry>();
 
     public ItemCollection ItemCollection { get => _itemCollection; set => _itemCollection = value; }
     public BlastCollection BlastCollection { get => _blastCollection; set => _blastCollection = value; }
@@ -33,6 +34,9 @@ public class NakamaData : MonoSingleton<NakamaData>
     public List<BlastData> BlastPedia { get => _blastPedia; set => _blastPedia = value; }
     public List<ItemData> ItemPedia { get => _itemPedia; set => _itemPedia = value; }
     public List<Move> MovePedia { get => _movePedia; set => _movePedia = value; }
+    public Dictionary<string, BlastTrackerEntry> BlastTracker { get => _blastTracker; set => _blastTracker = value; }
+
+
 
     public BlastDataRef GetBlastDataRef(int id)
     {

@@ -56,6 +56,7 @@ public class QuestPopup : Popup
             _questRewardsLayouts[i].Init(dailyQuestRewards.rewards[i], dailyQuestRewards.rewardCount == i && amountQuestCompleted > i, dailyQuestRewards.rewardCount > i);
         }
     }
+
     public async void HandleOnClaimReward()
     {
         await NakamaManager.Instance.NakamaQuest.ClaimQuestReward();

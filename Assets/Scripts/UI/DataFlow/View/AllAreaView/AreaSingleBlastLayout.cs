@@ -16,7 +16,7 @@ public class AreaSingleBlastLayout : MonoBehaviour
     {
         _blast = blast;
 
-        isDiscovered = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blast.id.ToString()].versions["1"].catched;
+        isDiscovered = NakamaData.Instance.BlastTracker[_blast.id.ToString()].versions["1"].catched;
 
         _blastIco.sprite = NakamaData.Instance.GetBlastDataRef(_blast.id).Sprite;
 

@@ -21,6 +21,8 @@ public class PediaBlastLayout : MonoBehaviour
     string _blastId;
     string _blastTypeString;
 
+    public string BlastId { get => _blastId; }
+
     public void Init(BlastData data)
     {
         _data = data;
@@ -67,7 +69,7 @@ public class PediaBlastLayout : MonoBehaviour
                 break;
         }
 
-        BlastVersionData data = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions[_blastTypeString];
+        BlastVersionData data = NakamaData.Instance.BlastTracker[_blastId].versions[_blastTypeString];
 
         IsAlreadyCatch(data.catched);
         CanClaimReward(data.rewardClaimed == false && data.catched);
@@ -75,7 +77,7 @@ public class PediaBlastLayout : MonoBehaviour
 
     void UpdateNotifLayout()
     {
-        var blastTracker = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions;
+        var blastTracker = NakamaData.Instance.BlastTracker[_blastId].versions;
 
         bool data1 = blastTracker["1"].catched && blastTracker["1"].rewardClaimed == false;
         bool data2 = blastTracker["2"].catched && blastTracker["2"].rewardClaimed == false;
@@ -93,7 +95,7 @@ public class PediaBlastLayout : MonoBehaviour
 
     void IsDiscovered()
     {
-        var blastTracker = NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions;
+        var blastTracker = NakamaData.Instance.BlastTracker[_blastId].versions;
 
         bool data1 = blastTracker["1"].catched;
         bool data2 = blastTracker["2"].catched;
@@ -176,7 +178,7 @@ public class PediaBlastLayout : MonoBehaviour
 
         ShowReward();
 
-        NakamaManager.Instance.NakamaBlastTracker.BlastTracker[_blastId].versions[_blastTypeString].rewardClaimed = true;
+        NakamaData.Instance.BlastTracker[_blastId].versions[_blastTypeString].rewardClaimed = true;
 
         CanClaimReward(false);
 

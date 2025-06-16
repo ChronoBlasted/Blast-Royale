@@ -13,8 +13,6 @@ public class NakamaBlastTracker : MonoBehaviour
     ISession _session;
 
 
-    public Dictionary<string, BlastTrackerEntry> BlastTracker = new Dictionary<string, BlastTrackerEntry>();
-
     public async Task Init(IClient client, ISession session)
     {
         _client = client;
@@ -29,7 +27,9 @@ public class NakamaBlastTracker : MonoBehaviour
         {
             var response = await _client.RpcAsync(_session, "loadBlastTracker");
 
-            BlastTracker = response.Payload.FromJson<Dictionary<string, BlastTrackerEntry>>();
+            var _blastTracker = response.Payload.FromJson<Dictionary<string, BlastTrackerEntry>>();
+
+            NakamaData.Instance.BlastTracker = _blastTracker;
         }
         catch (ApiResponseException ex)
         {
