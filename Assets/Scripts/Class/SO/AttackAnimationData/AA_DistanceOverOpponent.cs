@@ -10,9 +10,9 @@ public class AA_DistanceOverOpponent : AAData
     {
         attacker.DoCastLaser();
 
-        var position = defender.transform.position + Vector3.up * 2f;
-        var fx = Instantiate(fxPrefab, position, Quaternion.identity);
-        await Task.Delay(500);
+        var fx = Instantiate(fxPrefab, defender.transform);
+        var position = Vector3.up * 2f;
+        fx.transform.localPosition = position;
         onHitCallback?.Invoke();
     }
 }

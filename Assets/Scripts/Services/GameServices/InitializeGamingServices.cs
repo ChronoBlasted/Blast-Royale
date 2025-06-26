@@ -1,4 +1,5 @@
 using System;
+using Unity.Services.Analytics;
 using Unity.Services.Core;
 using Unity.Services.Core.Environments;
 using UnityEngine;
@@ -8,23 +9,27 @@ public class InitializeGamingServices : MonoBehaviour
 {
     const string k_Environment = "production";
 
-
-    void Initialize(Action onSuccess, Action<string> onError)
+    async void Initialize(Action onSuccess, Action<string> onError)
     {
         try
         {
             var options = new InitializationOptions().SetEnvironmentName(k_Environment);
 
-            UnityServices.InitializeAsync(options).ContinueWith(task => onSuccess());
+            await UnityServices.InitializeAsync(options);
+
+            onSuccess?.Invoke();
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-            onError(exception.Message);
+            onError?.Invoke(ex.Message);
         }
     }
 
+
     void OnSuccess()
     {
+        AnalyticsService.Instance.StartDataCollection();
+
         Debug.Log("Succes Unity Gaming Services");
     }
 
