@@ -1,0 +1,19 @@
+console:
+  max_message_size_bytes: 409600
+  port: 7351
+  username: "alex"
+  password: "password"
+logger:
+  level: "DEBUG"
+runtime:
+  js_entrypoint: "./build/index.js"
+session:
+  token_expiry_sec: 7200 # 2 hours
+socket:
+  max_message_size_bytes: 4096
+  max_request_size_bytes: 131072
+matchmaker:
+  max_tickets: 2
+  interval_sec: 15
+  max_intervals: 3
+
