@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 5058742042691063933}
   - component: {fileID: 7915879120723047166}
   - component: {fileID: 2875598339340954956}
+  - component: {fileID: 2365328521452186001}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -388,6 +389,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2365328521452186001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6398117880929034666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:8e47f340855630048937d8806ed8d4b5
+    m_TableEntryReference:
+      m_KeyId: 380724247715840
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2875598339340954956}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &337622785625505709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -512,7 +553,8 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2581122544098881175, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -537,6 +579,14 @@ PrefabInstance:
     - target: {fileID: 2328405210847447885, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
       propertyPath: m_Name
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 2581122544098881175, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61959142912032768
+      objectReference: {fileID: 0}
+    - target: {fileID: 2581122544098881175, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     - target: {fileID: 4349721913331495543, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
       propertyPath: m_text
@@ -980,7 +1030,8 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2581122544098881175, guid: 19cc7bcee62ce9744bf8515aa170ff9a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1165,6 +1216,14 @@ PrefabInstance:
     - target: {fileID: 5780927215617218521, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002705498825550407, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61958869523103744
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002705498825550407, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1508,6 +1567,14 @@ PrefabInstance:
     - target: {fileID: 5780927215617218521, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002705498825550407, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61958903366942720
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002705498825550407, guid: bff40e7208321574b9c7d54cb30eff40, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

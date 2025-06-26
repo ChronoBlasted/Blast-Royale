@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4747712107123752314}
   - component: {fileID: 1978576828297491948}
   - component: {fileID: 2908493892634900181}
+  - component: {fileID: 6867584723050161827}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 36
-  m_fontStyle: 1
+  m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
@@ -134,6 +135,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6867584723050161827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5594541103242911665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:42930672b685ee04392d838ee2fcef86
+    m_TableEntryReference:
+      m_KeyId: 403175112704
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2908493892634900181}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &6827746452404168967
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +677,18 @@ PrefabInstance:
       value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -809,6 +862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 4201088992111418562}
+  _tweenSequence: {fileID: 0}
   changeBlastLayouts:
   - {fileID: 6638815464810081796}
   - {fileID: 8475326784862498871}
@@ -837,7 +891,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!225 &4201088992111418562 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 73851629902220499, guid: 6b677807674d05c438664e6209f434eb, type: 3}

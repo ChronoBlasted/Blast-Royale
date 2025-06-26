@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.UI;
 
 public class DailyRewardLayout : MonoBehaviour
@@ -15,6 +16,7 @@ public class DailyRewardLayout : MonoBehaviour
     [SerializeField] CustomButton _rewardButton;
     [SerializeField] ParticleSystem _specialRewardFX;
     [SerializeField] NotifChild _notifChild;
+    [SerializeField] LocalizedString _dayTrad;
 
     [SerializeField] Color _regularColorBG, _specialColorBG;
     [SerializeField] Color _regularColorTxt, _specialColorTxt;
@@ -118,7 +120,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void UpdateDay(int day)
     {
-        _dayTxt.text = "DAY " + day;
+        _dayTxt.text = _dayTrad.GetLocalizedString() + " " + day;
     }
 
     public void Unlock()
@@ -165,6 +167,8 @@ public class DailyRewardLayout : MonoBehaviour
 
             UIManager.Instance.RewardPopup.OpenPopup();
             UIManager.Instance.RewardPopup.UpdateData(_reward);
+
+            _notifChild.Unregister();
         }
         catch (ApiResponseException ex)
         {

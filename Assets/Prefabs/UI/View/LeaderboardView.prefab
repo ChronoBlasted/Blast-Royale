@@ -1143,6 +1143,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: NavBarTab, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 380663442890752
+      objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
+      objectReference: {fileID: 0}
     - target: {fileID: 1134171387968132544, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: _type
       value: 2
@@ -1287,6 +1295,14 @@ PrefabInstance:
     - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61957803582685184
+      objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     - target: {fileID: 2858808079298735558, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_Name
@@ -1488,13 +1504,72 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8700489653149508181, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3450778804125382899}
   m_SourcePrefab: {fileID: 100100000, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
+--- !u!114 &1446419908554278314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071496487518637501, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
+  m_PrefabInstance: {fileID: 4517834963177359383}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5047633344074279490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3713209227216168075 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 951784440972635292, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
   m_PrefabInstance: {fileID: 4517834963177359383}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5047633344074279490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8700489653149508181, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
+  m_PrefabInstance: {fileID: 4517834963177359383}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3450778804125382899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5047633344074279490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:8e47f340855630048937d8806ed8d4b5
+    m_TableEntryReference:
+      m_KeyId: 380685995663360
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1446419908554278314}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &5747689168722935069 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8174444742001685770, guid: 839d46aed4df25c4f88760796f3246d0, type: 3}
@@ -1593,6 +1668,14 @@ PrefabInstance:
     - target: {fileID: 261365691249698652, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264534274269085383, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61955972559273984
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264534274269085383, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     - target: {fileID: 5167367444412672786, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
       propertyPath: m_Name
@@ -1743,6 +1826,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2264534274269085383, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 206193430528
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264534274269085383, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:e48fa6b3bffdbda47b782e083dfa71f5
+      objectReference: {fileID: 0}
     - target: {fileID: 5167367444412672786, guid: 0c6f6bdd4524ddb45b8a2e4801f740ed, type: 3}
       propertyPath: m_Name
       value: LeaderboardTabLayout
@@ -1823,6 +1914,14 @@ PrefabInstance:
     - target: {fileID: 518345553840872589, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: NavBarTab, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 61957834524065792
+      objectReference: {fileID: 0}
+    - target: {fileID: 866521267326085961, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:8e47f340855630048937d8806ed8d4b5
       objectReference: {fileID: 0}
     - target: {fileID: 1134171387968132544, guid: 54f76562fb6120245a4b1a29c78809c5, type: 3}
       propertyPath: _type

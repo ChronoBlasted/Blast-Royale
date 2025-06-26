@@ -54,7 +54,6 @@ public class UIManager : MonoSingleton<UIManager>
     [field: SerializeField] public RewardPopup RewardPopup { get; protected set; }
     [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
     [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
-    [field: SerializeField] public TypeInfoPopup TypeInfoPopup { get; protected set; }
     [field: SerializeField] public WildBattleOfferPopup WildBattleOfferPopup { get; protected set; }
     [field: SerializeField] public QuestPopup QuestPopup { get; protected set; }
 
@@ -94,7 +93,6 @@ public class UIManager : MonoSingleton<UIManager>
         RewardPopup.Init();
         LevelExpPopup.Init();
         ConfirmPopup.Init();
-        TypeInfoPopup.Init();
         WildBattleOfferPopup.Init();
 
         BlackShadeView.HideBlackShade();

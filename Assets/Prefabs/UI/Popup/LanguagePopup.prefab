@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 6808690578211264667}
   - component: {fileID: 3377057221700050698}
   - component: {fileID: 2445679878436411457}
+  - component: {fileID: 7750508164510235415}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -198,6 +199,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7750508164510235415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4357852578720791141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:42930672b685ee04392d838ee2fcef86
+    m_TableEntryReference:
+      m_KeyId: 1265008115712
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2445679878436411457}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1001 &83681221587371856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -509,6 +550,18 @@ PrefabInstance:
       value: 224
       objectReference: {fileID: 0}
     - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -567,6 +620,10 @@ PrefabInstance:
     - target: {fileID: 5131712485992490782, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LanguagePopup, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6504119753994840655, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Sprite
@@ -662,6 +719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 3490979957935103066}
+  _tweenSequence: {fileID: 0}
   _currentLanguageTxt: {fileID: 2445679878436411457}
   _languageLayoutList:
   - {fileID: 8778287658019489987}

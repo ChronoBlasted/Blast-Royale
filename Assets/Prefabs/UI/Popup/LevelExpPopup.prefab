@@ -924,6 +924,18 @@ PrefabInstance:
       value: 624
       objectReference: {fileID: 0}
     - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3301209090611207827, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -995,6 +1007,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: cb37917483ee24fea8fab306393441e5, type: 3}
+    - target: {fileID: 6504119753994840655, guid: 6b677807674d05c438664e6209f434eb, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7147348996498601492, guid: 6b677807674d05c438664e6209f434eb, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1097,6 +1113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 7096552252492584250}
+  _tweenSequence: {fileID: 0}
   _blastNameTxt: {fileID: 924080001427573530}
   _blastLvlTxt: {fileID: 8670158516941969358}
   _nextBlastLvlTxt: {fileID: 6912002654788711054}
