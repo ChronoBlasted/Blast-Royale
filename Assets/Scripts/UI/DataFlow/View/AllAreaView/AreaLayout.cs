@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Analytics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,5 +52,12 @@ public class AreaLayout : MonoBehaviour
     public void HandleOnSelectClick()
     {
         UIManager.Instance.AllAreaView.HandleOnSelectArea(_data.id);
+
+        ChangeAreaEvent myEvent = new ChangeAreaEvent
+        {
+            ChangeAreaAmount = 1,
+        };
+
+        AnalyticsService.Instance.RecordEvent(myEvent);
     }
 }

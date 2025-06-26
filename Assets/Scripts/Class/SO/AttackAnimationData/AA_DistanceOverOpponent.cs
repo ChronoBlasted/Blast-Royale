@@ -13,6 +13,9 @@ public class AA_DistanceOverOpponent : AAData
         var fx = Instantiate(fxPrefab, defender.transform);
         var position = Vector3.up * 2f;
         fx.transform.localPosition = position;
+
+        await Task.Delay(500);
+
         onHitCallback?.Invoke();
     }
 }

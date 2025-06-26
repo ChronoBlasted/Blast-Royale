@@ -120,7 +120,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void UpdateDay(int day)
     {
-        _dayTxt.text = _dayTrad.GetLocalizedString() + " " + day;
+        _dayTxt.text = _dayTrad.GetLocalizedString() + " "  + day;
     }
 
     public void Unlock()
