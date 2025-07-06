@@ -31,7 +31,8 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             (2f * attackerLevel / 5f + 2f)   
             * movePower                      
             * (attackerAttack / defenderDefense) 
-        ) / 50f;                           
+        ) / 50f;
+
 
         float damage = baseDamage * typeMultiplier * weatherModifier;
 

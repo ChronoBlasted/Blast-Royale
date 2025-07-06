@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
-using UnityEngine.UI;
+
 
 public class IAPPriceDisplay : MonoBehaviour, IDetailedStoreListener
 {

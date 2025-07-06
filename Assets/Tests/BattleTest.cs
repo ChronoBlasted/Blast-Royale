@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using Nakama;
+﻿using Nakama;
+using Nakama.TinyJson;
 using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
-using System.Threading.Tasks;
 
 public class BattleTest
 {
@@ -12,9 +12,10 @@ public class BattleTest
     private ISocket _socket;
 
     private const string ServerKey = "defaultkey";
-    private const string Host = "127.0.0.1"; // ou l'IP de ton serveur
+    private const string Host = "127.0.0.1";
+    //private const string Host = "209.38.212.129";
     private const int Port = 7350;
-    private const bool UseSSL = false;
+
 
     [UnitySetUp]
     public IEnumerator SetUp()
@@ -33,25 +34,107 @@ public class BattleTest
     }
 
     [UnityTest]
-    public IEnumerator TestSimpleRpcCall()
+    public IEnumerator CalculateBasicAttackDamage()
     {
-        //// Appelle la RPC "test_rpc"
-        //var payload = "{}";
-        //var rpcTask = _client.RpcAsync(_session, "test_rpc", payload);
-        //while (!rpcTask.IsCompleted) yield return null;
+        CalculateDamageParams payload = new CalculateDamageParams
+        {
+            attackerLevel = 50,
+            attackerAttack = 100,
+            defenderDefense = 50,
+            attackType = Type.Normal,
+            defenderType = Type.Normal,
+            movePower = 80,
+            meteo = Meteo.None
+        };
 
-        //var response = rpcTask.Result;
-        //var serverResult = int.Parse(response.Payload); // si le payload est juste un nombre
-
-        //// Fonction locale équivalente
-        //int localResult = LocalFunction();
-
-        //Assert.AreEqual(localResult, serverResult);
-        yield return null;
+        yield return TestAttack(payload);
     }
 
-    private int LocalFunction()
+    [UnityTest]
+    public IEnumerator CalculateEffectiveAttackDamage()
     {
-        return 42; // doit correspondre au retour de "test_rpc"
+        CalculateDamageParams payload = new CalculateDamageParams
+        {
+            attackerLevel = 50,
+            attackerAttack = 100,
+            defenderDefense = 50,
+            attackType = Type.Fire,
+            defenderType = Type.Water,
+            movePower = 80,
+            meteo = Meteo.None
+        };
+
+        yield return TestAttack(payload);
     }
+
+
+    [UnityTest]
+    public IEnumerator CalculateNotEffectiveAttackDamage()
+    {
+        CalculateDamageParams payload = new CalculateDamageParams
+        {
+            attackerLevel = 50,
+            attackerAttack = 100,
+            defenderDefense = 50,
+            attackType = Type.Water,
+            defenderType = Type.Fire,
+            movePower = 80,
+            meteo = Meteo.None
+        };
+
+        yield return TestAttack(payload);
+    }
+
+    [UnityTest]
+    public IEnumerator CalculateWeatherBoostAttackDamage()
+    {
+        CalculateDamageParams payload = new CalculateDamageParams
+        {
+            attackerLevel = 50,
+            attackerAttack = 100,
+            defenderDefense = 50,
+            attackType = Type.Fire,
+            defenderType = Type.Normal,
+            movePower = 80,
+            meteo = Meteo.Sun
+        };
+
+        yield return TestAttack(payload);
+    }
+
+
+    private IEnumerator TestAttack(CalculateDamageParams payload)
+    {
+        int localResult = NakamaLogic.CalculateDamage(
+            payload.attackerLevel,
+            payload.attackerAttack,
+            payload.defenderDefense,
+            payload.attackType,
+            payload.defenderType,
+            payload.movePower,
+            payload.meteo
+        );
+
+        Debug.Log(payload.ToJson());
+
+        var rpcTask = _client.RpcAsync(_session, "calculateAttackDamage", payload.ToJson());
+        while (!rpcTask.IsCompleted) yield return null;
+
+        var response = rpcTask.Result;
+        var serverResult = int.Parse(response.Payload);
+
+        Assert.AreEqual(serverResult, localResult);
+    }
+
+    public struct CalculateDamageParams
+    {
+        public int attackerLevel;
+        public int attackerAttack;
+        public int defenderDefense;
+        public Type attackType;
+        public Type defenderType;
+        public int movePower;
+        public Meteo meteo;
+    }
+
 }
