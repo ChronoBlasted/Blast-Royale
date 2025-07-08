@@ -40,6 +40,14 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./android.keystore
 
+      - name: Set custom parameters for Android
+        if: matrix.targetPlatform == 'Android'
+        run: echo "CUSTOM_PARAMS=--android-keystore-path ./android.keystore --android-keystore-password ${{ secrets.KEYSTORE_PASSWORD }} --android-keyalias ${{ secrets.KEY_ALIAS }} --android-keyalias-password ${{ secrets.KEY_ALIAS_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Set custom parameters empty for other platforms
+        if: matrix.targetPlatform != 'Android'
+        run: echo "CUSTOM_PARAMS=" >> $GITHUB_ENV
+
       - name: Build with Unity
         uses: game-ci/unity-builder@v4
         env:
@@ -50,17 +58,10 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
-
-          ANDROID_CUSTOM_PARAMS: >-
-            --android-keystore-path ./android.keystore
-            --android-keystore-password ${{ secrets.KEYSTORE_PASSWORD }}
-            --android-keyalias ${{ secrets.KEY_ALIAS }}
-            --android-keyalias-password ${{ secrets.KEY_ALIAS_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: MyGameBuild
-          customParameters: ${{ matrix.targetPlatform == 'Android' && env.ANDROID_CUSTOM_PARAMS || '' }}
-
+          customParameters: ${{ env.CUSTOM_PARAMS }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
