@@ -2,6 +2,7 @@
 using Nakama.TinyJson;
 using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -13,146 +14,49 @@ public class DamageTest
     public IEnumerator SetUp()
     {
         _utilsTest = new UtilsTest();
-
         yield return _utilsTest.ConnectToServer();
     }
 
     [UnityTest]
-    public IEnumerator CalculateBasicAttackDamage()
+    public IEnumerator RunDamageVariations()
     {
-        CalculateDamageParams payload = new CalculateDamageParams
+        var testCases = new[]
         {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Normal,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.None
+            CreatePayload(1),                                  // Level 1
+            CreatePayload(100),                                // Level 100
+            CreatePayload(50, 100, 20),                         // Faible défense
+            CreatePayload(50, 100, 200),                        // Forte défense
+            CreatePayload(50, 100, 50, Type.Fire, Type.Grass),  // Très efficace
+            CreatePayload(50, 100, 50, Type.Water, Type.Fire),  // Peu efficace
+            CreatePayload(50, 100, 50, Type.Fire, Type.Normal, 80, Meteo.Sun), // Bonus météo
         };
 
-        yield return TestAttack(payload);
-    }
-
-    [UnityTest]
-    public IEnumerator CalculateBasicAttackLevelOneDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
+        foreach (var payload in testCases)
         {
-            attackerLevel = 1,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Normal,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.None
-        };
-
-        yield return TestAttack(payload);
+            yield return TestAttack(payload);
+        }
     }
 
-    [UnityTest]
-    public IEnumerator CalculateBasicAttackLevelHundredDamage()
+    private CalculateDamageParams CreatePayload(
+        int attackerLevel = 50,
+        int attackerAttack = 100,
+        int defenderDefense = 50,
+        Type attackType = Type.Normal,
+        Type defenderType = Type.Normal,
+        int movePower = 80,
+        Meteo meteo = Meteo.None)
     {
-        CalculateDamageParams payload = new CalculateDamageParams
+        return new CalculateDamageParams
         {
-            attackerLevel = 100,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Normal,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.None
+            attackerLevel = attackerLevel,
+            attackerAttack = attackerAttack,
+            defenderDefense = defenderDefense,
+            attackType = attackType,
+            defenderType = defenderType,
+            movePower = movePower,
+            meteo = meteo
         };
-
-        yield return TestAttack(payload);
     }
-
-    [UnityTest]
-    public IEnumerator CalculateBasicDefenseLowAttackDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
-        {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 20,
-            attackType = Type.Normal,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.None
-        };
-
-        yield return TestAttack(payload);
-    }
-    [UnityTest]
-    public IEnumerator CalculateBasicDefenseHighAttackDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
-        {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 200,
-            attackType = Type.Normal,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.None
-        };
-
-        yield return TestAttack(payload);
-    }
-
-    [UnityTest]
-    public IEnumerator CalculateEffectiveAttackDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
-        {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Fire,
-            defenderType = Type.Water,
-            movePower = 80,
-            meteo = Meteo.None
-        };
-
-        yield return TestAttack(payload);
-    }
-
-
-    [UnityTest]
-    public IEnumerator CalculateNotEffectiveAttackDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
-        {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Water,
-            defenderType = Type.Fire,
-            movePower = 80,
-            meteo = Meteo.None
-        };
-
-        yield return TestAttack(payload);
-    }
-
-    [UnityTest]
-    public IEnumerator CalculateWeatherBoostAttackDamage()
-    {
-        CalculateDamageParams payload = new CalculateDamageParams
-        {
-            attackerLevel = 50,
-            attackerAttack = 100,
-            defenderDefense = 50,
-            attackType = Type.Fire,
-            defenderType = Type.Normal,
-            movePower = 80,
-            meteo = Meteo.Sun
-        };
-
-        yield return TestAttack(payload);
-    }
-
 
     private IEnumerator TestAttack(CalculateDamageParams payload)
     {
@@ -166,13 +70,19 @@ public class DamageTest
             payload.meteo
         );
 
+        Debug.Log($"[Local Calculation] {localResult} for {payload.ToJson()}");
+
         var rpcTask = _utilsTest.Client.RpcAsync(_utilsTest.Session, "calculateAttackDamage", payload.ToJson());
         while (!rpcTask.IsCompleted) yield return null;
 
         var response = rpcTask.Result;
         var serverResult = int.Parse(response.Payload);
 
-        Assert.AreEqual(serverResult, localResult);
+        Debug.Log($"[Server Response] {serverResult}");
+
+        Assert.AreEqual(serverResult, localResult, "Server and local damage calculation mismatch.");
+        Assert.Greater(localResult, 0, "Damage should be greater than 0");
+        Assert.LessOrEqual(localResult, 999, "Damage should not exceed reasonable maximum");
     }
 
     public struct CalculateDamageParams
@@ -185,5 +95,4 @@ public class DamageTest
         public int movePower;
         public Meteo meteo;
     }
-
 }

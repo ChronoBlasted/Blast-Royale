@@ -29,6 +29,8 @@ public class Blast
     public float Speed => CalculateBlastStat(NakamaData.Instance.GetBlastDataById(data_id).speed, iv, Level) * GetModifierMultiplier(StatType.Speed);
     public int Level { get => NakamaLogic.CalculateLevelFromExperience(exp); }
 
+    public Blast() { }
+
     public Blast(string uuid, int data, int exp, int iv, List<int> moveset, bool boss, bool shiny)
     {
         this.uuid = uuid;
@@ -43,21 +45,20 @@ public class Blast
         this.shiny = shiny;
     }
 
-    int CalculateBlastStat(int baseStat, int iv, int level)
+    public int CalculateBlastStat(int baseStat, int iv, int level)
     {
         float result = ((baseStat + iv) * level) / 100 + 5;
 
         return Mathf.FloorToInt(result);
     }
 
-
-    int CalculateBlastHp(int baseHp, int iv, int level)
+    public int CalculateBlastHp(int baseHp, int iv, int level)
     {
         float result = ((baseHp + iv) * level) / 100 + level + 10;
         return Mathf.FloorToInt(result);
     }
 
-    int CalculateBlastMana(float baseMana, float iv, float level)
+    public int CalculateBlastMana(float baseMana, float iv, float level)
     {
         float mana = ((baseMana + iv) * level) / 100f + 10f;
         return Mathf.FloorToInt(mana);
