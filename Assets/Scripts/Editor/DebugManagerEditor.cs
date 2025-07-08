@@ -1,5 +1,6 @@
-using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(DebugManager))]
 public class DebugManagerEditor : Editor
@@ -16,3 +17,4 @@ public class DebugManagerEditor : Editor
         }
     }
 }
+#endif
