@@ -1,70 +1,48 @@
-name: Build project
+name: Build Unity Android
 
 on:
   push:
-    branches: [ "PipelineCICD" ]
+    branches: [PipelineCICD]
   pull_request:
-    branches: [ "PipelineCICD" ]
+    branches: [PipelineCICD]
 
 jobs:
-  buildForAllSupportedPlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - StandaloneWindows
-          - Android
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          lfs: true
 
-      - name: Cache Unity Library
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
-
-      - name: Free disk space (Android only)
-        if: matrix.targetPlatform == 'Android'
-        uses: jlumbroso/free-disk-space@v1.3.1
-
-      - name: Decode keystore and save (Android only)
-        if: matrix.targetPlatform == 'Android'
+      - name: Decode keystore from secret
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./android.keystore
-
-      - name: Set custom parameters for Android
-        if: matrix.targetPlatform == 'Android'
-        run: echo "CUSTOM_PARAMS=--android-keystore-path ./android.keystore --android-keystore-password ${{ secrets.KEYSTORE_PASSWORD }} --android-keyalias ${{ secrets.KEY_ALIAS }} --android-keyalias-password ${{ secrets.KEY_ALIAS_PASSWORD }}" >> $GITHUB_ENV
-
-      - name: Set custom parameters empty for other platforms
-        if: matrix.targetPlatform != 'Android'
-        run: echo "CUSTOM_PARAMS=" >> $GITHUB_ENV
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android.keystore
 
       - name: Build with Unity
         uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: Android
+          buildName: MyGameBuild
+          customParameters: >
+            --android-keystore-path ./android.keystore
+            --android-keystore-password ${{ secrets.KEYSTORE_PASSWORD }}
+            --android-keyalias ${{ secrets.KEY_ALIAS }}
+            --android-keyalias-password ${{ secrets.KEY_ALIAS_PASSWORD }}
+          unityVersion: auto
+          versioning: Semantic
+          androidExportType: androidPackage
+          androidSymbolType: none
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
-        with:
-          targetPlatform: ${{ matrix.targetPlatform }}
-          buildName: MyGameBuild
-          customParameters: ${{ env.CUSTOM_PARAMS }}
 
-      - name: Upload build artifact
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          name: Android-APK
+          path: build/Android/*.apk
