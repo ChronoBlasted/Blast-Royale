@@ -50,17 +50,17 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
+
+          ANDROID_CUSTOM_PARAMS: >-
+            --android-keystore-path ./android.keystore
+            --android-keystore-password ${{ secrets.KEYSTORE_PASSWORD }}
+            --android-keyalias ${{ secrets.KEY_ALIAS }}
+            --android-keyalias-password ${{ secrets.KEY_ALIAS_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: MyGameBuild
-          customParameters: ${{ 
-            matrix.targetPlatform == 'Android' && format(
-              '--android-keystore-path ./android.keystore --android-keystore-password {0} --android-keyalias {1} --android-keyalias-password {2}',
-              env.KEYSTORE_PASSWORD,
-              env.KEY_ALIAS,
-              env.KEY_ALIAS_PASSWORD
-            ) || ''
-          }}
+          customParameters: ${{ matrix.targetPlatform == 'Android' && env.ANDROID_CUSTOM_PARAMS || '' }}
+
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
