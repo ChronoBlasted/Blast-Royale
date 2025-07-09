@@ -27,12 +27,6 @@ jobs:
           lfs: true
           fetch-depth: 0
 
-      - name: Show git status (debug)
-        run: git status
-
-      - name: Clean working directory
-        run: git reset --hard
-
       - name: Cache Library
         uses: actions/cache@v3
         with:
@@ -61,11 +55,8 @@ jobs:
           projectPath: .
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check modified files after tests
-        run: |
-          echo "Modified files:"
-          git diff --name-only
-
+      - name: Clean working directory after tests
+        run: git reset --hard
 
       - name: Build Unity project
         uses: game-ci/unity-builder@v4
