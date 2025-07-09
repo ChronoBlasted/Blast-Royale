@@ -12,8 +12,8 @@ public class UtilsTest
     public ISocket Socket;
 
     private const string ServerKey = "defaultkey";
-    private const string Host = "127.0.0.1";
-    //private const string Host = "209.38.212.129";
+    //private const string Host = "127.0.0.1";
+    private const string Host = "209.38.212.129";
     private const int Port = 7350;
 
     public IEnumerator ConnectToServer()
