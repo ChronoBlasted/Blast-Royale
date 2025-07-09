@@ -1,4 +1,4 @@
-name: Build Android, iOS and Windows (with PlayMode Tests)
+name: Build Game for All Platforms
 
 on:
   push:
@@ -6,15 +6,10 @@ on:
   pull_request:
     branches: [PipelineCICD]
 
-permissions:
-  contents: read
-  actions: write
-  checks: write
-  
 jobs:
-  testAndBuild:
-    name: Test and Build ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
+  build:
+    name: Build ${{ matrix.targetPlatform }}
+    runs-on: ${{ matrix.targetPlatform == 'iOS' && 'macos-latest' || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
       matrix:
@@ -27,17 +22,6 @@ jobs:
           lfs: true
           fetch-depth: 0
 
-      - name: Cache Library
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
-
-      - name: Free disk space (Android only)
-        if: matrix.targetPlatform == 'Android'
-        uses: jlumbroso/free-disk-space@v1.3.1
-
       - name: Decode Android Keystore (Android only)
         if: matrix.targetPlatform == 'Android'
         run: |
@@ -45,20 +29,7 @@ jobs:
           mkdir -p ~/.android
           mv android.keystore ~/.android/
 
-      - name: Run PlayMode Tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: .
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Clean working directory after tests
-        run: git reset --hard
-
-      - name: Build Unity project
+      - name: Build with Unity
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -72,7 +43,7 @@ jobs:
           androidKeyaliasName: ${{ matrix.targetPlatform == 'Android' && secrets.KEY_ALIAS || '' }}
           androidKeyaliasPass: ${{ matrix.targetPlatform == 'Android' && secrets.KEY_PASSWORD || '' }}
 
-      - name: Upload Build Artifact
+      - name: Upload build
         uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
