@@ -10,6 +10,20 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+# Unity Cloud / CI
+.crashlytics/
+*.apk
+*.aab
+*.ipa
+*.xcodeproj
+*.xcworkspace
+*.xcuserstate
+
+# GameCI / Build output
+build/
+Artifacts/
+artifacts/
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
