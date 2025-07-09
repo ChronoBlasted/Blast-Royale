@@ -1,4 +1,4 @@
-name: Build Game for All Platforms
+name: Build and Test Unity
 
 on:
   push:
@@ -6,9 +6,14 @@ on:
   pull_request:
     branches: [PipelineCICD]
 
+permissions:
+  contents: read
+  actions: write
+  checks: write
+
 jobs:
-  build:
-    name: Build ${{ matrix.targetPlatform }}
+  build-and-test:
+    name: Build ${{ matrix.targetPlatform }} and Run Tests
     runs-on: ${{ matrix.targetPlatform == 'iOS' && 'macos-latest' || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
@@ -22,6 +27,17 @@ jobs:
           lfs: true
           fetch-depth: 0
 
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+
+      - name: Free disk space (Android only)
+        if: matrix.targetPlatform == 'Android'
+        uses: jlumbroso/free-disk-space@v1.3.1
+
       - name: Decode Android Keystore (Android only)
         if: matrix.targetPlatform == 'Android'
         run: |
@@ -29,13 +45,14 @@ jobs:
           mkdir -p ~/.android
           mv android.keystore ~/.android/
 
-      - name: Build with Unity
+      - name: Build Unity project
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          projectPath: .
           targetPlatform: ${{ matrix.targetPlatform }}
           androidKeystoreName: ${{ matrix.targetPlatform == 'Android' && 'android.keystore' || '' }}
           androidKeystoreBase64: ${{ matrix.targetPlatform == 'Android' && secrets.ANDROID_KEYSTORE_BASE64 || '' }}
@@ -43,8 +60,18 @@ jobs:
           androidKeyaliasName: ${{ matrix.targetPlatform == 'Android' && secrets.KEY_ALIAS || '' }}
           androidKeyaliasPass: ${{ matrix.targetPlatform == 'Android' && secrets.KEY_PASSWORD || '' }}
 
-      - name: Upload build
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
+
+      - name: Run PlayMode Tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: .
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
