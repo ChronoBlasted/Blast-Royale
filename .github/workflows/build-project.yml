@@ -2,7 +2,7 @@ name: Build and Test Unity
 
 on:
   push:
-    branches: [PipelineCICD]
+    branches: [PipelineCICD,hotfix/Pipeline-CICD-Build]
   pull_request:
     branches: [PipelineCICD]
 
