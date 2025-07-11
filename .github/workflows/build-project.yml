@@ -1,59 +1,62 @@
-name: Build and Test Unity
+name: Build and Test Unity # Nom global du workflow visible dans l’UI GitHub
 
 on:
   push:
-    branches: [PipelineCICD,hotfix/Pipeline-CICD-Build]
+    branches: [main] # Le workflow se déclenche à chaque push sur la branche main
   pull_request:
-    branches: [PipelineCICD]
+    branches: [main] # ...et aussi à chaque pull request vers main
 
-permissions:
-  contents: read
-  actions: write
-  checks: write
+# permissions:
+#   contents: read        # Lecture du contenu du dépôt (obligatoire pour checkout)
+#   actions: write        # Permet d’écrire/modifier des actions GitHub (ex: check statuses)
+#   checks: write         # Nécessaire pour publier les résultats de tests
 
 jobs:
   build-and-test:
-    name: Build ${{ matrix.targetPlatform }} and Run Tests
-    runs-on: ${{ matrix.targetPlatform == 'iOS' && 'macos-latest' || 'ubuntu-latest' }}
+    name: Build ${{ matrix.targetPlatform }} and Run Tests # Nom dynamique selon la plateforme
+    runs-on: ${{ matrix.targetPlatform == 'iOS' && 'macos-latest' || 'ubuntu-latest' }} 
+    # iOS nécessite un runner macOS ; sinon, Ubuntu est utilisé pour Android & Windows
+
     strategy:
-      fail-fast: false
+      fail-fast: false # Si un build échoue, les autres continuent quand même
       matrix:
-        targetPlatform: [Android,iOS,StandaloneWindows64]
+        targetPlatform: [Android, iOS, StandaloneWindows64] # Build déclenché pour chaque plateforme listée
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          lfs: true
-          fetch-depth: 0
+          lfs: true            # Active Git LFS (Large File Storage)
+          fetch-depth: 0       # Récupère tout l'historique Git (utile pour versioning, changelog…)
 
       - name: Cache Library
         uses: actions/cache@v3
         with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
+          path: Library                             # Répertoire des fichiers temporaires Unity
+          key: Library-${{ matrix.targetPlatform }} # Cache séparé par plateforme
+          restore-keys: Library-                    # Clé de secours si la clé exacte n’existe pas
 
       - name: Free disk space
         if: runner.os == 'Linux'
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v1.3.1      # Libère de l’espace disque sur les runners Linux (utile pour Unity)
 
       - name: Decode Android Keystore (Android only)
-        if: matrix.targetPlatform == 'Android'
+        if: matrix.targetPlatform == 'Android'      # Étape exécutée uniquement si cible = Android
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android.keystore
           mkdir -p ~/.android
-          mv android.keystore ~/.android/
+          mv android.keystore ~/.android/           # Prépare le keystore Android pour la signature du build
 
       - name: Build Unity project
         uses: game-ci/unity-builder@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}   # Activation de Unity
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: .
-          targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: .                                # Racine du projet Unity
+          targetPlatform: ${{ matrix.targetPlatform }}  # Plateforme ciblée (Android, iOS, Windows)
+          # Les 5 lignes suivantes sont utilisées seulement pour Android
           androidKeystoreName: ${{ matrix.targetPlatform == 'Android' && 'android.keystore' || '' }}
           androidKeystoreBase64: ${{ matrix.targetPlatform == 'Android' && secrets.ANDROID_KEYSTORE_BASE64 || '' }}
           androidKeystorePass: ${{ matrix.targetPlatform == 'Android' && secrets.KEYSTORE_PASSWORD || '' }}
@@ -63,17 +66,16 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          name: Build-${{ matrix.targetPlatform }}     # Nom dynamique de l’artifact (par plateforme)
+          path: build/${{ matrix.targetPlatform }}     # Dossier de sortie généré par Unity
 
       - name: Run PlayMode Tests
-        if: matrix.targetPlatform != 'iOS'
+        if: matrix.targetPlatform != 'iOS'             # Tests exécutés uniquement pour Android et Windows
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          projectPath: .
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
+          projectPath: .                               # Exécute les tests sur tout le projet Unity
+          githubToken: ${{ secrets.GITHUB_TOKEN }}     # Nécessaire pour publier les résultats dans l’UI GitHub
