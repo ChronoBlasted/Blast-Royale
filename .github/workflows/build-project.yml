@@ -6,10 +6,10 @@ on:
   pull_request:
     branches: [main] # ...et aussi à chaque pull request vers main
 
-# permissions:
-#   contents: read        # Lecture du contenu du dépôt (obligatoire pour checkout)
-#   actions: write        # Permet d’écrire/modifier des actions GitHub (ex: check statuses)
-#   checks: write         # Nécessaire pour publier les résultats de tests
+permissions:
+  contents: read        # Lecture du contenu du dépôt (obligatoire pour checkout)
+  actions: write        # Permet d’écrire/modifier des actions GitHub (ex: check statuses)
+  checks: write         # Nécessaire pour publier les résultats de tests
 
 jobs:
   build-and-test:
