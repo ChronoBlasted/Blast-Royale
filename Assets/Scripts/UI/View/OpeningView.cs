@@ -54,4 +54,14 @@ public class OpeningView : View
 
         });
     }
+
+    public void HandleOnGoogleLog()
+    {
+        NakamaManager.Instance.NakamaAuth.SignInWithGoogle();
+    }
+
+    public void HandleOnFacebookLog()
+    {
+        NakamaManager.Instance.NakamaAuth.SignInWithGoogle();
+    }
 }

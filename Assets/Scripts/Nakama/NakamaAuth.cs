@@ -1,3 +1,4 @@
+using Google;
 using Nakama;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,12 @@ public class NakamaAuth : MonoBehaviour
 
     public void Init()
     {
+        configuration = new GoogleSignInConfiguration
+        {
+            WebClientId = "905607993036-8dirl49g0et7aus50qe5atmbgmhoavq5.apps.googleusercontent.com\r\n",
+            RequestIdToken = true
+        };
+
         _client = new Client(_nakamaClientConnexion.Scheme, _nakamaClientConnexion.Host, _nakamaClientConnexion.Port, _nakamaClientConnexion.ServerKey);
 
         vars["DeviceOS"] = SystemInfo.operatingSystem;
@@ -108,6 +115,44 @@ public class NakamaAuth : MonoBehaviour
         }
     }
 
+    public async void AuthenticateWithGoogle(string token)
+    {
+        try
+        {
+            UIManager.Instance.OpeningView.ShowLogOption(false);
+
+            _session = await _client.AuthenticateGoogleAsync(token, null, true, vars);
+
+            SaveSession();
+            await AfterAuth();
+        }
+        catch (Exception ex)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup();
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.OpeningView.ShowLogOption(true);
+        }
+    }
+
+    public async void AuthenticateWithFacebook(string token)
+    {
+        try
+        {
+            UIManager.Instance.OpeningView.ShowLogOption(false);
+
+            _session = await _client.AuthenticateFacebookAsync(token, null, true, true, vars);
+
+            SaveSession();
+            await AfterAuth();
+        }
+        catch (Exception ex)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup();
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.OpeningView.ShowLogOption(true);
+        }
+    }
+
     async Task AfterAuth()
     {
         ISocket socket = _client.NewSocket();
@@ -136,7 +181,7 @@ public class NakamaAuth : MonoBehaviour
 
     #region Linking Accounts
 
-    public async void LinkDevice(string email, string password)
+    public async void LinkDevice()
     {
         try
         {
@@ -171,16 +216,79 @@ public class NakamaAuth : MonoBehaviour
         }
     }
 
-    public async void LinkGoogle()
+    public async void LinkGoogle(string token)
     {
         try
         {
-            await _client.LinkGoogleAsync(_session, "");
+            await _client.LinkGoogleAsync(_session, token);
         }
         catch (Exception ex)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();
             UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+        }
+    }
+
+    public async void LinkFacebook(string token)
+    {
+        try
+        {
+            await _client.LinkGoogleAsync(_session, token);
+        }
+        catch (Exception ex)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup();
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+        }
+    }
+
+
+
+    #endregion
+
+    #region AuthGoogle 
+
+    private GoogleSignInConfiguration configuration;
+
+    public void SignInWithGoogle()
+    {
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnGoogleAuthAuthFinished);
+    }
+
+    private void OnGoogleAuthAuthFinished(Task<GoogleSignInUser> task)
+    {
+        if (task.IsCanceled || task.IsFaulted)
+        {
+            Debug.LogError("Google sign-in failed");
+        }
+        else
+        {
+            string idToken = task.Result.IdToken;
+            Debug.Log("Google Sign-In Successful! ID Token: " + idToken);
+
+            AuthenticateWithGoogle(idToken);
+        }
+    }
+
+    public void LinkInWithGoogle()
+    {
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnGoogleAuthLinkFinished);
+    }
+
+    private void OnGoogleAuthLinkFinished(Task<GoogleSignInUser> task)
+    {
+        if (task.IsCanceled || task.IsFaulted)
+        {
+            Debug.LogError("Google sign-in failed");
+        }
+        else
+        {
+            string idToken = task.Result.IdToken;
+            Debug.Log("Google Sign-In Successful! ID Token: " + idToken);
+
+            LinkGoogle(idToken);
         }
     }
 
