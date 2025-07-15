@@ -8,6 +8,8 @@ public class Popup : MonoBehaviour
 
     bool _triggerBlackShade;
 
+    Tween _tween;
+
     public virtual void Init()
     {
         _canvasGroup.blocksRaycasts = false;
@@ -23,6 +25,8 @@ public class Popup : MonoBehaviour
 
         if (_triggerBlackShade) UIManager.Instance.BlackShadeView.ShowBlackShade(ClosePopup, openCloseButton);
 
+        _tween.Kill(true);
+
         gameObject.SetActive(true);
 
         transform.localScale = Vector3.zero;
@@ -30,7 +34,7 @@ public class Popup : MonoBehaviour
 
         _canvasGroup.blocksRaycasts = true;
 
-        _canvasGroup.DOFade(1, .2f).OnComplete(() =>
+        _tween = _canvasGroup.DOFade(1, .2f).OnComplete(() =>
         {
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
@@ -44,9 +48,11 @@ public class Popup : MonoBehaviour
     {
         if (_triggerBlackShade) UIManager.Instance.BlackShadeView.HideBlackShade();
 
+        _tween.Kill(true);
+
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
-        _canvasGroup.DOFade(0, .1f)
+        _tween = _canvasGroup.DOFade(0, .1f)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);

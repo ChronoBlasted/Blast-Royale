@@ -19,7 +19,9 @@ public class GameManager : MonoSingleton<GameManager>
 
         EnvironmentManager.Instance.Init();
 
-        WildBattleManager.Instance.Init();
+        PvEBattleManager.Instance.Init();
+
+        PvPBattleManager.Instance.Init();
 
         CameraManager.Instance.Init();
 

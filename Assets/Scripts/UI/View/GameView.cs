@@ -31,7 +31,7 @@ public class GameView : View
 
     Panel _currentPanel;
 
-    WildBattleManager _wildBattleManager;
+    PvEBattleManager _wildBattleManager;
     NakamaData _dataUtils;
 
     Meteo _currentMeteo;
@@ -45,7 +45,7 @@ public class GameView : View
         _bagPanel.Init();
         _squadPanel.Init();
 
-        _wildBattleManager = WildBattleManager.Instance;
+        _wildBattleManager = PvEBattleManager.Instance;
         _dataUtils = NakamaData.Instance;
     }
 
@@ -194,6 +194,11 @@ public class GameView : View
         EnvironmentManager.Instance.SetMeteo(startDataMeteo);
     }
 
+    public void UpdateStateProgressLayout(bool showPermanent)
+    {
+
+    }
+
     public void SetProgression(int indexProgression)
     {
         _progressionLayout.Init(indexProgression);
@@ -336,22 +341,22 @@ public class GameView : View
 
         switch (itemData.behaviour)
         {
-            case ItemBehaviour.HEAL:
+            case ItemBehaviour.Heal:
                 await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateHpBar(selectedBlast.Hp);
                 break;
-            case ItemBehaviour.MANA:
+            case ItemBehaviour.Mana:
                 await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.UpdateManaBar(selectedBlast.Mana);
                 break;
-            case ItemBehaviour.STATUS:
+            case ItemBehaviour.Status:
                 await DoShowMessage("You use " + itemDataRef.Name.GetLocalizedString() + " on " + blastDataRef.Name.GetLocalizedString());
 
                 _playerHUD.SetStatus(selectedBlast.status);
                 break;
-            case ItemBehaviour.CATCH:
+            case ItemBehaviour.Catch:
                 if (isCaptured)
                 {
                     await _opponentHUD.BlastInWorld.DoCatchBlastTrap(4, itemDataRef.Prefab);

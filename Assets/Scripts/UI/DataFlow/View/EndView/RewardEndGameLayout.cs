@@ -21,7 +21,7 @@ public class RewardEndGameLayout : MonoBehaviour
 
         switch (_currentOffer.type)
         {
-            case OfferType.BLAST:
+            case OfferType.Blast:
 
                 BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(_currentOffer.blast.data_id);
 
@@ -29,7 +29,7 @@ public class RewardEndGameLayout : MonoBehaviour
 
                 _amount.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(_currentOffer.blast.exp);
                 break;
-            case OfferType.ITEM:
+            case OfferType.Item:
                 ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(_currentOffer.item.data_id);
 
                 ItemData itemData = NakamaData.Instance.GetItemDataById(_currentOffer.item.data_id);
@@ -38,14 +38,14 @@ public class RewardEndGameLayout : MonoBehaviour
 
                 _amount.text = "x" + _currentOffer.item.amount;
                 break;
-            case OfferType.COIN:
+            case OfferType.Coin:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
 
                 _ico.sprite = resourceData.Sprite;
 
                 _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.coinsAmount);
                 break;
-            case OfferType.GEM:
+            case OfferType.Gem:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
 
                 _ico.sprite = resourceData.Sprite;

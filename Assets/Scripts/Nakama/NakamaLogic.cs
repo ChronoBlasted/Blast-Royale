@@ -28,9 +28,9 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         float typeMultiplier = GetTypeMultiplier(attackType, defenderType);
 
         float baseDamage = (
-            (2f * attackerLevel / 5f + 2f)   
-            * movePower                      
-            * (attackerAttack / defenderDefense) 
+            (2f * attackerLevel / 5f + 2f)
+            * movePower
+            * (attackerAttack / defenderDefense)
         ) / 50f;
 
 
@@ -48,6 +48,31 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     public static bool IsAllBlastFainted(List<Blast> allPlayerBlasts)
     {
         return allPlayerBlasts.All(blast => blast.Hp == 0);
+    }
+
+    public static int GetActionPriority(TurnType turnType)
+    {
+        switch (turnType)
+        {
+            case TurnType.Attack:
+                return 2;
+            case TurnType.Swap:
+                return 4;
+            case TurnType.Item:
+                return 3;
+            case TurnType.Wait:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    public static bool CompareActionPriorities(TurnType p1ActionType, TurnType p2ActionType)
+    {
+        int p1Priority = NakamaLogic.GetActionPriority(p1ActionType);
+        int p2Priority = NakamaLogic.GetActionPriority(p2ActionType);
+
+        return p1Priority >= p2Priority;
     }
 
     public int CalculateStaminaRecovery(int maxStamina, int currentStamina, bool useWait = false)

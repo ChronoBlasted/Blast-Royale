@@ -57,10 +57,16 @@ public class NakamaUserAccount : MonoBehaviour
         UIManager.Instance.ProfilePopup.UpdateData(_lastData, username);
         UIManager.Instance.AllAreaView.SetArea(_lastData.area);
 
-        if (_lastData.wildBattleButtonAds)
+        if (_lastData.pveBattleButtonAds)
         {
-            UIManager.Instance.MenuView.FightPanel.WildBattleBonusAds.SetAdsOn();
-            WildBattleManager.Instance.BonusAds = true;
+            UIManager.Instance.MenuView.FightPanel.PvEBattleBonusAds.SetAdsOn();
+            PvEBattleManager.Instance.BonusAds = true;
+        }
+
+        if (_lastData.pvpBattleButtonAds)
+        {
+            UIManager.Instance.MenuView.FightPanel.PvPBattleBonusAds.SetAdsOn();
+            PvPBattleManager.Instance.BonusAds = true;
         }
     }
 
@@ -421,6 +427,7 @@ public class Metadata
     public int loose;
     public int blast_captured;
     public int blast_defeated;
-    public bool wildBattleButtonAds;
+    public bool pveBattleButtonAds;
+    public bool pvpBattleButtonAds;
 
 }

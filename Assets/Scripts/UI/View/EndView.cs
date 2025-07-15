@@ -20,11 +20,11 @@ public class EndView : View
 
     public override void OpenView(bool _instant = false)
     {
-        _progressionSlotLayout.InitSmooth(WildBattleManager.Instance.IndexProgression);
+        _progressionSlotLayout.InitSmooth(PvEBattleManager.Instance.IndexProgression);
 
-        UIManager.Instance.DoSmoothTextInt(_amountRegularBlastTxt, 0, WildBattleManager.Instance.BlastDefeated, "<sprite name=\"RegularBlast\">");
-        UIManager.Instance.DoSmoothTextInt(_amountBossDefeatedTxt, 0, WildBattleManager.Instance.BossEncounter, "<sprite name=\"BossBlast\">");
-        UIManager.Instance.DoSmoothTextInt(_amountShinyDefeatedTxt, 0, WildBattleManager.Instance.ShinyEncounter, "<sprite name=\"Luck\">");
+        UIManager.Instance.DoSmoothTextInt(_amountRegularBlastTxt, 0, PvEBattleManager.Instance.BlastDefeated, "<sprite name=\"RegularBlast\">");
+        UIManager.Instance.DoSmoothTextInt(_amountBossDefeatedTxt, 0, PvEBattleManager.Instance.BossEncounter, "<sprite name=\"BossBlast\">");
+        UIManager.Instance.DoSmoothTextInt(_amountShinyDefeatedTxt, 0, PvEBattleManager.Instance.ShinyEncounter, "<sprite name=\"Luck\">");
 
         foreach (Transform transform in _rewardContentTransform)
         {
@@ -33,7 +33,7 @@ public class EndView : View
 
         _chronoTweenSequence.ObjectsToTween.Clear();
 
-        foreach (Offer offer in WildBattleManager.Instance.WildBattleReward)
+        foreach (Offer offer in PvEBattleManager.Instance.PvEBattleReward)
         {
             var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
             currentRerward.Init(offer);

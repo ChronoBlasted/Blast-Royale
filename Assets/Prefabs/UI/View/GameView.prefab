@@ -2989,6 +2989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 7673301957442774097}
+  _tabButton: {fileID: 5049963601529798229}
   itemInBattleLayouts:
   - {fileID: 640376470236691692}
   - {fileID: 5453094524551274888}
@@ -4051,7 +4052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NavBar, Assembly-CSharp
+      value: NavBar, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -4059,7 +4060,7 @@ PrefabInstance:
       objectReference: {fileID: 4723547987268452759}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: NavBarTab, Assembly-CSharp
+      value: NavBarTab, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5712543178038832854, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: _tab
@@ -4221,6 +4222,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c2112d7a9e53345aaa9cad82f006f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5049963601529798229 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
+  m_PrefabInstance: {fileID: 1065785342318096193}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb5570ddae87224cb0821ff1581563f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6978071974740094047 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7934631582068753182, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
@@ -4331,7 +4343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5426844218309161303, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_fontSize
-      value: 27.85
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5835879247934445361, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4488,7 +4500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5426844218309161303, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_fontSize
-      value: 27.85
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5835879247934445361, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -5008,7 +5020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NavBar, Assembly-CSharp
+      value: NavBar, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -5016,7 +5028,7 @@ PrefabInstance:
       objectReference: {fileID: 8735042271872976218}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: NavBarTab, Assembly-CSharp
+      value: NavBarTab, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5712543178038832854, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: _tab
@@ -5687,7 +5699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5426844218309161303, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_fontSize
-      value: 27.85
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5835879247934445361, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6961,7 +6973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5426844218309161303, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_fontSize
-      value: 27.85
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5835879247934445361, guid: 2bef279eb84468e45892b9884219021d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -7660,7 +7672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NavBar, Assembly-CSharp
+      value: NavBar, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -7668,7 +7680,7 @@ PrefabInstance:
       objectReference: {fileID: 2363664913799076324}
     - target: {fileID: 5251053391389774100, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: NavBarTab, Assembly-CSharp
+      value: NavBarTab, Core
       objectReference: {fileID: 0}
     - target: {fileID: 5712543178038832854, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: _tab
@@ -7764,7 +7776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8801573613682095250, guid: e0ce950b4326b104fbb0877b52436a20, type: 3}
       propertyPath: m_fontSize
-      value: 33.7
+      value: 36
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

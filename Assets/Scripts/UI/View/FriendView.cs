@@ -77,6 +77,6 @@ public class FriendView : View
     {
         UIManager.Instance.ConfirmPopup.OpenPopup();
 
-        UIManager.Instance.ConfirmPopup.UpdateDataWithInputField("Add friend", "Enter your friend username :", "Enter friend username", NakamaManager.Instance.NakamaFriends.AddFriends);
+        UIManager.Instance.ConfirmPopup.UpdateDataWithInputField("Add friend", "Enter your friend username :", "Enter friend username", TMP_InputField.ContentType.Alphanumeric, NakamaManager.Instance.NakamaFriends.AddFriends);
     }
 }

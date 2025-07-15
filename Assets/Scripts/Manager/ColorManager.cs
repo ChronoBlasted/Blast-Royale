@@ -19,16 +19,16 @@ public class ColorManager : MonoSingleton<ColorManager>
 
         switch (behaviour)
         {
-            case ItemBehaviour.HEAL:
+            case ItemBehaviour.Heal:
                 colorToReturn = _healColor;
                 break;
-            case ItemBehaviour.MANA:
+            case ItemBehaviour.Mana:
                 colorToReturn = _manaColor;
                 break;
-            case ItemBehaviour.STATUS:
+            case ItemBehaviour.Status:
                 colorToReturn = _statusColor;
                 break;
-            case ItemBehaviour.CATCH:
+            case ItemBehaviour.Catch:
                 colorToReturn = _catchColor;
                 break;
         }

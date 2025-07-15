@@ -4,21 +4,23 @@ using System.Linq;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class BagMiniPanel : Panel
 {
+    [SerializeField] Button _tabButton;
     [SerializeField] List<ItemLayout> itemInBattleLayouts;
 
     int _lastItemIndex;
 
-    WildBattleManager _wildBattleManager;
+    PvEBattleManager _wildBattleManager;
     List<Item> _items;
 
     public override void Init()
     {
         base.Init();
 
-        _wildBattleManager = WildBattleManager.Instance;
+        _wildBattleManager = PvEBattleManager.Instance;
     }
 
     public override void OpenPanel()
@@ -69,23 +71,23 @@ public class BagMiniPanel : Panel
 
         switch (itemData.behaviour)
         {
-            case ItemBehaviour.HEAL:
+            case ItemBehaviour.Heal:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
                 UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.HP, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
 
-            case ItemBehaviour.MANA:
+            case ItemBehaviour.Mana:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
                 UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.MANA, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
-            case ItemBehaviour.STATUS:
+            case ItemBehaviour.Status:
                 UIManager.Instance.ChangeBlastPopup.OpenPopup();
 
                 UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.STATUS, NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString());
                 break;
-            case ItemBehaviour.CATCH:
+            case ItemBehaviour.Catch:
                 UseItemOnBlast(_lastItemIndex);
                 break;
         }
@@ -95,4 +97,10 @@ public class BagMiniPanel : Panel
     {
         _wildBattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
     }
+
+    public void HandleOnPvPBattle(bool isPvPBattle)
+    {
+        _tabButton.interactable = !isPvPBattle;
+    }
+
 }

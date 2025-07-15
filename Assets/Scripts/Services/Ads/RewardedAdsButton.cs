@@ -81,6 +81,7 @@ public class RewardedAdsButton : MonoBehaviour
         if (_background == null || _adsReadyParticle == null) return;
 
         _adsLayout.gameObject.SetActive(false);
+
         _background.sprite = _activeBG;
         _adsReadyParticle.Play();
         _isAdsActive = true;

@@ -21,7 +21,7 @@ public class ChangeBlastPopup : Popup
     {
         base.OpenPopup();
 
-        UpdateData(WildBattleManager.Instance.PlayerSquads);
+        UpdateData(PvEBattleManager.Instance.PlayerSquads);
     }
 
     public override void ClosePopup()

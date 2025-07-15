@@ -26,7 +26,8 @@ public class LoadingBattleView : View
 
     public async void HandleCancelMatchMaking()
     {
-        await NakamaManager.Instance.NakamaWildBattle.CancelMatchmaking();
+        await NakamaManager.Instance.NakamaPvEBattle.CancelMatchmaking();
+        await NakamaManager.Instance.NakamaPvPBattle.CancelMatchmaking();
 
         UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
     }

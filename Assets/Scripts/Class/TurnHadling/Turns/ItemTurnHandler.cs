@@ -15,16 +15,16 @@ public class ItemTurnHandler : TurnActionHandler
 
         switch (itemData.behaviour)
         {
-            case ItemBehaviour.HEAL:
+            case ItemBehaviour.Heal:
                 targetBlast.Hp += itemData.gain_amount;
                 break;
-            case ItemBehaviour.MANA:
+            case ItemBehaviour.Mana:
                 targetBlast.Mana += itemData.gain_amount;
                 break;
-            case ItemBehaviour.STATUS:
+            case ItemBehaviour.Status:
                 targetBlast.status = itemData.status;
                 break;
-            case ItemBehaviour.CATCH:
+            case ItemBehaviour.Catch:
                 break;
         }
 

@@ -19,7 +19,7 @@ public class OfferLayout : MonoBehaviour
 
         switch (_currentOffer.type)
         {
-            case OfferType.BLAST:
+            case OfferType.Blast:
 
                 BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(_currentOffer.blast.data_id);
 
@@ -28,7 +28,7 @@ public class OfferLayout : MonoBehaviour
                 _nameTxt.text = blastData.Name.GetLocalizedString();
                 _descTxt.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(_currentOffer.blast.exp);
                 break;
-            case OfferType.ITEM:
+            case OfferType.Item:
                 ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(_currentOffer.item.data_id);
 
                 ItemData itemData = NakamaData.Instance.GetItemDataById(_currentOffer.item.data_id);
@@ -38,7 +38,7 @@ public class OfferLayout : MonoBehaviour
                 _nameTxt.text = itemDataRef.Name.GetLocalizedString();
                 _descTxt.text = "x" + _currentOffer.item.amount;
                 break;
-            case OfferType.COIN:
+            case OfferType.Coin:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
 
                 _ico.sprite = resourceData.Sprite;
@@ -46,7 +46,7 @@ public class OfferLayout : MonoBehaviour
                 _nameTxt.text = resourceData.Name.GetLocalizedString();
                 _descTxt.text = "x" + UIManager.GetFormattedInt(_currentOffer.coinsAmount);
                 break;
-            case OfferType.GEM:
+            case OfferType.Gem:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
 
                 _ico.sprite = resourceData.Sprite;
@@ -67,7 +67,7 @@ public class OfferLayout : MonoBehaviour
 
         switch (storeOffer.offer.type)
         {
-            case OfferType.COIN:
+            case OfferType.Coin:
                 storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(storeOffer.offer_id);
 
                 _ico.sprite = storeOfferRef.Sprite;
@@ -75,7 +75,7 @@ public class OfferLayout : MonoBehaviour
                 _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
                 _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.offer.coinsAmount);
                 break;
-            case OfferType.GEM:
+            case OfferType.Gem:
                 storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(storeOffer.offer_id);
 
                 _ico.sprite = storeOfferRef.Sprite;

@@ -1,1 +1,8 @@
-public enum OfferType { NONE, COIN, GEM, BLAST, ITEM }
+public enum OfferType
+{
+    None,
+    Coin,
+    Gem,
+    Blast,
+    Item
+}

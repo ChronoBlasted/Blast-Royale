@@ -10,24 +10,31 @@ public class FightPanel : Panel
     [SerializeField] SettingLayout _settingLayout;
     [SerializeField] SquadLayout _squadLayout;
     [SerializeField] AreaLayoutFightPanel _areaLayoutFightPanel;
-    [SerializeField] RewardedAdsButton _wildBattleBonusAds;
+    [SerializeField] RewardedAdsButton _pveBattleBonusAds, _pvpBattleBonusAds;
 
 
     public ProfileLayout ProfileLayout { get => _profileLayout; }
     public AreaLayoutFightPanel AreaLayoutFightPanel { get => _areaLayoutFightPanel; }
-    public RewardedAdsButton WildBattleBonusAds { get => _wildBattleBonusAds; }
+    public RewardedAdsButton PvEBattleBonusAds { get => _pveBattleBonusAds; }
+    public RewardedAdsButton PvPBattleBonusAds { get => _pvpBattleBonusAds; }
     public SettingLayout SettingLayout { get => _settingLayout; }
 
     public override void Init()
     {
         base.Init();
 
-        NakamaManager.Instance.NakamaWildBattle.OnWildBattleEnd.AddListener(() =>
+        NakamaManager.Instance.NakamaPvEBattle.OnPvEBattleEnd.AddListener(() =>
         {
-            _wildBattleBonusAds.RefreshAd();
+            _pveBattleBonusAds.RefreshAd();
         });
 
-        _wildBattleBonusAds.Init();
+        NakamaManager.Instance.NakamaPvPBattle.OnPvPBattleEnd.AddListener(() =>
+        {
+            _pvpBattleBonusAds.RefreshAd();
+        });
+
+        _pveBattleBonusAds.Init();
+        _pvpBattleBonusAds.Init();
     }
 
     public override void OpenPanel()
@@ -47,21 +54,28 @@ public class FightPanel : Panel
         _squadLayout.UpdateDeckBlast(decks);
     }
 
-    public void HandleOnWildBattle()
+    public void HandleOnPvEBattle()
     {
-        NakamaManager.Instance.NakamaWildBattle.FindWildBattle();
+        NakamaManager.Instance.NakamaPvEBattle.FindBattle();
     }
 
-    public void HandleOnPlayerBattle()
+    public void HandleOnPvPBattle()
     {
-        Debug.Log("Coming soon");
+        NakamaManager.Instance.NakamaPvPBattle.FindBattle();
     }
 
-    public void HandleOnBonusRewardsAds()
+    public void HandleOnBonusPvERewardsAds()
     {
-        _wildBattleBonusAds.SetAdsOn();
+        _pveBattleBonusAds.SetAdsOn();
 
-        NakamaManager.Instance.NakamaWildBattle.HandleOnBonusRewardsAds();
+        NakamaManager.Instance.NakamaPvEBattle.HandleOnPvERewardsAds();
+    }
+
+    public void HandleOnBonusPvPRewardsAds()
+    {
+        _pvpBattleBonusAds.SetAdsOn();
+
+        NakamaManager.Instance.NakamaPvPBattle.HandleOnPvERewardsAds();
     }
 
     public void HandleOnOpenQuest()

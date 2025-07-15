@@ -56,7 +56,7 @@ public class BlastMiniSquadLayout : MonoBehaviour
             _bg.sprite = _aliveBG;
         }
 
-        if (_currentBlast == WildBattleManager.Instance.PlayerBlast)
+        if (_currentBlast == PvEBattleManager.Instance.PlayerBlast)
         {
             _bg.sprite = _activeBG;
             _bgGlow.color = _onGlow;
@@ -69,8 +69,8 @@ public class BlastMiniSquadLayout : MonoBehaviour
 
     public void HandleOnClick()
     {
-        if (_currentBlast == WildBattleManager.Instance.PlayerBlast) ErrorManager.Instance.ShowError(ErrorType.ALREADY_IN_BATTLE);
+        if (_currentBlast == PvEBattleManager.Instance.PlayerBlast) ErrorManager.Instance.ShowError(ErrorType.ALREADY_IN_BATTLE);
         else if (_currentBlast.Hp <= 0) ErrorManager.Instance.ShowError(ErrorType.IS_FAINTED);
-        else WildBattleManager.Instance.PlayerChangeBlast(_blastIndex);
+        else PvEBattleManager.Instance.PlayerChangeBlast(_blastIndex);
     }
 }

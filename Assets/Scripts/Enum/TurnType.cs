@@ -1,1 +1,9 @@
-public enum TurnType { NONE, ATTACK, ITEM, SWAP, WAIT, STATUS }
+public enum TurnType
+{
+    None,
+    Attack,
+    Item,
+    Swap,
+    Wait,
+    Status
+}

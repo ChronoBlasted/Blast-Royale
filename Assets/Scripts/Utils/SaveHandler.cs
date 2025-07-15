@@ -23,7 +23,7 @@ public static class SaveHandler
                 break;
 
             default:
-                Debug.Log("The value you want to save must be one of the following types : bool, int, float, string.");
+                Debug.Log("The value you want to save must be one of the following types: bool, int, float, string.");
                 break;
         }
 
@@ -59,10 +59,24 @@ public static class SaveHandler
                 break;
 
             default:
-                Debug.Log("The value you want to load must be one of the following types : bool, int, float, string.");
+                Debug.Log("The value you want to load must be one of the following types: bool, int, float, string.");
                 break;
         }
 
         return returnValue;
+    }
+
+    public static void DeleteValue(string _Key, bool _InstantDiskSave = true)
+    {
+        if (PlayerPrefs.HasKey(_Key))
+        {
+            PlayerPrefs.DeleteKey(_Key);
+            if (_InstantDiskSave)
+                SaveAll();
+        }
+        else
+        {
+            Debug.Log($"Key '{_Key}' not found in PlayerPrefs.");
+        }
     }
 }

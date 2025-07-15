@@ -19,16 +19,16 @@ public class PediaItemLayout : MonoBehaviour
 
         switch (_data.behaviour)
         {
-            case ItemBehaviour.HEAL:
+            case ItemBehaviour.Heal:
                 _descTxt.text = "Restore " + _data.gain_amount + " health points";
                 break;
-            case ItemBehaviour.MANA:
+            case ItemBehaviour.Mana:
                 _descTxt.text = "Restore " + _data.gain_amount + " mana points";
                 break;
-            case ItemBehaviour.STATUS:
+            case ItemBehaviour.Status:
                 _descTxt.text = "Remove " + _data.status + " from a Blast";
                 break;
-            case ItemBehaviour.CATCH:
+            case ItemBehaviour.Catch:
                 _descTxt.text = "Try to catch with rate  : " + _data.catchRate;
                 break;
         }

@@ -55,7 +55,7 @@ public class WildBattleOfferLayout : MonoBehaviour
     IEnumerator ContinueFlow()
     {
         yield return new WaitForSeconds(2f);
-        WildBattleManager.Instance.PlayerChooseOffer(_index);
+        PvEBattleManager.Instance.PlayerChooseOffer(_index);
 
         UIManager.Instance.WildBattleOfferPopup.ClosePopup();
     }

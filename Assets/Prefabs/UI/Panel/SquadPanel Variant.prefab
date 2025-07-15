@@ -1891,7 +1891,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 443.6019, y: -660}
+  m_AnchoredPosition: {x: 540, y: -660}
   m_SizeDelta: {x: 800, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &8189382024665515229
@@ -3590,12 +3590,20 @@ PrefabInstance:
       value: QuitSoloItem
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Core
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: SquadPanel, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Core
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4497,12 +4505,20 @@ PrefabInstance:
       value: QuitSoloItem
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: NavBar, Core
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: SquadPanel, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: SquadPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: NavBarTab, Core
       objectReference: {fileID: 0}
     - target: {fileID: 8085237547846721398, guid: 8bfa7848c5ce90748807a1c0da425640, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName

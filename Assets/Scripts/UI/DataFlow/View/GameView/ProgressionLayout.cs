@@ -5,7 +5,7 @@ using System.Collections;
 
 public class ProgressionLayout : MonoBehaviour
 {
-    [SerializeField] ProgressionSlotLayout _permanentSlot;
+    public ProgressionSlotLayout _permanentSlot;
     [SerializeField] List<ProgressionSlotLayout> slots;           // Logique
     [SerializeField] List<RectTransform> slotRects;               // UI
     [SerializeField] RectTransform slotsContainer;
@@ -109,12 +109,12 @@ public class ProgressionLayout : MonoBehaviour
 
     public void Hide()
     {
+
         DOTween.Kill(_cg, true);
 
         _cg.DOFade(0f, .2f);
 
         _isOpen = false;
-
     }
 
     IEnumerator HideCor()

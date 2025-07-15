@@ -6,12 +6,12 @@ public static class TurnHandlerFactory
     {
         return turnType switch
         {
-            TurnType.ATTACK => new AttackTurnHandler(context, view, nakamaData),
-            TurnType.ITEM => new ItemTurnHandler(context, view, nakamaData),
-            TurnType.SWAP => new SwapTurnHandler(context, view, nakamaData),
-            TurnType.WAIT => new WaitTurnHandler(context, view, nakamaData),
-            TurnType.STATUS => new StatusEffectTurnHandler(context, view, nakamaData),
-            TurnType.NONE => new WaitTurnHandler(context, view, nakamaData),
+            TurnType.Attack => new AttackTurnHandler(context, view, nakamaData),
+            TurnType.Item => new ItemTurnHandler(context, view, nakamaData),
+            TurnType.Swap => new SwapTurnHandler(context, view, nakamaData),
+            TurnType.Wait => new WaitTurnHandler(context, view, nakamaData),
+            TurnType.Status => new StatusEffectTurnHandler(context, view, nakamaData),
+            TurnType.None => new WaitTurnHandler(context, view, nakamaData),
             _ => throw new NotImplementedException(),
         };
     }

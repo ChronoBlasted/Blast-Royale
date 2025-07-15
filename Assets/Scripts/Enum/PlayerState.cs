@@ -1,9 +1,10 @@
 public enum PlayerState
 {
-    BUSY,
-    READY,
-    WAITFORATTACK,
-    WAITFORCHANGEBLAST,
-    WAITFORUSEITEM,
-    WAITTURN,
+    None,
+    Busy,
+    Ready,
+    WaitForAttack,
+    WaitForChangeBlast,
+    WaitForUseItem,
+    WaitTurn,
 }

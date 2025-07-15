@@ -1,8 +1,8 @@
 public enum ItemBehaviour
 {
-    NONE,
-    HEAL,
-    MANA,
-    STATUS,
-    CATCH,
+    None,
+    Heal,
+    Mana,
+    Status,
+    Catch,
 }

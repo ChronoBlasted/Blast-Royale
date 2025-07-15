@@ -22,12 +22,12 @@ public class DebugManager : MonoSingleton<DebugManager>
         switch (move.target)
         {
             case Target.Opponent:
-                target = WildBattleManager.Instance.WildBlast;
+                target = PvEBattleManager.Instance.WildBlast;
                 defenderHUD = UIManager.Instance.GameView.OpponentHUD;
 
                 break;
             case Target.Self:
-                target = WildBattleManager.Instance.PlayerBlast;
+                target = PvEBattleManager.Instance.PlayerBlast;
                 defenderHUD = UIManager.Instance.GameView.PlayerHUD;
                 break;
         }
