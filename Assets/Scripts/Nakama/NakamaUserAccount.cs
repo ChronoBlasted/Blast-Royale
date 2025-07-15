@@ -2,6 +2,8 @@ using Nakama;
 using Nakama.TinyJson;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -35,6 +37,9 @@ public class NakamaUserAccount : MonoBehaviour
         await GetWalletData();
         await GetPlayerBlast();
         await GetPlayerBag();
+
+        IsEmailLinked();
+        IsAnyDeviceLinked();
     }
 
     async Task GetPlayerData()
@@ -69,6 +74,33 @@ public class NakamaUserAccount : MonoBehaviour
             PvPBattleManager.Instance.BonusAds = true;
         }
     }
+
+    public bool IsEmailLinked()
+    {
+        bool isLinked = _lastAccount.Email != null;
+        SaveHandler.SaveValue("mailLink", isLinked);
+
+        UIManager.Instance.LinkLogPopup.UpdateDeviceBG(isLinked);
+
+        if (isLinked == false) return false;
+
+        SaveHandler.SaveValue("mail", _lastAccount.Email);
+
+        return true;
+    }
+
+    public bool IsAnyDeviceLinked()
+    {
+        bool isLinked = _lastAccount.Devices != null && _lastAccount.Devices.Count() > 0;
+
+        SaveHandler.SaveValue("deviceLink", isLinked);
+
+        UIManager.Instance.LinkLogPopup.UpdateDeviceBG(isLinked);
+
+        return isLinked;
+    }
+
+
 
     #region ApiAccountUpdate
 
