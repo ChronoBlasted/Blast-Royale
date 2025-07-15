@@ -59,9 +59,4 @@ public class OpeningView : View
     {
         NakamaManager.Instance.NakamaAuth.SignInWithGoogle();
     }
-
-    public void HandleOnFacebookLog()
-    {
-        NakamaManager.Instance.NakamaAuth.SignInWithGoogle();
-    }
 }

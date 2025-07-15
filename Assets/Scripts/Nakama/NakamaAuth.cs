@@ -87,12 +87,17 @@ public class NakamaAuth : MonoBehaviour
 
             SaveSession();
 
+            SaveHandler.SaveValue("deviceLink", true);
+
+            UIManager.Instance.LinkLogPopup.UpdateDeviceBG(true);
+
             await AfterAuth();
         }
         catch (Exception ex)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
+
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
@@ -105,12 +110,18 @@ public class NakamaAuth : MonoBehaviour
 
             _session = await _client.AuthenticateEmailAsync(email, password, null, true, vars);
             SaveSession();
+
+            SaveHandler.SaveValue("mailLink", true);
+            SaveHandler.SaveValue("mail", email);
+
+            UIManager.Instance.LinkLogPopup.UpdateMailBG(true);
+
             await AfterAuth();
         }
         catch (Exception ex)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
@@ -124,34 +135,19 @@ public class NakamaAuth : MonoBehaviour
             _session = await _client.AuthenticateGoogleAsync(token, null, true, vars);
 
             SaveSession();
+
+            SaveHandler.SaveValue("googleLink", true);
+
             await AfterAuth();
         }
         catch (Exception ex)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
 
-    public async void AuthenticateWithFacebook(string token)
-    {
-        try
-        {
-            UIManager.Instance.OpeningView.ShowLogOption(false);
-
-            _session = await _client.AuthenticateFacebookAsync(token, null, true, true, vars);
-
-            SaveSession();
-            await AfterAuth();
-        }
-        catch (Exception ex)
-        {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
-            UIManager.Instance.OpeningView.ShowLogOption(true);
-        }
-    }
 
     async Task AfterAuth()
     {
@@ -174,9 +170,11 @@ public class NakamaAuth : MonoBehaviour
     {
         SaveHandler.DeleteValue("nakama.token");
 
+        PlayerPrefs.DeleteAll();
+
         _session = null;
 
-        UIManager.Instance.OpeningView.ShowLogOption(true);
+        GameManager.Instance.ReloadScene();
     }
 
     #region Linking Accounts
@@ -195,11 +193,15 @@ public class NakamaAuth : MonoBehaviour
             PlayerPrefs.SetString("deviceId", deviceId);
 
             await _client.LinkDeviceAsync(_session, deviceId);
+
+            SaveHandler.SaveValue("deviceLink", true);
+
+            UIManager.Instance.LinkLogPopup.UpdateDeviceBG(true);
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
         }
     }
 
@@ -208,11 +210,15 @@ public class NakamaAuth : MonoBehaviour
         try
         {
             await _client.LinkEmailAsync(_session, email, password);
+
+            SaveHandler.SaveValue("mailLink", true);
+
+            UIManager.Instance.LinkLogPopup.UpdateMailBG(true);
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
         }
     }
 
@@ -221,27 +227,74 @@ public class NakamaAuth : MonoBehaviour
         try
         {
             await _client.LinkGoogleAsync(_session, token);
+
+            SaveHandler.SaveValue("googleLink", true);
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
         }
     }
 
-    public async void LinkFacebook(string token)
+
+    #endregion
+
+    #region Unlink Accounts
+
+    public async void UnlinkDevice()
+    {
+        try
+        {
+            string deviceId = PlayerPrefs.GetString("deviceId");
+
+            await _client.UnlinkDeviceAsync(_session, deviceId);
+
+            SaveHandler.SaveValue("deviceLink", false);
+
+            UIManager.Instance.LinkLogPopup.UpdateDeviceBG(false);
+        }
+        catch (Exception ex)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
+        }
+    }
+
+    public async void UnlinkMail(string password)
+    {
+        try
+        {
+
+            string email = SaveHandler.LoadValue("mail", "");
+
+            await _client.UnlinkEmailAsync(_session, email, password);
+
+            SaveHandler.SaveValue("mailLink", false);
+
+            UIManager.Instance.LinkLogPopup.UpdateMailBG(false);
+        }
+        catch (Exception ex)
+        {
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
+        }
+    }
+
+    public async void UnlinkGoogle(string token)
     {
         try
         {
             await _client.LinkGoogleAsync(_session, token);
+
+            SaveHandler.SaveValue("googleLink", false);
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, GameManager.Instance.ReloadScene, false);
+            UIManager.Instance.ConfirmPopup.OpenPopup(false);
+            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
         }
     }
-
 
 
     #endregion

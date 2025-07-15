@@ -93,10 +93,10 @@ public class SettingView : View
     {
         Application.OpenURL("https://discord.gg/ApzM4bQh8w");
     }
-    public void HandleResetAccount()
+
+    public void HandleOpenAccountLog()
     {
-        UIManager.Instance.ConfirmPopup.OpenPopup();
-        UIManager.Instance.ConfirmPopup.UpdateData("DELETE ACCOUNT", "Are you sure to delete your account ?", NakamaManager.Instance.NakamaUserAccount.DeleteAccount);
+        UIManager.Instance.LinkLogPopup.OpenPopup();
     }
 
     public void HandleOpenLanguagePopUp()

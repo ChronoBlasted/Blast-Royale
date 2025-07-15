@@ -27,35 +27,38 @@ public enum TextStyle
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    [field: SerializeField] public Canvas MainCanvas { get; protected set; }
-    [field: SerializeField] public RectTransform RectTransformPool { get; protected set; }
+    public Canvas MainCanvas;
+    public RectTransform RectTransformPool;
 
-    [field: SerializeField] public MenuView MenuView { get; protected set; }
-    [field: SerializeField] public GameView GameView { get; protected set; }
-    [field: SerializeField] public EndView EndView { get; protected set; }
-    [field: SerializeField] public OpeningView OpeningView { get; protected set; }
-    [field: SerializeField] public PediaView PediaView { get; protected set; }
-    [field: SerializeField] public DailyRewardView DailyRewardView { get; protected set; }
-    [field: SerializeField] public AreaLeaderboardView AreaLeaderboardView { get; protected set; }
-    [field: SerializeField] public RegularLeaderboardView RegularLeaderboardView { get; protected set; }
-    [field: SerializeField] public FriendView FriendView { get; protected set; }
-    [field: SerializeField] public SettingView SettingView { get; protected set; }
-    [field: SerializeField] public LoadingBattleView LoadingBattleView { get; protected set; }
-    [field: SerializeField] public AllAreaView AllAreaView { get; protected set; }
-    [field: SerializeField] public ErrorView ErrorView { get; protected set; }
-    [field: SerializeField] public BlackShadeView BlackShadeView { get; protected set; }
+    [Header("Views")]
+    public MenuView MenuView;
+    public GameView GameView;
+    public EndView EndView;
+    public OpeningView OpeningView;
+    public PediaView PediaView;
+    public DailyRewardView DailyRewardView;
+    public AreaLeaderboardView AreaLeaderboardView;
+    public RegularLeaderboardView RegularLeaderboardView;
+    public FriendView FriendView;
+    public SettingView SettingView;
+    public LoadingBattleView LoadingBattleView;
+    public AllAreaView AllAreaView;
+    public ErrorView ErrorView;
+    public BlackShadeView BlackShadeView;
 
-    [field: SerializeField] public ChangeBlastPopup ChangeBlastPopup { get; protected set; }
-    [field: SerializeField] public BlastInfoPopup BlastInfoPopup { get; protected set; }
-    [field: SerializeField] public MoveSelectorPopup MoveSelectorPopup { get; protected set; }
-    [field: SerializeField] public ItemInfoPopup ItemInfoPopup { get; protected set; }
-    [field: SerializeField] public ProfilePopup ProfilePopup { get; protected set; }
-    [field: SerializeField] public LanguagePopup LanguagePopup { get; protected set; }
-    [field: SerializeField] public RewardPopup RewardPopup { get; protected set; }
-    [field: SerializeField] public LevelExpPopup LevelExpPopup { get; protected set; }
-    [field: SerializeField] public ConfirmPopup ConfirmPopup { get; protected set; }
-    [field: SerializeField] public WildBattleOfferPopup WildBattleOfferPopup { get; protected set; }
-    [field: SerializeField] public QuestPopup QuestPopup { get; protected set; }
+    [Header("Popups")]
+    public ChangeBlastPopup ChangeBlastPopup;
+    public BlastInfoPopup BlastInfoPopup;
+    public MoveSelectorPopup MoveSelectorPopup;
+    public ItemInfoPopup ItemInfoPopup;
+    public ProfilePopup ProfilePopup;
+    public LanguagePopup LanguagePopup;
+    public RewardPopup RewardPopup;
+    public LevelExpPopup LevelExpPopup;
+    public LinkLogPopup LinkLogPopup;
+    public ConfirmPopup ConfirmPopup;
+    public WildBattleOfferPopup WildBattleOfferPopup;
+    public QuestPopup QuestPopup;
 
     View _currentView;
 
@@ -93,6 +96,7 @@ public class UIManager : MonoSingleton<UIManager>
         RewardPopup.Init();
         LevelExpPopup.Init();
         ConfirmPopup.Init();
+        LinkLogPopup.Init();
         WildBattleOfferPopup.Init();
 
         BlackShadeView.HideBlackShade();
