@@ -1,39 +1,22 @@
 using Nakama;
 using Nakama.TinyJson;
-using PimDeWitte.UnityMainThreadDispatcher;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class NakamaPvEBattle : MonoBehaviour
+public class NakamaPvEBattle : NakamaBattleBase
 {
-    IClient _client;
-    ISession _session;
-    ISocket _socket;
-    IMatch _match;
-    Action<IMatchState> _matchStateHandler;
-
-    string _matchId;
-    PlayerState _playerState;
-
-    PvEBattleManager _battleManager;
-    StartStateData _startStateData;
+    private PvEBattleManager _battleManager;
+    private StartStateData _startStateData;
 
     public UnityEvent OnPvEBattleEnd;
-    public PlayerState PlayerState { get => _playerState; }
 
-    public void Init(IClient client, ISession session, ISocket socket)
+    public override void Init(IClient client, ISession session, ISocket socket)
     {
-        _client = client;
-        _session = session;
-        _socket = socket;
-
+        base.Init(client, session, socket);
         _battleManager = PvEBattleManager.Instance;
-
-        _matchStateHandler = m => UnityMainThreadDispatcher.Instance().Enqueue(() => OnReceivedMatchState(m));
     }
 
     public async void FindBattle()
@@ -43,45 +26,26 @@ public class NakamaPvEBattle : MonoBehaviour
             UIManager.Instance.ChangeView(UIManager.Instance.LoadingBattleView);
 
             var response = await _client.RpcAsync(_session, "findPvEBattle");
+            string matchId = response.Payload.FromJson<string>();
 
-            _matchId = response.Payload.FromJson<string>();
-            _match = await _socket.JoinMatchAsync(_matchId);
-
-            StartWildBattle();
+            await JoinMatchById(matchId);
         }
         catch (ApiResponseException e)
         {
-            Debug.LogWarning("Could not join / find match: " + e.Message);
+            Debug.LogWarning("PvE: Could not join / find match: " + e.Message);
         }
     }
 
-    void StartWildBattle()
+    protected override void HandleMatchState(IMatchState matchState)
     {
-        _socket.ReceivedMatchState += _matchStateHandler;
-    }
+        string messageJson = DecodeMatchState(matchState);
 
-    public async Task CancelMatchmaking()
-    {
-        if (_matchId == null) return;
-
-        await _socket.LeaveMatchAsync(_matchId);
-
-        _socket.ReceivedMatchState -= _matchStateHandler;
-
-        _matchId = null;
-    }
-
-    private void OnReceivedMatchState(IMatchState matchState)
-    {
-        string messageJson = Encoding.UTF8.GetString(matchState.State);
-
-        Debug.Log("OpCodes recu : " + matchState.OpCode + ",Message en Json : " + messageJson);
+        Debug.Log($"[PvE] OpCode: {matchState.OpCode} | Data: {messageJson}");
 
         switch (matchState.OpCode)
         {
             case NakamaOpCode.MATCH_START:
                 _startStateData = JsonUtility.FromJson<StartStateData>(messageJson);
-
                 _battleManager.StartBattle(_startStateData);
                 break;
 
@@ -90,47 +54,29 @@ public class NakamaPvEBattle : MonoBehaviour
                 break;
 
             case NakamaOpCode.MATCH_ROUND:
-                var _turnState = messageJson.FromJson<TurnStateData>();
-
-                _battleManager.PlayTurn(_turnState);
+                var turnState = messageJson.FromJson<TurnStateData>();
+                _battleManager.PlayTurn(turnState);
                 break;
+
             case NakamaOpCode.MATCH_END:
-                PlayerLeaveMatch(Boolean.Parse(messageJson));
+                PlayerLeaveMatch(bool.Parse(messageJson));
                 break;
 
             case NakamaOpCode.ERROR_SERV:
                 _battleManager.StartNewTurn();
-
                 ErrorManager.Instance.ShowError(ErrorType.SERVER_ERROR);
                 break;
+
             case NakamaOpCode.NEW_BLAST:
                 var newBlast = JsonUtility.FromJson<NewBlastData>(messageJson);
                 _battleManager.SetNewWildBlast(newBlast);
                 break;
+
             case NakamaOpCode.NEW_OFFER_TURN:
                 var newOffers = JsonUtility.FromJson<OfferTurnStateData>(messageJson);
                 var offerList = new List<Offer> { newOffers.offerOne, newOffers.offerTwo, newOffers.offerThree };
                 _battleManager.SetNewOffers(offerList);
                 break;
-
-            case NakamaOpCode.DEBUG:
-                break;
-
-
-            default:
-                break;
-        }
-    }
-
-    public async void LeaveMatch()
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_LEAVE, "");
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("Error Player Leave: " + e.Message);
         }
     }
 
@@ -138,127 +84,48 @@ public class NakamaPvEBattle : MonoBehaviour
     {
         try
         {
-            await _socket.LeaveMatchAsync(_matchId);
-            _socket.ReceivedMatchState -= _matchStateHandler;
-            _matchId = null;
-
-
-            await NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata(); // TODO Just update locally
-            await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards(); // TODO Just update correct leaderboard
+            await LeaveMatch();
+            await NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata();
+            await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards();
 
             OnPvEBattleEnd?.Invoke();
-
             _battleManager.MatchEnd(isWin.ToString());
         }
         catch (ApiResponseException e)
         {
-            Debug.LogWarning("Error Player Leave: " + e.Message);
+            Debug.LogWarning("PvE: Error Player Leave: " + e.Message);
         }
     }
 
+    public async Task PlayerAttack(int indexAttack) =>
 
-    public async Task PlayerAttack(int indexAttack)
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson(), null);
-
-            _battleManager.WaitForOpponent();
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Attack: " + e.Message);
-        }
-    }
+        await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson());
 
     public async Task PlayerUseItem(int indexItem, int indexSelectedBlast = 0)
     {
-        try
-        {
-            ItemUseJSON itemUseJson = new ItemUseJSON();
-
-            itemUseJson.index_item = indexItem;
-            itemUseJson.index_blast = indexSelectedBlast;
-
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_USE_ITEM, itemUseJson.ToJson(), null);
-
-            _battleManager.WaitForOpponent();
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Use Item: " + e.Message);
-        }
-
+        var json = new ItemUseJSON { index_item = indexItem, index_blast = indexSelectedBlast }.ToJson();
+        await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_USE_ITEM, json);
     }
 
-    public async void PlayerChangeBlast(int indexSelectedBlast)
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, indexSelectedBlast.ToJson(), null);
+    public async Task PlayerChooseOffer(int indexOffer) =>
+        await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson());
 
-            _battleManager.WaitForOpponent();
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Change Blast: " + e.Message);
-        }
+    public async Task PlayerWait() =>
+        await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, "");
 
-    }
-
-    public async Task PlayerWait()
-    {
-        try
-        {
-
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, "");
-
-            _battleManager.WaitForOpponent();
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Wait : " + e.Message);
-        }
-    }
+    public async void PlayerChangeBlast(int indexSelectedBlast) =>
+        await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, indexSelectedBlast.ToJson());
 
     public async void HandleOnPvERewardsAds()
     {
         try
         {
             var response = await _client.RpcAsync(_session, "watchPvEBattleAds");
-
             PvEBattleManager.Instance.BonusAds = true;
         }
         catch (ApiResponseException e)
         {
-            Debug.LogWarning("Could not join / find match: " + e.Message);
-        }
-    }
-
-    public async Task PlayerChooseOffer(int indexOffer)
-    {
-        try
-        {
-
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
-
-            _battleManager.WaitForOpponent();
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Choose Offer: " + e.Message);
-        }
-    }
-
-    public async void PlayerReady()
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_READY, "", null);
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error player Ready : " + e.Message);
+            Debug.LogWarning("PvE: Could not reward ad: " + e.Message);
         }
     }
 
@@ -266,57 +133,4 @@ public class NakamaPvEBattle : MonoBehaviour
     {
         if (_matchId != null) LeaveMatch();
     }
-}
-
-// Receive data
-
-[Serializable]
-public class StartStateData
-{
-    public NewBlastData newBlastData;
-    public Meteo meteo;
-}
-
-[Serializable]
-public class NewBlastData
-{
-    public int id;
-    public int exp;
-    public int iv;
-    public bool boss;
-    public bool shiny;
-    public Status status;
-    public List<int> activeMoveset;
-}
-
-[Serializable]
-public class TurnStateData
-{
-    public TurnType p1TurnType;
-    public int p1MoveIndex;
-    public int p1MoveDamage;
-    public List<MoveEffectData> p1MoveEffects;
-
-    public TurnType p2TurnType;
-    public int p2MoveIndex;
-    public int p2MoveDamage;
-    public List<MoveEffectData> p2MoveEffects;
-
-    public bool catched;
-}
-
-// Send data
-
-public class ItemUseJSON
-{
-    public int index_item;
-    public int index_blast;
-}
-
-[Serializable]
-public class OfferTurnStateData
-{
-    public Offer offerOne;
-    public Offer offerTwo;
-    public Offer offerThree;
 }

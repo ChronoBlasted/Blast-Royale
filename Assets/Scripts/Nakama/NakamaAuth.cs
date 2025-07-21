@@ -37,36 +37,31 @@ public class NakamaAuth : MonoBehaviour
 
         if (!string.IsNullOrEmpty(token))
         {
-            _session = Session.Restore(token);
-
-            if (_session.IsExpired)
+            try
             {
-                try
+                _session = Session.Restore(token);
+
+                if (_session.IsExpired)
                 {
                     _session = await _client.SessionRefreshAsync(_session);
-
-                    SaveSession();
-
-                    await AfterAuth();
-
-                    return;
+                    Debug.Log("Session rafraîchie avec succès.");
                 }
-                catch (Exception ex)
-                {
-                    Debug.LogWarning("Échec du rafraîchissement de la session : " + ex.Message);
-                }
-            }
-            else
-            {
-                Debug.Log("Session restaurée automatiquement.");
+
+                SaveSession();
 
                 await AfterAuth();
                 return;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("Session invalide ou expirée, suppression du token. Détail : " + ex.Message);
+                Logout(); 
             }
         }
 
         UIManager.Instance.OpeningView.ShowLogOption(true); // Affiche les options de login
     }
+
 
     public async void AuthenticateWithDevice()
     {

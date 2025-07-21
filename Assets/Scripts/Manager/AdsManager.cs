@@ -11,25 +11,37 @@ public class AdsManager : MonoSingleton<AdsManager>
 #if UNITY_ANDROID
     string _adUnitId = "ca-app-pub-1529838381890617/9990832209";
 #elif UNITY_IPHONE
-  private string _adUnitId = "ca-app-pub-1529838381890617/9990832209";
+    string _adUnitId = "ca-app-pub-1529838381890617/9990832209";
 #else
-  private string _adUnitId = "unused";
+    string _adUnitId = "unused";
 #endif
 
     public UnityEvent OnRewardedAdLoaded;
-
     public RewardedAd RewardedAd;
+
+    private bool _adsEnabled = false;
 
     public void Init()
     {
+#if UNITY_ANDROID || UNITY_IOS
         MobileAds.Initialize((InitializationStatus initStatus) =>
         {
+            _adsEnabled = true;
             LoadRewardedAd();
         });
+#else
+        Debug.Log("AdsManager: Mobile Ads not supported on this platform.");
+#endif
     }
 
     public void LoadRewardedAd()
     {
+        if (!_adsEnabled)
+        {
+            Debug.LogWarning("AdsManager: Ads not enabled. Skipping ad load.");
+            return;
+        }
+
         if (RewardedAd != null)
         {
             RewardedAd.Destroy();
@@ -38,33 +50,40 @@ public class AdsManager : MonoSingleton<AdsManager>
 
         var adRequest = new AdRequest();
 
-        RewardedAd.Load(_adUnitId, adRequest,
-            (RewardedAd ad, LoadAdError error) =>
+        RewardedAd.Load(_adUnitId, adRequest, (RewardedAd ad, LoadAdError error) =>
+        {
+            if (error != null || ad == null)
             {
-                if (error != null || ad == null)
-                {
-                    Debug.LogError("Rewarded ad failed to load an ad " +
-                                   "with error : " + error);
-                    return;
-                }
+                Debug.LogError("Rewarded ad failed to load an ad with error: " + error);
+                return;
+            }
 
-                RewardedAd = ad;
+            RewardedAd = ad;
 
-                RegisterReloadHandler(RewardedAd);
+            RegisterReloadHandler(RewardedAd);
 
-                OnRewardedAdLoaded?.Invoke();
-
-            });
+            OnRewardedAdLoaded?.Invoke();
+        });
     }
 
     public void ShowRewardedAd(UnityEvent onAdsComplete)
     {
+        if (!_adsEnabled)
+        {
+            Debug.LogWarning("AdsManager: Ads not available on this platform.");
+            return;
+        }
+
         if (RewardedAd != null && RewardedAd.CanShowAd())
         {
             RewardedAd.Show((Reward reward) =>
             {
                 onAdsComplete.Invoke();
             });
+        }
+        else
+        {
+            Debug.LogWarning("AdsManager: Rewarded ad not ready.");
         }
     }
 
@@ -73,15 +92,12 @@ public class AdsManager : MonoSingleton<AdsManager>
         ad.OnAdFullScreenContentClosed += () =>
         {
             Debug.Log("Rewarded Ad full screen content closed.");
-
             LoadRewardedAd();
         };
 
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-
+            Debug.LogError("Rewarded ad failed to open full screen content with error: " + error);
             LoadRewardedAd();
         };
     }

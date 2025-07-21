@@ -16,8 +16,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
     [field: SerializeField] public NakamaArea NakamaArea { get; protected set; }
     [field: SerializeField] public NakamaLogic NakamaLogic { get; protected set; }
     [field: SerializeField] public NakamaStore NakamaStore { get; protected set; }
-    [field: SerializeField] public NakamaPvEBattle NakamaPvEBattle { get; protected set; }
-    [field: SerializeField] public NakamaPvPBattle NakamaPvPBattle { get; protected set; }
+    [field: SerializeField] public NakamaBattleManager NakamaBattleManager { get; protected set; }
     [field: SerializeField] public NakamaNotifications NakamaNotifications { get; protected set; }
     [field: SerializeField] public NakamaBlastTracker NakamaBlastTracker { get; protected set; }
     [field: SerializeField] public NakamaQuest NakamaQuest { get; protected set; }
@@ -57,9 +56,7 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
         NakamaNotifications.Init(Client, Session, Socket);
 
-        NakamaPvEBattle.Init(Client, Session, Socket);
-
-        NakamaPvPBattle.Init(Client, Session, Socket);
+        NakamaBattleManager.Init(Client, Session, Socket);
 
         GameManager.Instance.AfterNakamaInit();
 
