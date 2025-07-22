@@ -65,13 +65,13 @@ public class NakamaUserAccount : MonoBehaviour
         if (_lastData.pveBattleButtonAds)
         {
             UIManager.Instance.MenuView.FightPanel.PvEBattleBonusAds.SetAdsOn();
-            PvEBattleManager.Instance.BonusAds = true;
+            NakamaManager.Instance.NakamaBattleManager.PveBattle.BattleManager.BonusAds = true;
         }
 
         if (_lastData.pvpBattleButtonAds)
         {
             UIManager.Instance.MenuView.FightPanel.PvPBattleBonusAds.SetAdsOn();
-            PvPBattleManager.Instance.BonusAds = true;
+            NakamaManager.Instance.NakamaBattleManager.PvpBattle.BattleManager.BonusAds = true;
         }
     }
 

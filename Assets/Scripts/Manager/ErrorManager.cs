@@ -28,7 +28,7 @@ public class ErrorManager : MonoSingleton<ErrorManager>
             case CHANGE_REASON.SWAP:
                 if (blast.Hp <= 0)
                     return GetErrorDataWithID(ErrorType.IS_FAINTED);
-                if (PvEBattleManager.Instance.PlayerBlast == blast)
+                if (NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerBlast == blast)
                     return GetErrorDataWithID(ErrorType.ALREADY_IN_BATTLE);
                 break;
         }

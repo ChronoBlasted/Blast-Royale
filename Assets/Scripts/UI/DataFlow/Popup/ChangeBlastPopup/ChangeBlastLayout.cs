@@ -71,7 +71,7 @@ public class ChangeBlastLayout : MonoBehaviour
                 break;
 
             case CHANGE_REASON.SWAP:
-                if (PvEBattleManager.Instance.PlayerBlast != _blast && _blast.Hp > 0)
+                if (NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerBlast != _blast && _blast.Hp > 0)
                 {
                     UnlockBlast();
                     return true;

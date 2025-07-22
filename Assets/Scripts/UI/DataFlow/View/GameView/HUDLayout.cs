@@ -187,6 +187,7 @@ public class HUDLayout : MonoBehaviour
 
     public async Task ThrowBlast(bool isIntant = false)
     {
+        Debug.Log("this");
         var duration = isIntant ? 0f : .5f;
 
         if (_isPlayerBlast) _blastInWorld.BlastRender.transform.DOLocalMove(Vector2.zero, duration);

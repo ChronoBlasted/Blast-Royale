@@ -7,10 +7,14 @@ public enum BattleMode { PvP, PvE }
 
 public class NakamaBattleManager : MonoBehaviour
 {
-    [SerializeField] private NakamaPvEBattle _pveBattle;
-    [SerializeField] private NakamaPvPBattle _pvpBattle;
+    [SerializeField] NakamaPvEBattle _pveBattle;
+    [SerializeField] NakamaPvPBattle _pvpBattle;
 
-    private NakamaBattleBase _activeBattle;
+    NakamaBattleBase _activeBattle;
+    public NakamaBattleBase CurrentBattle => _activeBattle;
+
+    public NakamaPvPBattle PvpBattle { get => _pvpBattle; }
+    public NakamaPvEBattle PveBattle { get => _pveBattle; }
 
     public void Init(IClient client, ISession session, ISocket socket)
     {
@@ -32,8 +36,6 @@ public class NakamaBattleManager : MonoBehaviour
                 break;
         }
     }
-
-    public NakamaBattleBase CurrentBattle => _activeBattle;
 }
 
 
@@ -57,18 +59,19 @@ public class NewBlastData
 }
 
 [Serializable]
+public class PlayerTurnData
+{
+    public TurnType type;
+    public int moveIndex;
+    public int moveDamage;
+    public List<MoveEffectData> moveEffects;
+}
+
+[Serializable]
 public class TurnStateData
 {
-    public TurnType p1TurnType;
-    public int p1MoveIndex;
-    public int p1MoveDamage;
-    public List<MoveEffectData> p1MoveEffects;
-
-    public TurnType p2TurnType;
-    public int p2MoveIndex;
-    public int p2MoveDamage;
-    public List<MoveEffectData> p2MoveEffects;
-
+    public PlayerTurnData p1TurnData;
+    public PlayerTurnData p2TurnData;
     public bool catched;
 }
 

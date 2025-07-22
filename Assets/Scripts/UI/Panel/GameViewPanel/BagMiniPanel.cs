@@ -13,14 +13,11 @@ public class BagMiniPanel : Panel
 
     int _lastItemIndex;
 
-    PvEBattleManager _wildBattleManager;
     List<Item> _items;
 
     public override void Init()
     {
         base.Init();
-
-        _wildBattleManager = PvEBattleManager.Instance;
     }
 
     public override void OpenPanel()
@@ -95,7 +92,7 @@ public class BagMiniPanel : Panel
 
     void UseItemOnBlast(int indexBlast)
     {
-        _wildBattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
+        NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
     }
 
     public void HandleOnPvPBattle(bool isPvPBattle)

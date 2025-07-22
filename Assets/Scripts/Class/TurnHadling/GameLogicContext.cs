@@ -74,7 +74,7 @@ public class GameLogicContext
         }
         else
         {
-            if (CurrentPlayerDefender.OwnerType == BlastOwner.Me && !isBlastAlive) PvEBattleManager.Instance.PlayerMustChangeBlast();
+            if (CurrentPlayerDefender.OwnerType == BlastOwner.Me && !isBlastAlive) NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerMustChangeBlast();
         }
 
         return isBlastAlive;

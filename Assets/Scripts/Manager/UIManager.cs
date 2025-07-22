@@ -33,7 +33,7 @@ public class UIManager : MonoSingleton<UIManager>
     [Header("Views")]
     public MenuView MenuView;
     public GameView GameView;
-    public EndView EndView;
+    public EndViewPvE EndViewPve;
     public OpeningView OpeningView;
     public PediaView PediaView;
     public DailyRewardView DailyRewardView;
@@ -75,7 +75,7 @@ public class UIManager : MonoSingleton<UIManager>
     {
         MenuView.Init();
         GameView.Init();
-        EndView.Init();
+        EndViewPve.Init();
         OpeningView.Init();
         SettingView.Init();
         OpeningView.Init();
@@ -177,7 +177,7 @@ public class UIManager : MonoSingleton<UIManager>
     }
     void HandleEnd()
     {
-        ChangeView(EndView);
+        ChangeView(EndViewPve);
     }
     void HandleWait()
     {

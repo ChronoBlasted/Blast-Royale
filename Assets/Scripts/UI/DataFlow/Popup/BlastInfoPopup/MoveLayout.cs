@@ -117,7 +117,7 @@ public class MoveLayout : MonoBehaviour
 
     public void HandleOnClick()
     {
-        if (_canUseMove) PvEBattleManager.Instance.PlayerAttack(_indexMove);
+        if (_canUseMove) NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerAttack(_indexMove);
         else
         {
             if (_move.attackType == AttackType.Normal || _move.attackType == AttackType.Status)
@@ -168,8 +168,8 @@ public class MoveLayout : MonoBehaviour
 
     int GetMoveDamage()
     {
-        Blast defender = PvEBattleManager.Instance.WildBlast;
+        Blast defender = NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.OpponentBlast;
 
-        return NakamaLogic.CalculateDamage(_blast.Level, _blast.Attack, defender.Defense, _move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type, _move.power, PvEBattleManager.Instance.Meteo);
+        return NakamaLogic.CalculateDamage(_blast.Level, _blast.Attack, defender.Defense, _move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type, _move.power, NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.Meteo);
     }
 }

@@ -64,7 +64,7 @@ public class GameNavBarTab : NavBarTab
 
         List<UnityAction<int>> actions = new List<UnityAction<int>>()
         {
-            PvEBattleManager.Instance.PlayerChangeBlast,
+            NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerChangeBlast,
         };
 
         UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.SWAP);
@@ -72,12 +72,12 @@ public class GameNavBarTab : NavBarTab
 
     public void HandleOnWait()
     {
-        PvEBattleManager.Instance.PlayerWait();
+        NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerWait();
     }
 
     public void HandleOnLeaveBattle()
     {
-        UIManager.Instance.ConfirmPopup.UpdateData("LEAVE BATTLE ?", "You will leave the battle, continue ?", () => PvEBattleManager.Instance.PlayerLeave(true));
+        UIManager.Instance.ConfirmPopup.UpdateData("LEAVE BATTLE ?", "You will leave the battle, continue ?", () => _ = NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerLeave(true));
         UIManager.Instance.ConfirmPopup.OpenPopup();
     }
 

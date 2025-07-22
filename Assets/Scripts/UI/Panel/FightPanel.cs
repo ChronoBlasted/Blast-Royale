@@ -23,16 +23,6 @@ public class FightPanel : Panel
     {
         base.Init();
 
-        NakamaManager.Instance.NakamaPvEBattle.OnPvEBattleEnd.AddListener(() =>
-        {
-            _pveBattleBonusAds.RefreshAd();
-        });
-
-        NakamaManager.Instance.NakamaPvPBattle.OnPvPBattleEnd.AddListener(() =>
-        {
-            _pvpBattleBonusAds.RefreshAd();
-        });
-
         _pveBattleBonusAds.Init();
         _pvpBattleBonusAds.Init();
     }
@@ -56,26 +46,26 @@ public class FightPanel : Panel
 
     public void HandleOnPvEBattle()
     {
-        NakamaManager.Instance.NakamaPvEBattle.FindBattle();
+        NakamaManager.Instance.NakamaBattleManager.StartBattle(BattleMode.PvE);
     }
 
     public void HandleOnPvPBattle()
     {
-        NakamaManager.Instance.NakamaPvPBattle.FindBattle();
+        NakamaManager.Instance.NakamaBattleManager.StartBattle(BattleMode.PvP);
     }
 
     public void HandleOnBonusPvERewardsAds()
     {
         _pveBattleBonusAds.SetAdsOn();
 
-        NakamaManager.Instance.NakamaPvEBattle.HandleOnPvERewardsAds();
+        NakamaManager.Instance.NakamaBattleManager.PveBattle.HandleOnRewardsAds();
     }
 
     public void HandleOnBonusPvPRewardsAds()
     {
         _pvpBattleBonusAds.SetAdsOn();
 
-        NakamaManager.Instance.NakamaPvPBattle.HandleOnPvERewardsAds();
+        NakamaManager.Instance.NakamaBattleManager.PvpBattle.HandleOnRewardsAds();
     }
 
     public void HandleOnOpenQuest()

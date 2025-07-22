@@ -56,7 +56,7 @@ public class BlastMiniSquadLayout : MonoBehaviour
             _bg.sprite = _aliveBG;
         }
 
-        if (_currentBlast == PvEBattleManager.Instance.PlayerBlast)
+        if (_currentBlast == NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerBlast)
         {
             _bg.sprite = _activeBG;
             _bgGlow.color = _onGlow;
@@ -69,8 +69,8 @@ public class BlastMiniSquadLayout : MonoBehaviour
 
     public void HandleOnClick()
     {
-        if (_currentBlast == PvEBattleManager.Instance.PlayerBlast) ErrorManager.Instance.ShowError(ErrorType.ALREADY_IN_BATTLE);
+        if (_currentBlast == NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerBlast) ErrorManager.Instance.ShowError(ErrorType.ALREADY_IN_BATTLE);
         else if (_currentBlast.Hp <= 0) ErrorManager.Instance.ShowError(ErrorType.IS_FAINTED);
-        else PvEBattleManager.Instance.PlayerChangeBlast(_blastIndex);
+        else NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerChangeBlast(_blastIndex);
     }
 }

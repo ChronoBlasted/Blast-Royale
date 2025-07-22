@@ -55,7 +55,9 @@ public class WildBattleOfferLayout : MonoBehaviour
     IEnumerator ContinueFlow()
     {
         yield return new WaitForSeconds(2f);
-        PvEBattleManager.Instance.PlayerChooseOffer(_index);
+
+        PvEBattleManager pveBattleManager = NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager as PvEBattleManager;
+        pveBattleManager.PlayerChooseOffer(_index);
 
         UIManager.Instance.WildBattleOfferPopup.ClosePopup();
     }

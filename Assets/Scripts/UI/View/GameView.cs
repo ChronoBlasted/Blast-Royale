@@ -31,7 +31,6 @@ public class GameView : View
 
     Panel _currentPanel;
 
-    PvEBattleManager _wildBattleManager;
     NakamaData _dataUtils;
 
     Meteo _currentMeteo;
@@ -45,7 +44,6 @@ public class GameView : View
         _bagPanel.Init();
         _squadPanel.Init();
 
-        _wildBattleManager = PvEBattleManager.Instance;
         _dataUtils = NakamaData.Instance;
     }
 
@@ -421,31 +419,30 @@ public class GameView : View
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, damage, effective);
 
-        //if (effective == 2) await _dialogLayout.UpdateTextAsync("It's super effective !");
-        //else if (effective == .5f) await _dialogLayout.UpdateTextAsync("It's not super effective !");
-
         // TODO Mettre FX super efficace / pas super efficace
 
-        foreach (var effect in moveEffects)
+        if (moveEffects != null)
         {
-            if (effect.effect != MoveEffect.None)
+            foreach (var effect in moveEffects)
             {
-                string dialogText;
-                dialogText = NakamaLogic.GetEffectMessage(effect.effect);
+                if (effect.effect != MoveEffect.None)
+                {
+                    string dialogText;
+                    dialogText = NakamaLogic.GetEffectMessage(effect.effect);
 
-                defenderHUD.SetStatus(defender.status);
+                    defenderHUD.SetStatus(defender.status);
 
-                var isStatusMove = move.attackType == AttackType.Status;
-                defenderHUD.AddModifier(effect.effect, isStatusMove ? effect.effectModifier : 1);
+                    var isStatusMove = move.attackType == AttackType.Status;
+                    defenderHUD.AddModifier(effect.effect, isStatusMove ? effect.effectModifier : 1);
 
-                Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)effect.effect).Prefab, defenderHUD.BlastInWorld.transform);
+                    Instantiate(ResourceObjectHolder.Instance.GetResourceByType((ResourceType)effect.effect).Prefab, defenderHUD.BlastInWorld.transform);
 
-                defenderHUD.BlastInWorld.DoTakeDamageRender();
+                    defenderHUD.BlastInWorld.DoTakeDamageRender();
 
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
+                    await Task.Delay(TimeSpan.FromMilliseconds(500));
+                }
             }
         }
-
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
