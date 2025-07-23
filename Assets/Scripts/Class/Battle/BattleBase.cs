@@ -166,147 +166,62 @@ public class BattleBase : MonoBehaviour
             var wildMove = _dataUtils.GetMoveById(OpponentBlast.activeMoveset[_opponentAction.MoveIndex]);
 
             isPlayerFirst = playerMove.priority > wildMove.priority ||
-                            (playerMove.priority == wildMove.priority && NakamaLogic.GetFasterBlast(PlayerBlast, OpponentBlast));
+                            (playerMove.priority == wildMove.priority &&
+                             NakamaLogic.GetFasterBlast(PlayerBlast, OpponentBlast));
         }
 
-        bool battleStop = false;
+        var firstAction = isPlayerFirst ? _playerAction : _opponentAction;
+        var secondAction = isPlayerFirst ? _opponentAction : _playerAction;
+        var firstInfo = isPlayerFirst ? _playerMeInfo : _playerOpponentInfo;
+        var secondInfo = isPlayerFirst ? _playerOpponentInfo : _playerMeInfo;
 
-        if (isPlayerFirst)
-        {
-            var gameLogicContextPlayer = new GameLogicContext(
-                attacker: _playerMeInfo.ActiveBlast,
-                defender: _playerOpponentInfo.ActiveBlast,
-                players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                moveIndex: _playerAction.MoveIndex,
-                moveDamage: _playerAction.MoveDamage,
-                moveEffects: _playerAction.MoveEffects,
-                itemIndex: _playerAction.ItemIndex,
-                selectedBlastIndex: _playerAction.SelectedBlastIndex,
-                isCatched: _turnStateData.catched
-            );
+        if (await HandleSingleTurn(firstAction, firstInfo, secondInfo, isPlayerFirst)) return;
+        if (await HandleSingleTurn(secondAction, secondInfo, firstInfo, !isPlayerFirst)) return;
 
-            var playerHandler = TurnHandlerFactory.CreateHandler(_playerAction.TurnType, gameLogicContextPlayer, _gameView, _dataUtils);
-            battleStop = await playerHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-
-            var gameLogicContextWild = new GameLogicContext(
-                attacker: _playerOpponentInfo.ActiveBlast,
-                defender: _playerMeInfo.ActiveBlast,
-                players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                moveIndex: _opponentAction.MoveIndex,
-                moveDamage: _opponentAction.MoveDamage,
-                moveEffects: _opponentAction.MoveEffects,
-                itemIndex: _opponentAction.ItemIndex,
-                selectedBlastIndex: _opponentAction.SelectedBlastIndex,
-                isCatched: false
-            );
-
-
-            var wildHandler = TurnHandlerFactory.CreateHandler(_opponentAction.TurnType, gameLogicContextWild, _gameView, _dataUtils);
-            battleStop = await wildHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-        }
-        else
-        {
-            var gameLogicContextWild = new GameLogicContext(
-                attacker: _playerOpponentInfo.ActiveBlast,
-                defender: _playerMeInfo.ActiveBlast,
-                players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                moveIndex: _opponentAction.MoveIndex,
-                moveDamage: _opponentAction.MoveDamage,
-                moveEffects: _opponentAction.MoveEffects,
-                itemIndex: _opponentAction.ItemIndex,
-                selectedBlastIndex: _opponentAction.SelectedBlastIndex,
-                isCatched: false
-            );
-
-            var wildHandler = TurnHandlerFactory.CreateHandler(_opponentAction.TurnType, gameLogicContextWild, _gameView, _dataUtils);
-            battleStop = await wildHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-
-            var gameLogicContextPlayer = new GameLogicContext(
-                attacker: _playerMeInfo.ActiveBlast,
-                defender: _playerOpponentInfo.ActiveBlast,
-                players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                moveIndex: _playerAction.MoveIndex,
-                moveDamage: _playerAction.MoveDamage,
-                moveEffects: _playerAction.MoveEffects,
-                itemIndex: _playerAction.ItemIndex,
-                selectedBlastIndex: _playerAction.SelectedBlastIndex,
-                isCatched: _turnStateData.catched
-            );
-
-            var playerHandler = TurnHandlerFactory.CreateHandler(_playerAction.TurnType, gameLogicContextPlayer, _gameView, _dataUtils);
-            battleStop = await playerHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-        }
-
-        if (_playerMeInfo.ActiveBlast.status != Status.None)
-        {
-            var statusHandler = TurnHandlerFactory.CreateHandler(TurnType.Status,
-                new GameLogicContext(
-                    attacker: _playerMeInfo.ActiveBlast,
-                    defender: _playerOpponentInfo.ActiveBlast,
-                    players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                    moveIndex: -1,
-                    moveDamage: 0,
-                    moveEffects: null,
-                    itemIndex: -1,
-                    selectedBlastIndex: -1,
-                    isCatched: false
-                ),
-                _gameView, _dataUtils
-            );
-            battleStop = await statusHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-        }
-
-        if (_playerOpponentInfo.ActiveBlast.status != Status.None)
-        {
-            var statusHandler = TurnHandlerFactory.CreateHandler(TurnType.Status,
-                new GameLogicContext(
-                    attacker: _playerOpponentInfo.ActiveBlast,
-                    defender: _playerMeInfo.ActiveBlast,
-                    players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
-                    moveIndex: -1,
-                    moveDamage: 0,
-                    moveEffects: null,
-                    itemIndex: -1,
-                    selectedBlastIndex: -1,
-                    isCatched: false
-                ),
-                _gameView, _dataUtils
-            );
-            battleStop = await statusHandler.HandleTurn();
-            if (battleStop)
-            {
-                await StopTurnHandler();
-                return;
-            }
-        }
+        if (await HandleStatusIfNeeded(_playerMeInfo, _playerOpponentInfo)) return;
+        if (await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo)) return;
 
         await StopTurnHandler();
     }
+
+    private async Task<bool> HandleSingleTurn(TurnAction action, PlayerBattleInfo attackerInfo, PlayerBattleInfo defenderInfo, bool isPlayer)
+    {
+        var context = new GameLogicContext(
+            attacker: attackerInfo.ActiveBlast,
+            defender: defenderInfo.ActiveBlast,
+            players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
+            moveIndex: action.MoveIndex,
+            moveDamage: action.MoveDamage,
+            moveEffects: action.MoveEffects,
+            itemIndex: action.ItemIndex,
+            selectedBlastIndex: action.SelectedBlastIndex,
+            isCatched: isPlayer ? _turnStateData.catched : false
+        );
+
+        var handler = TurnHandlerFactory.CreateHandler(action.TurnType, context, _gameView, _dataUtils);
+        return await handler.HandleTurn();
+    }
+
+    private async Task<bool> HandleStatusIfNeeded(PlayerBattleInfo statusOwner, PlayerBattleInfo target)
+    {
+        if (statusOwner.ActiveBlast.status == Status.None) return false;
+
+        var statusContext = new GameLogicContext(
+            attacker: statusOwner.ActiveBlast,
+            defender: target.ActiveBlast,
+            players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
+            moveIndex: -1,
+            moveDamage: 0,
+            moveEffects: null,
+            itemIndex: -1,
+            selectedBlastIndex: -1,
+            isCatched: false
+        );
+
+        var statusHandler = TurnHandlerFactory.CreateHandler(TurnType.Status, statusContext, _gameView, _dataUtils);
+        return await statusHandler.HandleTurn();
+    }
+
 
     private TurnAction UpdateActionTurn(PlayerTurnData turnData)
     {

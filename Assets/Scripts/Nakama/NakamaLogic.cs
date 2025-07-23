@@ -69,8 +69,8 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
 
     public static bool CompareActionPriorities(TurnType p1ActionType, TurnType p2ActionType)
     {
-        int p1Priority = NakamaLogic.GetActionPriority(p1ActionType);
-        int p2Priority = NakamaLogic.GetActionPriority(p2ActionType);
+        int p1Priority = GetActionPriority(p1ActionType);
+        int p2Priority = GetActionPriority(p2ActionType);
 
         return p1Priority >= p2Priority;
     }
