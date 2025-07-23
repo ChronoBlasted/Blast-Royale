@@ -131,7 +131,12 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, indexAttack.ToJson(), null);
+            PlayerActionData playerActionData = new PlayerActionData
+            {
+                type = TurnType.Attack,
+                data = indexAttack
+            };
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_ATTACK, playerActionData.ToJson(), null);
 
             BattleManager.WaitForOpponent();
         }
@@ -150,7 +155,13 @@ public abstract class NakamaBattleBase : MonoBehaviour
             itemUseJson.index_item = indexItem;
             itemUseJson.index_blast = indexSelectedBlast;
 
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_USE_ITEM, itemUseJson.ToJson(), null);
+            PlayerActionData playerActionData = new PlayerActionData
+            {
+                type = TurnType.Item,
+                data = itemUseJson
+            };
+
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_USE_ITEM, playerActionData.ToJson());
 
             BattleManager.WaitForOpponent();
         }
@@ -165,7 +176,13 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, indexSelectedBlast.ToJson(), null);
+            PlayerActionData playerActionData = new PlayerActionData
+            {
+                type = TurnType.Swap,
+                data = indexSelectedBlast
+            };
+
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHANGE_BLAST, playerActionData.ToJson());
 
             BattleManager.WaitForOpponent();
         }
@@ -180,28 +197,18 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, "");
+            PlayerActionData playerActionData = new PlayerActionData
+            {
+                type = TurnType.Wait
+            };
+
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_WAIT, playerActionData.ToJson());
 
             BattleManager.WaitForOpponent();
         }
         catch (ApiResponseException e)
         {
             Debug.LogWarning("Error Player Wait : " + e.Message);
-        }
-    }
-    public async Task PlayerChooseOffer(int indexOffer)
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
-
-            BattleManager.WaitForOpponent();
-
-
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("Error Player Choose Offer: " + e.Message);
         }
     }
 
@@ -262,4 +269,11 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         if (_matchId != null) _ = LeaveMatch();
     }
+}
+
+[Serializable]
+public class PlayerActionData
+{
+    public TurnType type;
+    public object data;
 }

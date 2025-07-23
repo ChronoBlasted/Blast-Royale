@@ -119,14 +119,12 @@ public class PvEBattleManager : BattleBase
         UIManager.Instance.WildBattleOfferPopup.OpenPopup(true, false);
     }
 
-
-
-
     public async void PlayerChooseOffer(int indexOffer)
     {
         try
         {
-            await _serverBattle.PlayerChooseOffer(indexOffer);
+            NakamaPvEBattle serverBattle = (NakamaPvEBattle)_serverBattle;
+            await serverBattle.PlayerChooseOffer(indexOffer);
 
             switch (_currentOffers[indexOffer].type)
             {

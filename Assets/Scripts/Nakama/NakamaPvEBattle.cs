@@ -27,4 +27,20 @@ public class NakamaPvEBattle : NakamaBattleBase
                 break;
         }
     }
+
+    public async Task PlayerChooseOffer(int indexOffer)
+    {
+        try
+        {
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
+
+            BattleManager.WaitForOpponent();
+
+
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Choose Offer: " + e.Message);
+        }
+    }
 }
