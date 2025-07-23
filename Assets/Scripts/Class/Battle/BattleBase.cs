@@ -175,8 +175,16 @@ public class BattleBase : MonoBehaviour
         var firstInfo = isPlayerFirst ? _playerMeInfo : _playerOpponentInfo;
         var secondInfo = isPlayerFirst ? _playerOpponentInfo : _playerMeInfo;
 
-        if (await HandleSingleTurn(firstAction, firstInfo, secondInfo, isPlayerFirst)) return;
-        if (await HandleSingleTurn(secondAction, secondInfo, firstInfo, !isPlayerFirst)) return;
+        if (await HandleSingleTurn(firstAction, firstInfo, secondInfo, isPlayerFirst))
+        {
+            await StopTurnHandler();
+            return;
+        }
+        if (await HandleSingleTurn(secondAction, secondInfo, firstInfo, !isPlayerFirst))
+        {
+            await StopTurnHandler();
+            return;
+        }
 
         if (await HandleStatusIfNeeded(_playerMeInfo, _playerOpponentInfo)) return;
         if (await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo)) return;
@@ -231,7 +239,7 @@ public class BattleBase : MonoBehaviour
 
         if (turnAction.TurnType == TurnType.Attack)
         {
-            turnAction.MoveIndex = turnData.moveIndex;
+            turnAction.MoveIndex = turnData.index;
             turnAction.MoveDamage = turnData.moveDamage;
             turnAction.MoveEffects = turnData.moveEffects;
         }

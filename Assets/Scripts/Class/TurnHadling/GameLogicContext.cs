@@ -41,9 +41,6 @@ public class GameLogicContext
             switch (CurrentPlayerDefender.OwnerType)
             {
                 case BlastOwner.Opponent:
-                    UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender);
-                    UIManager.Instance.LevelExpPopup.OpenPopup();
-
                     _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
                     _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
 
@@ -53,6 +50,9 @@ public class GameLogicContext
                     await UIManager.Instance.GameView.BlastFainted(true, Defender);
                     break;
                 case BlastOwner.Wild:
+                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
+                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+
                     await UIManager.Instance.GameView.BlastFainted(false, Defender);
 
                     //UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender); TODO FAIRE PLUS JOLIE ET ERGO
@@ -67,7 +67,7 @@ public class GameLogicContext
 
         if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts))
         {
-            if (CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
+            if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts) && CurrentPlayerDefender.OwnerType != BlastOwner.Wild)
             {
                 GameStateManager.Instance.UpdateStateToEnd();
             }

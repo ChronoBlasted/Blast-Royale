@@ -63,7 +63,7 @@ public class NewBlastData
 public class PlayerTurnData
 {
     public TurnType type;
-    public int moveIndex;
+    public int index;
     public int moveDamage;
     public List<MoveEffectData> moveEffects;
 }
