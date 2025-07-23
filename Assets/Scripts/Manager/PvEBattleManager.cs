@@ -33,12 +33,11 @@ public class PvEBattleManager : BattleBase
         CoinGenerated = 0;
         GemGenerated = 0;
 
-        _gameView.UpdateStateProgressLayout(false);
+        _gameView.UpdateGameviewState(BattleMode.PvE);
         _gameView.SetProgression(IndexProgression);
 
         _gameView.ExpProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(_playerMeInfo.ActiveBlast.data_id).Sprite);
 
-        _gameView.BagPanel.HandleOnPvPBattle(false);
     }
 
     public override Task ShowOpponentBlast()

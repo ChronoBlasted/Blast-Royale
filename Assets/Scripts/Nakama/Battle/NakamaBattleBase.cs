@@ -196,6 +196,8 @@ public abstract class NakamaBattleBase : MonoBehaviour
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_CHOOSE_OFFER, indexOffer.ToJson(), null);
 
             BattleManager.WaitForOpponent();
+
+
         }
         catch (ApiResponseException e)
         {
@@ -236,6 +238,8 @@ public abstract class NakamaBattleBase : MonoBehaviour
             case NakamaOpCode.MATCH_ROUND:
                 var turnState = messageJson.FromJson<TurnStateData>();
                 BattleManager.PlayTurn(turnState);
+                BattleManager.WaitForOpponent();
+                UIManager.Instance.GameView.DialogLayout.Hide();
                 break;
 
             case NakamaOpCode.MATCH_END:

@@ -30,6 +30,7 @@ public class BattleBase : MonoBehaviour
     private Meteo _meteo;
     protected Blast _nextOpponentBlast;
 
+    protected StartStateData _startData;
     protected TurnStateData _turnStateData;
     protected TurnAction _playerAction, _opponentAction;
 
@@ -50,6 +51,8 @@ public class BattleBase : MonoBehaviour
 
     public virtual void StartBattle(StartStateData startData)
     {
+        _startData = startData;
+
         _playerSquads.Clear();
         _playerItems.Clear();
         _opponentSquads.Clear();
@@ -72,8 +75,6 @@ public class BattleBase : MonoBehaviour
         _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
         _gameView.SetMeteo(_meteo);
 
-        _gameView.UpdateStateProgressLayout(true);
-
         _gameView.DialogLayout.UpdateText("");
         _gameView.DialogLayout.Hide();
 
@@ -93,7 +94,7 @@ public class BattleBase : MonoBehaviour
         StartBattleAnim();
     }
 
-    public  void SetOpponent(NewBlastData newBlastData)
+    public void SetOpponent(NewBlastData newBlastData)
     {
         var opponentBlast = new Blast("", newBlastData.id, newBlastData.exp, newBlastData.iv, newBlastData.activeMoveset, newBlastData.boss, newBlastData.shiny);
 
@@ -101,7 +102,7 @@ public class BattleBase : MonoBehaviour
     }
 
 
-    public async void StartBattleAnim()
+    public virtual async void StartBattleAnim()
     {
         UIManager.Instance.GameView.ShowSpawnBlast();
 
@@ -136,6 +137,8 @@ public class BattleBase : MonoBehaviour
         _gameView.DialogLayout.Hide();
         _gameView.ShowNavBar();
         _gameView.ResetTab();
+
+        _gameView.StartTimer(_startData.turnDelay / 1000);
     }
 
     public void WaitForOpponent()
@@ -366,7 +369,7 @@ public class BattleBase : MonoBehaviour
 
     #region TurnAction Handlers
 
-    public async void PlayerAttack(int indexAttack)
+    public virtual async void PlayerAttack(int indexAttack)
     {
         try
         {
@@ -376,7 +379,7 @@ public class BattleBase : MonoBehaviour
         catch (ApiResponseException e) { Debug.LogError(e); }
     }
 
-    public async void PlayerUseItem(int indexItem, int indexSelectedBlast = 0)
+    public virtual async void PlayerUseItem(int indexItem, int indexSelectedBlast = 0)
     {
         try
         {
@@ -386,7 +389,7 @@ public class BattleBase : MonoBehaviour
         catch (ApiResponseException e) { Debug.LogError(e); }
     }
 
-    public void PlayerChangeBlast(int indexSelectedBlast)
+    public virtual void PlayerChangeBlast(int indexSelectedBlast)
     {
         try
         {
@@ -396,7 +399,7 @@ public class BattleBase : MonoBehaviour
         catch (ApiResponseException e) { Debug.LogError(e); }
     }
 
-    public async void PlayerWait()
+    public virtual async void PlayerWait()
     {
         try
         {

@@ -95,9 +95,19 @@ public class BagMiniPanel : Panel
         NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerUseItem(_lastItemIndex, indexBlast);
     }
 
-    public void HandleOnPvPBattle(bool isPvPBattle)
+    public void UpdateTabState(BattleMode battleMode)
     {
-        _tabButton.interactable = !isPvPBattle;
+        switch (battleMode)
+        {
+            case BattleMode.PvP:
+                _tabButton.interactable = false;
+                break;
+            case BattleMode.PvE:
+                _tabButton.interactable = true;
+                break;
+            default:
+                break;
+        }
     }
 
 }

@@ -44,6 +44,7 @@ public class StartStateData
 {
     public NewBlastData newBlastData;
     public Meteo meteo;
+    public int turnDelay;
 }
 
 [Serializable]

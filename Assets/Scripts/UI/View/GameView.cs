@@ -1,7 +1,9 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class GameView : View
@@ -19,6 +21,7 @@ public class GameView : View
     [SerializeField] DialogLayout _dialogLayout;
     [SerializeField] ProgressionLayout _progressionLayout;
     [SerializeField] ExpProgressionLayout _expProgressionLayout;
+    [SerializeField] TimerLayout _timerLayout;
 
     public HUDLayout PlayerHUD { get => _playerHUD; }
     public HUDLayout OpponentHUD { get => _opponentHUD; }
@@ -34,6 +37,7 @@ public class GameView : View
     NakamaData _dataUtils;
 
     Meteo _currentMeteo;
+    Coroutine _timerCoroutine;
 
     #region Setup
     public override void Init()
@@ -122,7 +126,6 @@ public class GameView : View
         _runBtnCG.interactable = false;
         _runBtnCG.blocksRaycasts = false;
 
-
         _waitBtnCG.DOFade(0, instant ? 0 : .2f);
         _waitBtnCG.interactable = false;
         _waitBtnCG.blocksRaycasts = false;
@@ -179,6 +182,7 @@ public class GameView : View
     }
 
     #endregion
+
     #region WildBlastBattle
 
     public void SetMeteo(Meteo startDataMeteo)
@@ -192,9 +196,50 @@ public class GameView : View
         EnvironmentManager.Instance.SetMeteo(startDataMeteo);
     }
 
-    public void UpdateStateProgressLayout(bool showPermanent)
+    public void StartTimer(int timer)
     {
+        _timerLayout.Show();
 
+        if (_timerCoroutine != null)
+        {
+            StopCoroutine(_timerCoroutine);
+            _timerCoroutine = null;
+        }
+
+        _timerCoroutine = StartCoroutine(TimerCor(timer));
+    }
+
+
+    IEnumerator TimerCor(int timer)
+    {
+        while (timer >= 0)
+        {
+            _timerLayout.SetTimer(timer);
+
+            yield return new WaitForSeconds(1);
+
+            timer--;
+        }
+
+        _timerLayout.Hide();
+    }
+
+    public void UpdateGameviewState(BattleMode battleMode)
+    {
+        _timerLayout.gameObject.SetActive(false);
+        _progressionLayout._permanentSlot.gameObject.SetActive(false);
+        BagPanel.UpdateTabState(battleMode);
+
+        switch (battleMode)
+        {
+            case BattleMode.PvP:
+                _timerLayout.gameObject.SetActive(true);
+                _timerLayout.Hide(true);
+                break;
+            case BattleMode.PvE:
+                _progressionLayout._permanentSlot.gameObject.SetActive(true);
+                break;
+        }
     }
 
     public void SetProgression(int indexProgression)
@@ -369,7 +414,6 @@ public class GameView : View
 
         await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-
         _dialogLayout.Hide();
     }
 
@@ -476,7 +520,6 @@ public class GameView : View
     {
         _dialogLayout.Show();
         await _dialogLayout.UpdateTextAsync(textToShow);
-        _dialogLayout.Hide();
     }
 
     public void HandleOnProgressionClick()

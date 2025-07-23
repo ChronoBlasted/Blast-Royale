@@ -6,14 +6,17 @@ using UnityEngine;
 
 public class PvPBattleManager : BattleBase
 {
-
     public override void StartBattle(StartStateData startData)
     {
         _serverBattle = NakamaManager.Instance.NakamaBattleManager.PvpBattle;
+        _gameView.UpdateGameviewState(BattleMode.PvP);
 
         base.StartBattle(startData);
+    }
 
-        _gameView.BagPanel.HandleOnPvPBattle(true);
+    public override void StartBattleAnim()
+    {
+        base.StartBattleAnim();
     }
 
     public override async Task PlayerLeave(bool leaveMatch)
@@ -24,5 +27,32 @@ public class PvPBattleManager : BattleBase
         {
             UIManager.Instance.MenuView.FightPanel.PvPBattleBonusAds.RefreshAd();
         }
+    }
+
+    public override void PlayerAttack(int indexAttack)
+    {
+        base.PlayerAttack(indexAttack);
+
+        _ = _gameView.DoShowMessage("Waiting for opponent");
+    }
+
+    public override void PlayerChangeBlast(int indexSelectedBlast)
+    {
+        base.PlayerChangeBlast(indexSelectedBlast);
+
+        _ = _gameView.DoShowMessage("Waiting for opponent");
+    }
+
+    public override void PlayerWait()
+    {
+        base.PlayerWait();
+        _ = _gameView.DoShowMessage("Waiting for opponent");
+
+    }
+
+    public override void PlayerUseItem(int indexItem, int indexSelectedBlast = 0)
+    {
+        base.PlayerUseItem(indexItem, indexSelectedBlast);
+        _ = _gameView.DoShowMessage("Waiting for opponent");
     }
 }
