@@ -73,7 +73,6 @@ public class GameLogicContext
             }
         }
  
-
         return isBlastAlive;
     }
 }

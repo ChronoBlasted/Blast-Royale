@@ -4,5 +4,5 @@ public enum OfferType
     Coin,
     Gem,
     Blast,
-    Item
+    Item,
 }

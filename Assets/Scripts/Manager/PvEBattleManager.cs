@@ -14,8 +14,7 @@ public class PvEBattleManager : BattleBase
     public int BossEncounter;
     public int ShinyEncounter;
 
-    public int CoinGenerated;
-    public int GemGenerated;
+
 
     List<Offer> _currentOffers;
 
@@ -93,7 +92,9 @@ public class PvEBattleManager : BattleBase
         }
         else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts))
         {
-            await PlayerLeave(false);
+            await PlayerLeave();
+
+            return;
         }
 
         EndTurn();
@@ -160,60 +161,13 @@ public class PvEBattleManager : BattleBase
     }
 
 
-    public override async Task PlayerLeave(bool leaveMatch)
+    public override async Task PlayerLeave()
     {
-        if (leaveMatch) await _serverBattle.LeaveMatch();
-
-        if (CoinGenerated > 0)
-        {
-            if (BonusAds)
-            {
-                Offer coinBonus = new Offer();
-
-                coinBonus.type = OfferType.Coin;
-                coinBonus.coinsAmount = CoinGenerated / 2;
-                coinBonus.isBonus = true;
-
-                BattleReward.Insert(0, coinBonus);
-            }
-
-            Offer coinReward = new Offer();
-
-            coinReward.type = OfferType.Coin;
-            coinReward.coinsAmount = CoinGenerated;
-
-            BattleReward.Insert(0, coinReward);
-        }
-
-        if (GemGenerated > 0)
-        {
-            if (BonusAds)
-            {
-                Offer gemBonus = new Offer();
-
-                gemBonus.type = OfferType.Gem;
-                gemBonus.coinsAmount = GemGenerated / 2;
-                gemBonus.isBonus = true;
-
-                BattleReward.Insert(0, gemBonus);
-            }
-
-            Offer gemReward = new Offer();
-
-            gemReward.type = OfferType.Gem;
-            gemReward.gemsAmount = GemGenerated;
-
-            BattleReward.Insert(0, gemReward);
-        }
-
         if (BonusAds)
         {
             UIManager.Instance.MenuView.FightPanel.PvEBattleBonusAds.RefreshAd();
         }
 
-        UIManager.Instance.ChangeView(UIManager.Instance.EndViewPve);
+        await base.PlayerLeave();
     }
-
-
-
 }

@@ -35,6 +35,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (Input.GetKeyUp(KeyCode.R))
         {
+            _ = NakamaManager.Instance.NakamaBattleManager.CurrentBattle.LeaveMatch();
             ReloadScene();
         }
     }

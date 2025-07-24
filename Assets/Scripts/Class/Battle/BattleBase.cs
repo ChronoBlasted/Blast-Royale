@@ -8,10 +8,9 @@ using UnityEngine.Events;
 
 public class BattleBase : MonoBehaviour
 {
-    protected bool _isMatchWin;
+    public bool IsMatchWin;
 
     protected GameView _gameView;
-    protected EndViewPvE _endView;
     protected NakamaBattleBase _serverBattle;
     protected NakamaUserAccount _userAccount;
     protected NakamaData _dataUtils;
@@ -27,6 +26,10 @@ public class BattleBase : MonoBehaviour
     protected PlayerBattleInfo _playerMeInfo;
     protected PlayerBattleInfo _playerOpponentInfo;
 
+    public int CoinGenerated;
+    public int GemGenerated;
+    public int TrophyGenerated;
+
     private Meteo _meteo;
     protected Blast _nextOpponentBlast;
 
@@ -39,12 +42,14 @@ public class BattleBase : MonoBehaviour
     public Blast PlayerBlast => _playerMeInfo.ActiveBlast;
 
     public Meteo Meteo { get => _meteo; }
-    public List<Blast> PlayerSquads { get => _playerSquads; }
+    public List<Blast> PlayerSquad { get => _playerSquads; }
+    public List<Blast> OpponentSquad { get => _opponentSquads; }
+    public PlayerBattleInfo PlayerMeInfo { get => _playerMeInfo; }
+    public PlayerBattleInfo PlayerOpponentInfo { get => _playerOpponentInfo; }
 
     public void Init()
     {
         _gameView = UIManager.Instance.GameView;
-        _endView = UIManager.Instance.EndViewPve;
         _userAccount = NakamaManager.Instance.NakamaUserAccount;
         _dataUtils = NakamaData.Instance;
     }
@@ -73,7 +78,7 @@ public class BattleBase : MonoBehaviour
             _opponentSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset, blast.boss, blast.shiny));
 
         _nextOpponentBlast = _opponentSquads[0];
-        _playerOpponentInfo = new PlayerBattleInfo("", BlastOwner.Opponent, _opponentSquads[0], _opponentSquads, null);
+        _playerOpponentInfo = new PlayerBattleInfo(startData.opponentName, BlastOwner.Opponent, _opponentSquads[0], _opponentSquads, null);
 
         _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
         _gameView.SetMeteo(_meteo);
@@ -294,13 +299,31 @@ public class BattleBase : MonoBehaviour
 
     public virtual async Task StopTurnHandler()
     {
+        if (NakamaLogic.IsBlastAlive(OpponentBlast) == false)
+        {
+            CoinGenerated += 200;
+        }
+
         if (NakamaLogic.IsBlastAlive(_playerOpponentInfo.ActiveBlast) == false && _playerOpponentInfo.OwnerType == BlastOwner.Wild)
         {
             await ShowOpponentBlast();
         }
-        else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts))
+        else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Wild)
         {
-            await PlayerLeave(false);
+            await PlayerLeave();
+
+            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvE);
+            return;
+        }
+        else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent || NakamaLogic.IsAllBlastFainted(_playerOpponentInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent)
+        {
+            TrophyGenerated = IsMatchWin ? 20 : -20;
+
+            await PlayerLeave();
+
+            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
+
+            return;
         }
 
         EndTurn();
@@ -316,21 +339,63 @@ public class BattleBase : MonoBehaviour
         _gameView.EndTurn(_playerMeInfo.ActiveBlast, _playerOpponentInfo.ActiveBlast);
     }
 
-    public virtual async Task PlayerLeave(bool leaveMatch)
+    public virtual async Task PlayerLeave()
     {
-        if (leaveMatch) await _serverBattle.LeaveMatch();
-
-        UIManager.Instance.ChangeView(UIManager.Instance.EndViewPve);
-    }
-
-    public void MatchEnd(string data)
-    {
-        if (bool.TryParse(data, out var result))
+        if (CoinGenerated > 0)
         {
-            _isMatchWin = result;
-            _endView.UpdateEndGame(_isMatchWin);
+            if (BonusAds)
+            {
+                Offer coinBonus = new Offer();
+
+                coinBonus.type = OfferType.Coin;
+                coinBonus.coinsAmount = CoinGenerated / 2;
+                coinBonus.isBonus = true;
+
+                BattleReward.Insert(0, coinBonus);
+            }
+
+            Offer coinReward = new Offer();
+
+            coinReward.type = OfferType.Coin;
+            coinReward.coinsAmount = CoinGenerated;
+
+            BattleReward.Insert(0, coinReward);
+        }
+
+        if (GemGenerated > 0)
+        {
+            if (BonusAds)
+            {
+                Offer gemBonus = new Offer();
+
+                gemBonus.type = OfferType.Gem;
+                gemBonus.coinsAmount = GemGenerated / 2;
+                gemBonus.isBonus = true;
+
+                BattleReward.Insert(0, gemBonus);
+            }
+
+            Offer gemReward = new Offer();
+
+            gemReward.type = OfferType.Gem;
+            gemReward.gemsAmount = GemGenerated;
+
+            BattleReward.Insert(0, gemReward);
+        }
+
+        await _serverBattle.LeaveMatch();
+
+        if (_playerOpponentInfo.OwnerType == BlastOwner.Opponent)
+        {
+            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
+        }
+        else
+        {
+            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvE);
         }
     }
+
+
 
     #region TurnAction Handlers
 

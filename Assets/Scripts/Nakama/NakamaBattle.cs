@@ -22,7 +22,6 @@ public class NakamaBattle : MonoSingleton<NakamaBattle>
 
     StartStateData _startStateData;
 
-    public UnityEvent OnBattleEnd;
 
     public PlayerState Player1State { get => _player1State; }
     public PlayerState Player2State { get => _player2State; }

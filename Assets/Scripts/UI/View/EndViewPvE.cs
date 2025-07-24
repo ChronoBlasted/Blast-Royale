@@ -22,6 +22,7 @@ public class EndViewPvE : View
     {
         PvEBattleManager battleManager = NakamaManager.Instance.NakamaBattleManager.PveBattle.BattleManager as PvEBattleManager;
 
+        _title.text = battleManager.IsMatchWin ? "GOOD GAME" : "YOU LOOSE";
 
         _progressionSlotLayout.InitSmooth(battleManager.IndexProgression);
 
@@ -57,11 +58,6 @@ public class EndViewPvE : View
         base.CloseView();
 
         CameraManager.Instance.SetCameraZoom(7);
-    }
-
-    public void UpdateEndGame(bool isWin)
-    {
-        _title.text = isWin ? "GOOD GAME" : "YOU LOOSE";
     }
 
     public async void HandleOnClaim()

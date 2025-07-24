@@ -43,6 +43,7 @@ public class NakamaBattleManager : MonoBehaviour
 public class StartStateData
 {
     public Blast[] newBlastSquad;
+    public string opponentName;
     public Meteo meteo;
     public int turnDelay;
 }

@@ -21,7 +21,7 @@ public class ChangeBlastPopup : Popup
     {
         base.OpenPopup();
 
-        UpdateData(NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerSquads);
+        UpdateData(NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerSquad);
     }
 
     public override void ClosePopup()

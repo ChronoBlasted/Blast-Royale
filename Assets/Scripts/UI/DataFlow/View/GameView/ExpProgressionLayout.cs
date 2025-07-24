@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ExpProgressionLayout : MonoBehaviour
 {
+    [SerializeField] CanvasGroup _cg;
     [SerializeField] Image _ico;
     [SerializeField] TMP_Text _amount;
 
@@ -24,6 +25,8 @@ public class ExpProgressionLayout : MonoBehaviour
         _offScreenPosition = _onScreenPosition + Vector2.left * 500f;
 
         _rectTransform.anchoredPosition = _offScreenPosition;
+
+        _cg.alpha = 0f;
 
         _amount.text = "+0";
     }
@@ -44,6 +47,7 @@ public class ExpProgressionLayout : MonoBehaviour
     {
         DOTween.Kill(_rectTransform);
 
+        _cg.DOFade(1, .2f);
         _rectTransform.DOAnchorPos(_onScreenPosition, .5f).SetEase(Ease.OutBack);
 
         if (_hideCor != null)
@@ -59,7 +63,9 @@ public class ExpProgressionLayout : MonoBehaviour
     {
         DOTween.Kill(_rectTransform);
 
-        _rectTransform.DOAnchorPos(_offScreenPosition, .5f).SetEase(Ease.InBack).OnComplete(() =>
+        _cg.DOFade(0f, .2f);
+
+        _rectTransform.DOAnchorPos(_offScreenPosition, .5f).SetEase(Ease.OutSine).OnComplete(() =>
         {
             _amount.text = "+0";
         });

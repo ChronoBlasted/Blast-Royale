@@ -2,6 +2,7 @@ using Nakama;
 using Nakama.TinyJson;
 using PimDeWitte.UnityMainThreadDispatcher;
 using System;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -21,7 +22,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
     protected Action<IMatchState> _matchStateHandler;
 
-    public UnityEvent OnBattleEnd;
     public BattleBase BattleManager;
 
     public virtual void Init(IClient client, ISession session, ISocket socket)
@@ -45,13 +45,23 @@ public abstract class NakamaBattleBase : MonoBehaviour
             var response = await _client.RpcAsync(_session, _matchName);
             _matchId = response.Payload.FromJson<string>();
 
+            await EnsureSocketConnected(); // <-- ajout ici
             await JoinMatchById(_matchId);
         }
         catch (ApiResponseException e)
         {
-            Debug.LogWarning("PvE: Could not join / find match: " + e.Message);
+            Debug.LogWarning("Could not join / find match: " + e.Message);
+        }
+        catch (SocketException ex)
+        {
+            Debug.LogError("Erreur socket : " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Erreur inattendue dans FindBattle : " + ex.Message);
         }
     }
+
 
     public async Task JoinMatchById(string matchId)
     {
@@ -64,10 +74,32 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         if (_matchId == null) return;
 
-        await _socket.LeaveMatchAsync(_matchId);
-        _socket.ReceivedMatchState -= _matchStateHandler;
-        _matchId = null;
+        try
+        {
+            await _socket.LeaveMatchAsync(_matchId);
+        }
+        catch
+        {
+        }
+        finally
+        {
+            _socket.ReceivedMatchState -= _matchStateHandler;
+            _matchId = null;
+        }
     }
+
+    async Task EnsureSocketConnected()
+    {
+        if (_socket == null || !_socket.IsConnected)
+        {
+            _socket = _client.NewSocket();
+            _socket.ReceivedMatchState += _matchStateHandler;
+
+            await _socket.ConnectAsync(_session);
+            Debug.Log("Socket reconnecté.");
+        }
+    }
+
 
     public async void PlayerReady()
     {
@@ -109,24 +141,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
         return Encoding.UTF8.GetString(matchState.State);
     }
 
-    public async void PlayerLeaveMatch(bool isWin)
-    {
-        try
-        {
-            await LeaveMatch();
-
-            await NakamaManager.Instance.NakamaUserAccount.GetPlayerMetadata();
-            await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards();
-
-            OnBattleEnd?.Invoke();
-
-            BattleManager.MatchEnd(isWin.ToString());
-        }
-        catch (ApiResponseException e)
-        {
-            Debug.LogWarning("PvP: Error Player Leave: " + e.Message);
-        }
-    }
 
 
     public async Task PlayerAttack(int indexAttack)
@@ -254,7 +268,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 break;
 
             case NakamaOpCode.MATCH_END:
-                PlayerLeaveMatch(bool.Parse(messageJson));
+                BattleManager.IsMatchWin = bool.Parse(messageJson);
                 break;
 
             case NakamaOpCode.ERROR_SERV:
@@ -283,7 +297,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if (_matchId != null) _ = LeaveMatch();
+        _ = LeaveMatch();
     }
 }
 

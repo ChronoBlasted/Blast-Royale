@@ -52,6 +52,7 @@ public class RewardEndGameLayout : MonoBehaviour
 
                 _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.gemsAmount);
                 break;
+
             default:
                 break;
         }

@@ -59,6 +59,5 @@ public class NakamaManager : MonoSingleton<NakamaManager>
         NakamaBattleManager.Init(Client, Session, Socket);
 
         GameManager.Instance.AfterNakamaInit();
-
     }
 }

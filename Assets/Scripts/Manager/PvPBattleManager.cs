@@ -19,14 +19,20 @@ public class PvPBattleManager : BattleBase
         base.StartBattleAnim();
     }
 
-    public override async Task PlayerLeave(bool leaveMatch)
+    public override async Task PlayerLeave()
     {
-        await base.PlayerLeave(leaveMatch);
-
         if (BonusAds)
         {
             UIManager.Instance.MenuView.FightPanel.PvPBattleBonusAds.RefreshAd();
         }
+
+        await base.PlayerLeave();
+
+    }
+
+    public override Task StopTurnHandler()
+    {
+        return base.StopTurnHandler();
     }
 
     public override void PlayerAttack(int indexAttack)
