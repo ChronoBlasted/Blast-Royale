@@ -209,6 +209,17 @@ public class GameView : View
         _timerCoroutine = StartCoroutine(TimerCor(timer));
     }
 
+    public void StopTimer()
+    {
+        if (_timerCoroutine != null)
+        {
+            StopCoroutine(_timerCoroutine);
+            _timerCoroutine = null;
+        }
+
+        _timerLayout.Hide();
+    }
+
 
     IEnumerator TimerCor(int timer)
     {
@@ -352,26 +363,32 @@ public class GameView : View
         }
     }
 
-    public async Task BlastSwap(Blast currentBlast, Blast newCurrentBlast)
+    public async Task BlastSwap(bool isPlayer, Blast currentBlast, Blast newCurrentBlast)
     {
-        await ComeBackBlast(currentBlast);
+        await ComeBackBlast(isPlayer, currentBlast);
 
-        await ThrowBlast(newCurrentBlast);
+        await ThrowBlast(isPlayer, newCurrentBlast);
     }
 
-    public async Task ComeBackBlast(Blast currentBlast)
+    public async Task ComeBackBlast(bool isPlayer, Blast currentBlast)
     {
-        await _playerHUD.ComeBackBlast();
+        HUDLayout HUDLayout = isPlayer ? PlayerHUD : OpponentHUD;
+
+        await HUDLayout.ComeBackBlast();
     }
 
-    public async Task ThrowBlast(Blast newBlast)
+    public async Task ThrowBlast(bool isPlayer, Blast newBlast)
     {
-        PlayerHUD.Init(newBlast);
-        AttackPanel.UpdateAttack(newBlast);
+        HUDLayout HUDLayout = isPlayer ? PlayerHUD : OpponentHUD;
+        HUDLayout.Init(newBlast);
 
-        _expProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(newBlast.data_id).Sprite);
+        if (isPlayer)
+        {
+            AttackPanel.UpdateAttack(newBlast);
+            _expProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(newBlast.data_id).Sprite);
+        }
 
-        await _playerHUD.ThrowBlast();
+        await HUDLayout.ThrowBlast();
     }
 
 

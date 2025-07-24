@@ -42,7 +42,7 @@ public class NakamaBattleManager : MonoBehaviour
 [Serializable]
 public class StartStateData
 {
-    public NewBlastData newBlastData;
+    public Blast[] newBlastSquad;
     public Meteo meteo;
     public int turnDelay;
 }

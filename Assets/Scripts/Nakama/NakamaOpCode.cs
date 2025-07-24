@@ -22,6 +22,7 @@ public static class NakamaOpCode
 
     public const long MATCH_ROUND = 60;
     public const long PLAYER_MUST_CHANGE_BLAST = 61;
+    public const long PLAYER_READY_MUST_CHANGE = 62;
 
     public const long NEW_OFFER_TURN = 80;
     public const long PLAYER_CHOOSE_OFFER = 81;

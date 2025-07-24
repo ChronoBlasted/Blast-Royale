@@ -72,10 +72,7 @@ public class GameLogicContext
                 GameStateManager.Instance.UpdateStateToEnd();
             }
         }
-        else
-        {
-            if (CurrentPlayerDefender.OwnerType == BlastOwner.Me && !isBlastAlive) NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.PlayerMustChangeBlast();
-        }
+ 
 
         return isBlastAlive;
     }

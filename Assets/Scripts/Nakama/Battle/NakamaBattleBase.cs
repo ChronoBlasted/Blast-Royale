@@ -32,6 +32,8 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
         BattleManager.Init();
 
+        _ = LeaveMatch();
+
         _matchStateHandler = m => UnityMainThreadDispatcher.Instance().Enqueue(() => HandleMatchState(m));
     }
     public async void FindBattle()
@@ -231,6 +233,8 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
         Debug.Log($" OpCode: {matchState.OpCode} | Data: {messageJson}");
 
+        TurnStateData turnState = new();
+
         switch (matchState.OpCode)
         {
             case NakamaOpCode.MATCH_START:
@@ -243,7 +247,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 break;
 
             case NakamaOpCode.MATCH_ROUND:
-                var turnState = messageJson.FromJson<TurnStateData>();
+                turnState = messageJson.FromJson<TurnStateData>();
                 BattleManager.PlayTurn(turnState);
                 BattleManager.WaitForOpponent();
                 UIManager.Instance.GameView.DialogLayout.Hide();
@@ -261,6 +265,18 @@ public abstract class NakamaBattleBase : MonoBehaviour
             case NakamaOpCode.NEW_BLAST:
                 var newBlast = JsonUtility.FromJson<NewBlastData>(messageJson);
                 BattleManager.SetOpponent(newBlast);
+                break;
+
+            case NakamaOpCode.PLAYER_READY_MUST_CHANGE:
+                BattleManager.StartNewMustSwapTurn();
+                if (!NakamaLogic.IsBlastAlive(BattleManager.PlayerBlast)) BattleManager.PlayerMustChangeBlast();
+                break;
+
+            case NakamaOpCode.PLAYER_MUST_CHANGE_BLAST:
+                UIManager.Instance.GameView.DialogLayout.Hide();
+                turnState = messageJson.FromJson<TurnStateData>();
+                BattleManager.PlayMustSwapTurn(turnState);
+                UIManager.Instance.ChangeBlastPopup.ClosePopup();
                 break;
         }
     }

@@ -69,8 +69,11 @@ public class BattleBase : MonoBehaviour
         _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
         _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
 
-        SetOpponent(startData.newBlastData);
-        _playerOpponentInfo = new PlayerBattleInfo("", BlastOwner.Opponent, _nextOpponentBlast, new List<Blast> { _nextOpponentBlast }, null);
+        foreach (var blast in startData.newBlastSquad)
+            _opponentSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset, blast.boss, blast.shiny));
+
+        _nextOpponentBlast = _opponentSquads[0];
+        _playerOpponentInfo = new PlayerBattleInfo("", BlastOwner.Opponent, _opponentSquads[0], _opponentSquads, null);
 
         _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
         _gameView.SetMeteo(_meteo);
@@ -100,7 +103,6 @@ public class BattleBase : MonoBehaviour
 
         _nextOpponentBlast = opponentBlast;
     }
-
 
     public virtual async void StartBattleAnim()
     {
@@ -132,13 +134,30 @@ public class BattleBase : MonoBehaviour
 
     public void StartNewTurn()
     {
-        _playerAction = new TurnAction();
-        _opponentAction = new TurnAction();
+        ResetAction();
         _gameView.DialogLayout.Hide();
         _gameView.ShowNavBar();
         _gameView.ResetTab();
 
         _gameView.StartTimer(_startData.turnDelay / 1000);
+    }
+
+    public async void StartNewMustSwapTurn()
+    {
+        _gameView.StartTimer(_startData.turnDelay / 1000);
+
+        if (NakamaLogic.IsBlastAlive(_playerOpponentInfo.ActiveBlast) == false && _playerOpponentInfo.OwnerType == BlastOwner.Opponent)
+        {
+            await _gameView.DoShowMessage("Waiting for ennemy swap");
+        }
+
+        ResetAction();
+    }
+
+    public void ResetAction()
+    {
+        _playerAction = new TurnAction();
+        _opponentAction = new TurnAction();
     }
 
     public void WaitForOpponent()
@@ -151,12 +170,11 @@ public class BattleBase : MonoBehaviour
     {
         _turnStateData = turnState;
 
-        _playerAction.MoveDamage = turnState.p1TurnData.moveDamage;
-        _playerAction.MoveEffects = turnState.p1TurnData.moveEffects;
-
+        _playerAction = UpdateActionTurn(_turnStateData.p1TurnData);
         _opponentAction = UpdateActionTurn(_turnStateData.p2TurnData);
 
         _gameView.CloseAllPanel();
+        _gameView.StopTimer();
 
         bool isPlayerFirst = NakamaLogic.CompareActionPriorities(_playerAction.TurnType, _opponentAction.TurnType);
 
@@ -190,6 +208,29 @@ public class BattleBase : MonoBehaviour
         if (await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo)) return;
 
         await StopTurnHandler();
+    }
+
+    public virtual async void PlayMustSwapTurn(TurnStateData turnState)
+    {
+        _turnStateData = turnState;
+
+        _playerAction = UpdateActionTurn(_turnStateData.p1TurnData);
+        _opponentAction = UpdateActionTurn(_turnStateData.p2TurnData);
+
+        _gameView.CloseAllPanel();
+        _gameView.StopTimer();
+
+        bool isPlayerFirst = NakamaLogic.CompareActionPriorities(_playerAction.TurnType, _opponentAction.TurnType);
+
+        var firstAction = isPlayerFirst ? _playerAction : _opponentAction;
+        var secondAction = isPlayerFirst ? _opponentAction : _playerAction;
+        var firstInfo = isPlayerFirst ? _playerMeInfo : _playerOpponentInfo;
+        var secondInfo = isPlayerFirst ? _playerOpponentInfo : _playerMeInfo;
+
+        await HandleSingleTurn(firstAction, firstInfo, secondInfo, isPlayerFirst);
+        await HandleSingleTurn(secondAction, secondInfo, firstInfo, !isPlayerFirst);
+
+        _serverBattle.PlayerReady();
     }
 
     private async Task<bool> HandleSingleTurn(TurnAction action, PlayerBattleInfo attackerInfo, PlayerBattleInfo defenderInfo, bool isPlayer)
@@ -243,13 +284,17 @@ public class BattleBase : MonoBehaviour
             turnAction.MoveDamage = turnData.moveDamage;
             turnAction.MoveEffects = turnData.moveEffects;
         }
+        else if (turnAction.TurnType == TurnType.Swap)
+        {
+            turnAction.SelectedBlastIndex = turnData.index;
+        }
 
         return turnAction;
     }
 
     public virtual async Task StopTurnHandler()
     {
-        if (NakamaLogic.IsBlastAlive(_playerOpponentInfo.ActiveBlast) == false)
+        if (NakamaLogic.IsBlastAlive(_playerOpponentInfo.ActiveBlast) == false && _playerOpponentInfo.OwnerType == BlastOwner.Wild)
         {
             await ShowOpponentBlast();
         }
@@ -260,10 +305,7 @@ public class BattleBase : MonoBehaviour
 
         EndTurn();
 
-        if (NakamaLogic.IsBlastAlive(_playerMeInfo.ActiveBlast))
-        {
-            _serverBattle.PlayerReady();
-        }
+        _serverBattle.PlayerReady();
     }
 
     public void EndTurn()
@@ -365,19 +407,10 @@ public class BattleBase : MonoBehaviour
         List<UnityAction<int>> actions = new List<UnityAction<int>>()
         {
             PlayerChangeBlast,
-            SwapBlast,
         };
 
         UIManager.Instance.ChangeBlastPopup.UpdateAction(actions, CHANGE_REASON.SWAP);
         UIManager.Instance.ChangeBlastPopup.UpdateClose(UIManager.Instance.GameView.ResetTab, false);
-    }
-
-    async void SwapBlast(int index)
-    {
-        await _gameView.ThrowBlast(_playerSquads[index]);
-        _playerMeInfo.ActiveBlast = _playerSquads[index];
-        await Task.Delay(TimeSpan.FromMilliseconds(500));
-        _serverBattle.PlayerReady();
     }
 
     #endregion

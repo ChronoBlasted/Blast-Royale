@@ -9,7 +9,8 @@ public class SwapTurnHandler : TurnActionHandler
     {
         PlayerBattleInfo currentPlayer = NakamaLogic.Instance.GetBlastOwner(context.Attacker, context.Players);
 
-        await gameView.BlastSwap(context.Attacker, currentPlayer.Blasts[context.SelectedBlastIndex]);
+        bool isPlayer = currentPlayer.OwnerType == BlastOwner.Me;
+        await gameView.BlastSwap(isPlayer, context.Attacker, currentPlayer.Blasts[context.SelectedBlastIndex]);
 
         currentPlayer.ActiveBlast = currentPlayer.Blasts[context.SelectedBlastIndex];
 
