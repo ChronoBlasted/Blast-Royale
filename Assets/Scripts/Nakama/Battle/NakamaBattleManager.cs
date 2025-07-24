@@ -44,6 +44,8 @@ public class StartStateData
 {
     public Blast[] newBlastSquad;
     public string opponentName;
+    public int opponentTrophy;
+    public PlayerStat opponentStats;
     public Meteo meteo;
     public int turnDelay;
 }

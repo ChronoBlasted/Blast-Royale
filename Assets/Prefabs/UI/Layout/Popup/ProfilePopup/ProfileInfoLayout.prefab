@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 482454010690477670}
   - component: {fileID: 1914748892761611195}
+  - component: {fileID: 3862837923949887164}
   m_Layer: 0
   m_Name: ProfileInfoLayout
   m_TagString: Untagged
@@ -59,6 +60,23 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
+--- !u!114 &3862837923949887164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3160617744655560398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 680a7f1f20bc98c47890857813474d93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayBeforeNext: 0.05
+  _tweenBehavior: 2
+  _whiteCover: {fileID: 0}
+  _duration: 0.2
+  _ease: 3
 --- !u!1 &3832187727646411394
 GameObject:
   m_ObjectHideFlags: 0

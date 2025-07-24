@@ -23,6 +23,8 @@ public class GameView : View
     [SerializeField] ExpProgressionLayout _expProgressionLayout;
     [SerializeField] TimerLayout _timerLayout;
 
+    [SerializeField] StartGameLayout _startGameLayout;
+
     public HUDLayout PlayerHUD { get => _playerHUD; }
     public HUDLayout OpponentHUD { get => _opponentHUD; }
     public DialogLayout DialogLayout { get => _dialogLayout; }
@@ -65,6 +67,13 @@ public class GameView : View
         ShowHUD();
 
         DialogLayout.Hide();
+    }
+
+    public async Task StartBattleAnim(StartStateData startData)
+    {
+        _startGameLayout.UpdateData(startData.opponentName, startData.opponentTrophy, startData.opponentStats);
+
+        await _startGameLayout.DoStartAnim();
     }
 
     public void ShowSpawnBlast()

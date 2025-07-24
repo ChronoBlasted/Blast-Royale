@@ -45,7 +45,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
             var response = await _client.RpcAsync(_session, _matchName);
             _matchId = response.Payload.FromJson<string>();
 
-            await EnsureSocketConnected(); // <-- ajout ici
+            await EnsureSocketConnected();
             await JoinMatchById(_matchId);
         }
         catch (ApiResponseException e)

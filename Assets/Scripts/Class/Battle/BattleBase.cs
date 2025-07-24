@@ -8,7 +8,9 @@ using UnityEngine.Events;
 
 public class BattleBase : MonoBehaviour
 {
-    public bool IsMatchWin;
+    public BattleMode BattleMode;
+    [HideInInspector] public bool IsMatchWin;
+
 
     protected GameView _gameView;
     protected NakamaBattleBase _serverBattle;
@@ -69,7 +71,7 @@ public class BattleBase : MonoBehaviour
         foreach (var item in _userAccount.LastItemCollection.deckItems)
             _playerItems.Add(new Item(item.data_id, item.amount));
 
-        _playerMeInfo = new PlayerBattleInfo(_userAccount.Username, BlastOwner.Me, _playerSquads[0], _playerSquads, _playerItems);
+        _playerMeInfo = new PlayerBattleInfo(_userAccount.Username, BlastOwner.Me, NakamaManager.Instance.NakamaUserAccount.LastData.playerStats, _playerSquads[0], _playerSquads, _playerItems);
 
         _gameView.PlayerHUD.BlastInWorld.PlatformLayout.Init();
         _gameView.OpponentHUD.BlastInWorld.PlatformLayout.Init();
@@ -78,7 +80,7 @@ public class BattleBase : MonoBehaviour
             _opponentSquads.Add(new Blast(blast.uuid, blast.data_id, blast.exp, blast.iv, blast.activeMoveset, blast.boss, blast.shiny));
 
         _nextOpponentBlast = _opponentSquads[0];
-        _playerOpponentInfo = new PlayerBattleInfo(startData.opponentName, BlastOwner.Opponent, _opponentSquads[0], _opponentSquads, null);
+        _playerOpponentInfo = new PlayerBattleInfo(startData.opponentName, BlastOwner.Opponent, startData.opponentStats, _opponentSquads[0], _opponentSquads, null);
 
         _meteo = NakamaLogic.GetEnumFromIndex<Meteo>((int)startData.meteo);
         _gameView.SetMeteo(_meteo);
@@ -111,11 +113,13 @@ public class BattleBase : MonoBehaviour
 
     public virtual async void StartBattleAnim()
     {
-        UIManager.Instance.GameView.ShowSpawnBlast();
+        _gameView.ShowSpawnBlast();
 
         await FrameWaiter.WaitForEndOfFrameAsync();
 
         CameraManager.Instance.SetCameraZoom(10);
+
+        if (BattleMode == BattleMode.PvP) await _gameView.StartBattleAnim(_startData);
 
         CameraManager.Instance.ResetCamera(1f);
 

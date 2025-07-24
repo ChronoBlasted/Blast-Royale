@@ -27,6 +27,7 @@ public class NakamaUserAccount : MonoBehaviour
     public ItemCollection LastItemCollection { get => _lastItemCollection; }
     public IApiAccount LastAccount { get => _lastAccount; }
     public string Username { get => _username; }
+    public Metadata LastData { get => _lastData; }
 
     public async Task Init(IClient client, ISession session)
     {
@@ -111,7 +112,7 @@ public class NakamaUserAccount : MonoBehaviour
         await _client.UpdateAccountAsync(
             _session,
             _username,
-            null,
+            _username,
             null,
             null,
             null,
@@ -455,11 +456,16 @@ public class Metadata
     public bool battle_pass;
     public bool updated_nickname;
     public int area;
+    public PlayerStat playerStats;
+    public bool pveBattleButtonAds;
+    public bool pvpBattleButtonAds;
+}
+
+[Serializable]
+public class PlayerStat
+{
     public int win;
     public int loose;
     public int blast_captured;
     public int blast_defeated;
-    public bool pveBattleButtonAds;
-    public bool pvpBattleButtonAds;
-
 }

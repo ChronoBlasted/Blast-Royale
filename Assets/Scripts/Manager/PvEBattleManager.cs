@@ -41,7 +41,7 @@ public class PvEBattleManager : BattleBase
 
     public override Task ShowOpponentBlast()
     {
-        _playerOpponentInfo = new PlayerBattleInfo("", BlastOwner.Wild, _nextOpponentBlast, new List<Blast> { _nextOpponentBlast }, null);
+        _playerOpponentInfo = new PlayerBattleInfo("", BlastOwner.Wild, null, _nextOpponentBlast, new List<Blast> { _nextOpponentBlast }, null);
 
         return base.ShowOpponentBlast();
     }

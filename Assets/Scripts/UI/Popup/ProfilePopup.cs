@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ProfilePopup : Popup
 {
-    [SerializeField] TMP_Text _winTxt, _looseTxt, _blastDefeatedTxt, _blastCapturedtxt;
+    [SerializeField] PlayerInfoLayout playerInfoLayout;
 
     Metadata _lastData;
 
@@ -30,11 +30,7 @@ public class ProfilePopup : Popup
     {
         _lastData = metadata;
 
-        _winTxt.text = _lastData.win.ToString();
-        _looseTxt.text = _lastData.loose.ToString();
-        _blastDefeatedTxt.text = _lastData.blast_defeated.ToString();
-        _blastCapturedtxt.text = _lastData.blast_captured.ToString();
-
+        playerInfoLayout.UpdateData(_lastData.playerStats);
 
         if (!_lastData.updated_nickname)
         {
