@@ -90,9 +90,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
-
+            UIManager.Instance.ErrorView.AddError(ex.Message);
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
@@ -115,8 +113,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
@@ -137,8 +134,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup();
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, null, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
             UIManager.Instance.OpeningView.ShowLogOption(true);
         }
     }
@@ -176,6 +172,7 @@ public class NakamaAuth : MonoBehaviour
 
     public async void LinkDevice()
     {
+        Debug.Log("LLINK DEVICE");
         try
         {
             var deviceId = PlayerPrefs.GetString("deviceId", SystemInfo.deviceUniqueIdentifier);
@@ -195,8 +192,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
         }
     }
 
@@ -212,8 +208,8 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
+
         }
     }
 
@@ -227,8 +223,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de connexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
         }
     }
 
@@ -251,8 +246,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
         }
     }
 
@@ -271,8 +265,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
         }
     }
 
@@ -286,8 +279,7 @@ public class NakamaAuth : MonoBehaviour
         }
         catch (Exception ex)
         {
-            UIManager.Instance.ConfirmPopup.OpenPopup(false);
-            UIManager.Instance.ConfirmPopup.UpdateData("Erreur de deconnexion", ex.Message, () => { }, false);
+            UIManager.Instance.ErrorView.AddError(ex.Message);
         }
     }
 
