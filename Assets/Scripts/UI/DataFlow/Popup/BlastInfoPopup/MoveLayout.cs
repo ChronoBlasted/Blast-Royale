@@ -8,10 +8,11 @@ using UnityEngine.UI;
 public class MoveLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _movePlatformCostTxt, _lockTxt;
-    [SerializeField] Image _moveGradientBG, _damageIco;
+    [SerializeField] Image _moveGradientBG, _damageIco, _powerBG;
     [SerializeField] Button _button;
     [SerializeField] PlatformSlotLayout _platformSlotLayout;
     [SerializeField] CanvasGroup _contentCG;
+    [SerializeField] Color _weakColor, _normalColor, _effectiveColor;
 
     [SerializeField] GameObject _platformLayout, _manaLayout, _lockLayout;
 
@@ -88,6 +89,7 @@ public class MoveLayout : MonoBehaviour
                 break;
             case AttackType.Status:
                 _movePowerTxt.text = "";
+                _moveDescTxt.gameObject.SetActive(false);
                 break;
             case AttackType.Special:
                 _movePowerTxt.text = GetMoveDamage().ToString();
@@ -169,7 +171,30 @@ public class MoveLayout : MonoBehaviour
     int GetMoveDamage()
     {
         Blast defender = NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.OpponentBlast;
+        Type defenderType = NakamaData.Instance.GetBlastDataById(defender.data_id).type;
 
-        return NakamaLogic.CalculateDamage(_blast.Level, _blast.Attack, defender.Defense, _move.type, NakamaData.Instance.GetBlastDataById(defender.data_id).type, _move.power, NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.Meteo);
+        float typeMultiplier = NakamaLogic.GetTypeMultiplier(_move.type, defenderType);
+
+        if (typeMultiplier == .5f)
+        {
+            _powerBG.color = _weakColor;
+            _moveDescTxt.text = "Not effective";
+            _moveDescTxt.gameObject.SetActive(true);
+        }
+        else if (typeMultiplier == 2f)
+        {
+            _powerBG.color = _effectiveColor;
+            _moveDescTxt.text = "Super effective";
+            _moveDescTxt.gameObject.SetActive(true);
+        }
+        else
+        {
+            _powerBG.color = _normalColor;
+            _moveDescTxt.text = "";
+            _moveDescTxt.gameObject.SetActive(false);
+        }
+
+
+        return NakamaLogic.CalculateDamage(_blast.Level, _blast.Attack, defender.Defense, _move.type, defenderType, _move.power, NakamaManager.Instance.NakamaBattleManager.CurrentBattle.BattleManager.Meteo);
     }
 }
