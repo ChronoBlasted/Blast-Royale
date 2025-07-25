@@ -189,12 +189,7 @@ public class BattleBase : MonoBehaviour
 
         if (_playerAction.TurnType == TurnType.Attack && _opponentAction.TurnType == TurnType.Attack)
         {
-            var playerMove = _dataUtils.GetMoveById(PlayerBlast.activeMoveset[_playerAction.MoveIndex]);
-            var wildMove = _dataUtils.GetMoveById(OpponentBlast.activeMoveset[_opponentAction.MoveIndex]);
-
-            isPlayerFirst = playerMove.priority > wildMove.priority ||
-                            (playerMove.priority == wildMove.priority &&
-                             NakamaLogic.GetFasterBlast(PlayerBlast, OpponentBlast));
+            isPlayerFirst = turnState.p1TurnPriority;
         }
 
         var firstAction = isPlayerFirst ? _playerAction : _opponentAction;

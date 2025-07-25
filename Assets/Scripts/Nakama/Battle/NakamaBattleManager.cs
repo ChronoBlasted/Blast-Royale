@@ -74,6 +74,7 @@ public class PlayerTurnData
 [Serializable]
 public class TurnStateData
 {
+    public bool p1TurnPriority;
     public PlayerTurnData p1TurnData;
     public PlayerTurnData p2TurnData;
     public bool catched;
