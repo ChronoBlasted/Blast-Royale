@@ -30,7 +30,6 @@ public class BattleBase : MonoBehaviour
 
     public int CoinGenerated;
     public int GemGenerated;
-    public int TrophyGenerated;
 
     private Meteo _meteo;
     protected Blast _nextOpponentBlast;
@@ -292,6 +291,11 @@ public class BattleBase : MonoBehaviour
         {
             turnAction.SelectedBlastIndex = turnData.index;
         }
+        else if (turnAction.TurnType == TurnType.Item)
+        {
+            turnAction.ItemIndex = turnData.itemUse.index_item;
+            turnAction.SelectedBlastIndex = turnData.itemUse.index_blast;
+        }
 
         return turnAction;
     }
@@ -316,12 +320,9 @@ public class BattleBase : MonoBehaviour
         }
         else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent || NakamaLogic.IsAllBlastFainted(_playerOpponentInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent)
         {
-            TrophyGenerated = IsMatchWin ? 20 : -20;
-
             await PlayerLeave();
 
             UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
-
             return;
         }
 

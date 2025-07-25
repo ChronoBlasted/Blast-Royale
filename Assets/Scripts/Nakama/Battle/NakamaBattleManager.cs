@@ -69,6 +69,8 @@ public class PlayerTurnData
     public int index;
     public int moveDamage;
     public List<MoveEffectData> moveEffects;
+    public ItemUseJSON itemUse;
+
 }
 
 [Serializable]

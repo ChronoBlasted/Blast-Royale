@@ -83,6 +83,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
         }
         finally
         {
+            BattleManager.IsMatchWin = false;
             _socket.ReceivedMatchState -= _matchStateHandler;
             _matchId = null;
         }
@@ -269,8 +270,17 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
             case NakamaOpCode.MATCH_END:
                 BattleManager.IsMatchWin = bool.Parse(messageJson);
+
+                _ = LeaveMatch();
                 break;
 
+            case NakamaOpCode.OPPONENT_LEAVE:
+                BattleManager.IsMatchWin = bool.Parse(messageJson);
+
+                _ = BattleManager.PlayerLeave();
+
+                UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
+                break;
             case NakamaOpCode.ERROR_SERV:
                 BattleManager.StartNewTurn();
                 ErrorManager.Instance.ShowError(ErrorType.SERVER_ERROR);

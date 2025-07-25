@@ -27,7 +27,6 @@ public class PvPBattleManager : BattleBase
         }
 
         await base.PlayerLeave();
-
     }
 
     public override Task StopTurnHandler()

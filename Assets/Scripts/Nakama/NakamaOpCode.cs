@@ -30,6 +30,7 @@ public static class NakamaOpCode
     public const long NEW_BLAST = 90;
 
     public const long MATCH_END = 100;
+    public const long OPPONENT_LEAVE = 101;
 
     public const long ERROR_SERV = 404;
 

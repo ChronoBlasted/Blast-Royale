@@ -19,7 +19,7 @@ public class StartGameLayout : MonoBehaviour
     Vector2 _p2OnScreenPosition;
     Vector2 _p2OffScreenPosition;
 
-    private void SetDefault()
+    private void Awake()
     {
         _p1OnScreenPosition = _p1GameObject.anchoredPosition;
         _p1OffScreenPosition = _p1OnScreenPosition + Vector2.left * 256f;
@@ -29,6 +29,16 @@ public class StartGameLayout : MonoBehaviour
         _p2OnScreenPosition = _p2GameObject.anchoredPosition;
         _p2OffScreenPosition = _p2OnScreenPosition + Vector2.right * 256f;
 
+        _p2GameObject.anchoredPosition = _p2OffScreenPosition;
+
+        _cg.alpha = 0f;
+        _cg.interactable = false;
+        _cg.blocksRaycasts = false;
+    }
+
+    private void SetDefault()
+    {
+        _p1GameObject.anchoredPosition = _p1OffScreenPosition;
         _p2GameObject.anchoredPosition = _p2OffScreenPosition;
 
         _cg.alpha = 0f;
