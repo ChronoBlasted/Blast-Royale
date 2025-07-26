@@ -969,19 +969,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5730190158127849987}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8332146565312259306}
-        m_TargetAssemblyTypeName: ProfileLayout, Assembly-CSharp
-        m_MethodName: HandleOnProfileClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _type: 1
   _rt: {fileID: 1954645848493763107}
   _timeOfScale: 0.2
@@ -998,6 +986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 5026503288802605837}
+  _playerTrophy: {fileID: 0}
 --- !u!1 &3025985329717482931
 GameObject:
   m_ObjectHideFlags: 0
@@ -2359,6 +2348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: {fileID: 8179096063199663339}
+  _playerTrophy: {fileID: 0}
 --- !u!1 &7495100458993575114
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,8 +32,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
         BattleManager.Init();
 
-        _ = LeaveMatch();
-
         _matchStateHandler = m => UnityMainThreadDispatcher.Instance().Enqueue(() => HandleMatchState(m));
     }
     public async void FindBattle()
@@ -70,27 +68,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
         _socket.ReceivedMatchState += _matchStateHandler;
     }
 
-    public async Task LeaveMatch()
-    {
-        if (_matchId == null) return;
-
-        try
-        {
-            await _socket.LeaveMatchAsync(_matchId);
-        }
-        catch
-        {
-        }
-        finally
-        {
-            BattleManager.EndStateData.win = false;
-            BattleManager.EndStateData.trophyRewards = -20;
-
-            _socket.ReceivedMatchState -= _matchStateHandler;
-            _matchId = null;
-        }
-    }
-
     async Task EnsureSocketConnected()
     {
         if (_socket == null || !_socket.IsConnected)
@@ -113,18 +90,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogWarning("Error player Ready : " + e.Message);
-        }
-    }
-
-    public async Task SendMatchState(int opCode, string json)
-    {
-        try
-        {
-            await _socket.SendMatchStateAsync(_matchId, opCode, json, null);
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"Error sending match state (OpCode {opCode}): {e.Message}");
         }
     }
 
@@ -231,6 +196,32 @@ public abstract class NakamaBattleBase : MonoBehaviour
         }
     }
 
+    public async Task PlayerLeave()
+    {
+        try
+        {
+            PlayerActionData playerActionData = new PlayerActionData
+            {
+                type = TurnType.Leave
+            };
+
+            await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_LEAVE, playerActionData.ToJson());
+        }
+        catch (ApiResponseException e)
+        {
+            Debug.LogWarning("Error Player Leave : " + e.Message);
+        }
+    }
+
+    public void MatchEnd(EndStateData endStateData)
+    {
+        BattleManager.GetBattleReward();
+
+        BattleManager.EndStateData = endStateData;
+
+        _socket.ReceivedMatchState -= _matchStateHandler;
+    }
+
     public async void HandleOnRewardsAds()
     {
         try
@@ -275,14 +266,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 endData = messageJson.FromJson<EndStateData>();
                 BattleManager.EndStateData = endData;
 
-                _ = LeaveMatch();
-                break;
-
-            case NakamaOpCode.OPPONENT_LEAVE:
-                endData = messageJson.FromJson<EndStateData>();
-                BattleManager.EndStateData = endData;
-
-                _ = BattleManager.PlayerLeave();
+                MatchEnd(endData);
                 break;
             case NakamaOpCode.ERROR_SERV:
                 BattleManager.StartNewTurn();
@@ -310,7 +294,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        _ = LeaveMatch();
+        _ = CancelMatchmaking();
     }
 }
 

@@ -5,5 +5,6 @@ public enum TurnType
     Item,
     Swap,
     Wait,
-    Status
+    Status,
+    Leave
 }

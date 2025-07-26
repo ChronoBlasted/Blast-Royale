@@ -340,7 +340,7 @@ public class BattleBase : MonoBehaviour
         _gameView.EndTurn(_playerMeInfo.ActiveBlast, _playerOpponentInfo.ActiveBlast);
     }
 
-    public virtual async Task PlayerLeave()
+    public virtual void GetBattleReward()
     {
         if (CoinGenerated > 0)
         {
@@ -384,7 +384,6 @@ public class BattleBase : MonoBehaviour
             BattleReward.Insert(0, gemReward);
         }
 
-        await _serverBattle.LeaveMatch();
 
         if (_playerOpponentInfo.OwnerType == BlastOwner.Opponent)
         {
@@ -436,6 +435,15 @@ public class BattleBase : MonoBehaviour
         {
             SetPlayerActionWait();
             await _serverBattle.PlayerWait();
+        }
+        catch (ApiResponseException e) { Debug.LogError(e); }
+    }
+
+    public virtual async Task PlayerLeave()
+    {
+        try
+        {
+            await _serverBattle.PlayerLeave();
         }
         catch (ApiResponseException e) { Debug.LogError(e); }
     }
