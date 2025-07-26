@@ -1,4 +1,5 @@
 using Chrono.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -56,7 +57,7 @@ public class ConfirmPopup : Popup
         }
     }
 
-    public void UpdateDataWithInputField(string title, string desc, string placeHolder, TMP_InputField.ContentType inputType, UnityAction<string> acceptAction, bool canClose = true)
+    public void UpdateDataWithInputField(string title, string desc, string placeHolder, TMP_InputField.ContentType inputType, UnityAction<string> acceptAction, bool canClose = true, int minFieldLength = 3)
     {
         _lastCanClose = canClose;
 
@@ -81,6 +82,15 @@ public class ConfirmPopup : Popup
             _cancelButton.onClick.RemoveAllListeners();
             _cancelButton.onClick.AddListener(ClosePopup);
         }
+
+        _inputField1.onValueChanged.RemoveAllListeners();
+
+        _inputField1.onValueChanged.AddListener((text) =>
+        {
+            _acceptButton.interactable = !string.IsNullOrWhiteSpace(text) && text.Length >= 3;
+        });
+
+        _acceptButton.interactable = false;
     }
 
     public void UpdateDataWithTwoInputField(string title, string desc, string placeHolder1, TMP_InputField.ContentType inputType1, string placeHolder2, TMP_InputField.ContentType inputType2, UnityAction<string, string> acceptAction, bool canClose = true)

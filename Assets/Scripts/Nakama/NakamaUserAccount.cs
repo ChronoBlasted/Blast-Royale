@@ -107,17 +107,30 @@ public class NakamaUserAccount : MonoBehaviour
 
     public async Task UpdateUsername(string newUsername)
     {
+        Debug.Log(newUsername);
+
         _username = newUsername;
 
-        await _client.UpdateAccountAsync(
-            _session,
-            _username,
-            _username,
-            null,
-            null,
-            null,
-            null
-        );
+        try
+        {
+            await _client.UpdateAccountAsync(
+                _session,
+                _username,
+                _username,
+                null,
+                null,
+                null,
+                null
+            );
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+
+
+
+        Debug.Log("rezerzerze");
 
         HaveUpdateDisplayName();
 
@@ -399,14 +412,22 @@ public class NakamaUserAccount : MonoBehaviour
 
     public async void HaveUpdateDisplayName()
     {
+        Debug.Log("3434343");
         try
         {
             var response = await _client.RpcAsync(_session, "updateNicknameStatus");
+
+            Debug.Log("tazmer");
         }
         catch (ApiResponseException ex)
         {
             Debug.LogFormat("Error: {0}", ex.Message);
         }
+        catch (Exception ex)
+        {
+            Debug.LogFormat("Error: {0}", ex.Message);
+        }
+
     }
 
     public async void UsePromoCode(string promoCode)

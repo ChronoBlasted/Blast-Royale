@@ -32,15 +32,26 @@ public class ProfilePopup : Popup
 
         playerInfoLayout.UpdateData(_lastData.playerStats);
 
+
         if (!_lastData.updated_nickname)
         {
             UIManager.Instance.ConfirmPopup.OpenPopup();
 
-            UIManager.Instance.ConfirmPopup.UpdateDataWithInputField("Change username", "Enter your new username", playerName, TMP_InputField.ContentType.Alphanumeric, (x) =>
-            {
-                _ = NakamaManager.Instance.NakamaUserAccount.UpdateUsername(x); // TODO Secure cette fonction
+            UIManager.Instance.ConfirmPopup.UpdateDataWithInputField(
+                "Change username",
+                "Enter your new username",
+                playerName,
+                TMP_InputField.ContentType.Alphanumeric,
+                (newName) =>
+                {
+                    _ = NakamaManager.Instance.NakamaUserAccount.UpdateUsername(newName);
+                },
+                false,
+                3
 
-            }, false);
+            );
+
         }
+
     }
 }

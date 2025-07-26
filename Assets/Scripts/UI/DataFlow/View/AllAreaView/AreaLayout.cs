@@ -12,6 +12,8 @@ public class AreaLayout : MonoBehaviour
     [SerializeField] AreaSingleBlastLayout _singleBlastPrefab;
     [SerializeField] Transform _singleBlastTransform;
 
+    [SerializeField] GameObject _selectLayout, _trophyRequiredLayout;
+
     AreaData _data;
     public AreaData Data { get => _data; }
 
@@ -24,7 +26,12 @@ public class AreaLayout : MonoBehaviour
         _areaTitleTxt.text = dataRef.Name.GetLocalizedString();
         _areaImg.sprite = dataRef.Sprite;
         _levelRangeTxt.text = "Level : " + _data.blastLevels[0] + "-" + _data.blastLevels[1];
-        //_trophyRequiredTxt.text = "+" + _data.trophyRequired;
+        _trophyRequiredTxt.text = "+" + _data.trophyRequired;
+
+        bool canAccess = NakamaManager.Instance.NakamaUserAccount.LastWalletData[Currency.Trophies.ToString()] > _data.trophyRequired;
+
+        _selectLayout.SetActive(canAccess);
+        _trophyRequiredLayout.SetActive(!canAccess);
 
         foreach (int blastId in _data.blastIds)
         {
