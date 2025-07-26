@@ -451,10 +451,8 @@ public class GameView : View
         float effective = NakamaLogic.GetTypeMultiplier(move.type, _dataUtils.GetBlastDataById(defender.data_id).type);
         attackerHUD = isPlayer ? _playerHUD : _opponentHUD;
 
-        float shakeIntensity = .5f;
-        if (damage > 50) shakeIntensity = 1f;
-        else if (damage > 100) shakeIntensity = 2f;
-        else if (damage > 200) shakeIntensity = 4f;
+        float shakeIntensity = 0f;
+        if (effective == 2) shakeIntensity = 2f;
 
         DoZoomEffect(attackerHUD, moveDataRef.Name.GetLocalizedString(), -5f, move.type, shakeIntensity);
 
@@ -489,7 +487,15 @@ public class GameView : View
 
         await attackerHUD.DoAttackAnimAsync(defenderHUD, defender, move, damage, effective);
 
-        // TODO Mettre FX super efficace / pas super efficace
+
+        if (effective != 1f)
+        {
+            await DoShowMessage(NakamaLogic.GetStringForEffectiveMove(effective));
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
+            DialogLayout.Hide();
+
+            // TODO Mettre FX super efficace / pas super efficace
+        }
 
         if (moveEffects != null)
         {

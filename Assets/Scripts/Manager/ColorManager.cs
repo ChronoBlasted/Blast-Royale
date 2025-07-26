@@ -7,6 +7,7 @@ public class ColorManager : MonoSingleton<ColorManager>
 {
     [SerializeField] Color _healColor, _manaColor, _catchColor, _statusColor;
     [SerializeField] Color _burnColor, _seededColor, _wetColor;
+    [SerializeField] Color _notEffectiveColor, _effectiveColor, _superEffectiveColor;
 
     [SerializeField] Sprite _activeSprite, _inactiveSprite;
 
@@ -49,5 +50,12 @@ public class ColorManager : MonoSingleton<ColorManager>
         }
 
         return Color.white;
+    }
+
+    public Color GetEffectiveColor(float effective)
+    {
+        if (effective == .5f) return _notEffectiveColor;
+        else if (effective == 2f) return _superEffectiveColor;
+        else return _effectiveColor;
     }
 }

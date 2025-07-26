@@ -106,7 +106,7 @@ public class HUDLayout : MonoBehaviour
 
         if (damage > 0)
         {
-            StartCoroutine(HitCoroutine(damage, .1f, effective > 1));
+            StartCoroutine(HitCoroutine(damage, .1f, effective));
 
             _lastOpponentHUD.UpdateHpBar(defender.Hp, 0.2f * effective, .1f);
         }
@@ -121,13 +121,14 @@ public class HUDLayout : MonoBehaviour
         var hitFX = Instantiate(fx, targetTransform);
     }
 
-    private IEnumerator HitCoroutine(int damage, float delay, bool isEffective)
+    private IEnumerator HitCoroutine(int damage, float delay, float effective)
     {
         yield return new WaitForSeconds(delay);
 
         var currentFloatingText = PoolManager.Instance[ResourceType.FloatingText].Get();
         currentFloatingText.transform.position = _lastOpponentHUD.BlastTransformInUI.position;
-        currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), Color.white, TextStyle.H1, isEffective);
+
+        currentFloatingText.GetComponent<FloatingText>().Init(damage.ToString(), ColorManager.Instance.GetEffectiveColor(effective), new Vector3(effective, effective, effective), TextStyle.H1);
     }
 
     public void DoFaintedAnim()

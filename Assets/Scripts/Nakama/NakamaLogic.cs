@@ -445,6 +445,14 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         }
     }
 
+    public static string GetStringForEffectiveMove(float effective)
+    {
+        if (effective == .5f) return "Not effective";
+        else if (effective == 2f) return "Super effective";
+        else return "";
+    }
+
+
     public static int GetAmountExpBall(BlastData blastData)
     {
         switch (blastData.rarity)

@@ -12,7 +12,6 @@ public class MoveLayout : MonoBehaviour
     [SerializeField] Button _button;
     [SerializeField] PlatformSlotLayout _platformSlotLayout;
     [SerializeField] CanvasGroup _contentCG;
-    [SerializeField] Color _weakColor, _normalColor, _effectiveColor;
 
     [SerializeField] GameObject _platformLayout, _manaLayout, _lockLayout;
 
@@ -175,22 +174,19 @@ public class MoveLayout : MonoBehaviour
 
         float typeMultiplier = NakamaLogic.GetTypeMultiplier(_move.type, defenderType);
 
+        _powerBG.color = ColorManager.Instance.GetEffectiveColor(typeMultiplier);
+        _moveDescTxt.text = NakamaLogic.GetStringForEffectiveMove(typeMultiplier);
+
         if (typeMultiplier == .5f)
         {
-            _powerBG.color = _weakColor;
-            _moveDescTxt.text = "Not effective";
             _moveDescTxt.gameObject.SetActive(true);
         }
         else if (typeMultiplier == 2f)
         {
-            _powerBG.color = _effectiveColor;
-            _moveDescTxt.text = "Super effective";
             _moveDescTxt.gameObject.SetActive(true);
         }
         else
         {
-            _powerBG.color = _normalColor;
-            _moveDescTxt.text = "";
             _moveDescTxt.gameObject.SetActive(false);
         }
 
