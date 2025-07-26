@@ -306,6 +306,8 @@ public class BattleBase : MonoBehaviour
         if (NakamaLogic.IsBlastAlive(OpponentBlast) == false)
         {
             CoinGenerated += 200;
+
+            NakamaManager.Instance.NakamaQuest.UpdateQuest(QuestType.DefeatBlast);
         }
 
         if (NakamaLogic.IsBlastAlive(_playerOpponentInfo.ActiveBlast) == false && _playerOpponentInfo.OwnerType == BlastOwner.Wild)

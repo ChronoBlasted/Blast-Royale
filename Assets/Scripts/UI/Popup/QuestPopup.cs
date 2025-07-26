@@ -14,11 +14,11 @@ public class QuestPopup : Popup
     DateTime _nextDailyReset;
     TimeSpan _timeRemaining;
 
-    int amountQuestCompleted;
+    int _amountQuestCompleted;
 
-    public void Init(List<DailyQuestData> dailyQuests)
+    public void Init(List<DailyQuest> dailyQuests)
     {
-        amountQuestCompleted = 0;
+        _amountQuestCompleted = 0;
 
         for (int i = 0; i < _questLayouts.Count; i++)
         {
@@ -27,13 +27,13 @@ public class QuestPopup : Popup
 
             if (_questLayouts[i].QuestComplete)
             {
-                amountQuestCompleted++;
+                _amountQuestCompleted++;
             }
         }
 
         _progressBar.Init(_progressBar.Slider.value, _questLayouts.Count);
 
-        _progressBar.SetValueSmooth(amountQuestCompleted);
+        _progressBar.SetValueSmooth(_amountQuestCompleted);
 
     }
 
@@ -41,7 +41,7 @@ public class QuestPopup : Popup
     {
         base.OpenPopup();
 
-        _progressBar.SetValueSmooth(amountQuestCompleted);
+        _progressBar.SetValueSmooth(_amountQuestCompleted);
 
         DateTime now = DateTime.Now;
         _nextDailyReset = now.Date.AddDays(1);
@@ -53,8 +53,13 @@ public class QuestPopup : Popup
     {
         for (int i = 0; i < _questLayouts.Count; i++)
         {
-            _questRewardsLayouts[i].Init(dailyQuestRewards.rewards[i], dailyQuestRewards.rewardCount == i && amountQuestCompleted > i, dailyQuestRewards.rewardCount > i);
+            _questRewardsLayouts[i].Init(dailyQuestRewards.rewards[i], dailyQuestRewards.rewardCount == i && _amountQuestCompleted > i, dailyQuestRewards.rewardCount > i);
         }
+    }
+
+    public void RefreshRewards(DailyQuestRewardData dailyQuestRewards)
+    {
+        InitRewards(dailyQuestRewards);
     }
 
     public async void HandleOnClaimReward()

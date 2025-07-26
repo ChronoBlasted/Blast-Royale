@@ -11,17 +11,16 @@ public class QuestLayout : MonoBehaviour
     [SerializeField] RewardedAdsButton _adsLayout;
 
     [SerializeField] Color _activeColor, _finishedColor;
-    DailyQuestData data;
+    DailyQuest data;
 
     bool _questComplete;
 
     public bool QuestComplete { get => _questComplete; }
 
-    public void Init(DailyQuestData questData)
+    public void Init(DailyQuest questData)
     {
         data = questData;
-        QuestDataRef dataRef = NakamaData.Instance.GetQuestDataRefByIds(data.id);
-
+        QuestDataRef dataRef = NakamaData.Instance.GetQuestDataRefByIds(data.type);
 
         _questComplete = data.progress >= data.goal;
 
@@ -44,7 +43,7 @@ public class QuestLayout : MonoBehaviour
             _sliderLayout.SetActive(true);
             _adsLayout.gameObject.SetActive(false);
         }
-        else if (dataRef.QuestIds == QuestIds.watch_ad)
+        else if (dataRef.QuestType == QuestType.WatchAd)
         {
             _sliderLayout.SetActive(false);
             _adsLayout.gameObject.SetActive(true);

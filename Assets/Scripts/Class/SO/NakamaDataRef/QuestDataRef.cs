@@ -6,7 +6,7 @@ using UnityEngine.Localization;
 [CreateAssetMenu(fileName = "NewQuestDataRef", menuName = "ScriptableObjects/NakamaDataRef/NewQuestDataRefObject", order = 0)]
 public class QuestDataRef : ScriptableObject
 {
-    public QuestIds QuestIds;
+    public QuestType QuestType;
     public Sprite QuestIco;
     public LocalizedString QuestName;
     public LocalizedString QuestDesc;

@@ -28,11 +28,11 @@ public class NakamaLeaderboards : MonoBehaviour
     {
         await GetTrophyLeaderboard();
         await GetTrophyAroundMeLeaderboard();
-        await GetTrophyFriendLeaderboard();
+        //await GetTrophyFriendLeaderboard();
 
         await GetBlastDefeatedLeaderboard();
         await GetBlastDefeatedAroundMeLeaderboard();
-        await GetBlastDefeatedFriendLeaderboard();
+        //await GetBlastDefeatedFriendLeaderboard();
 
         await GetAllBlastDefeatedByAreaLeaderboard();
         await GetAllBestStageByAreaLeaderboard();

@@ -70,9 +70,9 @@ public class NakamaData : MonoSingleton<NakamaData>
     {
         return _allStoreOfferDataRef.Find(x => x.DataID == id);
     }
-    public QuestDataRef GetQuestDataRefByIds(string id)
+    public QuestDataRef GetQuestDataRefByIds(QuestType id)
     {
-        return _allQuestDataRef.Find(x => x.QuestIds.ToString() == id);
+        return _allQuestDataRef.Find(x => x.QuestType == id);
     }
 
 

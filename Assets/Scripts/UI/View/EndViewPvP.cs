@@ -116,9 +116,6 @@ public class EndViewPvP : View
 
         await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards();
 
-        await NakamaManager.Instance.NakamaQuest.LoadDailyQuest();
-        await NakamaManager.Instance.NakamaQuest.LoadDailyQuestRewards();
-
         GameStateManager.Instance.UpdateStateToMenu();
     }
 }

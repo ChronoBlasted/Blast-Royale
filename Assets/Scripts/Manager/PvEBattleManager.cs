@@ -71,11 +71,15 @@ public class PvEBattleManager : BattleBase
 
                 NakamaManager.Instance.NakamaBlastTracker.AddBlastTrackerEntry(newBlast.blast.data_id.ToString(), version);
 
+                NakamaManager.Instance.NakamaQuest.UpdateQuest(QuestType.CatchBlast);
+
                 BlastCatched++;
             }
             else
             {
                 BlastDefeated++;
+
+                NakamaManager.Instance.NakamaQuest.UpdateQuest(QuestType.DefeatBlast);
 
                 if (_playerOpponentInfo.ActiveBlast.boss) BossEncounter++;
                 if (_playerOpponentInfo.ActiveBlast.shiny) ShinyEncounter++;
