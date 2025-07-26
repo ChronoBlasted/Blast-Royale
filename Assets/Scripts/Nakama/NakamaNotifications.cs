@@ -36,14 +36,14 @@ public class NakamaNotifications : MonoBehaviour
 
                 reward.blast = rewardBlast;
 
-                await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
+                NakamaManager.Instance.NakamaUserAccount.AddPlayerBlast(rewardBlast);
                 break;
             case NotificationOpCodes.ITEM:
                 Item rewardItem = notification.Content.FromJson<Item>();
 
                 reward.item = rewardItem;
 
-                await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+                NakamaManager.Instance.NakamaUserAccount.AddOrUpdateItem(rewardItem);
                 break;
             default:
                 break;

@@ -35,6 +35,15 @@ public class ItemTurnHandler : TurnActionHandler
         UIManager.Instance.GameView.BagPanel.UpdateUI(currentPlayer.Items);
         UIManager.Instance.ChangeBlastPopup.UpdateData(currentPlayer.Blasts);
 
+        Item itemToUse = new Item(
+            currentPlayer.Items[context.ItemIndex].data_id,
+            -1
+        );
+
+
+        NakamaManager.Instance.NakamaUserAccount.AddOrUpdateItem(itemToUse);
+
+
         await Task.Delay(500);
 
         return context.IsCatched;

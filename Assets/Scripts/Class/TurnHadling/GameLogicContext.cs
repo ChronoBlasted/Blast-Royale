@@ -41,18 +41,12 @@ public class GameLogicContext
             switch (CurrentPlayerDefender.OwnerType)
             {
                 case BlastOwner.Opponent:
-                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
-                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
-
                     await UIManager.Instance.GameView.BlastFainted(false, Defender);
                     break;
                 case BlastOwner.Me:
                     await UIManager.Instance.GameView.BlastFainted(true, Defender);
                     break;
                 case BlastOwner.Wild:
-                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
-                    _ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
-
                     await UIManager.Instance.GameView.BlastFainted(false, Defender);
 
                     //UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender); TODO FAIRE PLUS JOLIE ET ERGO

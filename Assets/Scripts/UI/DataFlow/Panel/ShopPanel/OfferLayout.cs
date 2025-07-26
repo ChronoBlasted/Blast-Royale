@@ -61,11 +61,11 @@ public class OfferLayout : MonoBehaviour
 
     public void Init(StoreOffer storeOffer)
     {
-        Init(storeOffer.offer);
+        Init(storeOffer.reward);
 
         StoreOfferDataRef storeOfferRef;
 
-        switch (storeOffer.offer.type)
+        switch (storeOffer.reward.type)
         {
             case RewardType.Coin:
                 storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(storeOffer.offer_id);
@@ -73,7 +73,7 @@ public class OfferLayout : MonoBehaviour
                 _ico.sprite = storeOfferRef.Sprite;
 
                 _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
-                _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.offer.amount);
+                _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.reward.amount);
                 break;
             case RewardType.Gem:
                 storeOfferRef = NakamaData.Instance.GetStoreOfferDataRef(storeOffer.offer_id);
@@ -81,7 +81,7 @@ public class OfferLayout : MonoBehaviour
                 _ico.sprite = storeOfferRef.Sprite;
 
                 _nameTxt.text = storeOfferRef.Name.GetLocalizedString();
-                _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.offer.amount);
+                _descTxt.text = "x" + UIManager.GetFormattedInt(storeOffer.reward.amount);
                 break;
         }
     }

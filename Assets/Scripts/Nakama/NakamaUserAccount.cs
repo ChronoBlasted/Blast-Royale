@@ -243,7 +243,7 @@ public class NakamaUserAccount : MonoBehaviour
     }
 
 
-    public async Task GetPlayerBlast()
+    async Task GetPlayerBlast()
     {
         try
         {
@@ -264,6 +264,13 @@ public class NakamaUserAccount : MonoBehaviour
         {
             Debug.LogFormat("Error: {0}", ex.Message);
         }
+    }
+
+    public void AddPlayerBlast(Blast blastToAdd)
+    {
+        _lastBlastCollection.storedBlasts.Add(blastToAdd);
+
+        UIManager.Instance.MenuView.SquadPanel.UpdateStoredBlast(_lastBlastCollection.storedBlasts);
     }
 
     public async void SwitchPlayerBlast(int indexOutBlast, int indexInBlast, bool isDeckToDeck)
@@ -366,7 +373,7 @@ public class NakamaUserAccount : MonoBehaviour
     }
 
 
-    public async Task GetPlayerBag()
+    async Task GetPlayerBag()
     {
         try
         {
@@ -386,6 +393,38 @@ public class NakamaUserAccount : MonoBehaviour
             Debug.LogFormat("Error: {0}", ex.Message);
         }
     }
+
+    public void AddOrUpdateItem(Item newItem)
+    {
+        var existingItem = _lastItemCollection.deckItems.Find(i => i.data_id == newItem.data_id);
+        if (existingItem != null)
+        {
+            existingItem.amount += newItem.amount;
+
+            UIManager.Instance.MenuView.SquadPanel.UpdateDeckItem(_lastItemCollection.deckItems);
+
+            return;
+        }
+
+        existingItem = _lastItemCollection.storedItems.Find(i => i.data_id == newItem.data_id);
+        if (existingItem != null)
+        {
+            existingItem.amount += newItem.amount;
+
+            UIManager.Instance.MenuView.SquadPanel.UpdateStoredItem(_lastItemCollection.storedItems);
+
+            return;
+        }
+
+        if (_lastItemCollection.deckItems.Count < 3)
+            _lastItemCollection.deckItems.Add(newItem);
+        else
+            _lastItemCollection.storedItems.Add(newItem);
+
+        UIManager.Instance.MenuView.SquadPanel.UpdateDeckItem(_lastItemCollection.deckItems);
+        UIManager.Instance.MenuView.SquadPanel.UpdateStoredItem(_lastItemCollection.storedItems);
+    }
+
 
     public async void SwitchPlayerItem(int indexDeckItem, int indexStoredItem, bool isDeckToDeck)
     {

@@ -72,10 +72,13 @@ public class ShopLayout : MonoBehaviour
         {
             { Currency.Coins.ToString(), -_storeOffer.price },
         };
-        
+
         NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
-        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+        NakamaManager.Instance.NakamaUserAccount.AddOrUpdateItem(_storeOffer.reward.item);
+
+        Debug.Log(_storeOffer.reward.item.data_id);
+        Debug.Log(_storeOffer.reward.item.amount);
 
         ShowReward();
     }
@@ -93,7 +96,7 @@ public class ShopLayout : MonoBehaviour
 
         Dictionary<string, int> changeset = new Dictionary<string, int>
         {
-            { Currency.Coins.ToString(), _storeOffer.offer.amount },
+            { Currency.Coins.ToString(), _storeOffer.reward.amount },
             { Currency.Gems.ToString(), -_storeOffer.price },
         };
 
@@ -109,7 +112,7 @@ public class ShopLayout : MonoBehaviour
 
         Dictionary<string, int> changeset = new Dictionary<string, int>
         {
-             { Currency.Gems.ToString(), _storeOffer.offer.amount },
+             { Currency.Gems.ToString(), _storeOffer.reward.amount },
         };
 
         NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
@@ -151,10 +154,10 @@ public class ShopLayout : MonoBehaviour
     {
         Reward reward = new Reward();
 
-        reward.type = _storeOffer.offer.type;
+        reward.type = _storeOffer.reward.type;
 
-        if (_storeOffer.offer.blast != null) reward.blast = _storeOffer.offer.blast;
-        if (_storeOffer.offer.item != null) reward.item = _storeOffer.offer.item;
+        if (_storeOffer.reward.blast != null) reward.blast = _storeOffer.reward.blast;
+        if (_storeOffer.reward.item != null) reward.item = _storeOffer.reward.item;
 
         UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);

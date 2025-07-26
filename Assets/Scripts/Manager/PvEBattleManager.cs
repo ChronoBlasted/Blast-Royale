@@ -61,6 +61,8 @@ public class PvEBattleManager : BattleBase
 
                 BattleReward.Add(newBlast);
 
+                NakamaManager.Instance.NakamaUserAccount.AddPlayerBlast(newBlast.blast);
+
                 BlastCatched++;
             }
             else

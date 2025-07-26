@@ -114,9 +114,6 @@ public class EndViewPvP : View
 
         NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
-        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
-        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
-
         await NakamaManager.Instance.NakamaLeaderboards.UpdateLeaderboards();
 
         await NakamaManager.Instance.NakamaBlastTracker.LoadBlastTracker();

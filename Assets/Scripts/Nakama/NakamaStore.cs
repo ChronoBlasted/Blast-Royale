@@ -168,9 +168,8 @@ public class NakamaStore : MonoBehaviour
 
             NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
-            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
-
-            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+            if (_canClaimDailyShop.lastDailyShop[index].reward.type == RewardType.Blast) NakamaManager.Instance.NakamaUserAccount.AddPlayerBlast(_canClaimDailyShop.lastDailyShop[index].reward.blast);
+            if (_canClaimDailyShop.lastDailyShop[index].reward.type == RewardType.Item) NakamaManager.Instance.NakamaUserAccount.AddOrUpdateItem(_canClaimDailyShop.lastDailyShop[index].reward.item);
 
         }
         catch (ApiResponseException ex)
@@ -202,7 +201,7 @@ public class NakamaStore : MonoBehaviour
 public class StoreOffer
 {
     public int offer_id;
-    public Reward offer;
+    public Reward reward;
 
     public int price;
     public Currency currency;
