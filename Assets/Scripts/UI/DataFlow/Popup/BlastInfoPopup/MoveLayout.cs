@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MoveLayout : MonoBehaviour
 {
     [SerializeField] TMP_Text _moveNameTxt, _moveDescTxt, _movePowerTxt, _moveCostTxt, _movePlatformCostTxt, _lockTxt;
-    [SerializeField] Image _moveGradientBG, _damageIco, _powerBG;
+    [SerializeField] Image _moveGradientBG, _damageIco, _glowPowerBG, _glowMoveLayoutBG;
     [SerializeField] Button _button;
     [SerializeField] PlatformSlotLayout _platformSlotLayout;
     [SerializeField] CanvasGroup _contentCG;
@@ -89,6 +89,8 @@ public class MoveLayout : MonoBehaviour
             case AttackType.Status:
                 _movePowerTxt.text = "";
                 _moveDescTxt.gameObject.SetActive(false);
+                _glowPowerBG.enabled = false;
+                _glowMoveLayoutBG.enabled = false;
                 break;
             case AttackType.Special:
                 _movePowerTxt.text = GetMoveDamage().ToString();
@@ -174,7 +176,20 @@ public class MoveLayout : MonoBehaviour
 
         float typeMultiplier = NakamaLogic.GetTypeMultiplier(_move.type, defenderType);
 
-        _powerBG.color = ColorManager.Instance.GetEffectiveColor(typeMultiplier);
+        if (typeMultiplier != 1)
+        {
+            _glowPowerBG.enabled = true;
+            _glowMoveLayoutBG.enabled = true;
+            _glowPowerBG.color = ColorManager.Instance.GetEffectiveColor(typeMultiplier);
+            _glowMoveLayoutBG.color = ColorManager.Instance.GetEffectiveColor(typeMultiplier);
+        }
+        else
+        {
+            _glowPowerBG.enabled = false;
+            _glowMoveLayoutBG.enabled = false;
+        }
+
+        _movePowerTxt.color = ColorManager.Instance.GetEffectiveColor(typeMultiplier);
         _moveDescTxt.text = NakamaLogic.GetStringForEffectiveMove(typeMultiplier);
 
         if (typeMultiplier == .5f)

@@ -87,6 +87,8 @@ public class ShopLayout : MonoBehaviour
 
     public async void HandleOnBuyGemOffer(int index)
     {
+        Debug.Log("COMPLE");
+
         await NakamaManager.Instance.NakamaStore.BuyGemOffer(index);
 
         ShowReward();
@@ -124,14 +126,12 @@ public class ShopLayout : MonoBehaviour
 
     private void ShowReward()
     {
-        RewardCollection reward = new RewardCollection();
+        Reward reward = new Reward();
 
-        reward.offer_id = _storeOffer.offer_id;
-        reward.coinsReceived = _storeOffer.offer.coinsAmount;
-        reward.gemsReceived = _storeOffer.offer.gemsAmount;
+        reward.type = _storeOffer.offer.type;
 
-        if (_storeOffer.offer.blast != null) reward.blastReceived = _storeOffer.offer.blast;
-        if (_storeOffer.offer.item != null) reward.itemReceived = _storeOffer.offer.item;
+        if (_storeOffer.offer.blast != null) reward.blast = _storeOffer.offer.blast;
+        if (_storeOffer.offer.item != null) reward.item = _storeOffer.offer.item;
 
         UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);

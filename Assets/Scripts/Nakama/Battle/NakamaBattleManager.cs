@@ -82,6 +82,14 @@ public class TurnStateData
     public bool catched;
 }
 
+[Serializable]
+public class EndStateData
+{
+    public bool win;
+    public int trophyRewards;
+}
+
+
 // Send data
 
 public class ItemUseJSON
@@ -93,7 +101,7 @@ public class ItemUseJSON
 [Serializable]
 public class OfferTurnStateData
 {
-    public Offer offerOne;
-    public Offer offerTwo;
-    public Offer offerThree;
+    public Reward offerOne;
+    public Reward offerTwo;
+    public Reward offerThree;
 }

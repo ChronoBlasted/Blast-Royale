@@ -9,7 +9,7 @@ public class WildBattleOfferPopup : Popup
     [SerializeField] List<WildBattleOfferLayout> _wildBattleOfferLayout;
 
 
-    public void Init(List<Offer> offers)
+    public void Init(List<Reward> offers)
     {
         for (int i = 0; i < _wildBattleOfferLayout.Count; i++)
         {

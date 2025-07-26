@@ -59,9 +59,7 @@ public class NakamaQuest : MonoBehaviour
         {
             var response = await _client.RpcAsync(_session, "claimDailyQuest");
 
-            var reward = response.Payload.FromJson<RewardCollection>();
-
-            reward.offer_id = -1;
+            var reward = response.Payload.FromJson<Reward>();
 
             UIManager.Instance.RewardPopup.OpenPopup(false);
             UIManager.Instance.RewardPopup.UpdateData(reward);
@@ -100,6 +98,6 @@ public class DailyQuestData
 
 public class DailyQuestRewardData
 {
-    public List<RewardCollection> rewards;
+    public List<Reward> rewards;
     public int rewardCount;
 }

@@ -10,8 +10,8 @@ public class RewardEndGameLayout : MonoBehaviour
     [SerializeField] TMP_Text _amount;
     [SerializeField] GameObject _bonusLayout;
 
-    Offer _currentOffer;
-    public void Init(Offer offer)
+    Reward _currentOffer;
+    public void Init(Reward offer)
     {
         _currentOffer = offer;
 
@@ -21,7 +21,7 @@ public class RewardEndGameLayout : MonoBehaviour
 
         switch (_currentOffer.type)
         {
-            case OfferType.Blast:
+            case RewardType.Blast:
 
                 BlastDataRef blastData = NakamaData.Instance.GetBlastDataRef(_currentOffer.blast.data_id);
 
@@ -29,7 +29,7 @@ public class RewardEndGameLayout : MonoBehaviour
 
                 _amount.text = "lvl." + NakamaLogic.CalculateLevelFromExperience(_currentOffer.blast.exp);
                 break;
-            case OfferType.Item:
+            case RewardType.Item:
                 ItemDataRef itemDataRef = NakamaData.Instance.GetItemDataRef(_currentOffer.item.data_id);
 
                 ItemData itemData = NakamaData.Instance.GetItemDataById(_currentOffer.item.data_id);
@@ -38,19 +38,19 @@ public class RewardEndGameLayout : MonoBehaviour
 
                 _amount.text = "x" + _currentOffer.item.amount;
                 break;
-            case OfferType.Coin:
+            case RewardType.Coin:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
 
                 _ico.sprite = resourceData.Sprite;
 
-                _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.coinsAmount);
+                _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.amount);
                 break;
-            case OfferType.Gem:
+            case RewardType.Gem:
                 resourceData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
 
                 _ico.sprite = resourceData.Sprite;
 
-                _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.gemsAmount);
+                _amount.text = "x" + UIManager.GetFormattedInt(_currentOffer.amount);
                 break;
 
             default:

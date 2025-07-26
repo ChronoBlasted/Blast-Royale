@@ -187,18 +187,21 @@ public class PediaBlastLayout : MonoBehaviour
 
     private void ShowReward()
     {
-        RewardCollection reward = new RewardCollection();
+        Reward reward = new Reward();
 
         switch (_currentBlastType)
         {
             case BlastType.Regular:
-                reward.coinsReceived = 200;
+                reward.type = RewardType.Coin;
+                reward.amount = 200;
                 break;
             case BlastType.Boss:
-                reward.coinsReceived = 1000;
+                reward.type = RewardType.Coin;
+                reward.amount = 1000;
                 break;
             case BlastType.Shiny:
-                reward.gemsReceived = 10;
+                reward.type = RewardType.Gem;
+                reward.amount = 10;
                 break;
         }
 

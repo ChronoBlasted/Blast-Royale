@@ -9,8 +9,6 @@ using UnityEngine.Events;
 public class BattleBase : MonoBehaviour
 {
     public BattleMode BattleMode;
-    [HideInInspector] public bool IsMatchWin;
-
 
     protected GameView _gameView;
     protected NakamaBattleBase _serverBattle;
@@ -18,7 +16,7 @@ public class BattleBase : MonoBehaviour
     protected NakamaData _dataUtils;
 
     public bool BonusAds = false;
-    public List<Offer> BattleReward;
+    public List<Reward> BattleReward;
 
     private List<Blast> _playerSquads = new List<Blast>();
     protected List<Blast> _opponentSquads = new List<Blast>();
@@ -36,6 +34,8 @@ public class BattleBase : MonoBehaviour
 
     protected StartStateData _startData;
     protected TurnStateData _turnStateData;
+    private EndStateData _endStateData;
+
     protected TurnAction _playerAction, _opponentAction;
 
     public Blast OpponentBlast => _playerOpponentInfo.ActiveBlast;
@@ -47,6 +47,7 @@ public class BattleBase : MonoBehaviour
     public List<Blast> OpponentSquad { get => _opponentSquads; }
     public PlayerBattleInfo PlayerMeInfo { get => _playerMeInfo; }
     public PlayerBattleInfo PlayerOpponentInfo { get => _playerOpponentInfo; }
+    public EndStateData EndStateData { get => _endStateData; set => _endStateData = value; }
 
     public void Init()
     {
@@ -207,8 +208,8 @@ public class BattleBase : MonoBehaviour
             return;
         }
 
-        if (await HandleStatusIfNeeded(_playerMeInfo, _playerOpponentInfo)) return;
-        if (await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo)) return;
+        await HandleStatusIfNeeded(_playerMeInfo, _playerOpponentInfo);
+        await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo);
 
         await StopTurnHandler();
     }
@@ -345,19 +346,19 @@ public class BattleBase : MonoBehaviour
         {
             if (BonusAds)
             {
-                Offer coinBonus = new Offer();
+                Reward coinBonus = new Reward();
 
-                coinBonus.type = OfferType.Coin;
-                coinBonus.coinsAmount = CoinGenerated / 2;
+                coinBonus.type = RewardType.Coin;
+                coinBonus.amount = CoinGenerated / 2;
                 coinBonus.isBonus = true;
 
                 BattleReward.Insert(0, coinBonus);
             }
 
-            Offer coinReward = new Offer();
+            Reward coinReward = new Reward();
 
-            coinReward.type = OfferType.Coin;
-            coinReward.coinsAmount = CoinGenerated;
+            coinReward.type = RewardType.Coin;
+            coinReward.amount = CoinGenerated;
 
             BattleReward.Insert(0, coinReward);
         }
@@ -366,19 +367,19 @@ public class BattleBase : MonoBehaviour
         {
             if (BonusAds)
             {
-                Offer gemBonus = new Offer();
+                Reward gemBonus = new Reward();
 
-                gemBonus.type = OfferType.Gem;
-                gemBonus.coinsAmount = GemGenerated / 2;
+                gemBonus.type = RewardType.Gem;
+                gemBonus.amount = GemGenerated / 2;
                 gemBonus.isBonus = true;
 
                 BattleReward.Insert(0, gemBonus);
             }
 
-            Offer gemReward = new Offer();
+            Reward gemReward = new Reward();
 
-            gemReward.type = OfferType.Gem;
-            gemReward.gemsAmount = GemGenerated;
+            gemReward.type = RewardType.Gem;
+            gemReward.amount = GemGenerated;
 
             BattleReward.Insert(0, gemReward);
         }

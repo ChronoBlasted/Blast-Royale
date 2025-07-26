@@ -29,7 +29,7 @@ public class DailyRewardView : View
         UIManager.Instance.ChangeView(UIManager.Instance.MenuView);
     }
 
-    public void UpdateDailyRewards(List<RewardCollection> rewardCollections)
+    public void UpdateDailyRewards(List<Reward> rewardCollections)
     {
         for (int i = 0; i < _allDailyRewardLayout.Count; i++)
         {

@@ -20,7 +20,7 @@ public class NakamaPvEBattle : NakamaBattleBase
 
             case NakamaOpCode.NEW_OFFER_TURN:
                 var newOffers = JsonUtility.FromJson<OfferTurnStateData>(messageJson);
-                var offerList = new List<Offer> { newOffers.offerOne, newOffers.offerTwo, newOffers.offerThree };
+                var offerList = new List<Reward> { newOffers.offerOne, newOffers.offerTwo, newOffers.offerThree };
 
                 PvEBattleManager battleManager = BattleManager as PvEBattleManager;
                 battleManager.SetNewOffers(offerList);

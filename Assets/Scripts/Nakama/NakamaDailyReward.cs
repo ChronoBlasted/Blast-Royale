@@ -67,7 +67,7 @@ public class NakamaDailyReward : MonoBehaviour
         {
             var loadAllDailyReward = await _client.RpcAsync(_session, "loadAllDailyReward");
 
-            var loadAllDailyRewardList = loadAllDailyReward.Payload.FromJson<List<RewardCollection>>();
+            var loadAllDailyRewardList = loadAllDailyReward.Payload.FromJson<List<Reward>>();
 
             UIManager.Instance.DailyRewardView.UpdateDailyRewards(loadAllDailyRewardList);
 
@@ -78,16 +78,6 @@ public class NakamaDailyReward : MonoBehaviour
         }
     }
 
-}
-
-[Serializable]
-public class RewardCollection
-{
-    public int offer_id = -1;
-    public int coinsReceived;
-    public int gemsReceived;
-    public Blast blastReceived;
-    public Item itemReceived;
 }
 
 public class CanClaimDailyReward

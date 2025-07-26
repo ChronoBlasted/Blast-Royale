@@ -1,8 +1,5 @@
 using BaseTemplate.Behaviours;
 using GoogleMobileAds.Api;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -76,7 +73,7 @@ public class AdsManager : MonoSingleton<AdsManager>
 
         if (RewardedAd != null && RewardedAd.CanShowAd())
         {
-            RewardedAd.Show((Reward reward) =>
+            RewardedAd.Show((GoogleMobileAds.Api.Reward reward) =>
             {
                 onAdsComplete.Invoke();
             });

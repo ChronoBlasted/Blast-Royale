@@ -83,7 +83,9 @@ public abstract class NakamaBattleBase : MonoBehaviour
         }
         finally
         {
-            BattleManager.IsMatchWin = false;
+            BattleManager.EndStateData.win = false;
+            BattleManager.EndStateData.trophyRewards = -20;
+
             _socket.ReceivedMatchState -= _matchStateHandler;
             _matchId = null;
         }
@@ -249,6 +251,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
         Debug.Log($" OpCode: {matchState.OpCode} | Data: {messageJson}");
 
         TurnStateData turnState = new();
+        EndStateData endData = new();
 
         switch (matchState.OpCode)
         {
@@ -269,17 +272,17 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 break;
 
             case NakamaOpCode.MATCH_END:
-                BattleManager.IsMatchWin = bool.Parse(messageJson);
+                endData = messageJson.FromJson<EndStateData>();
+                BattleManager.EndStateData = endData;
 
                 _ = LeaveMatch();
                 break;
 
             case NakamaOpCode.OPPONENT_LEAVE:
-                BattleManager.IsMatchWin = bool.Parse(messageJson);
+                endData = messageJson.FromJson<EndStateData>();
+                BattleManager.EndStateData = endData;
 
                 _ = BattleManager.PlayerLeave();
-
-                UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
                 break;
             case NakamaOpCode.ERROR_SERV:
                 BattleManager.StartNewTurn();

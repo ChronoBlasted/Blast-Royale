@@ -27,7 +27,7 @@ public class NakamaNotifications : MonoBehaviour
     {
         await NakamaManager.Instance.NakamaUserAccount.GetWalletData();
 
-        RewardCollection reward = new RewardCollection();
+        Reward reward = new Reward();
 
         switch (notification.Code)
         {
@@ -36,14 +36,14 @@ public class NakamaNotifications : MonoBehaviour
             case NotificationOpCodes.BLAST:
                 Blast rewardBlast = notification.Content.FromJson<Blast>();
 
-                reward.blastReceived = rewardBlast;
+                reward.blast = rewardBlast;
 
                 await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
                 break;
             case NotificationOpCodes.ITEM:
                 Item rewardItem = notification.Content.FromJson<Item>();
 
-                reward.itemReceived = rewardItem;
+                reward.item = rewardItem;
 
                 await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
                 break;

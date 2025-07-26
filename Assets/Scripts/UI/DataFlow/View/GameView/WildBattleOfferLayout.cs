@@ -17,7 +17,7 @@ public class WildBattleOfferLayout : MonoBehaviour
     [SerializeField] ParticleSystem _offerTakenVFX;
 
     int _index;
-    public void Init(Offer offer, int index)
+    public void Init(Reward reward, int index)
     {
         _index = index;
 
@@ -31,7 +31,7 @@ public class WildBattleOfferLayout : MonoBehaviour
 
         _canvas.sortingOrder = 10;
 
-        _offerLayout.Init(offer);
+        _offerLayout.Init(reward);
     }
 
     public void HandleOnClick()

@@ -20,16 +20,18 @@ public class EndViewPvP : View
     [SerializeField] ChronoTweenSequence _chronoTweenSequence;
     [SerializeField] ChronoTweenObject _claimBtn;
 
+    PvPBattleManager battleManager;
+
     public override void OpenView(bool _instant = false)
     {
-        PvPBattleManager battleManager = NakamaManager.Instance.NakamaBattleManager.PvpBattle.BattleManager as PvPBattleManager;
+        battleManager = NakamaManager.Instance.NakamaBattleManager.PvpBattle.BattleManager as PvPBattleManager;
 
         foreach (Transform transform in _rewardContentTransform)
         {
             Destroy(transform.gameObject);
         }
 
-        UpdateEndGame(battleManager.IsMatchWin);
+        UpdateEndGame(battleManager.EndStateData.win);
 
         _p1Username.text = battleManager.PlayerMeInfo.Username;
         _p2Username.text = battleManager.PlayerOpponentInfo.Username;
@@ -54,7 +56,7 @@ public class EndViewPvP : View
         {
             _rewardTitleLayout.SetActive(true);
 
-            foreach (Offer offer in battleManager.BattleReward)
+            foreach (Reward offer in battleManager.BattleReward)
             {
                 var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
                 currentRerward.Init(offer);
@@ -91,7 +93,7 @@ public class EndViewPvP : View
         _p1Glow.enabled = isWin;
         _p2Glow.enabled = !isWin;
 
-        UIManager.Instance.DoSmoothTextInt(_p1TrophyGain, 0, isWin ? +20 : -20, isWin ? "+" : "");
+        UIManager.Instance.DoSmoothTextInt(_p1TrophyGain, 0, isWin ? battleManager.EndStateData.trophyRewards : battleManager.EndStateData.trophyRewards, isWin ? "+" : "");
     }
 
     public async void HandleOnClaim()

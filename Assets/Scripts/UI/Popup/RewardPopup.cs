@@ -42,35 +42,68 @@ public class RewardPopup : Popup
         base.OpenPopup(openBlackShade, openCloseButton);
     }
 
-    public void UpdateData(RewardCollection reward)
+    public void UpdateData(Reward reward)
     {
         _rewardQueue = new Queue<RewardPopupData>(10);
 
-        if (reward.coinsReceived != 0)
+        if (reward.type == RewardType.Coin)
         {
             var coinData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin);
 
-            Sprite sprite = reward.offer_id == -1 ? coinData.Sprite : NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id).Sprite;
+            Sprite sprite = coinData.Sprite;
 
-            _rewardQueue.Enqueue(new RewardPopupData(reward.coinsReceived, coinData.Name.GetLocalizedString(), sprite));
+            if (reward.amount <= 1000)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
+            }
+            else if (reward.amount <= 3000)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinThree).Sprite;
+            }
+            else if (reward.amount <= 3000)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinLots).Sprite;
+            }
+            else
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinMega).Sprite;
+            }
+
+            _rewardQueue.Enqueue(new RewardPopupData(reward.amount, coinData.Name.GetLocalizedString(), sprite));
         }
-        if (reward.gemsReceived != 0)
+        if (reward.type == RewardType.Gem)
         {
             var gemData = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem);
 
-            Sprite sprite = reward.offer_id == -1 ? gemData.Sprite : NakamaData.Instance.GetStoreOfferDataRef(reward.offer_id).Sprite;
+            Sprite sprite = gemData.Sprite;
 
-            _rewardQueue.Enqueue(new RewardPopupData(reward.gemsReceived, gemData.Name.GetLocalizedString(), sprite));
+            if (reward.amount <= 5)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
+            }
+            else if (reward.amount <= 10)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemThree).Sprite;
+            }
+            else if (reward.amount <= 20)
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemLots).Sprite;
+            }
+            else
+            {
+                sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemMega).Sprite;
+            }
+            _rewardQueue.Enqueue(new RewardPopupData(reward.amount, gemData.Name.GetLocalizedString(), sprite));
         }
-        if (reward.blastReceived != null)
+        if (reward.type == RewardType.Blast)
         {
-            _rewardQueue.Enqueue(new RewardPopupData(0, NakamaData.Instance.GetBlastDataRef(reward.blastReceived.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetBlastDataRef(NakamaData.Instance.GetBlastDataById(reward.blastReceived.data_id).id).Sprite));
+            _rewardQueue.Enqueue(new RewardPopupData(0, NakamaData.Instance.GetBlastDataRef(reward.blast.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetBlastDataRef(NakamaData.Instance.GetBlastDataById(reward.blast.data_id).id).Sprite));
         }
-        if (reward.itemReceived != null)
+        if (reward.type == RewardType.Item)
         {
-            ItemData itemData = NakamaData.Instance.GetItemDataById(reward.itemReceived.data_id);
+            ItemData itemData = NakamaData.Instance.GetItemDataById(reward.item.data_id);
 
-            _rewardQueue.Enqueue(new RewardPopupData(reward.itemReceived.amount, NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id).Sprite));
+            _rewardQueue.Enqueue(new RewardPopupData(reward.item.amount, NakamaData.Instance.GetItemDataRef(reward.item.data_id).Name.GetLocalizedString(), NakamaData.Instance.GetItemDataRef(reward.item.data_id).Sprite));
         }
 
         if (_openRewardCor != null)

@@ -23,25 +23,25 @@ public class DailyRewardLayout : MonoBehaviour
     [SerializeField] Color _regularColorGlow, _specialColorGlow;
 
     int _index;
-    RewardCollection _reward;
-    public void Init(RewardCollection reward, int index)
+    Reward _reward;
+    public void Init(Reward reward, int index)
     {
         _index = index;
         _reward = reward;
 
-        if (reward.coinsReceived > 0)
+        if (reward.type == RewardType.Coin)
         {
-            _rewardAmount.text = UIManager.GetFormattedInt(reward.coinsReceived);
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.amount);
 
-            if (reward.coinsReceived <= 1000)
+            if (reward.amount <= 1000)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
             }
-            else if (reward.coinsReceived <= 3000)
+            else if (reward.amount <= 3000)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinThree).Sprite;
             }
-            else if (reward.coinsReceived <= 5000)
+            else if (reward.amount <= 5000)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinLots).Sprite;
             }
@@ -50,19 +50,19 @@ public class DailyRewardLayout : MonoBehaviour
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinMega).Sprite;
             }
         }
-        else if (reward.gemsReceived > 0)
+        else if (reward.type == RewardType.Gem)
         {
-            _rewardAmount.text = UIManager.GetFormattedInt(reward.gemsReceived);
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.amount);
 
-            if (reward.gemsReceived <= 5)
+            if (reward.amount <= 5)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
             }
-            else if (reward.gemsReceived <= 10)
+            else if (reward.amount <= 10)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemThree).Sprite;
             }
-            else if (reward.gemsReceived <= 20)
+            else if (reward.amount <= 20)
             {
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemLots).Sprite;
             }
@@ -71,21 +71,21 @@ public class DailyRewardLayout : MonoBehaviour
                 _rewardImg.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemMega).Sprite;
             }
         }
-        else if (reward.blastReceived != null)
+        else if (reward.type == RewardType.Blast)
         {
-            _rewardAmount.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(reward.blastReceived.exp);
+            _rewardAmount.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(reward.blast.exp);
 
-            var dataRef = NakamaData.Instance.GetBlastDataRef(reward.blastReceived.data_id);
+            var dataRef = NakamaData.Instance.GetBlastDataRef(reward.blast.data_id);
 
-            if (reward.blastReceived.shiny) _rewardImg.sprite = dataRef.ShinySprite;
-            else if (reward.blastReceived.boss) _rewardImg.sprite = dataRef.BossSprite;
+            if (reward.blast.shiny) _rewardImg.sprite = dataRef.ShinySprite;
+            else if (reward.blast.boss) _rewardImg.sprite = dataRef.BossSprite;
             else _rewardImg.sprite = dataRef.Sprite;
         }
-        else if (reward.itemReceived != null)
+        else if (reward.type == RewardType.Item)
         {
-            _rewardAmount.text = reward.itemReceived.amount.ToString();
+            _rewardAmount.text = reward.item.amount.ToString();
 
-            var dataRef = NakamaData.Instance.GetItemDataRef(reward.itemReceived.data_id);
+            var dataRef = NakamaData.Instance.GetItemDataRef(reward.item.data_id);
 
             _rewardImg.sprite = dataRef.Sprite;
         }
@@ -120,7 +120,7 @@ public class DailyRewardLayout : MonoBehaviour
 
     public void UpdateDay(int day)
     {
-        _dayTxt.text = _dayTrad.GetLocalizedString() + " "  + day;
+        _dayTxt.text = _dayTrad.GetLocalizedString() + " " + day;
     }
 
     public void Unlock()
@@ -162,8 +162,6 @@ public class DailyRewardLayout : MonoBehaviour
         try
         {
             await NakamaManager.Instance.NakamaDailyReward.ClaimDailyReward();
-
-            _reward.offer_id = -1;
 
             UIManager.Instance.RewardPopup.OpenPopup();
             UIManager.Instance.RewardPopup.UpdateData(_reward);

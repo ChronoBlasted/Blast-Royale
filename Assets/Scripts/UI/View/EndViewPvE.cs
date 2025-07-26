@@ -22,7 +22,7 @@ public class EndViewPvE : View
     {
         PvEBattleManager battleManager = NakamaManager.Instance.NakamaBattleManager.PveBattle.BattleManager as PvEBattleManager;
 
-        _title.text = battleManager.IsMatchWin ? "GOOD GAME" : "YOU LOOSE";
+        _title.text = battleManager.EndStateData.win ? "GOOD GAME" : "YOU LOOSE";
 
         _progressionSlotLayout.InitSmooth(battleManager.IndexProgression);
 
@@ -37,10 +37,10 @@ public class EndViewPvE : View
 
         _chronoTweenSequence.ObjectsToTween.Clear();
 
-        foreach (Offer offer in battleManager.BattleReward)
+        foreach (Reward reward in battleManager.BattleReward)
         {
             var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
-            currentRerward.Init(offer);
+            currentRerward.Init(reward);
             _chronoTweenSequence.ObjectsToTween.Add(currentRerward.GetComponent<ChronoTweenObject>());
         }
 

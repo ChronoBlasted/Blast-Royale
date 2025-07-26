@@ -13,21 +13,21 @@ public class QuestRewardLayout : MonoBehaviour
     [SerializeField] NotifChild _notifChild;
 
     Tween _tweenScale;
-    public void Init(RewardCollection reward, bool canBeClaim, bool isCollected)
+    public void Init(Reward reward, bool canBeClaim, bool isCollected)
     {
-        if (reward.coinsReceived > 0)
+        if (reward.type == RewardType.Coin)
         {
-            _rewardAmount.text = UIManager.GetFormattedInt(reward.coinsReceived);
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.amount);
 
-            if (reward.coinsReceived <= 1000)
+            if (reward.amount <= 1000)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Coin).Sprite;
             }
-            else if (reward.coinsReceived <= 3000)
+            else if (reward.amount <= 3000)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinThree).Sprite;
             }
-            else if (reward.coinsReceived <= 5000)
+            else if (reward.amount <= 3000)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinLots).Sprite;
             }
@@ -36,19 +36,19 @@ public class QuestRewardLayout : MonoBehaviour
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.CoinMega).Sprite;
             }
         }
-        else if (reward.gemsReceived > 0)
+        else if (reward.type == RewardType.Gem)
         {
-            _rewardAmount.text = UIManager.GetFormattedInt(reward.gemsReceived);
+            _rewardAmount.text = UIManager.GetFormattedInt(reward.amount);
 
-            if (reward.gemsReceived <= 5)
+            if (reward.amount <= 5)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.Gem).Sprite;
             }
-            else if (reward.gemsReceived <= 10)
+            else if (reward.amount <= 10)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemThree).Sprite;
             }
-            else if (reward.gemsReceived <= 20)
+            else if (reward.amount <= 20)
             {
                 _ico.sprite = ResourceObjectHolder.Instance.GetResourceByType(ResourceType.GemLots).Sprite;
             }

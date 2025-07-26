@@ -14,9 +14,7 @@ public class PvEBattleManager : BattleBase
     public int BossEncounter;
     public int ShinyEncounter;
 
-
-
-    List<Offer> _currentOffers;
+    List<Reward> _currentOffers;
 
     public override void StartBattle(StartStateData startData)
     {
@@ -55,9 +53,9 @@ public class PvEBattleManager : BattleBase
 
             if (_turnStateData.catched)
             {
-                Offer newBlast = new Offer
+                Reward newBlast = new Reward
                 {
-                    type = OfferType.Blast,
+                    type = RewardType.Blast,
                     blast = _playerOpponentInfo.ActiveBlast,
                 };
 
@@ -108,7 +106,7 @@ public class PvEBattleManager : BattleBase
     }
 
 
-    public void SetNewOffers(List<Offer> newOffers)
+    public void SetNewOffers(List<Reward> newOffers)
     {
         _currentOffers = newOffers;
 
@@ -129,14 +127,14 @@ public class PvEBattleManager : BattleBase
 
             switch (_currentOffers[indexOffer].type)
             {
-                case OfferType.Coin:
-                    CoinGenerated += _currentOffers[indexOffer].coinsAmount;
+                case RewardType.Coin:
+                    CoinGenerated += _currentOffers[indexOffer].amount;
                     break;
-                case OfferType.Gem:
-                    GemGenerated += _currentOffers[indexOffer].gemsAmount;
+                case RewardType.Gem:
+                    GemGenerated += _currentOffers[indexOffer].amount;
                     break;
-                case OfferType.Blast:
-                case OfferType.Item:
+                case RewardType.Blast:
+                case RewardType.Item:
                     BattleReward.Add(_currentOffers[indexOffer]);
                     break;
                 default:
