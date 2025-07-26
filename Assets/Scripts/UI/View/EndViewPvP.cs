@@ -20,11 +20,16 @@ public class EndViewPvP : View
     [SerializeField] ChronoTweenSequence _chronoTweenSequence;
     [SerializeField] ChronoTweenObject _claimBtn;
 
+    int coinGained;
+    int gemGained;
+
     PvPBattleManager battleManager;
 
     public override void OpenView(bool _instant = false)
     {
         battleManager = NakamaManager.Instance.NakamaBattleManager.PvpBattle.BattleManager as PvPBattleManager;
+        coinGained = 0;
+        gemGained = 0;
 
         foreach (Transform transform in _rewardContentTransform)
         {
@@ -56,11 +61,14 @@ public class EndViewPvP : View
         {
             _rewardTitleLayout.SetActive(true);
 
-            foreach (Reward offer in battleManager.BattleReward)
+            foreach (Reward reward in battleManager.BattleReward)
             {
                 var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
-                currentRerward.Init(offer);
+                currentRerward.Init(reward);
                 _chronoTweenSequence.ObjectsToTween.Add(currentRerward.GetComponent<ChronoTweenObject>());
+
+                if (reward.type == RewardType.Coin) coinGained += reward.amount;
+                if (reward.type == RewardType.Gem) gemGained += reward.amount;
             }
         }
         else
@@ -92,12 +100,19 @@ public class EndViewPvP : View
         _p1Glow.enabled = isWin;
         _p2Glow.enabled = !isWin;
 
-        UIManager.Instance.DoSmoothTextInt(_p1TrophyGain, 0, isWin ? battleManager.EndStateData.trophyRewards : battleManager.EndStateData.trophyRewards, isWin ? "+" : "");
+        UIManager.Instance.DoSmoothTextInt(_p1TrophyGain, 0, battleManager.EndStateData.trophyRewards, isWin ? "+" : "");
     }
 
     public async void HandleOnClaim()
     {
-        await NakamaManager.Instance.NakamaUserAccount.GetWalletData();
+        Dictionary<string, int> changeset = new Dictionary<string, int>
+        {
+            { Currency.Coins.ToString(), coinGained },
+            { Currency.Gems.ToString(), gemGained },
+            { Currency.Trophies.ToString(), battleManager.EndStateData.trophyRewards },
+        };
+
+        NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
         await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
         await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();

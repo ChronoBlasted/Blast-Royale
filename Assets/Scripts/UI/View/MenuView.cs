@@ -23,6 +23,8 @@ public class MenuView : View
         FightPanel.Init();
         ClanPanel.Init();
         EventPanel.Init();
+
+        TopBar.Init();
     }
 
     public override void OpenView(bool _instant = false)

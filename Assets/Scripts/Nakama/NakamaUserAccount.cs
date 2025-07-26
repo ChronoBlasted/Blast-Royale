@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NakamaUserAccount : MonoBehaviour
 {
@@ -22,7 +23,9 @@ public class NakamaUserAccount : MonoBehaviour
     Metadata _lastData;
     Dictionary<string, int> _lastWalletData;
 
-    public Dictionary<string, int> LastWalletData { get => _lastWalletData; set => _lastWalletData = value; }
+    public Action<Currency, int> OnWalletCurrencyUpdated;
+
+    public Dictionary<string, int> LastWalletData { get => _lastWalletData; }
     public BlastCollection LastBlastCollection { get => _lastBlastCollection; }
     public ItemCollection LastItemCollection { get => _lastItemCollection; }
     public IApiAccount LastAccount { get => _lastAccount; }
@@ -196,11 +199,11 @@ public class NakamaUserAccount : MonoBehaviour
 
     #endregion
 
-    public async Task GetWalletData()
+    async Task GetWalletData()
     {
         _lastAccount = await _client.GetAccountAsync(_session);
 
-        LastWalletData = JsonParser.FromJson<Dictionary<string, int>>(_lastAccount.Wallet);
+        _lastWalletData = JsonParser.FromJson<Dictionary<string, int>>(_lastAccount.Wallet);
 
         foreach (var currency in LastWalletData.Keys)
         {
@@ -218,6 +221,27 @@ public class NakamaUserAccount : MonoBehaviour
             }
         }
     }
+
+    public void UpdateWalletData(Dictionary<string, int> changeset)
+    {
+        foreach (var entry in changeset)
+        {
+            if (_lastWalletData.ContainsKey(entry.Key))
+            {
+                _lastWalletData[entry.Key] += entry.Value;
+            }
+            else
+            {
+                _lastWalletData[entry.Key] = entry.Value;
+            }
+
+            if (Enum.TryParse(entry.Key, out Currency currency))
+            {
+                OnWalletCurrencyUpdated?.Invoke(currency, _lastWalletData[entry.Key]);
+            }
+        }
+    }
+
 
     public async Task GetPlayerBlast()
     {

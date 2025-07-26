@@ -1,5 +1,6 @@
 using Chrono.UI;
 using Nakama;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +68,15 @@ public class ShopLayout : MonoBehaviour
 
         await NakamaManager.Instance.NakamaStore.BuyTrapOffer(index);
 
+        Dictionary<string, int> changeset = new Dictionary<string, int>
+        {
+            { Currency.Coins.ToString(), -_storeOffer.price },
+        };
+        
+        NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
+
+        await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
+
         ShowReward();
     }
 
@@ -81,15 +91,28 @@ public class ShopLayout : MonoBehaviour
 
         await NakamaManager.Instance.NakamaStore.BuyCoinOffer(index);
 
+        Dictionary<string, int> changeset = new Dictionary<string, int>
+        {
+            { Currency.Coins.ToString(), _storeOffer.offer.amount },
+            { Currency.Gems.ToString(), -_storeOffer.price },
+        };
+
+        NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
+
         ShowReward();
 
     }
 
     public async void HandleOnBuyGemOffer(int index)
     {
-        Debug.Log("COMPLE");
-
         await NakamaManager.Instance.NakamaStore.BuyGemOffer(index);
+
+        Dictionary<string, int> changeset = new Dictionary<string, int>
+        {
+             { Currency.Gems.ToString(), _storeOffer.offer.amount },
+        };
+
+        NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
         ShowReward();
 

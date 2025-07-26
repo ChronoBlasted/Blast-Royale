@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ public class EndViewPvE : View
     [SerializeField] RewardEndGameLayout _rewardEndGameLayout;
     [SerializeField] ChronoTweenSequence _chronoTweenSequence;
     [SerializeField] ChronoTweenObject _claimBtn;
+
+    int coinGained;
+    int gemGained;
 
     public override void Init()
     {
@@ -42,6 +46,9 @@ public class EndViewPvE : View
             var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
             currentRerward.Init(reward);
             _chronoTweenSequence.ObjectsToTween.Add(currentRerward.GetComponent<ChronoTweenObject>());
+
+            if (reward.type == RewardType.Coin) coinGained += reward.amount;
+            if (reward.type == RewardType.Gem) gemGained += reward.amount;
         }
 
         _chronoTweenSequence.ObjectsToTween.Add(_claimBtn);
@@ -62,7 +69,13 @@ public class EndViewPvE : View
 
     public async void HandleOnClaim()
     {
-        await NakamaManager.Instance.NakamaUserAccount.GetWalletData();
+        Dictionary<string, int> changeset = new Dictionary<string, int>
+        {
+            { Currency.Coins.ToString(), coinGained },
+            { Currency.Gems.ToString(), gemGained },
+        };
+
+        NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
         await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
         await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();

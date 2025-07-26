@@ -17,9 +17,23 @@ public class Topbar : MonoBehaviour
 
     public void Init()
     {
-        _trophyTxt.text = _lastTrophy.ToString();
-        _coinTxt.text = _lastCoin.ToString();
-        _gemTxt.text = _lastGem.ToString();
+        NakamaManager.Instance.NakamaUserAccount.OnWalletCurrencyUpdated += UpdateCurrency;
+    }
+
+    void UpdateCurrency(Currency currency, int amount)
+    {
+        switch (currency)
+        {
+            case Currency.Coins:
+                UpdateCoin(amount);
+                break;
+            case Currency.Gems:
+                UpdateGem(amount);
+                break;
+            case Currency.Trophies:
+                UpdateTrophy(amount);
+                break;
+        }
     }
 
     public void UpdateTrophy(int amount)
@@ -54,7 +68,6 @@ public class Topbar : MonoBehaviour
         _showHideTopbarTween
             .Join(rectTransform.DOAnchorPosY(-64, .2f).SetEase(Ease.OutBack))
             .Join(_cg.DOFade(1, .1f));
-
     }
 
     public void HideTopBar()
@@ -72,5 +85,4 @@ public class Topbar : MonoBehaviour
             .Join(rectTransform.DOAnchorPosY(64, .2f).SetEase(Ease.OutBack))
             .Join(_cg.DOFade(0, .1f));
     }
-
 }

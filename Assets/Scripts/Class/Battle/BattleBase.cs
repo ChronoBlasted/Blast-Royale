@@ -342,11 +342,10 @@ public class BattleBase : MonoBehaviour
 
     public virtual void GetBattleReward(bool isWin)
     {
-        if (isWin) CoinGenerated += 2000;
+        if (isWin && BattleMode == BattleMode.PvP) CoinGenerated += 2000;
 
         if (CoinGenerated > 0)
         {
-
             if (BonusAds)
             {
                 Reward coinBonus = new Reward();

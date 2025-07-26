@@ -48,10 +48,6 @@ public class NakamaStore : MonoBehaviour
         try
         {
             var response = await _client.RpcAsync(_session, "buyTrapOffer", index.ToJson());
-
-            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
-
-            await NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
         }
         catch (ApiResponseException ex)
         {
@@ -80,8 +76,6 @@ public class NakamaStore : MonoBehaviour
         try
         {
             var response = await _client.RpcAsync(_session, "buyCoinOffer", index.ToJson());
-
-            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
         }
         catch (ApiResponseException ex)
         {
@@ -110,8 +104,6 @@ public class NakamaStore : MonoBehaviour
         try
         {
             var response = await _client.RpcAsync(_session, "buyGemOffer", index.ToJson());
-
-            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
         }
         catch (ApiResponseException ex)
         {
@@ -169,7 +161,12 @@ public class NakamaStore : MonoBehaviour
 
             var response = await _client.RpcAsync(_session, "buyDailyShopOffer", index.ToJson());
 
-            await NakamaManager.Instance.NakamaUserAccount.GetWalletData(); // TO DO : Refresh wallet data with response
+            Dictionary<string, int> changeset = new Dictionary<string, int>
+            {
+                 { Currency.Coins.ToString(), -_canClaimDailyShop.lastDailyShop[index].price },
+            };
+
+            NakamaManager.Instance.NakamaUserAccount.UpdateWalletData(changeset);
 
             await NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
 

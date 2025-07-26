@@ -25,8 +25,6 @@ public class NakamaNotifications : MonoBehaviour
 
     private async void OnReceivedNotification(IApiNotification notification)
     {
-        await NakamaManager.Instance.NakamaUserAccount.GetWalletData();
-
         Reward reward = new Reward();
 
         switch (notification.Code)
