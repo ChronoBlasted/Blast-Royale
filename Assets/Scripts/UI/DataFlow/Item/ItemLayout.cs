@@ -28,8 +28,6 @@ public class ItemLayout : MonoBehaviour
         _itemIco.sprite = NakamaData.Instance.GetItemDataRef(itemData.id).Sprite;
         _amount.text = "X" + _item.amount;
         _name.text = NakamaData.Instance.GetItemDataRef(itemData.id).Name.GetLocalizedString();
-
-        Debug.Log("aaaaa + = " + _item.amount);
     }
 
     public void HandleOnInfoButton()

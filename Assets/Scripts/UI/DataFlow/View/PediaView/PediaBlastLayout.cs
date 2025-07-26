@@ -22,6 +22,7 @@ public class PediaBlastLayout : MonoBehaviour
     string _blastTypeString;
 
     public string BlastId { get => _blastId; }
+    public BlastData Data { get => _data; }
 
     public void Init(BlastData data)
     {

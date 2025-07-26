@@ -11,6 +11,10 @@ public class NavBar : MonoBehaviour
 
     public void Init()
     {
+        if (_currentTab != null && _currentTab != _firstTab) _currentTab.HandleOnReset();
+
+        _currentTab = null;
+
         ChangeTab(_firstTab);
     }
 

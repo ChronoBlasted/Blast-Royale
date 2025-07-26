@@ -16,7 +16,7 @@ public class PediaView : View
 
     [SerializeField] NavBar _pediaNavBar;
 
-    Dictionary<int, PediaBlastLayout> _pediaBlastLayouts = new();
+    Dictionary<string, PediaBlastLayout> _pediaBlastLayouts = new();
 
     public override void Init()
     {
@@ -51,13 +51,13 @@ public class PediaView : View
             PediaBlastLayout pediaBlastLayout = Instantiate(_pediaBlastLayoutPrefab, _pediaBlastTransform);
             pediaBlastLayout.Init(blast);
 
-            _pediaBlastLayouts[blast.id] = pediaBlastLayout;
+            _pediaBlastLayouts[blast.id.ToString()] = pediaBlastLayout;
         }
     }
 
-    public void UpdateBlastPediaByBlastID(int blastID)
+    public void UpdateBlastPediaByBlastID(string blastID)
     {
-
+        _pediaBlastLayouts[blastID].Init(_pediaBlastLayouts[blastID].Data);
     }
 
     public void UpdateItemPedia(List<ItemData> allItems)

@@ -21,7 +21,7 @@ public class NakamaBlastTracker : MonoBehaviour
         await LoadBlastTracker();
     }
 
-    public async Task LoadBlastTracker()
+    async Task LoadBlastTracker()
     {
         try
         {
@@ -36,6 +36,14 @@ public class NakamaBlastTracker : MonoBehaviour
             Debug.LogFormat("Error: {0}", ex.Message);
         }
     }
+
+    public void AddBlastTrackerEntry(string blastId, string version)
+    {
+        NakamaData.Instance.BlastTracker[blastId].versions[version].catched = true;
+
+        UIManager.Instance.PediaView.UpdateBlastPediaByBlastID(blastId);
+    }
+
 
     public async Task ClaimFirstCatchReward(string blastId, string blastVersion)
     {

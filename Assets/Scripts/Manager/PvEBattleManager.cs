@@ -63,6 +63,14 @@ public class PvEBattleManager : BattleBase
 
                 NakamaManager.Instance.NakamaUserAccount.AddPlayerBlast(newBlast.blast);
 
+                string version = "";
+
+                if (newBlast.blast.shiny) version = "3";
+                else if (newBlast.blast.boss) version = "2";
+                else version = "1";
+
+                NakamaManager.Instance.NakamaBlastTracker.AddBlastTrackerEntry(newBlast.blast.data_id.ToString(), version);
+
                 BlastCatched++;
             }
             else
