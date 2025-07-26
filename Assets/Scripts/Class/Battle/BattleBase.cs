@@ -340,10 +340,13 @@ public class BattleBase : MonoBehaviour
         _gameView.EndTurn(_playerMeInfo.ActiveBlast, _playerOpponentInfo.ActiveBlast);
     }
 
-    public virtual void GetBattleReward()
+    public virtual void GetBattleReward(bool isWin)
     {
+        if (isWin) CoinGenerated += 2000;
+
         if (CoinGenerated > 0)
         {
+
             if (BonusAds)
             {
                 Reward coinBonus = new Reward();

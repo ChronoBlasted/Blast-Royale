@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public abstract class NakamaBattleBase : MonoBehaviour
 {
@@ -17,8 +18,11 @@ public abstract class NakamaBattleBase : MonoBehaviour
     protected ISession _session;
     protected ISocket _socket;
     protected IMatch _match;
+    protected BattleState _battleState;
     protected string _matchId;
     protected StartStateData _startStateData;
+    protected EndStateData _endStateData;
+    protected bool _opponentSurrender;
 
     protected Action<IMatchState> _matchStateHandler;
 
@@ -38,6 +42,12 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
+            _startStateData = new();
+            _endStateData = new();
+            _opponentSurrender = false;
+            _matchId = null;
+            _battleState = BattleState.None;
+
             UIManager.Instance.ChangeView(UIManager.Instance.LoadingBattleView);
 
             var response = await _client.RpcAsync(_session, _matchName);
@@ -85,7 +95,16 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
+            if (_opponentSurrender)
+            {
+                MatchEnd(_endStateData);
+                return;
+            }
+
             await _socket.SendMatchStateAsync(_matchId, NakamaOpCode.PLAYER_READY, "", null);
+
+            _battleState = BattleState.Ready;
+
         }
         catch (Exception e)
         {
@@ -215,7 +234,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
     public void MatchEnd(EndStateData endStateData)
     {
-        BattleManager.GetBattleReward();
+        BattleManager.GetBattleReward(endStateData.win);
 
         BattleManager.EndStateData = endStateData;
 
@@ -249,10 +268,12 @@ public abstract class NakamaBattleBase : MonoBehaviour
             case NakamaOpCode.MATCH_START:
                 _startStateData = JsonUtility.FromJson<StartStateData>(messageJson);
                 BattleManager.StartBattle(_startStateData);
+                _battleState = BattleState.Start;
                 break;
 
             case NakamaOpCode.ENEMY_READY:
                 BattleManager.StartNewTurn();
+                _battleState = BattleState.Waiting;
                 break;
 
             case NakamaOpCode.MATCH_ROUND:
@@ -260,6 +281,7 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 BattleManager.PlayTurn(turnState);
                 BattleManager.WaitForOpponent();
                 UIManager.Instance.GameView.DialogLayout.Hide();
+                _battleState = BattleState.ResolveTurn;
                 break;
 
             case NakamaOpCode.MATCH_END:
@@ -267,6 +289,24 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 BattleManager.EndStateData = endData;
 
                 MatchEnd(endData);
+                _battleState = BattleState.End;
+                break;
+
+            case NakamaOpCode.OPPONENT_LEAVE:
+                endData = messageJson.FromJson<EndStateData>();
+                _endStateData = endData;
+                _endStateData.opponentSurrender = true;
+
+                BattleManager.EndStateData = _endStateData;
+
+                _ = UIManager.Instance.GameView.DoShowMessage("Opponent surrender");
+
+                _opponentSurrender = true;
+
+                if (_battleState != BattleState.ResolveTurn)
+                {
+                    MatchEnd(endData);
+                }
                 break;
             case NakamaOpCode.ERROR_SERV:
                 BattleManager.StartNewTurn();
@@ -303,4 +343,17 @@ public class PlayerActionData
 {
     public TurnType type;
     public object data;
+}
+public enum BattleState
+{
+    None,
+    Start,
+    Waiting,
+    Ready,
+    ResolveTurn,
+    WaitingForPlayerSwap,
+    ReadyForPlayerSwap,
+    ResolvePlayerSwap,
+    WaitForPlayerChooseOffer,
+    End,
 }

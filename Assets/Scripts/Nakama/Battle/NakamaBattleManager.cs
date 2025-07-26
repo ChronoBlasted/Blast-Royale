@@ -86,6 +86,7 @@ public class TurnStateData
 public class EndStateData
 {
     public bool win;
+    public bool opponentSurrender;
     public int trophyRewards;
 }
 

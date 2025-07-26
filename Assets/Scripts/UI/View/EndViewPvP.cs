@@ -68,7 +68,6 @@ public class EndViewPvP : View
             _rewardTitleLayout.SetActive(false);
         }
 
-
         _chronoTweenSequence.ObjectsToTween.Add(_claimBtn);
 
         _chronoTweenSequence.Init();
