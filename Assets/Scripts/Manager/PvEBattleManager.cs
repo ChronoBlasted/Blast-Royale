@@ -32,9 +32,6 @@ public class PvEBattleManager : BattleBase
 
         _gameView.UpdateGameviewState(BattleMode.PvE);
         _gameView.SetProgression(IndexProgression);
-
-        _gameView.ExpProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(_playerMeInfo.ActiveBlast.data_id).Sprite);
-
     }
 
     public override Task ShowOpponentBlast()

@@ -41,10 +41,7 @@ public class HUDLayout : MonoBehaviour
         _blast = blast;
 
         _blastNameTxt.text = NakamaData.Instance.GetBlastDataRef(data.id).Name.GetLocalizedString();
-        _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
-
-        _hpSlider.Init(_blast.Hp, _blast.MaxHp);
-        _manaSlider.Init(_blast.Mana, _blast.MaxMana);
+        UpdateData(blast);
 
         SetStatus(_blast.status);
 
@@ -53,6 +50,23 @@ public class HUDLayout : MonoBehaviour
 
         _blastInWorld.Init(NakamaData.Instance.GetSpriteWithBlast(_blast));
     }
+
+    void UpdateData(Blast blast)
+    {
+        _blastLevelTxt.text = "LVL." + NakamaLogic.CalculateLevelFromExperience(blast.exp);
+
+        _hpSlider.Init(_blast.Hp, _blast.MaxHp);
+        _manaSlider.Init(_blast.Mana, _blast.MaxMana);
+    }
+
+    public async Task DoLevelUp(Blast blast)
+    {
+        UpdateData(blast);
+
+        await transform.DOPunchScale(new Vector3(.2f, .2f, .2f), .5f, 1, 1).AsyncWaitForCompletion();
+    }
+
+
 
     public void UpdateHpBar(int newHp, float duration = .2f, float delay = 0f)
     {

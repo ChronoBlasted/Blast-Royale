@@ -272,16 +272,6 @@ public class GameView : View
         _progressionLayout.SlideNext();
     }
 
-    public void SetExpProgression(Sprite newSprite, int amountExp)
-    {
-        _expProgressionLayout.Init(newSprite, amountExp);
-    }
-
-    public void ShowExpProgression()
-    {
-        _expProgressionLayout.Show();
-    }
-
     public void EndTurn(Blast playerBlast, Blast opponentBlast)
     {
         _playerHUD.UpdateManaBar(playerBlast.Mana);
@@ -330,7 +320,7 @@ public class GameView : View
         await Task.Delay(TimeSpan.FromMilliseconds(500));
     }
 
-    public async Task BlastFainted(bool isPlayer, Blast blast)
+    public async Task BlastFainted(bool isPlayer, Blast blast, int amountExp)
     {
         HUDLayout faintedHUD;
         HUDLayout attackerHUD;
@@ -351,7 +341,7 @@ public class GameView : View
 
         if (isPlayer == false)
         {
-            ShowExpProgression();
+            _expProgressionLayout.Show();
         }
 
         ResetZoomEffect(faintedHUD);
@@ -360,15 +350,32 @@ public class GameView : View
 
         if (isPlayer == false)
         {
-            int amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(_dataUtils.GetBlastDataById(faintedHUD.Blast.data_id).expYield, faintedHUD.Blast.Level, faintedHUD.Blast.Level));
-            SetExpProgression(_dataUtils.GetBlastDataRef(attackerHUD.Blast.data_id).Sprite, amountExp);
+            int amountLeft = _expProgressionLayout.AddExp(amountExp);
+
+            while (amountLeft >= 0)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(2000));
+
+                _expProgressionLayout.UpdateData(
+                    attackerHUD.Blast.Level,
+                    0,
+                    attackerHUD.Blast.GetRatioExpNextLevel()
+                );
+
+                amountLeft = _expProgressionLayout.AddExp(amountLeft);
+
+                AttackPanel.UpdateAttack(attackerHUD.Blast);
+
+                await attackerHUD.DoLevelUp(attackerHUD.Blast);
+            }
 
             await Task.Delay(TimeSpan.FromMilliseconds(1500));
+
+            _expProgressionLayout.Hide();
         }
         else
         {
             await Task.Delay(TimeSpan.FromMilliseconds(500)); // Exp Ball finish tween
-
         }
     }
 
@@ -393,8 +400,11 @@ public class GameView : View
 
         if (isPlayer)
         {
+            Blast playerBlast = PlayerHUD.Blast;
+
             AttackPanel.UpdateAttack(newBlast);
-            _expProgressionLayout.SetSprite(_dataUtils.GetBlastDataRef(newBlast.data_id).Sprite);
+            _expProgressionLayout.Init(_dataUtils.GetBlastDataRef(playerBlast.data_id).Sprite);
+            _expProgressionLayout.UpdateData(playerBlast.Level, playerBlast.GetRatioExp(), playerBlast.GetRatioExpNextLevel());
         }
 
         await HUDLayout.ThrowBlast();

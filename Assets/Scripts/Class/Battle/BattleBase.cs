@@ -125,7 +125,7 @@ public class BattleBase : MonoBehaviour
 
         await ShowOpponentBlast();
 
-        await _gameView.PlayerHUD.ThrowBlast();
+        await _gameView.ThrowBlast(true, _playerMeInfo.ActiveBlast);
 
         _serverBattle.PlayerReady();
     }
@@ -138,7 +138,7 @@ public class BattleBase : MonoBehaviour
 
         _ = _gameView.OpponentHUD.ComeBackBlast(true);
 
-        await _gameView.OpponentHUD.ThrowBlast();
+        await _gameView.ThrowBlast(false, _nextOpponentBlast);
     }
 
     public void StartNewTurn()

@@ -38,25 +38,25 @@ public class GameLogicContext
 
         if (!isBlastAlive)
         {
+            int expYield = NakamaData.Instance.GetBlastDataById(Defender.data_id).expYield;
+            int amountExp = Mathf.FloorToInt(NakamaLogic.CalculateExpGain(expYield, Attacker.Level, Defender.Level));
+
+            Attacker.exp += amountExp;
+
+            if (CurrentPlayerDefender.OwnerType != BlastOwner.Me) NakamaManager.Instance.NakamaUserAccount.AddPlayerBlastExp(Attacker.uuid, amountExp);
+
             switch (CurrentPlayerDefender.OwnerType)
             {
-                case BlastOwner.Opponent:
-                    await UIManager.Instance.GameView.BlastFainted(false, Defender);
-                    break;
                 case BlastOwner.Me:
-                    await UIManager.Instance.GameView.BlastFainted(true, Defender);
+                    await UIManager.Instance.GameView.BlastFainted(true, Defender, amountExp);
                     break;
+                case BlastOwner.Opponent:
                 case BlastOwner.Wild:
-                    await UIManager.Instance.GameView.BlastFainted(false, Defender);
-
-                    //UIManager.Instance.LevelExpPopup.UpdateData(Attacker, Defender); TODO FAIRE PLUS JOLIE ET ERGO
-                    //UIManager.Instance.LevelExpPopup.OpenPopup();
-
-                    //_ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBlast();
-                    //_ = NakamaManager.Instance.NakamaUserAccount.GetPlayerBag();
-
+                    await UIManager.Instance.GameView.BlastFainted(false, Defender, amountExp);
                     break;
             }
+
+
         }
 
         if (NakamaLogic.IsAllBlastFainted(CurrentPlayerDefender.Blasts))
@@ -66,7 +66,7 @@ public class GameLogicContext
                 GameStateManager.Instance.UpdateStateToEnd();
             }
         }
- 
+
         return isBlastAlive;
     }
 }

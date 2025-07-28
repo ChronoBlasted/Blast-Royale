@@ -19,10 +19,10 @@ public class ExperienceTest
     {
         var testCases = new[]
         {
-            new ExpGainParams { expYield = 100, enemyLevel = 5, yourLevel = 5 },
-            new ExpGainParams { expYield = 300, enemyLevel = 5, yourLevel = 5 },
-            new ExpGainParams { expYield = 100, enemyLevel = 5, yourLevel = 100 },
-            new ExpGainParams { expYield = 100, enemyLevel = 100, yourLevel = 5 }
+            new ExpGainParams { expYield = 100, yourLevel = 5, enemyLevel = 5 },
+            new ExpGainParams { expYield = 300, yourLevel = 5, enemyLevel = 5},
+            new ExpGainParams { expYield = 100,yourLevel = 100 , enemyLevel = 5, },
+            new ExpGainParams { expYield = 100, yourLevel = 5, enemyLevel = 100 }
         };
 
         foreach (var testCase in testCases)
@@ -93,7 +93,7 @@ public class ExperienceTest
     public struct ExpGainParams
     {
         public int expYield;
-        public int enemyLevel;
         public int yourLevel;
+        public int enemyLevel;
     }
 }

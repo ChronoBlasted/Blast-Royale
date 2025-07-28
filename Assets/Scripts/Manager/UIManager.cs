@@ -310,18 +310,18 @@ public class UIManager : MonoSingleton<UIManager>
         scrollRect.normalizedPosition = new Vector2(step * indexToScroll, scrollRect.normalizedPosition.y);
     }
 
-    public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", float duration = 1f, Ease ease = Ease.OutSine)
+    public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", string suffix = "", float duration = 1f, Ease ease = Ease.OutSine)
     {
         if (destinationInt == baseInt + 1)
         {
-            textToUpdate.text = prefix + GetFormattedInt(destinationInt);
+            textToUpdate.text = prefix + GetFormattedInt(destinationInt) + suffix;
 
             return;
         }
 
         DOVirtual.Int(baseInt, destinationInt, duration, x =>
         {
-            textToUpdate.text = prefix + GetFormattedInt(x);
+            textToUpdate.text = prefix + GetFormattedInt(x) + suffix;
         }).SetEase(ease);
     }
 

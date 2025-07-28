@@ -273,6 +273,14 @@ public class NakamaUserAccount : MonoBehaviour
         UIManager.Instance.MenuView.SquadPanel.UpdateStoredBlast(_lastBlastCollection.storedBlasts);
     }
 
+    public void AddPlayerBlastExp(string uuid, int expToAdd)
+    {
+        _lastBlastCollection.deckBlasts.Find((x) => x.uuid == uuid).exp += expToAdd;
+
+        UIManager.Instance.MenuView.SquadPanel.UpdateDeckBlast(_lastBlastCollection.deckBlasts);
+        UIManager.Instance.MenuView.FightPanel.UpdateDeckBlast(_lastBlastCollection.deckBlasts);
+    }
+
     public async void SwitchPlayerBlast(int indexOutBlast, int indexInBlast, bool isDeckToDeck)
     {
         try
