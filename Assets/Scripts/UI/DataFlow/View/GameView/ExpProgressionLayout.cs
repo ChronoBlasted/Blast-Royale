@@ -8,7 +8,7 @@ public class ExpProgressionLayout : MonoBehaviour
 {
     [SerializeField] CanvasGroup _cg;
     [SerializeField] Image _ico;
-    [SerializeField] TMP_Text _amount, _level, _levelExpSlash;
+    [SerializeField] TMP_Text _amountTxt, _levelTxt, _levelExpSlashTxt;
 
     RectTransform _rectTransform;
     Vector2 _onScreenPosition;
@@ -16,11 +16,12 @@ public class ExpProgressionLayout : MonoBehaviour
 
     Coroutine _hideCor;
 
-    int _lastRatioExp;
-    int _lastNextRatioExp;
-    int _lastLevel;
+    int _exp;
+    int _expForNextLevel;
+    int _level;
 
-    public TMP_Text Amount { get => _amount; }
+    public TMP_Text Amount { get => _amountTxt; }
+    public int Level { get => _level; }
 
     void Awake()
     {
@@ -34,41 +35,55 @@ public class ExpProgressionLayout : MonoBehaviour
 
     }
 
-    public void Init(Sprite newIco)
+    public void Init(Sprite newIco, int level, int ratioExp)
     {
         _ico.sprite = newIco;
 
-        _amount.text = "+0";
+        _level = level;
+        _exp = ratioExp;
+        _expForNextLevel = NakamaLogic.GetRatioExpNextLevel(_level);
+
+        UpdateLevel(level);
+
+        _amountTxt.text = "+0";
     }
 
-    public void UpdateData(int level, int ratioExp, int ratioNextLevel)
+    void UpdateLevel(int level)
     {
-        _lastRatioExp = ratioExp;
-        _lastLevel = level;
-        _lastNextRatioExp = ratioNextLevel;
-
-        _level.text = "Level " + _lastLevel;
-        UIManager.Instance.DoSmoothTextInt(_levelExpSlash, 0, _lastRatioExp, "", "/" + _lastNextRatioExp);
+        _level = level;
+        _levelTxt.text = "Level " + (_level + 1);
     }
 
-    public int AddExp(int expGain)
+    public void UpdateData()
     {
-        int newTotal = _lastRatioExp + expGain;
+        UIManager.Instance.DoSmoothTextInt(_levelExpSlashTxt, 0, _exp, "", "/" + NakamaLogic.GetRatioExpNextLevel(_level));
+    }
 
-        if (newTotal >= _lastNextRatioExp)
+    public int AddExp(int expGain, bool isInLoop = false)
+    {
+        if (isInLoop)
         {
-            int surplus = newTotal - _lastNextRatioExp;
+            _level++;
+            UpdateLevel(_level);
+            _exp = 0;
+            _expForNextLevel = NakamaLogic.GetRatioExpNextLevel(_level);
+        }
 
-            UIManager.Instance.DoSmoothTextInt(_amount, 0, _lastNextRatioExp - _lastRatioExp, "+");
-            UIManager.Instance.DoSmoothTextInt(_levelExpSlash, _lastRatioExp, _lastNextRatioExp, "", "/" + _lastNextRatioExp);
+        int nexExpGain = _exp + expGain;
 
+        if (nexExpGain >= _expForNextLevel)
+        {
+            int surplus = nexExpGain - _expForNextLevel;
+
+            UIManager.Instance.DoSmoothTextInt(_amountTxt, 0, _expForNextLevel - _exp, "+");
+            UIManager.Instance.DoSmoothTextInt(_levelExpSlashTxt, _exp, _expForNextLevel, "", "/" + _expForNextLevel, 1, Ease.OutSine, () => _levelExpSlashTxt.transform.DOPunchScale(new Vector3(.2f, .2f, .2f), .5f, 1, 1));
             return surplus;
         }
 
-        UIManager.Instance.DoSmoothTextInt(_amount, 0, expGain, "+");
-        UIManager.Instance.DoSmoothTextInt(_levelExpSlash, _lastRatioExp, _lastRatioExp + expGain, "", "/" + _lastNextRatioExp);
+        UIManager.Instance.DoSmoothTextInt(_amountTxt, 0, expGain, "+");
+        UIManager.Instance.DoSmoothTextInt(_levelExpSlashTxt, _exp, _exp + expGain, "", "/" + _expForNextLevel);
 
-        _lastRatioExp = newTotal;
+        _exp = nexExpGain;
         return -1;
     }
 
@@ -89,7 +104,7 @@ public class ExpProgressionLayout : MonoBehaviour
 
         _rectTransform.DOAnchorPos(_offScreenPosition, .5f).SetEase(Ease.OutSine).OnComplete(() =>
         {
-            _amount.text = "+0";
+            _amountTxt.text = "+0";
         });
     }
 }

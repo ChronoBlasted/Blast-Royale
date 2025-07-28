@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class NakamaLogic : MonoSingleton<NakamaLogic>
@@ -24,7 +25,6 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     )
     {
         float weatherModifier = CalculateWeatherModifier(meteo, attackType);
-
         float typeMultiplier = GetTypeMultiplier(attackType, defenderType);
 
         float baseDamage = (
@@ -33,11 +33,12 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
             * (attackerAttack / defenderDefense)
         ) / 50f;
 
+        float finalDamage = baseDamage * typeMultiplier * weatherModifier;
 
-        float damage = baseDamage * typeMultiplier * weatherModifier;
-
-        return Mathf.FloorToInt(damage);
+        return Mathf.FloorToInt(finalDamage);
     }
+
+
 
 
     public static bool IsBlastAlive(Blast blast)
@@ -317,10 +318,21 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
     {
         if (level < 1 || level > 100)
         {
-            throw new System.ArgumentOutOfRangeException("Le niveau doit être compris entre 1 et 100.");
+            throw new System.ArgumentOutOfRangeException("Le niveau doit être compris entre 1 et 100. Recu = " + level);
         }
 
         return Mathf.FloorToInt(Mathf.Pow(level, 3));
+    }
+
+    public static int GetRatioExp(int level, int experience)
+    {
+        return experience - CalculateExperienceFromLevel(level);
+    }
+
+    public static int GetRatioExpNextLevel(int level)
+    {
+        return CalculateExperienceFromLevel(level + 1) - CalculateExperienceFromLevel(level);
+
     }
 
     public static Blast GetBlastByUUID(string uuid, BlastCollection allBlasts)

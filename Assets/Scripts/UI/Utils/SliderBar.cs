@@ -29,6 +29,10 @@ public class SliderBar : MonoBehaviour
 
         recoverSlider.maxValue = maxValue;
         recoverSlider.value = value;
+
+        slider.onValueChanged?.Invoke(value);
+        delayedSlider.onValueChanged?.Invoke(value);
+        recoverSlider.onValueChanged?.Invoke(value);
     }
 
     public void Init(float value)

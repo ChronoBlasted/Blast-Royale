@@ -1,10 +1,13 @@
 using BaseTemplate.Behaviours;
 using DG.Tweening;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public enum TravelEffect
 {
@@ -310,19 +313,20 @@ public class UIManager : MonoSingleton<UIManager>
         scrollRect.normalizedPosition = new Vector2(step * indexToScroll, scrollRect.normalizedPosition.y);
     }
 
-    public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", string suffix = "", float duration = 1f, Ease ease = Ease.OutSine)
+    public void DoSmoothTextInt(TMP_Text textToUpdate, int baseInt, int destinationInt, string prefix = "", string suffix = "", float duration = 1f, Ease ease = Ease.OutSine, Action onComplete = null)
     {
         if (destinationInt == baseInt + 1)
         {
             textToUpdate.text = prefix + GetFormattedInt(destinationInt) + suffix;
-
+            onComplete?.Invoke();
             return;
         }
 
         DOVirtual.Int(baseInt, destinationInt, duration, x =>
         {
             textToUpdate.text = prefix + GetFormattedInt(x) + suffix;
-        }).SetEase(ease);
+        }).SetEase(ease)
+        .OnComplete(() => onComplete?.Invoke());
     }
 
     public static string GetTradByKey(string key)

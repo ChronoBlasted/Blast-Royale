@@ -59,14 +59,15 @@ public class HUDLayout : MonoBehaviour
         _manaSlider.Init(_blast.Mana, _blast.MaxMana);
     }
 
-    public async Task DoLevelUp(Blast blast)
+    public async Task DoLevelUp(int level)
     {
-        UpdateData(blast);
+        _blastLevelTxt.text = "LVL." + level;
+
+        _hpSlider.Init(_blast.Hp, _blast.CalculateBlastHp(NakamaData.Instance.GetBlastDataById(_blast.data_id).hp, _blast.iv, level));
+        _manaSlider.Init(_blast.Mana, _blast.CalculateBlastMana(NakamaData.Instance.GetBlastDataById(_blast.data_id).mana, _blast.iv, level));
 
         await transform.DOPunchScale(new Vector3(.2f, .2f, .2f), .5f, 1, 1).AsyncWaitForCompletion();
     }
-
-
 
     public void UpdateHpBar(int newHp, float duration = .2f, float delay = 0f)
     {

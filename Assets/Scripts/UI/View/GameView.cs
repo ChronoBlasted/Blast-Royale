@@ -356,17 +356,13 @@ public class GameView : View
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(2000));
 
-                _expProgressionLayout.UpdateData(
-                    attackerHUD.Blast.Level,
-                    0,
-                    attackerHUD.Blast.GetRatioExpNextLevel()
-                );
+                _expProgressionLayout.UpdateData();
 
-                amountLeft = _expProgressionLayout.AddExp(amountLeft);
+                amountLeft = _expProgressionLayout.AddExp(amountLeft, true);
 
                 AttackPanel.UpdateAttack(attackerHUD.Blast);
 
-                await attackerHUD.DoLevelUp(attackerHUD.Blast);
+                await attackerHUD.DoLevelUp(_expProgressionLayout.Level);
             }
 
             await Task.Delay(TimeSpan.FromMilliseconds(1500));
@@ -403,8 +399,8 @@ public class GameView : View
             Blast playerBlast = PlayerHUD.Blast;
 
             AttackPanel.UpdateAttack(newBlast);
-            _expProgressionLayout.Init(_dataUtils.GetBlastDataRef(playerBlast.data_id).Sprite);
-            _expProgressionLayout.UpdateData(playerBlast.Level, playerBlast.GetRatioExp(), playerBlast.GetRatioExpNextLevel());
+            _expProgressionLayout.Init(_dataUtils.GetBlastDataRef(playerBlast.data_id).Sprite, PlayerHUD.Blast.Level, PlayerHUD.Blast.GetRatioExp());
+            _expProgressionLayout.UpdateData();
         }
 
         await HUDLayout.ThrowBlast();

@@ -48,7 +48,6 @@ public class Blast
     public int CalculateBlastStat(int baseStat, int iv, int level)
     {
         float result = ((baseStat + iv) * level) / 100 + 5;
-
         return Mathf.FloorToInt(result);
     }
 
@@ -63,7 +62,6 @@ public class Blast
         float mana = ((baseMana + iv) * level) / 100f + 10f;
         return Mathf.FloorToInt(mana);
     }
-
 
     public int GetRatioExp()
     {
