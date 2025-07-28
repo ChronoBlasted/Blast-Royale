@@ -27,7 +27,11 @@ public class ModifierManager : MonoBehaviour
         {
             existingModifier.Add(amount);
 
-            if (existingModifier.Amount == 0) Destroy(existingModifier.gameObject);
+            if (existingModifier.Amount == 0)
+            {
+                _modifiers.Remove(existingModifier);
+                Destroy(existingModifier.gameObject);
+            }
             return;
         }
 
