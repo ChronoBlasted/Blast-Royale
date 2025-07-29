@@ -22,7 +22,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
     protected string _matchId;
     protected StartStateData _startStateData;
     protected EndStateData _endStateData;
-    protected bool _opponentSurrender;
 
     protected Action<IMatchState> _matchStateHandler;
 
@@ -44,11 +43,12 @@ public abstract class NakamaBattleBase : MonoBehaviour
         {
             _startStateData = new();
             _endStateData = new();
-            _opponentSurrender = false;
             _matchId = null;
             _battleState = BattleState.None;
 
             UIManager.Instance.ChangeView(UIManager.Instance.LoadingBattleView);
+
+            await Task.Delay(100);
 
             var response = await _client.RpcAsync(_session, _matchName);
             _matchId = response.Payload.FromJson<string>();
@@ -95,9 +95,9 @@ public abstract class NakamaBattleBase : MonoBehaviour
     {
         try
         {
-            if (_opponentSurrender)
+            if (_endStateData.opponentSurrender)
             {
-                MatchEnd(_endStateData);
+                BattleManager.GetBattleReward();
                 return;
             }
 
@@ -234,8 +234,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
 
     public void MatchEnd(EndStateData endStateData)
     {
-        BattleManager.GetBattleReward(endStateData.win);
-
         BattleManager.EndStateData = endStateData;
 
         _socket.ReceivedMatchState -= _matchStateHandler;
@@ -261,7 +259,6 @@ public abstract class NakamaBattleBase : MonoBehaviour
         Debug.Log($" OpCode: {matchState.OpCode} | Data: {messageJson}");
 
         TurnStateData turnState = new();
-        EndStateData endData = new();
 
         switch (matchState.OpCode)
         {
@@ -285,27 +282,24 @@ public abstract class NakamaBattleBase : MonoBehaviour
                 break;
 
             case NakamaOpCode.MATCH_END:
-                endData = messageJson.FromJson<EndStateData>();
-                BattleManager.EndStateData = endData;
+                _endStateData = messageJson.FromJson<EndStateData>();
+                BattleManager.EndStateData = _endStateData;
 
-                MatchEnd(endData);
+                MatchEnd(_endStateData);
                 _battleState = BattleState.End;
                 break;
 
             case NakamaOpCode.OPPONENT_LEAVE:
-                endData = messageJson.FromJson<EndStateData>();
-                _endStateData = endData;
+                _endStateData = messageJson.FromJson<EndStateData>();
                 _endStateData.opponentSurrender = true;
-
-                BattleManager.EndStateData = _endStateData;
 
                 _ = UIManager.Instance.GameView.DoShowMessage("Opponent surrender");
 
-                _opponentSurrender = true;
+                MatchEnd(_endStateData);
 
                 if (_battleState != BattleState.ResolveTurn)
                 {
-                    MatchEnd(endData);
+                    BattleManager.GetBattleReward();
                 }
                 break;
             case NakamaOpCode.ERROR_SERV:

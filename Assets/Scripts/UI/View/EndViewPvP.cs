@@ -20,16 +20,12 @@ public class EndViewPvP : View
     [SerializeField] ChronoTweenSequence _chronoTweenSequence;
     [SerializeField] ChronoTweenObject _claimBtn;
 
-    int coinGained;
-    int gemGained;
-
     PvPBattleManager battleManager;
 
     public override void OpenView(bool _instant = false)
     {
         battleManager = NakamaManager.Instance.NakamaBattleManager.PvpBattle.BattleManager as PvPBattleManager;
-        coinGained = 0;
-        gemGained = 0;
+
 
         foreach (Transform transform in _rewardContentTransform)
         {
@@ -66,9 +62,6 @@ public class EndViewPvP : View
                 var currentRerward = Instantiate(_rewardEndGameLayout, _rewardContentTransform);
                 currentRerward.Init(reward);
                 _chronoTweenSequence.ObjectsToTween.Add(currentRerward.GetComponent<ChronoTweenObject>());
-
-                if (reward.type == RewardType.Coin) coinGained += reward.amount;
-                if (reward.type == RewardType.Gem) gemGained += reward.amount;
             }
         }
         else
@@ -107,8 +100,8 @@ public class EndViewPvP : View
     {
         Dictionary<string, int> changeset = new Dictionary<string, int>
         {
-            { Currency.Coins.ToString(), coinGained },
-            { Currency.Gems.ToString(), gemGained },
+            { Currency.Coins.ToString(), battleManager.CoinGenerated },
+            { Currency.Gems.ToString(), battleManager.GemGenerated },
             { Currency.Trophies.ToString(), battleManager.EndStateData.trophyRewards },
         };
 

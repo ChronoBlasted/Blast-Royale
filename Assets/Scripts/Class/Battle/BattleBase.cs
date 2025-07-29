@@ -63,6 +63,9 @@ public class BattleBase : MonoBehaviour
         _playerSquads.Clear();
         _playerItems.Clear();
         _opponentSquads.Clear();
+
+        CoinGenerated = 0;
+        GemGenerated = 0;
         BattleReward.Clear();
 
         foreach (var blast in _userAccount.LastBlastCollection.deckBlasts)
@@ -211,6 +214,8 @@ public class BattleBase : MonoBehaviour
         await HandleStatusIfNeeded(_playerMeInfo, _playerOpponentInfo);
         await HandleStatusIfNeeded(_playerOpponentInfo, _playerMeInfo);
 
+
+
         await StopTurnHandler();
     }
 
@@ -260,8 +265,8 @@ public class BattleBase : MonoBehaviour
         if (statusOwner.ActiveBlast.status == Status.None) return false;
 
         var statusContext = new GameLogicContext(
-            attacker: statusOwner.ActiveBlast,
-            defender: target.ActiveBlast,
+            attacker: target.ActiveBlast,
+            defender: statusOwner.ActiveBlast,
             players: new List<PlayerBattleInfo> { _playerMeInfo, _playerOpponentInfo },
             moveIndex: -1,
             moveDamage: 0,
@@ -316,16 +321,12 @@ public class BattleBase : MonoBehaviour
         }
         else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Wild)
         {
-            await PlayerLeave();
-
-            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvE);
+            GetBattleReward();
             return;
         }
         else if (NakamaLogic.IsAllBlastFainted(_playerMeInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent || NakamaLogic.IsAllBlastFainted(_playerOpponentInfo.Blasts) && _playerOpponentInfo.OwnerType == BlastOwner.Opponent)
         {
-            await PlayerLeave();
-
-            UIManager.Instance.ChangeView(UIManager.Instance.EndViewPvP);
+            GetBattleReward();
             return;
         }
 
@@ -342,9 +343,9 @@ public class BattleBase : MonoBehaviour
         _gameView.EndTurn(_playerMeInfo.ActiveBlast, _playerOpponentInfo.ActiveBlast);
     }
 
-    public virtual void GetBattleReward(bool isWin)
+    public virtual void GetBattleReward()
     {
-        if (isWin && BattleMode == BattleMode.PvP) CoinGenerated += 2000;
+        if (_endStateData.win && BattleMode == BattleMode.PvP) CoinGenerated += 2000;
 
         if (CoinGenerated > 0)
         {

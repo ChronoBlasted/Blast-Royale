@@ -149,20 +149,29 @@ public class NakamaLogic : MonoSingleton<NakamaLogic>
         switch (blast.status)
         {
             case Status.Burn:
-                blast.Hp = Mathf.Max(0, blast.Hp - Mathf.FloorToInt(blast.MaxHp / 8f));
+                int burnDamage = Mathf.Max(3, Mathf.FloorToInt(blast.MaxHp / 8f));
+                blast.Hp = Mathf.Max(0, blast.Hp - burnDamage);
                 break;
 
             case Status.Seeded:
-                int healAmount = Mathf.FloorToInt(blast.MaxHp / 16f);
+                int seedDamage = Mathf.Max(2, Mathf.FloorToInt(blast.MaxHp / 16f));
+                blast.Hp = Mathf.Max(0, blast.Hp - seedDamage);
 
-                blast.Hp = Mathf.Max(0, blast.Hp - healAmount);
-                otherBlast.Hp = Mathf.Min(otherBlast.MaxHp, otherBlast.Hp + healAmount);
+                int healAmount = Mathf.Min(otherBlast.MaxHp - otherBlast.Hp, seedDamage);
+                otherBlast.Hp += healAmount;
+                break;
+
+            case Status.Wet:
+                int manaLoss = Mathf.Max(2, Mathf.FloorToInt(blast.MaxMana / 16f));
+                blast.Mana = Mathf.Max(0, blast.Mana - manaLoss);
                 break;
 
             default:
                 break;
         }
     }
+
+
 
     public static Blast ApplyEffectToBlast(Blast blast, Move move, MoveEffectData moveEffectData)
     {

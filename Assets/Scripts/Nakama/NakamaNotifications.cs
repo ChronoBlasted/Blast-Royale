@@ -23,7 +23,7 @@ public class NakamaNotifications : MonoBehaviour
         _socket.ReceivedNotification += _notificationHandler;
     }
 
-    private async void OnReceivedNotification(IApiNotification notification)
+    private void OnReceivedNotification(IApiNotification notification)
     {
         Reward reward = new Reward();
 
@@ -51,7 +51,5 @@ public class NakamaNotifications : MonoBehaviour
 
         UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);
-
-        Debug.Log("REWARD");
     }
 }
