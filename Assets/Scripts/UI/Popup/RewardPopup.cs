@@ -37,7 +37,7 @@ public class RewardPopup : Popup
         if (_tweenSequence != null) _tweenSequence.Init();
     }
 
-    public override void OpenPopup(bool openBlackShade = true, bool openCloseButton = true)
+    public override void OpenPopup(bool openBlackShade = true, bool openCloseButton = true, bool instant = false)
     {
         base.OpenPopup(openBlackShade, openCloseButton);
     }

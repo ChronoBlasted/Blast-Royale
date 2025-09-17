@@ -26,6 +26,8 @@ public class NakamaLeaderboards : MonoBehaviour
 
     public async Task UpdateLeaderboards()
     {
+        NakamaManager.BeforeAsync();
+
         await GetTrophyLeaderboard();
         await GetTrophyAroundMeLeaderboard();
         //await GetTrophyFriendLeaderboard();
@@ -36,6 +38,8 @@ public class NakamaLeaderboards : MonoBehaviour
 
         await GetAllBlastDefeatedByAreaLeaderboard();
         await GetAllBestStageByAreaLeaderboard();
+
+        NakamaManager.AfterAsync();
     }
 
     public async Task GetTrophyLeaderboard()

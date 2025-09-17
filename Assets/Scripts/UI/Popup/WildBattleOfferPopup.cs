@@ -17,7 +17,7 @@ public class WildBattleOfferPopup : Popup
         }
     }
 
-    public override void OpenPopup(bool openBlackShade = true, bool openCloseButton = true)
+    public override void OpenPopup(bool openBlackShade = true, bool openCloseButton = true, bool instant = false)
     {
         base.OpenPopup(openBlackShade, openCloseButton);
 

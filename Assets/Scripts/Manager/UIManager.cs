@@ -63,6 +63,7 @@ public class UIManager : MonoSingleton<UIManager>
     public ConfirmPopup ConfirmPopup;
     public WildBattleOfferPopup WildBattleOfferPopup;
     public QuestPopup QuestPopup;
+    public WaitingPopup WaitingPopup;
 
     View _currentView;
 
@@ -103,6 +104,7 @@ public class UIManager : MonoSingleton<UIManager>
         ConfirmPopup.Init();
         LinkLogPopup.Init();
         WildBattleOfferPopup.Init();
+        WaitingPopup.Init();
 
         BlackShadeView.HideBlackShade();
     }

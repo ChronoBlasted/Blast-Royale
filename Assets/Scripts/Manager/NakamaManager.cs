@@ -60,4 +60,14 @@ public class NakamaManager : MonoSingleton<NakamaManager>
 
         GameManager.Instance.AfterNakamaInit();
     }
+
+    public static void BeforeAsync()
+    {
+        UIManager.Instance.WaitingPopup.OpenPopup(false, false, true);
+    }
+
+    public static void AfterAsync()
+    {
+        UIManager.Instance.WaitingPopup.ClosePopup(true);
+    }
 }

@@ -19,7 +19,7 @@ public class Popup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public virtual void OpenPopup(bool triggerBlackShade = true, bool openCloseButton = true)
+    public virtual void OpenPopup(bool triggerBlackShade = true, bool openCloseButton = true, bool instant = false)
     {
         _triggerBlackShade = triggerBlackShade;
 
@@ -29,12 +29,14 @@ public class Popup : MonoBehaviour
 
         gameObject.SetActive(true);
 
+        float time = instant ? 0 : .2f;
+
         transform.localScale = Vector3.zero;
-        transform.DOScale(1, .2f).SetEase(Ease.OutBack);
+        transform.DOScale(1, time).SetEase(Ease.OutBack);
 
         _canvasGroup.blocksRaycasts = true;
 
-        _tween = _canvasGroup.DOFade(1, .2f).OnComplete(() =>
+        _tween = _canvasGroup.DOFade(1, time).OnComplete(() =>
         {
             _canvasGroup.interactable = true;
         }).SetUpdate(UpdateType.Normal, true);
@@ -44,19 +46,23 @@ public class Popup : MonoBehaviour
 
     public virtual void OpenPopup() => OpenPopup(true);
 
-    public virtual void ClosePopup()
+    public virtual void ClosePopup(bool instant = false)
     {
         if (_triggerBlackShade) UIManager.Instance.BlackShadeView.HideBlackShade();
+
+        float time = instant ? 0 : .1f;
 
         _tween.Kill(true);
 
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.interactable = false;
-        _tween = _canvasGroup.DOFade(0, .1f)
+        _tween = _canvasGroup.DOFade(0, time)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);
             })
             .SetUpdate(UpdateType.Normal, true);
     }
+
+    public virtual void ClosePopup() => ClosePopup(false);
 }

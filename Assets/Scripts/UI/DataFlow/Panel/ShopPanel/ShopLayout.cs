@@ -159,7 +159,9 @@ public class ShopLayout : MonoBehaviour
         if (_storeOffer.reward.blast != null) reward.blast = _storeOffer.reward.blast;
         if (_storeOffer.reward.item != null) reward.item = _storeOffer.reward.item;
 
-        UIManager.Instance.RewardPopup.OpenPopup();
         UIManager.Instance.RewardPopup.UpdateData(reward);
+        UIManager.Instance.RewardPopup.OpenPopup();
+
+        Debug.Log("SHOW REWARD");
     }
 }
